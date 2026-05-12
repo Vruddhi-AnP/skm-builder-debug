@@ -39,12 +39,14 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 
+import { Role } from '../../common/enums/role.enum';
+
 @Controller('startup')
 export class StartupController {
   constructor(private readonly startupService: StartupService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('founder')
+  @Roles(Role.FOUNDER)
   @Post()
   create(@Body() dto: CreateStartupDto, @GetUser('id') userId: string) {
     return this.startupService.create(dto, userId);

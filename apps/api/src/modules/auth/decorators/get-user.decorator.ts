@@ -9,12 +9,13 @@
 // );
 
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { Role } from '../../../common/enums/role.enum';
 
 type RequestWithUser = {
   user: {
     id: string;
     email: string;
-    role: string;
+    role: Role;
   };
 };
 
