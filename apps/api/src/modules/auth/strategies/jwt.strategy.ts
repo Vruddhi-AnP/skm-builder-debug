@@ -32,6 +32,8 @@ import { ConfigService } from '@nestjs/config';
 
 import { JwtPayload } from '../types/jwt-payload.type';
 
+import { CurrentUser } from '../../../common/types/current-user.type';
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigService) {
@@ -44,7 +46,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: JwtPayload) {
+  validate(payload: JwtPayload): CurrentUser {
     return {
       id: payload.sub,
       email: payload.email,
