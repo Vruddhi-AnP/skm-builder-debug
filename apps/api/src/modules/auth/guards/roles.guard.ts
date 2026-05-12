@@ -36,15 +36,17 @@ import { Role } from '../../../common/enums/role.enum';
 
 import { CurrentUser } from '../../../common/types/current-user.type';
 
+import { AUTH_ROLES_KEY } from '../../../common/constants/auth.constants';
+
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>('roles', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(
+      AUTH_ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
     if (!requiredRoles) {
       return true;
