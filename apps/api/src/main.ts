@@ -31,7 +31,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(helmet());
 
-  app.setGlobalPrefix('api'); // ✅ IMPORTANT
+  app.setGlobalPrefix('api');
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -42,4 +42,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 4000);
 }
-bootstrap();
+void bootstrap();

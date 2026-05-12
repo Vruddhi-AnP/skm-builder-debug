@@ -25,9 +25,12 @@ datasource db {
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
+  password  String
   name      String?
   role      String
   createdAt DateTime @default(now())
+
+  startups  Startup[]
 }
 
 model Startup {
@@ -35,7 +38,10 @@ model Startup {
   name        String
   industry    String?
   description String?
+
   founderId   String
+  founder     User     @relation(fields: [founderId], references: [id])
+
   createdAt   DateTime @default(now())
 }
 

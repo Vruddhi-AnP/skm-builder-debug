@@ -4,6 +4,6 @@ import { FounderService } from './founder.service';
 
 @Module({
   controllers: [FounderController],
-  providers: [FounderService]
+  providers: [FounderService],
 })
 export class FounderModule {}

@@ -4,6 +4,6 @@ import { AdvisorService } from './advisor.service';
 
 @Module({
   controllers: [AdvisorController],
-  providers: [AdvisorService]
+  providers: [AdvisorService],
 })
 export class AdvisorModule {}
