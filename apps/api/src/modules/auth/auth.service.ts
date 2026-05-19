@@ -1,20 +1,97 @@
-// import { Injectable } from '@nestjs/common';
+// import {
+//   BadRequestException,
+//   Injectable,
+//   UnauthorizedException,
+// } from '@nestjs/common';
 
-// @Injectable()
-// export class AuthService {}
+// import { JwtService } from '@nestjs/jwt';
+// import * as bcrypt from 'bcrypt';
 
-// import { Injectable } from '@nestjs/common';
 // import { PrismaService } from '../../prisma/prisma.service';
+
 // import { CreateUserDto } from './dto/create-user.dto';
+// import { LoginDto } from './dto/login.dto';
 
 // @Injectable()
 // export class AuthService {
-//   constructor(private prisma: PrismaService) {}
+//   constructor(
+//     private prisma: PrismaService,
+//     private jwtService: JwtService,
+//   ) {}
 
-//   async createUser(dto: CreateUserDto) {
-//     return this.prisma.user.create({
-//       data: dto,
+//   async signup(dto: CreateUserDto) {
+//     const existingUser = await this.prisma.user.findUnique({
+//       where: {
+//         email: dto.email,
+//       },
 //     });
+
+//     if (existingUser) {
+//       throw new BadRequestException('User already exists');
+//     }
+
+//     const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+//     const user = await this.prisma.user.create({
+//       data: {
+//         email: dto.email,
+//         password: hashedPassword,
+//         name: dto.name,
+//         role: dto.role,
+//       },
+//     });
+
+//     const token = await this.jwtService.signAsync({
+//       sub: user.id,
+//       email: user.email,
+//       role: user.role,
+//     });
+
+//     return {
+//       //message: 'Signup successful',
+//       accessToken: token,
+//       user: {
+//         id: user.id,
+//         email: user.email,
+//         name: user.name,
+//         role: user.role,
+//       },
+//     };
+//   }
+
+//   async login(dto: LoginDto) {
+//     const user = await this.prisma.user.findUnique({
+//       where: {
+//         email: dto.email,
+//       },
+//     });
+
+//     if (!user) {
+//       throw new UnauthorizedException('Invalid credentials');
+//     }
+
+//     const passwordMatch = await bcrypt.compare(dto.password, user.password);
+
+//     if (!passwordMatch) {
+//       throw new UnauthorizedException('Invalid credentials');
+//     }
+
+//     const token = await this.jwtService.signAsync({
+//       sub: user.id,
+//       email: user.email,
+//       role: user.role,
+//     });
+
+//     return {
+//       //message: 'Login successful',
+//       accessToken: token,
+//       user: {
+//         id: user.id,
+//         email: user.email,
+//         name: user.name,
+//         role: user.role,
+//       },
+//     };
 //   }
 // }
 
@@ -25,12 +102,17 @@ import {
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
+
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../../prisma/prisma.service';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+
+import { AuthResponseData } from './types/auth-response.type';
+
+import { Role } from '../../common/enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +121,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(dto: CreateUserDto) {
+  async signup(dto: CreateUserDto): Promise<AuthResponseData> {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -68,18 +150,18 @@ export class AuthService {
     });
 
     return {
-      message: 'Signup successful',
       accessToken: token,
+
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role,
+        role: user.role as Role,
       },
     };
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto): Promise<AuthResponseData> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -103,13 +185,13 @@ export class AuthService {
     });
 
     return {
-      message: 'Login successful',
       accessToken: token,
+
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role,
+        role: user.role as Role,
       },
     };
   }

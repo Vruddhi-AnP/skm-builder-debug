@@ -35,11 +35,14 @@ import { Auth } from '../auth/decorators/auth.decorator';
 
 import { Role } from '../../common/enums/role.enum';
 
+import { ResponseMessage } from '../../common/decorators/response-message.decorator';
+
 @Controller('startup')
 export class StartupController {
   constructor(private readonly startupService: StartupService) {}
 
   @Auth(Role.FOUNDER)
+  @ResponseMessage('Startup created successfully')
   @Post()
   create(@Body() dto: CreateStartupDto, @GetUser('id') userId: string) {
     return this.startupService.create(dto, userId);

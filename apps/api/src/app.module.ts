@@ -10,6 +10,7 @@ import { AdvisorModule } from './modules/advisor/advisor.module';
 import { InvestorModule } from './modules/investor/investor.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import { PrismaModule } from './prisma/prisma.module';
     PrismaModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TransformResponseInterceptor],
 })
 export class AppModule {}

@@ -1,38 +1,46 @@
-// import { NestFactory } from '@nestjs/core';
-// import { AppModule } from './app.module';
-// import helmet from 'helmet';
-// import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
-// async function bootstrap() {
-//   const app = await NestFactory.create(AppModule);
-
-//   app.enableCors();
-//   app.use(helmet());
-
-//   app.useGlobalPipes(
-//     new ValidationPipe({
-//       whitelist: true,
-//       forbidNonWhitelisted: true,
-//     }),
-//   );
-
-//   await app.listen(process.env.PORT ?? 4000);
-// }
-// bootstrap();
+import { ConfigService } from '@nestjs/config';
 
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+
 import helmet from 'helmet';
-import { ValidationPipe } from '@nestjs/common';
+
+import { AppModule } from './app.module';
+
+import { validateEnv } from './config/validate-env';
+
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
 
-  app.enableCors();
+import { API_PREFIX, DEFAULT_PORT } from './common/constants/app.constants';
+
+async function bootstrap() {
+  validateEnv();
+
+  const logger = new Logger('Bootstrap');
+
+  const nodeEnv = process.env.NODE_ENV ?? 'development';
+
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      nodeEnv === 'production'
+        ? ['error', 'warn']
+        : ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
+
+  const configService = app.get(ConfigService);
+
+  app.enableCors({
+    origin: true,
+
+    credentials: true,
+  });
+
   app.use(helmet());
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(API_PREFIX);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -50,6 +58,21 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  await app.listen(process.env.PORT ?? 4000);
+  app.useGlobalInterceptors(app.get(TransformResponseInterceptor));
+
+  const port = configService.get<number>('PORT') ?? DEFAULT_PORT;
+
+  await app.listen(port);
+
+  logger.log(`
+🚀 API running on:
+http://localhost:${port}/${API_PREFIX}
+`);
+
+logger.log(`
+🌍 Environment:
+${configService.get<string>('NODE_ENV') ?? 'development'}
+`);
 }
+
 void bootstrap();
