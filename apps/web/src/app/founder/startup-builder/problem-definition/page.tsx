@@ -1,14 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   AlertTriangle,
   ArrowRight,
   CircleHelp,
   Users,
+  Save,
+  Target,
+  ShieldAlert,
+  CheckCircle2,
 } from "lucide-react";
 
+interface ProblemDefinitionForm {
+  coreProblemStatement: string;
+  problemSeverity: string;
+  affectedUsers: string[];
+  currentAlternatives: string[];
+  marketGap: string;
+  customerFrustrations: string;
+  operationalImpact: string;
+  problemFrequency: string;
+  problemUrgency: string;
+  founderObservations: string;
+}
+
 export default function ProblemDefinitionPage() {
+  const router = useRouter();
+
+  const [formData, setFormData] =
+    useState<ProblemDefinitionForm>({
+      coreProblemStatement: "",
+      problemSeverity: "",
+      affectedUsers: [],
+      currentAlternatives: [],
+      marketGap: "",
+      customerFrustrations: "",
+      operationalImpact: "",
+      problemFrequency: "",
+      problemUrgency: "",
+      founderObservations: "",
+    });
+
   const problemAreas = [
     "Manual Operations",
     "Poor Communication",
@@ -16,6 +51,8 @@ export default function ProblemDefinitionPage() {
     "No Automation",
     "Customer Retention",
     "Slow Processes",
+    "Data Management Issues",
+    "Workflow Inefficiencies",
   ];
 
   const existingSolutions = [
@@ -25,15 +62,19 @@ export default function ProblemDefinitionPage() {
     "Google Docs",
     "Legacy Software",
     "Freelancers",
+    "Internal Teams",
+    "Multiple SaaS Tools",
   ];
 
-  const affectedUsers = [
+  const userGroups = [
     "Founders",
     "Startups",
     "SMBs",
     "Enterprises",
     "Students",
+    "Creators",
     "Agencies",
+    "Remote Teams",
   ];
 
   const severityLevels = [
@@ -41,135 +82,203 @@ export default function ProblemDefinitionPage() {
       label: "Low",
       emoji: "🙂",
     },
+
     {
       label: "Moderate",
       emoji: "😐",
     },
+
     {
       label: "High",
       emoji: "🔥",
     },
+
     {
       label: "Critical",
       emoji: "🚨",
     },
   ];
 
-  const [selectedProblems, setSelectedProblems] =
-    useState<string[]>([]);
+  const toggleArrayValue = (
+    field:
+      | "affectedUsers"
+      | "currentAlternatives",
+    value: string
+  ) => {
+    const existingValues = formData[field];
 
-  const [
-    selectedAlternatives,
-    setSelectedAlternatives,
-  ] = useState<string[]>([]);
+    if (existingValues.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: existingValues.filter(
+          (item) => item !== value
+        ),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: [...existingValues, value],
+      }));
+    }
+  };
 
-  const [selectedUsers, setSelectedUsers] =
-    useState<string[]>([]);
-
-  const [selectedSeverity, setSelectedSeverity] =
-    useState("");
+  const handleChange = (
+    field: keyof ProblemDefinitionForm,
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="space-y-8">
-      {/* HEADER */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <div className="mb-4 inline-flex items-center rounded-full bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700">
-            Step 2 • Startup Builder
-          </div>
+      {/* HERO */}
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+        <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
+          {/* LEFT */}
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-rose-700">
+              <ShieldAlert className="h-4 w-4" />
+              Startup Builder • Module 2
+            </div>
 
-          <h1 className="text-4xl font-black tracking-tight text-slate-900">
-            Problem Definition
-          </h1>
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+              Define The Real
+              <span className="block text-primary">
+                Market Problem
+              </span>
+            </h1>
 
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-            Discover real-world pain points,
-            customer frustrations and market
-            inefficiencies through interactive startup
-            workflows.
-          </p>
-        </div>
-
-        {/* PROGRESS */}
-        <div className="w-full rounded-[28px] border border-slate-200 bg-slate-50 p-6 lg:max-w-sm">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-600">
-              Module Progress
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+              Identify operational inefficiencies,
+              customer frustrations and real-world
+              business problems worth solving through
+              structured startup validation workflows.
             </p>
-
-            <span className="text-sm font-bold text-cyan-600">
-              60%
-            </span>
           </div>
 
-          <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-slate-200">
-            <div className="h-full w-[60%] rounded-full bg-cyan-500" />
-          </div>
+          {/* RIGHT */}
+          <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Validation Progress
+                </p>
 
-          <p className="mt-4 text-sm text-slate-500">
-            Continue defining customer pain and
-            market opportunity.
-          </p>
+                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                  60%
+                </h3>
+              </div>
+
+              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+                <AlertTriangle className="h-8 w-8" />
+              </div>
+            </div>
+
+            <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
+              <div className="h-full w-[60%] rounded-full bg-primary" />
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {[
+                "Operational pain identified",
+                "Market inefficiencies detected",
+                "Customer frustrations validated",
+                "Problem opportunity increasing",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3"
+                >
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+
+                  <p className="text-sm font-medium text-slate-600">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* CONTENT */}
+      {/* MAIN GRID */}
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         {/* LEFT */}
         <div className="space-y-6">
-          {/* CORE PROBLEM */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-rose-100 p-3 text-rose-700">
-                <CircleHelp className="h-5 w-5" />
+          {/* PROBLEM DISCOVERY */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-rose-100 p-4 text-rose-700">
+                <CircleHelp className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
-                  Problem Discovery Engine
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                  Problem Discovery
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Identify major market pain points
+                <p className="mt-1 text-sm text-slate-500">
+                  Identify high-value market pain points
                 </p>
               </div>
             </div>
 
-            {/* PROBLEM AREAS */}
+            {/* CORE PROBLEM */}
             <div>
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Core Problem Statement
+              </label>
+
+              <textarea
+                rows={5}
+                value={formData.coreProblemStatement}
+                onChange={(e) =>
+                  handleChange(
+                    "coreProblemStatement",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe the primary real-world problem your startup is solving..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+              />
+            </div>
+
+            {/* PROBLEM AREAS */}
+            <div className="mt-8">
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Select Core Problem Areas
+                Core Problem Areas
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {problemAreas.map((problem) => {
+                {problemAreas.map((item) => {
                   const active =
-                    selectedProblems.includes(problem);
+                    formData.currentAlternatives.includes(
+                      item
+                    );
 
                   return (
                     <button
-                      key={problem}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedProblems(
-                            selectedProblems.filter(
-                              (p) => p !== problem
-                            )
-                          );
-                        } else {
-                          setSelectedProblems([
-                            ...selectedProblems,
-                            problem,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all duration-200 ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "currentAlternatives",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-rose-500 bg-rose-500 text-white shadow-lg shadow-rose-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-rose-400 hover:bg-rose-50"
-                      }`}
+                          ? "border-rose-500 bg-rose-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-rose-300 hover:bg-rose-50"
+                      }
+                    `}
                     >
-                      {problem}
+                      {item}
                     </button>
                   );
                 })}
@@ -186,20 +295,24 @@ export default function ProblemDefinitionPage() {
                 {severityLevels.map((item) => (
                   <button
                     key={item.label}
+                    type="button"
                     onClick={() =>
-                      setSelectedSeverity(item.label)
+                      handleChange(
+                        "problemSeverity",
+                        item.label
+                      )
                     }
-                    className={`rounded-2xl border p-5 text-center transition-all ${
-                      selectedSeverity === item.label
-                        ? "border-rose-500 bg-rose-50 shadow-lg shadow-rose-100"
-                        : "border-slate-200 hover:border-rose-400 hover:bg-rose-50"
-                    }`}
+                    className={`rounded-2xl border p-2 text-center transition-all
+                      ${
+                        formData.problemSeverity ===
+                        item.label
+                          ? "border-rose-400 bg-rose-50"
+                          : "border-border/60 bg-white hover:border-rose-300 hover:bg-rose-50"
+                      }
+                    `}
                   >
-                    <div className="text-3xl">
-                      {item.emoji}
-                    </div>
 
-                    <p className="mt-3 font-semibold text-slate-900">
+                    <p className="mt-3 font-bold text-slate-800">
                       {item.label}
                     </p>
                   </button>
@@ -207,38 +320,41 @@ export default function ProblemDefinitionPage() {
               </div>
             </div>
 
-            {/* OPTIONAL NOTES */}
+            {/* OPERATIONAL IMPACT */}
             <div className="mt-8">
-              <label className="mb-2 block text-sm font-semibold text-slate-700">
-                Additional Problem Insights
-                <span className="ml-2 text-xs font-medium text-slate-400">
-                  (Optional)
-                </span>
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Operational Impact
               </label>
 
               <textarea
                 rows={4}
-                placeholder="Add additional founder observations..."
-                className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm outline-none transition focus:border-rose-500"
+                value={formData.operationalImpact}
+                onChange={(e) =>
+                  handleChange(
+                    "operationalImpact",
+                    e.target.value
+                  )
+                }
+                placeholder="How does this problem affect businesses and users?"
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
               />
             </div>
           </section>
 
-          {/* MARKET GAPS */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
-                <AlertTriangle className="h-5 w-5" />
+          {/* MARKET GAP */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
+                <Target className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Market Gap Analysis
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Analyze existing alternatives and
-                  weaknesses
+                <p className="mt-1 text-sm text-slate-500">
+                  Analyze current alternatives and gaps
                 </p>
               </div>
             </div>
@@ -246,38 +362,34 @@ export default function ProblemDefinitionPage() {
             {/* EXISTING SOLUTIONS */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Existing Solutions Used By Customers
+                Existing Solutions Customers Use
               </label>
 
               <div className="flex flex-wrap gap-3">
                 {existingSolutions.map((item) => {
                   const active =
-                    selectedAlternatives.includes(
+                    formData.currentAlternatives.includes(
                       item
                     );
 
                   return (
                     <button
                       key={item}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedAlternatives(
-                            selectedAlternatives.filter(
-                              (p) => p !== item
-                            )
-                          );
-                        } else {
-                          setSelectedAlternatives([
-                            ...selectedAlternatives,
-                            item,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "currentAlternatives",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-amber-500 bg-amber-500 text-white shadow-lg shadow-amber-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50"
-                      }`}
+                          ? "border-amber-500 bg-amber-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                      }
+                    `}
                     >
                       {item}
                     </button>
@@ -286,160 +398,162 @@ export default function ProblemDefinitionPage() {
               </div>
             </div>
 
-            {/* MARKET GAPS */}
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {[
-                "Too Expensive",
-                "Complex UX",
-                "No Automation",
-                "Poor Scalability",
-              ].map((gap) => (
-                <div
-                  key={gap}
-                  className="cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:border-amber-400 hover:shadow-lg"
-                >
-                  <h3 className="font-semibold text-slate-900">
-                    {gap}
-                  </h3>
+            {/* MARKET GAP */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Market Gap Opportunity
+              </label>
 
-                  <p className="mt-2 text-sm text-slate-500">
-                    Common weakness identified in
-                    existing market solutions.
-                  </p>
-                </div>
-              ))}
+              <textarea
+                rows={4}
+                value={formData.marketGap}
+                onChange={(e) =>
+                  handleChange(
+                    "marketGap",
+                    e.target.value
+                  )
+                }
+                placeholder="What weaknesses exist in current solutions?"
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+              />
             </div>
 
-            {/* PROBLEM INSIGHTS */}
-              <div className="mt-10 rounded-[24px] border border-slate-200 bg-slate-50 p-6">
-                <div className="flex items-start justify-between gap-6">
-                  <div>
-                    <p className="inline-flex rounded-full bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-cyan-700">
-                      Problem Insights
-                    </p>
+            {/* CUSTOMER FRUSTRATIONS */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Customer Frustrations
+              </label>
 
-                    <h3 className="mt-4 text-2xl font-black text-slate-900">
-                      Problem Opportunity Summary
-                    </h3>
-
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
-                      Your selected pain points indicate strong
-                      operational inefficiencies with scalable
-                      opportunities for automation and workflow
-                      optimization across multiple industries.
-                    </p>
-                  </div>
-
-                  <div className="hidden h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-sm lg:flex">
-                    <span className="text-3xl">⚠️</span>
-                  </div>
-                </div>
-
-                <div className="mt-8 grid gap-4 md:grid-cols-3">
-                  {[
-                    {
-                      title: "Pain Intensity",
-                      value: "High",
-                    },
-                    {
-                      title: "Market Gap",
-                      value: "Strong",
-                    },
-                    {
-                      title: "Demand Potential",
-                      value: "Scalable",
-                    },
-                  ].map((item) => (
-                    <div
-                      key={item.title}
-                      className="rounded-2xl border border-white bg-white p-5"
-                    >
-                      <p className="text-sm font-medium text-slate-500">
-                        {item.title}
-                      </p>
-
-                      <h4 className="mt-2 text-xl font-black text-slate-900">
-                        {item.value}
-                      </h4>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <textarea
+                rows={4}
+                value={formData.customerFrustrations}
+                onChange={(e) =>
+                  handleChange(
+                    "customerFrustrations",
+                    e.target.value
+                  )
+                }
+                placeholder="What frustrates users most about existing workflows?"
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+              />
+            </div>
           </section>
 
           {/* AFFECTED USERS */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-cyan-100 p-3 text-cyan-700">
-                <Users className="h-5 w-5" />
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
+                <Users className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Affected Users
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Define who experiences this
-                  problem
+                <p className="mt-1 text-sm text-slate-500">
+                  Identify who experiences the problem
                 </p>
               </div>
             </div>
 
-            {/* USER TYPES */}
+            {/* USERS */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Select Target Users
+                Target User Segments
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {affectedUsers.map((user) => {
+                {userGroups.map((item) => {
                   const active =
-                    selectedUsers.includes(user);
+                    formData.affectedUsers.includes(
+                      item
+                    );
 
                   return (
                     <button
-                      key={user}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedUsers(
-                            selectedUsers.filter(
-                              (p) => p !== user
-                            )
-                          );
-                        } else {
-                          setSelectedUsers([
-                            ...selectedUsers,
-                            user,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "affectedUsers",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-cyan-500 bg-cyan-500 text-white shadow-lg shadow-cyan-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-cyan-400 hover:bg-cyan-50"
-                      }`}
+                          ? "border-cyan-500 bg-cyan-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50"
+                      }
+                    `}
                     >
-                      {user}
+                      {item}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* USER BEHAVIOR */}
+            {/* FREQUENCY */}
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              <div>
+                <label className="mb-3 block text-sm font-semibold text-slate-700">
+                  Problem Frequency
+                </label>
+
+                <input
+                  type="text"
+                  value={formData.problemFrequency}
+                  onChange={(e) =>
+                    handleChange(
+                      "problemFrequency",
+                      e.target.value
+                    )
+                  }
+                  placeholder="Daily / Weekly / Monthly"
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                />
+              </div>
+
+              <div>
+                <label className="mb-3 block text-sm font-semibold text-slate-700">
+                  Problem Urgency
+                </label>
+
+                <input
+                  type="text"
+                  value={formData.problemUrgency}
+                  onChange={(e) =>
+                    handleChange(
+                      "problemUrgency",
+                      e.target.value
+                    )
+                  }
+                  placeholder="Low / Medium / High"
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                />
+              </div>
+            </div>
+
+            {/* OBSERVATIONS */}
             <div className="mt-8">
-              <label className="mb-2 block text-sm font-semibold text-slate-700">
-                User Behavior & Challenges
-                <span className="ml-2 text-xs font-medium text-slate-400">
-                  (Optional)
-                </span>
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Founder Observations
               </label>
 
               <textarea
                 rows={5}
-                placeholder="Describe how users currently deal with this problem..."
-                className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-500"
+                value={formData.founderObservations}
+                onChange={(e) =>
+                  handleChange(
+                    "founderObservations",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe insights gathered from customers, research or observations..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
           </section>
@@ -447,47 +561,47 @@ export default function ProblemDefinitionPage() {
 
         {/* RIGHT */}
         <div className="space-y-6">
-          {/* PROBLEM INSIGHTS */}
-          <section className="rounded-[28px] border border-cyan-100 bg-gradient-to-br from-cyan-50 to-rose-50 p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold text-slate-900">
-                Problem Insights
-              </h3>
-            </div>
+          {/* INSIGHTS */}
+          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
+            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+              Problem Insights
+            </h3>
 
             <div className="mt-6 space-y-4">
               {[
-                "Strong operational pain detected",
-                "Automation opportunity identified",
-                "Recurring business demand possible",
-                "Problem appears scalable across industries",
-              ].map((tip) => (
+                "Strong operational inefficiencies detected",
+                "Recurring pain patterns identified",
+                "Automation opportunity appears scalable",
+                "Existing solutions show major gaps",
+              ].map((item) => (
                 <div
-                  key={tip}
-                  className="rounded-2xl bg-white p-4 text-sm font-medium text-slate-700 shadow-sm"
+                  key={item}
+                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
                 >
-                  {tip}
+                  {item}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* READINESS */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <h3 className="text-xl font-bold text-slate-900">
-              Problem Validation Score
+          {/* VALIDATION SCORE */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+              Validation Score
             </h3>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-8 space-y-5">
               {[
                 {
                   label: "Pain Severity",
                   value: "82%",
                 },
+
                 {
                   label: "Market Gap",
                   value: "74%",
                 },
+
                 {
                   label: "Customer Demand",
                   value: "68%",
@@ -499,14 +613,14 @@ export default function ProblemDefinitionPage() {
                       {item.label}
                     </p>
 
-                    <span className="text-sm font-bold text-cyan-600">
+                    <span className="text-sm font-bold text-primary">
                       {item.value}
                     </span>
                   </div>
 
                   <div className="h-2 overflow-hidden rounded-full bg-slate-200">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-rose-500"
+                      className="h-full rounded-full bg-primary"
                       style={{
                         width: item.value,
                       }}
@@ -520,14 +634,25 @@ export default function ProblemDefinitionPage() {
       </div>
 
       {/* FOOTER */}
-      <div className="flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button className="rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600">
+      <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* SAVE */}
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+          <Save className="h-4 w-4" />
+
           Save Draft
         </button>
 
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-cyan-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-cyan-700">
+        {/* NEXT */}
+        <button
+          onClick={() =>
+            router.push(
+              "/founder/startup-builder/market-research"
+            )
+          }
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+        >
           Continue to Market Research
-          <ArrowRight className="h-4 w-4" />
+
         </button>
       </div>
     </div>

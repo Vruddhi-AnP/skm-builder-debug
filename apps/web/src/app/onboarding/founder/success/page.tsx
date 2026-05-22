@@ -3,30 +3,62 @@
 import { useRouter } from "next/navigation";
 
 import {
+  ArrowLeft,
   ArrowRight,
   Check,
+  Rocket,
+  LayoutDashboard,
+  Users,
 } from "lucide-react";
 
-const steps = [
+import OnboardingLayout from "@/components/onboarding/OnboardingLayout";
+
+const onboardingSteps = [
   {
-    id: "1",
+    title: "Founder Profile",
+    description:
+      "Founder identity & experience",
+  },
+  {
+    title: "Startup Profile",
+    description:
+      "Startup information & stage",
+  },
+  {
+    title: "Programs",
+    description:
+      "Packages & ecosystem support",
+  },
+  {
+    title: "Complete",
+    description:
+      "Access founder workspace",
+  },
+];
+
+const nextSteps = [
+  {
+    id: "01",
     title: "Access Founder Dashboard",
     description:
-      "Track startup progress, recommendations and execution.",
+      "Track startup progress, recommendations and execution workflows.",
+    icon: LayoutDashboard,
   },
 
   {
-    id: "2",
-    title: "Build Your Startup Blueprint",
+    id: "02",
+    title: "Build Startup Blueprint",
     description:
       "Complete structured startup builder modules step-by-step.",
+    icon: Rocket,
   },
 
   {
-    id: "3",
+    id: "03",
     title: "Unlock Advisors & Investors",
     description:
-      "Access ecosystem opportunities, programs and support.",
+      "Access ecosystem opportunities, programs and startup support.",
+    icon: Users,
   },
 ];
 
@@ -34,47 +66,53 @@ export default function FounderSuccessPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#eef2ff,white_40%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-3xl rounded-[2.5rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_80px_rgba(99,102,241,0.12)] backdrop-blur-xl sm:p-10 lg:p-14">
-        {/* Success Icon */}
+    <OnboardingLayout
+      title="Welcome to Startup Ka Mall"
+      subtitle="Your founder onboarding setup has been completed successfully. Your startup workspace and execution dashboard are now ready."
+      currentStep={4}
+      steps={onboardingSteps}
+    >
+      <div className="space-y-10">
+        {/* SUCCESS ICON */}
         <div className="flex justify-center">
-          <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-emerald-100 shadow-[0_10px_40px_rgba(16,185,129,0.18)]">
-            <div className="absolute inset-0 rounded-full bg-emerald-400/20 blur-2xl" />
-
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg">
+          <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-emerald-100 bg-emerald-50">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-100">
               <Check className="h-10 w-10" />
             </div>
           </div>
         </div>
 
-        {/* Badge */}
-        <div className="mt-8 flex justify-center">
-          <div className="rounded-full bg-emerald-100 px-5 py-2 text-sm font-semibold text-emerald-700">
+        {/* BADGE */}
+        <div className="flex justify-center">
+          <div className="rounded-full border border-emerald-200 bg-emerald-50 px-5 py-2 text-sm font-semibold text-emerald-700">
             Onboarding Completed Successfully
           </div>
         </div>
 
-        {/* Heading */}
-        <div className="mt-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            Welcome to
-          </h1>
-
-          <h2 className="mt-4 bg-gradient-to-r from-violet-600 to-cyan-500 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl">
-            Startup Ka Mall
+        {/* HEADING */}
+        <div className="text-center">
+          <h2 className="text-4xl font-black tracking-tight text-slate-800 sm:text-5xl">
+            Your Founder Workspace
+            <br />
+            Is Ready
           </h2>
 
-          <p className="mx-auto mt-8 max-w-2xl text-base leading-8 text-slate-500">
-            Your founder profile, startup information and onboarding
-            setup have been completed successfully. Your dashboard and
-            startup workspace are now ready.
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-8 text-slate-500 sm:text-base">
+            Your founder profile, startup information
+            and ecosystem preferences have been setup
+            successfully. You can now access your
+            personalized startup execution platform.
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-[1.8rem] border border-slate-100 bg-white p-6 text-center shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900">
+        {/* STATUS CARDS */}
+        <div className="grid gap-5 sm:grid-cols-3">
+          <div className="rounded-3xl border border-border/60 bg-white p-6 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Check className="h-6 w-6" />
+            </div>
+
+            <h3 className="mt-5 text-lg font-black text-slate-800">
               Founder Profile
             </h3>
 
@@ -83,8 +121,12 @@ export default function FounderSuccessPage() {
             </p>
           </div>
 
-          <div className="rounded-[1.8rem] border border-slate-100 bg-white p-6 text-center shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900">
+          <div className="rounded-3xl border border-border/60 bg-white p-6 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Rocket className="h-6 w-6" />
+            </div>
+
+            <h3 className="mt-5 text-lg font-black text-slate-800">
               Startup Setup
             </h3>
 
@@ -93,8 +135,12 @@ export default function FounderSuccessPage() {
             </p>
           </div>
 
-          <div className="rounded-[1.8rem] border border-slate-100 bg-white p-6 text-center shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900">
+          <div className="rounded-3xl border border-border/60 bg-white p-6 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <LayoutDashboard className="h-6 w-6" />
+            </div>
+
+            <h3 className="mt-5 text-lg font-black text-slate-800">
               Dashboard Ready
             </h3>
 
@@ -104,61 +150,102 @@ export default function FounderSuccessPage() {
           </div>
         </div>
 
-        {/* Journey Box */}
-        <div className="mt-12 rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm">
-          <h3 className="text-center text-2xl font-bold text-slate-900">
-            Your Founder Journey Begins Here
-          </h3>
+        {/* JOURNEY */}
+        <div className="rounded-[32px] border border-border/60 bg-[#f8fbff] p-6 sm:p-8">
+          <div className="flex flex-col gap-3 text-center">
+            <div className="inline-flex self-center rounded-full border border-primary/10 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+              Founder Journey
+            </div>
 
-          <div className="mt-10 space-y-8">
-            {steps.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-start gap-5"
-              >
-                {/* Number */}
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-sm font-bold text-white shadow-lg">
-                  {item.id}
+            <h3 className="text-3xl font-black tracking-tight text-slate-800">
+              What Happens Next?
+            </h3>
+
+            <p className="mx-auto max-w-2xl text-sm leading-7 text-slate-500">
+              Continue building your startup through
+              structured execution workflows, ecosystem
+              support and founder collaboration.
+            </p>
+          </div>
+
+          {/* STEPS */}
+          <div className="mt-10 space-y-5">
+            {nextSteps.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <div
+                  key={item.id}
+                  className="rounded-3xl border border-white/70 bg-white p-6 shadow-sm"
+                >
+                  <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                    {/* ICON */}
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-sm">
+                      <Icon className="h-6 w-6" />
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-sm font-black text-primary">
+                          {item.id}
+                        </span>
+
+                        <h4 className="text-xl font-black text-slate-800">
+                          {item.title}
+                        </h4>
+                      </div>
+
+                      <p className="mt-3 text-sm leading-7 text-slate-500">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-
-                {/* Content */}
-                <div>
-                  <h4 className="text-lg font-semibold text-slate-900">
-                    {item.title}
-                  </h4>
-
-                  <p className="mt-2 text-sm leading-7 text-slate-500">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* Bottom Buttons */}
-        <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
+        {/* FINAL INFO */}
+        <div className="rounded-3xl border border-primary/10 bg-primary/5 p-6">
+          <p className="text-center text-sm leading-7 text-slate-600">
+            Your onboarding data will now personalize
+            startup recommendations, advisor matching,
+            investor readiness workflows and founder
+            execution tools across the platform.
+          </p>
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex flex-col gap-4 border-t border-border/60 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          {/* PREVIOUS */}
           <button
             onClick={() =>
-              router.push("/onboarding/founder/package")
+              router.push(
+                "/onboarding/founder/package"
+              )
             }
-            className="inline-flex h-14 items-center justify-center rounded-2xl border border-slate-200 bg-white px-8 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50"
+            className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-8 text-sm font-semibold text-slate-700 transition hover:bg-muted"
           >
+
             Previous
           </button>
 
+          {/* DASHBOARD */}
           <button
             onClick={() =>
-              router.push("/founder/dashboard")
+              router.push(
+                "/founder/dashboard"
+              )
             }
-            className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 px-8 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(99,102,241,0.25)] transition-all hover:scale-[1.02]"
+            className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-white transition hover:opacity-90"
           >
             Continue to Dashboard
 
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </button>
         </div>
       </div>
-    </div>
+    </OnboardingLayout>
   );
 }

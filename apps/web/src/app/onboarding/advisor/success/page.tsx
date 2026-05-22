@@ -59,7 +59,7 @@ export default function AdvisorSuccessPage() {
 
         {/* Heading */}
         <div className="mt-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-slate-800 sm:text-5xl">
             Welcome to the
           </h1>
 
@@ -81,7 +81,7 @@ export default function AdvisorSuccessPage() {
               <Sparkles className="h-6 w-6" />
             </div>
 
-            <h3 className="mt-5 text-lg font-bold text-slate-900">
+            <h3 className="mt-5 text-lg font-bold text-slate-800">
               Advisor Profile
             </h3>
 
@@ -95,7 +95,7 @@ export default function AdvisorSuccessPage() {
               <Users2 className="h-6 w-6" />
             </div>
 
-            <h3 className="mt-5 text-lg font-bold text-slate-900">
+            <h3 className="mt-5 text-lg font-bold text-slate-800">
               Founder Access
             </h3>
 
@@ -109,7 +109,7 @@ export default function AdvisorSuccessPage() {
               <WalletCards className="h-6 w-6" />
             </div>
 
-            <h3 className="mt-5 text-lg font-bold text-slate-900">
+            <h3 className="mt-5 text-lg font-bold text-slate-800">
               Advisory Setup
             </h3>
 
@@ -121,7 +121,7 @@ export default function AdvisorSuccessPage() {
 
         {/* Journey */}
         <div className="mt-12 rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm">
-          <h3 className="text-center text-2xl font-bold text-slate-900">
+          <h3 className="text-center text-2xl font-bold text-slate-800">
             Your Advisor Journey Starts Here
           </h3>
 
@@ -138,7 +138,7 @@ export default function AdvisorSuccessPage() {
 
                 {/* Content */}
                 <div>
-                  <h4 className="text-lg font-semibold text-slate-900">
+                  <h4 className="text-lg font-semibold text-slate-800">
                     {item.title}
                   </h4>
 

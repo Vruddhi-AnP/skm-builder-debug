@@ -1,316 +1,340 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+
+import {
+  ArrowLeft,
+  Calendar,
+  Clock3,
+  MessageSquare,
+  Star,
+  Users,
+} from "lucide-react";
+
+import { getAdvisors } from "@/lib/api";
+
+import { Advisor } from "@/types/advisor";
 
 export default function AdvisorProfilePage() {
-  const router = useRouter();
-
   const params = useParams();
 
-  const advisors: any = {
-    "rahul-mehta": {
-      name: "Rahul Mehta",
-      role: "Startup Strategy Advisor",
-      expertise: [
-        "SaaS",
-        "GTM Strategy",
-        "Startup Validation",
-      ],
-      experience:
-        "12+ Years Experience",
-      about:
-        "Rahul helps early-stage founders with startup validation, go-to-market strategy and execution planning. He has worked with multiple SaaS startups and founder teams across India.",
-      startups: "45+ Startups",
-      sessions: "300+ Sessions",
-      availability:
-        "Available This Week",
-      initials: "R",
-    },
+  const [advisor, setAdvisor] =
+    useState<Advisor | null>(null);
 
-    "priya-sharma": {
-      name: "Priya Sharma",
-      role: "Fundraising Mentor",
-      expertise: [
-        "Fundraising",
-        "Investor Readiness",
-        "Pitch Decks",
-      ],
-      experience: "Ex-VC Partner",
-      about:
-        "Priya mentors startup founders on fundraising preparation, investor communication and pitch strategy. She has supported multiple seed-stage startups.",
-      startups: "60+ Startups",
-      sessions: "500+ Sessions",
-      availability:
-        "2 Slots Available",
-      initials: "P",
-    },
+  const [loading, setLoading] =
+    useState(true);
 
-    "aman-verma": {
-      name: "Aman Verma",
-      role: "Product & MVP Expert",
-      expertise: [
-        "Product Strategy",
-        "MVP Building",
-        "Execution",
-      ],
-      experience:
-        "Built 3 Startups",
-      about:
-        "Aman helps startup founders structure MVP execution, product-market fit and founder workflows for scalable startup execution.",
-      startups: "30+ Startups",
-      sessions: "180+ Sessions",
-      availability:
-        "Available Tomorrow",
-      initials: "A",
-    },
+  useEffect(() => {
+    async function loadAdvisor() {
+      try {
+        const advisors =
+          await getAdvisors();
 
-    "neha-kapoor": {
-      name: "Neha Kapoor",
-      role: "Growth Advisor",
-      expertise: [
-        "Growth",
-        "Branding",
-        "User Acquisition",
-      ],
-      experience:
-        "Startup Growth Consultant",
-      about:
-        "Neha specializes in startup growth systems, founder branding and customer acquisition strategies for modern startups.",
-      startups: "50+ Startups",
-      sessions: "420+ Sessions",
-      availability:
-        "Open for Consultation",
-      initials: "N",
-    },
-  };
+        const matchedAdvisor =
+          advisors.find(
+            (item: Advisor) =>
+              item.id === params.id
+          );
 
-  const advisor =
-    advisors[
-      params.id as keyof typeof advisors
-    ];
+        setAdvisor(
+          matchedAdvisor || null
+        );
+      } catch (error) {
+        console.error(
+          "Failed to load advisor",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
 
+    if (params?.id) {
+      loadAdvisor();
+    }
+  }, [params?.id]);
+
+  /* LOADING */
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#f8fbff]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          <div className="h-[320px] animate-pulse rounded-[32px] bg-white" />
+
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div className="xl:col-span-2 space-y-6">
+              <div className="h-[240px] animate-pulse rounded-[32px] bg-white" />
+
+              <div className="h-[220px] animate-pulse rounded-[32px] bg-white" />
+            </div>
+
+            <div className="space-y-6">
+              <div className="h-[220px] animate-pulse rounded-[32px] bg-white" />
+
+              <div className="h-[200px] animate-pulse rounded-[32px] bg-white" />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  /* NOT FOUND */
   if (!advisor) {
     return (
-      <main className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6">
-        <div className="bg-white rounded-[32px] border border-slate-200 p-10 text-center max-w-xl">
-          <h1 className="text-4xl font-black text-slate-900">
+      <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-4">
+        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-white p-10 text-center shadow-sm">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-red-50">
+            <Users className="h-10 w-10 text-red-500" />
+          </div>
+
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-slate-800">
             Advisor Not Found
           </h1>
 
-          <p className="text-slate-500 mt-4 leading-relaxed">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-slate-500">
             The advisor profile you are
-            looking for does not exist.
+            trying to access does not
+            exist or may have been
+            removed.
           </p>
 
-          <button
-            onClick={() =>
-              router.push(
-                "/founder/advisors"
-              )
-            }
-            className="mt-8 bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 text-white px-7 py-4 rounded-2xl font-semibold hover:scale-[1.02] transition"
+          <Link
+            href="/founder/advisors"
+            className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 font-semibold text-white transition hover:opacity-90"
           >
+            <ArrowLeft className="h-4 w-4" />
             Back To Advisors
-          </button>
+          </Link>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#f8fafc]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-8">
-        {/* TOP */}
-        <section className="relative overflow-hidden bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] shadow-[0_15px_60px_rgba(99,102,241,0.12)] p-6 md:p-8 lg:p-10">
-          {/* BG */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-200 rounded-full blur-3xl opacity-25 pointer-events-none" />
+    <main className="min-h-screen bg-[#f8fbff]">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-violet-200 rounded-full blur-3xl opacity-25 pointer-events-none" />
+        {/* BACK */}
+        <div>
+          <Link
+            href="/founder/advisors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-800"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back To Advisors
+          </Link>
+        </div>
 
-          <div className="relative z-10 flex flex-col xl:flex-row xl:items-start xl:justify-between gap-10">
+        {/* HERO */}
+        <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-white p-6 shadow-sm md:p-8 lg:p-10">
+          <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl opacity-60" />
+
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-sky-100 blur-3xl opacity-60" />
+
+          <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
+
             {/* LEFT */}
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+            <div className="flex flex-col gap-6 md:flex-row">
               {/* AVATAR */}
-              <div className="w-28 h-28 rounded-[28px] bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 flex items-center justify-center text-5xl font-black text-white shadow-[0_20px_50px_rgba(99,102,241,0.35)] shrink-0">
-                {advisor.initials}
+              <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-[28px] bg-gradient-to-br from-sky-500 via-cyan-500 to-blue-500 text-4xl font-black text-white shadow-[0_20px_60px_rgba(14,165,233,0.25)]">
+                {advisor.fullName
+                  ?.charAt(0)
+                  ?.toUpperCase()}
               </div>
 
               {/* INFO */}
               <div>
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold mb-5">
-                  {advisor.availability}
+                <div className="inline-flex items-center rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
+                  {
+                    advisor.availabilityStatus
+                  }
                 </div>
 
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900">
-                  {advisor.name}
+                <h1 className="mt-5 text-4xl font-black tracking-tight text-slate-800 md:text-5xl">
+                  {advisor.fullName}
                 </h1>
 
-                <p className="text-lg text-slate-500 mt-3">
-                  {advisor.role}
+                <p className="mt-3 text-lg text-slate-500">
+                  {advisor.headline}
                 </p>
 
-                {/* EXPERTISE */}
-                <div className="flex flex-wrap gap-3 mt-6">
+                {/* TAGS */}
+                <div className="mt-6 flex flex-wrap gap-3">
                   {advisor.expertise.map(
-                    (
-                      item: string,
-                      index: number
-                    ) => (
-                      <button
+                    (item, index) => (
+                      <div
                         key={index}
-                        className="px-4 py-2 rounded-2xl bg-indigo-50 text-indigo-700 text-sm border border-indigo-100 font-medium hover:bg-indigo-100 transition"
+                        className="rounded-2xl border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700"
                       >
                         {item}
-                      </button>
+                      </div>
                     )
                   )}
                 </div>
 
-                {/* EXPERIENCE */}
-                <div className="mt-6 text-sm text-slate-500">
-                  {advisor.experience}
+                {/* META */}
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-slate-50 px-4 py-3">
+                    <Star className="h-4 w-4 text-yellow-500" />
+
+                    <span className="text-sm font-semibold text-slate-700">
+                      {advisor.rating} Rating
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-slate-50 px-4 py-3">
+                    <MessageSquare className="h-4 w-4 text-sky-500" />
+
+                    <span className="text-sm font-semibold text-slate-700">
+                      {
+                        advisor.totalSessions
+                      }{" "}
+                      Sessions
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-slate-50 px-4 py-3">
+                    <Users className="h-4 w-4 text-cyan-500" />
+
+                    <span className="text-sm font-semibold text-slate-700">
+                      {
+                        advisor.startupCount
+                      }{" "}
+                      Startups
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* RIGHT */}
-            <div className="w-full xl:w-[320px] space-y-4">
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/programs"
-                  )
-                }
-                className="w-full bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 text-white px-6 py-4 rounded-2xl hover:scale-[1.01] transition-all duration-300 font-semibold shadow-[0_10px_40px_rgba(99,102,241,0.35)]"
-              >
+            <div className="w-full space-y-4 xl:w-[320px]">
+              <button className="w-full rounded-2xl bg-primary px-6 py-4 font-semibold text-white transition hover:opacity-90">
                 Book Consultation
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/resources"
-                  )
-                }
-                className="w-full border border-indigo-100 bg-white/80 backdrop-blur-xl text-slate-700 px-6 py-4 rounded-2xl hover:bg-indigo-50 transition-all duration-300 font-semibold"
-              >
-                View Resources
+              <button className="w-full rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
+                Schedule Discovery Call
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/dashboard"
-                  )
-                }
-                className="w-full border border-slate-200 bg-white text-slate-700 px-6 py-4 rounded-2xl hover:bg-slate-50 transition-all duration-300 font-semibold"
-              >
-                Back To Dashboard
+              <button className="w-full rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
+                View Founder Resources
               </button>
             </div>
           </div>
         </section>
 
-        {/* GRID */}
-        <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* CONTENT */}
+        <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+
           {/* LEFT */}
           <div className="xl:col-span-2 space-y-6">
+
             {/* ABOUT */}
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 md:p-8 shadow-sm">
-              <h2 className="text-3xl font-black text-slate-900">
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
+              <h2 className="text-3xl font-black tracking-tight text-slate-800">
                 About Advisor
               </h2>
 
-              <p className="text-slate-500 leading-relaxed mt-5">
-                {advisor.about}
+              <p className="mt-5 leading-8 text-slate-500">
+                {advisor.fullName} supports
+                founders with startup
+                execution, business growth,
+                strategic planning and
+                scalable startup decision
+                making. This advisor profile
+                architecture is now aligned
+                with backend-driven dynamic
+                rendering for future API
+                integrations.
               </p>
             </div>
 
             {/* EXPERIENCE */}
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 md:p-8 shadow-sm">
-              <h2 className="text-3xl font-black text-slate-900">
-                Experience & Mentorship
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
+              <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                Mentorship Experience
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-8">
-                <div className="rounded-3xl border border-slate-200 bg-white p-6">
+              <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                <div className="rounded-3xl border border-border/60 bg-slate-50 p-6">
                   <p className="text-sm text-slate-500">
                     Experience
                   </p>
 
-                  <h3 className="text-3xl font-black text-slate-900 mt-3">
-                    12+
+                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                    {
+                      advisor.yearsExperience
+                    }+
                   </h3>
 
-                  <p className="text-sm text-slate-500 mt-2">
+                  <p className="mt-2 text-sm text-slate-500">
                     Years
                   </p>
                 </div>
 
-                <div className="rounded-3xl border border-slate-200 bg-white p-6">
-                  <p className="text-sm text-slate-500">
-                    Startups
-                  </p>
-
-                  <h3 className="text-3xl font-black text-slate-900 mt-3">
-                    {
-                      advisor.startups
-                    }
-                  </h3>
-
-                  <p className="text-sm text-slate-500 mt-2">
-                    Mentored
-                  </p>
-                </div>
-
-                <div className="rounded-3xl border border-slate-200 bg-white p-6">
+                <div className="rounded-3xl border border-border/60 bg-slate-50 p-6">
                   <p className="text-sm text-slate-500">
                     Sessions
                   </p>
 
-                  <h3 className="text-3xl font-black text-slate-900 mt-3">
+                  <h3 className="mt-3 text-3xl font-black text-slate-800">
                     {
-                      advisor.sessions
+                      advisor.totalSessions
                     }
                   </h3>
 
-                  <p className="text-sm text-slate-500 mt-2">
+                  <p className="mt-2 text-sm text-slate-500">
                     Completed
+                  </p>
+                </div>
+
+                <div className="rounded-3xl border border-border/60 bg-slate-50 p-6">
+                  <p className="text-sm text-slate-500">
+                    Startups
+                  </p>
+
+                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                    {
+                      advisor.startupCount
+                    }
+                  </h3>
+
+                  <p className="mt-2 text-sm text-slate-500">
+                    Supported
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* STARTUP SUPPORT */}
-            <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-indigo-50 via-violet-50 to-cyan-50 border border-white/50 p-6 md:p-8 shadow-sm">
-              <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-200 rounded-full blur-3xl opacity-20" />
+            {/* FOUNDER CTA */}
+            <div className="relative overflow-hidden rounded-[32px] border border-sky-100 bg-gradient-to-br from-sky-50 via-cyan-50 to-blue-50 p-6 shadow-sm md:p-8">
+              <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-40" />
 
               <div className="relative z-10">
-                <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 border border-white text-slate-700 text-xs font-semibold mb-5 shadow-sm">
-                  Founder Guidance
+                <div className="inline-flex items-center rounded-full border border-white bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
+                  Founder Mentorship
                 </div>
 
-                <h2 className="text-3xl font-black text-slate-900">
-                  Personalized Startup Mentorship
+                <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-800">
+                  Build Faster With Expert
+                  Startup Guidance
                 </h2>
 
-                <p className="text-slate-500 leading-relaxed mt-5 max-w-2xl">
-                  Get actionable startup
-                  execution guidance, founder
-                  support and strategic
-                  mentoring sessions to scale
-                  your startup effectively.
+                <p className="mt-5 max-w-2xl leading-8 text-slate-500">
+                  Work closely with
+                  experienced startup
+                  advisors to validate ideas,
+                  improve execution and scale
+                  your startup journey with
+                  structured mentorship.
                 </p>
 
-                <button
-                  onClick={() =>
-                    router.push(
-                      "/founder/programs"
-                    )
-                  }
-                  className="mt-8 bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 text-white px-7 py-4 rounded-2xl hover:scale-[1.02] transition font-semibold shadow-[0_10px_40px_rgba(99,102,241,0.35)]"
-                >
+                <button className="mt-8 rounded-2xl bg-primary px-6 py-4 font-semibold text-white transition hover:opacity-90">
                   Start Mentorship
                 </button>
               </div>
@@ -319,60 +343,50 @@ export default function AdvisorProfilePage() {
 
           {/* RIGHT */}
           <div className="space-y-6">
-            {/* SESSION */}
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 shadow-sm">
-              <h2 className="text-2xl font-black text-slate-900">
+
+            {/* AVAILABILITY */}
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+              <h2 className="text-2xl font-black text-slate-800">
                 Session Availability
               </h2>
 
-              <div className="mt-6 rounded-3xl bg-slate-50 p-5 border border-slate-100">
-                <p className="text-sm text-slate-500">
+              <div className="mt-6 rounded-3xl border border-border/60 bg-slate-50 p-5">
+                <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <Calendar className="h-4 w-4" />
                   Next Available Session
-                </p>
+                </div>
 
-                <h3 className="text-2xl font-black text-slate-900 mt-3">
+                <h3 className="mt-3 text-2xl font-black text-slate-800">
                   Saturday • 7 PM
                 </h3>
 
-                <p className="text-sm text-slate-500 mt-3">
+                <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
+                  <Clock3 className="h-4 w-4" />
                   1:1 Founder Strategy Call
-                </p>
+                </div>
               </div>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/programs"
-                  )
-                }
-                className="w-full mt-6 bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 text-white px-6 py-4 rounded-2xl hover:scale-[1.01] transition-all duration-300 font-semibold"
-              >
+              <button className="mt-6 w-full rounded-2xl bg-primary px-6 py-4 font-semibold text-white transition hover:opacity-90">
                 Schedule Session
               </button>
             </div>
 
             {/* SUPPORT */}
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 shadow-sm">
-              <h2 className="text-2xl font-black text-slate-900">
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+              <h2 className="text-2xl font-black text-slate-800">
                 Founder Support
               </h2>
 
-              <p className="text-slate-500 mt-4 leading-relaxed">
-                Need help selecting the
-                right startup mentor? Our
-                founder support team can
-                help you plan your startup
-                roadmap.
+              <p className="mt-4 leading-8 text-slate-500">
+                Need help choosing the
+                right advisor for your
+                startup stage? Our founder
+                support team can help you
+                identify the best mentorship
+                path.
               </p>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/resources"
-                  )
-                }
-                className="w-full mt-6 border border-indigo-100 bg-white/80 backdrop-blur-xl text-slate-700 px-6 py-4 rounded-2xl hover:bg-indigo-50 transition-all duration-300 font-semibold"
-              >
+              <button className="mt-6 w-full rounded-2xl border border-border/60 bg-slate-50 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-100">
                 Contact Support
               </button>
             </div>

@@ -51,7 +51,7 @@ export default function AdvisorPricingPage() {
               Advisor Pricing
             </div>
 
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-800 sm:text-5xl">
               Setup Your Advisory Pricing
             </h1>
 
@@ -97,7 +97,7 @@ export default function AdvisorPricingPage() {
         {/* FORM */}
         <div className="mt-14">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">
+            <h2 className="text-3xl font-bold text-slate-800">
               Pricing & Advisory Setup
             </h2>
 
@@ -117,7 +117,7 @@ export default function AdvisorPricingPage() {
                   <WalletCards className="h-5 w-5" />
                 </div>
 
-                <h3 className="mt-5 text-xl font-bold text-slate-900">
+                <h3 className="mt-5 text-xl font-bold text-slate-800">
                   {item.title}
                 </h3>
 

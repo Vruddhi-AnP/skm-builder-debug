@@ -3,8 +3,6 @@
 import Link from "next/link";
 
 import {
-  ArrowRight,
-  BarChart3,
   Briefcase,
   CheckCircle2,
   ChevronRight,
@@ -12,8 +10,8 @@ import {
   Layers3,
   Rocket,
   ShieldCheck,
-  Sparkles,
   Users2,
+  BarChart3,
 } from "lucide-react";
 
 const founderJourney = [
@@ -103,33 +101,26 @@ const stats = [
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#f7f9fc] text-[#0f172a]">
-      {/* BACKGROUND */}
-      <div className="pointer-events-none absolute left-0 top-0 h-[420px] w-[420px] rounded-full bg-violet-200/40 blur-3xl" />
-
-      <div className="pointer-events-none absolute right-0 top-[20%] h-[420px] w-[420px] rounded-full bg-cyan-200/40 blur-3xl" />
-
-      <div className="pointer-events-none absolute bottom-0 left-[30%] h-[420px] w-[420px] rounded-full bg-fuchsia-200/30 blur-3xl" />
-
+    <main className="min-h-screen bg-background text-slate-800">
       {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 border-b border-white/40 bg-white/75 backdrop-blur-2xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
+      <nav className="sticky top-0 z-50 border-b border-border/60 bg-white/95 backdrop-blur-xl">
+        <div className="page-container flex h-20 items-center justify-between">
           {/* LOGO */}
           <Link
             href="/"
             className="flex items-center gap-4"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 text-xl font-black text-white shadow-xl shadow-indigo-200">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-white">
               S
             </div>
 
             <div>
-              <h1 className="text-lg font-black tracking-tight">
+              <h1 className="text-lg font-black tracking-tight text-slate-800">
                 Startup Ka Mall
               </h1>
 
               <p className="text-sm text-slate-500">
-                Startup Ecosystem Platform
+                Founder Ecosystem Platform
               </p>
             </div>
           </Link>
@@ -138,28 +129,28 @@ export default function HomePage() {
           <div className="hidden items-center gap-10 text-sm font-semibold text-slate-600 lg:flex">
             <a
               href="#journey"
-              className="transition hover:text-indigo-600"
+              className="transition hover:text-slate-800"
             >
               Founder Journey
             </a>
 
             <a
               href="#modules"
-              className="transition hover:text-indigo-600"
+              className="transition hover:text-slate-800"
             >
               Modules
             </a>
 
             <a
               href="#ecosystem"
-              className="transition hover:text-indigo-600"
+              className="transition hover:text-slate-800"
             >
               Ecosystem
             </a>
 
             <a
               href="#cta"
-              className="transition hover:text-indigo-600"
+              className="transition hover:text-slate-800"
             >
               Get Started
             </a>
@@ -169,14 +160,14 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="hidden rounded-2xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold shadow-sm transition hover:bg-slate-50 sm:flex"
+              className="hidden rounded-2xl border border-border/60 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-primary/10 text-primary border-primary/20 sm:flex"
             >
               Login
             </Link>
 
             <Link
               href="/signup"
-              className="rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-xl shadow-indigo-200 transition hover:scale-[1.02]"
+              className="rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
             >
               Get Started
             </Link>
@@ -185,43 +176,42 @@ export default function HomePage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 lg:px-10 lg:pb-32 lg:pt-28">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center gap-3 rounded-full border border-violet-100 bg-white/80 px-5 py-3 shadow-lg shadow-violet-100 backdrop-blur-xl">
-
+      <section className="relative overflow-hidden">
+        <div className="page-container py-24 md:py-32">
+          <div className="mx-auto max-w-5xl text-center">
+            {/* BADGE */}
+            <div className="inline-flex items-center rounded-full border border-border/60 bg-white px-5 py-3 shadow-sm">
               <span className="text-sm font-semibold text-slate-700">
-                Startup ecosystem platform for founders,
-                investors & advisors
+                Founder operating platform for startup execution
               </span>
             </div>
 
-            <h1 className="mt-8 text-5xl font-black leading-[1.05] tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
-              Build Your Startup
+            {/* TITLE */}
+            <h1 className="mt-8 text-5xl font-black leading-[1.05] tracking-tight text-slate-800 md:text-6xl">
+              Build Startups
               <br />
-              With Structure,
-              <br />
-              Clarity & Execution
+              With Structured Execution
             </h1>
 
-            <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-slate-600 lg:text-xl">
-              A premium startup ecosystem platform helping
-              founders move from idea validation to execution,
-              advisor collaboration and investor readiness.
+            {/* SUBTITLE */}
+            <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-slate-600">
+              A founder operating platform designed for
+              startup execution, ecosystem collaboration,
+              advisor access and investor readiness.
             </p>
 
             {/* CTA */}
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/signup"
-                className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-8 py-4 font-semibold text-white shadow-2xl shadow-indigo-200 transition hover:scale-[1.02]"
+                className="rounded-2xl bg-primary px-8 py-4 font-semibold text-white transition hover:opacity-90"
               >
                 Start Your Journey
               </Link>
 
               <Link
                 href="/login"
-                className="rounded-2xl border border-slate-200 bg-white px-8 py-4 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                className="rounded-2xl border border-border/60 bg-white px-8 py-4 font-semibold text-slate-700 transition hover:bg-primary/10 text-primary border-primary/20"
               >
                 Explore Platform
               </Link>
@@ -236,7 +226,7 @@ export default function HomePage() {
               ].map((tag) => (
                 <div
                   key={tag}
-                  className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-600 shadow-sm"
+                  className="rounded-full border border-border/60 bg-white px-5 py-2 text-sm font-medium text-slate-600"
                 >
                   {tag}
                 </div>
@@ -249,15 +239,15 @@ export default function HomePage() {
       {/* JOURNEY */}
       <section
         id="journey"
-        className="py-24"
+        className="section-spacing"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="page-container">
           <div className="text-center">
-            <div className="inline-flex rounded-full bg-violet-100 px-5 py-2 text-sm font-semibold text-violet-700">
+            <div className="inline-flex rounded-full border border-border/60 bg-primary/10 text-primary border-primary/20 px-5 py-2 text-sm font-semibold text-slate-700">
               Founder Workflow
             </div>
 
-            <h2 className="mt-6 text-4xl font-black tracking-tight md:text-5xl">
+            <h2 className="mt-6 text-4xl font-black tracking-tight text-slate-800">
               Your Founder Journey
             </h2>
 
@@ -271,13 +261,13 @@ export default function HomePage() {
             {founderJourney.map((item) => (
               <div
                 key={item.step}
-                className="rounded-[32px] border border-white/60 bg-white/90 p-8 shadow-lg shadow-slate-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(99,102,241,0.12)]"
+                className="rounded-3xl border border-border/60 bg-white p-8 transition hover:-translate-y-1 hover:shadow-lg"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 text-lg font-black text-white shadow-lg shadow-indigo-200">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-lg font-black text-white">
                   {item.step}
                 </div>
 
-                <h3 className="mt-7 text-2xl font-black">
+                <h3 className="mt-7 text-2xl font-black text-slate-800">
                   {item.title}
                 </h3>
 
@@ -293,15 +283,15 @@ export default function HomePage() {
       {/* MODULES */}
       <section
         id="modules"
-        className="py-24"
+        className="section-spacing"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="page-container">
           <div className="text-center">
-            <div className="inline-flex rounded-full bg-cyan-100 px-5 py-2 text-sm font-semibold text-cyan-700">
+            <div className="inline-flex rounded-full border border-border/60 bg-primary/10 text-primary border-primary/20 px-5 py-2 text-sm font-semibold text-slate-700">
               Platform Modules
             </div>
 
-            <h2 className="mt-6 text-4xl font-black tracking-tight md:text-5xl">
+            <h2 className="mt-6 text-4xl font-black tracking-tight text-slate-800">
               Core Platform Infrastructure
             </h2>
 
@@ -319,13 +309,13 @@ export default function HomePage() {
               return (
                 <div
                   key={item.title}
-                  className="group rounded-[32px] border border-white/60 bg-white/90 p-8 shadow-lg shadow-slate-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(99,102,241,0.12)]"
+                  className="group rounded-3xl border border-border/60 bg-white p-8 transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 text-white shadow-xl shadow-indigo-200">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-white">
                     <Icon className="h-7 w-7" />
                   </div>
 
-                  <h3 className="mt-7 text-2xl font-black">
+                  <h3 className="mt-7 text-2xl font-black text-slate-800">
                     {item.title}
                   </h3>
 
@@ -333,7 +323,7 @@ export default function HomePage() {
                     {item.description}
                   </p>
 
-                  <button className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 transition group-hover:gap-3">
+                  <button className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-slate-800 transition group-hover:gap-3">
                     Explore Module
                     <ChevronRight className="h-4 w-4" />
                   </button>
@@ -347,18 +337,18 @@ export default function HomePage() {
       {/* ECOSYSTEM */}
       <section
         id="ecosystem"
-        className="py-24"
+        className="section-spacing"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="overflow-hidden rounded-[40px] border border-white/60 bg-white/90 p-10 shadow-[0_20px_80px_rgba(99,102,241,0.10)] backdrop-blur-2xl md:p-14">
+        <div className="page-container">
+          <div className="rounded-3xl border border-border/60 bg-white p-10 md:p-14">
             <div className="grid items-center gap-14 lg:grid-cols-2">
               {/* LEFT */}
               <div>
-                <div className="inline-flex rounded-full bg-emerald-100 px-5 py-2 text-sm font-semibold text-emerald-700">
+                <div className="inline-flex rounded-full border border-border/60 bg-primary/10 text-primary border-primary/20 px-5 py-2 text-sm font-semibold text-slate-700">
                   Founder Ecosystem
                 </div>
 
-                <h2 className="mt-6 text-4xl font-black leading-tight md:text-5xl">
+                <h2 className="mt-6 text-4xl font-black leading-tight text-slate-800 md:text-5xl">
                   Access Advisors &
                   <br />
                   Execution Support
@@ -373,14 +363,14 @@ export default function HomePage() {
                 <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                   <Link
                     href="/signup"
-                    className="rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-7 py-4 font-semibold text-white shadow-xl shadow-indigo-200 transition hover:scale-[1.02]"
+                    className="rounded-2xl bg-primary px-7 py-4 font-semibold text-white transition hover:opacity-90"
                   >
                     Join Platform
                   </Link>
 
                   <Link
                     href="/login"
-                    className="rounded-2xl border border-slate-200 bg-white px-7 py-4 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                    className="rounded-2xl border border-border/60 bg-white px-7 py-4 font-semibold text-slate-700 transition hover:bg-primary/10 text-primary border-primary/20"
                   >
                     Explore Programs
                   </Link>
@@ -397,13 +387,13 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="rounded-[28px] border border-slate-100 bg-gradient-to-br from-white to-slate-50 p-6"
+                    className="rounded-3xl border border-border/60 bg-primary/10 text-primary border-primary/20/20 p-6"
                   >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 text-white shadow-lg shadow-indigo-200">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white">
                       <Layers3 className="h-6 w-6" />
                     </div>
 
-                    <h3 className="mt-5 text-xl font-black">
+                    <h3 className="mt-5 text-xl font-black text-slate-800">
                       {item}
                     </h3>
 
@@ -420,14 +410,14 @@ export default function HomePage() {
       </section>
 
       {/* STATS */}
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+      <section className="section-spacing">
+        <div className="page-container">
           <div className="text-center">
-            <div className="inline-flex rounded-full bg-violet-100 px-5 py-2 text-sm font-semibold text-violet-700">
+            <div className="inline-flex rounded-full border border-border/60 bg-primary/10 text-primary border-primary/20 px-5 py-2 text-sm font-semibold text-slate-700">
               Founder Network
             </div>
 
-            <h2 className="mt-6 text-4xl font-black tracking-tight md:text-5xl">
+            <h2 className="mt-6 text-4xl font-black tracking-tight text-slate-800">
               Trusted By Founders Worldwide
             </h2>
           </div>
@@ -436,9 +426,9 @@ export default function HomePage() {
             {stats.map((item) => (
               <div
                 key={item.label}
-                className="rounded-[32px] border border-white/60 bg-white/90 p-10 text-center shadow-lg shadow-slate-100"
+                className="rounded-3xl border border-border/60 bg-white p-10 text-center"
               >
-                <h3 className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-5xl font-black text-transparent">
+                <h3 className="text-5xl font-black tracking-tight text-slate-800">
                   {item.value}
                 </h3>
 
@@ -456,12 +446,10 @@ export default function HomePage() {
         id="cta"
         className="pb-24"
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="relative overflow-hidden rounded-[42px] bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 px-10 py-16 text-white shadow-[0_30px_90px_rgba(99,102,241,0.35)] md:px-16">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,white,transparent_40%)] opacity-20" />
-
-            <div className="relative text-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-semibold backdrop-blur-xl">
+        <div className="page-container">
+          <div className="rounded-3xl bg-primary px-10 py-16 text-white md:px-16">
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-5 py-2 text-sm font-semibold backdrop-blur-sm">
                 <CheckCircle2 className="h-4 w-4" />
                 Startup Execution Platform
               </div>
@@ -472,7 +460,7 @@ export default function HomePage() {
                 Should Not Be Built Alone
               </h2>
 
-              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-indigo-100">
+              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
                 Build with structure, execution support,
                 ecosystem collaboration and investor readiness.
               </p>
@@ -480,14 +468,14 @@ export default function HomePage() {
               <div className="mt-10 flex flex-col items-center justify-center gap-5 sm:flex-row">
                 <Link
                   href="/signup"
-                  className="rounded-2xl bg-white px-8 py-4 font-bold text-indigo-600 shadow-xl transition hover:scale-[1.02]"
+                  className="rounded-2xl bg-white px-8 py-4 font-bold text-slate-800 transition hover:opacity-90"
                 >
                   Start Now
                 </Link>
 
                 <Link
                   href="/login"
-                  className="rounded-2xl border border-white/30 bg-white/10 px-8 py-4 font-bold backdrop-blur-xl transition hover:bg-white/20"
+                  className="rounded-2xl border border-white/20 bg-white/10 px-8 py-4 font-bold backdrop-blur-sm transition hover:bg-white/20"
                 >
                   Login
                 </Link>
@@ -498,8 +486,8 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-white/40 bg-white/60 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-8 text-sm text-slate-500 lg:flex-row lg:px-10">
+      <footer className="border-t border-border/60 bg-white">
+        <div className="page-container flex flex-col items-center justify-between gap-5 py-8 text-sm text-slate-500 lg:flex-row">
           <p>
             © 2026 Startup Ka Mall. All rights
             reserved.
@@ -508,14 +496,14 @@ export default function HomePage() {
           <div className="flex items-center gap-6">
             <Link
               href="/login"
-              className="transition hover:text-indigo-600"
+              className="transition hover:text-slate-800"
             >
               Login
             </Link>
 
             <Link
               href="/signup"
-              className="transition hover:text-indigo-600"
+              className="transition hover:text-slate-800"
             >
               Signup
             </Link>

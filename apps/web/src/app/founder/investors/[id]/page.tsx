@@ -1,263 +1,300 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+
+import {
+  ArrowLeft,
+  Briefcase,
+  Building2,
+  CircleDollarSign,
+} from "lucide-react";
+
+import { getInvestors } from "@/lib/api";
+
+import { Investor } from "@/types/investor";
 
 export default function InvestorProfilePage() {
-  const router = useRouter();
-
   const params = useParams();
 
-  const investors: any = {
-    "arjun-capital": {
-      name: "Arjun Mehta",
-      firm: "Apex Capital",
-      stage: "Seed Investor",
-      industries: [
-        "SaaS",
-        "AI",
-        "Fintech",
-      ],
-      ticket: "₹25L - ₹2Cr",
-      about:
-        "Arjun actively invests in early-stage SaaS and AI startups with strong execution-focused founding teams.",
-      portfolio:
-        "18 Startup Investments",
-      availability:
-        "Actively Investing",
-      initials: "A",
-    },
+  const [investor, setInvestor] =
+    useState<Investor | null>(null);
 
-    "neha-ventures": {
-      name: "Neha Kapoor",
-      firm: "Vision Ventures",
-      stage: "Pre-Seed Investor",
-      industries: [
-        "D2C",
-        "Consumer",
-        "Branding",
-      ],
-      ticket: "₹10L - ₹75L",
-      about:
-        "Neha supports founder-first startups focused on consumer growth and scalable branding systems.",
-      portfolio:
-        "32 Founder Investments",
-      availability:
-        "Open For Pitches",
-      initials: "N",
-    },
+  const [loading, setLoading] =
+    useState(true);
 
-    "rahul-fund": {
-      name: "Rahul Sharma",
-      firm: "ScaleX Fund",
-      stage: "Series A Investor",
-      industries: [
-        "Growth",
-        "SaaS",
-        "Technology",
-      ],
-      ticket: "₹1Cr - ₹10Cr",
-      about:
-        "Rahul partners with scalable technology startups and helps founders optimize growth and expansion.",
-      portfolio:
-        "50+ Startup Portfolio",
-      availability:
-        "Available This Month",
-      initials: "R",
-    },
+  useEffect(() => {
+    async function loadInvestor() {
+      try {
+        const investors =
+          await getInvestors();
 
-    "priya-angels": {
-      name: "Priya Verma",
-      firm: "Launch Angels",
-      stage: "Angel Investor",
-      industries: [
-        "Women-led",
-        "AI",
-        "EdTech",
-      ],
-      ticket: "₹5L - ₹50L",
-      about:
-        "Priya invests in founder-led startups focused on innovation, AI and education ecosystems.",
-      portfolio:
-        "22 Angel Investments",
-      availability:
-        "Accepting Applications",
-      initials: "P",
-    },
-  };
+        const matchedInvestor =
+          investors.find(
+            (item: Investor) =>
+              item.id === params.id
+          );
 
-  const investor =
-    investors[
-      params.id as keyof typeof investors
-    ];
+        setInvestor(
+          matchedInvestor || null
+        );
+      } catch (error) {
+        console.error(
+          "Failed to load investor",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
 
+    if (params?.id) {
+      loadInvestor();
+    }
+  }, [params?.id]);
+
+  /* LOADING */
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#f8fbff]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+
+          <div className="h-[320px] animate-pulse rounded-[32px] bg-white" />
+
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+
+            <div className="xl:col-span-2 space-y-6">
+              <div className="h-[240px] animate-pulse rounded-[32px] bg-white" />
+
+              <div className="h-[220px] animate-pulse rounded-[32px] bg-white" />
+            </div>
+
+            <div className="space-y-6">
+              <div className="h-[220px] animate-pulse rounded-[32px] bg-white" />
+
+              <div className="h-[200px] animate-pulse rounded-[32px] bg-white" />
+            </div>
+
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  /* NOT FOUND */
   if (!investor) {
     return (
-      <main className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6">
-        <div className="bg-white rounded-[32px] border border-slate-200 p-10 text-center max-w-xl">
-          <h1 className="text-4xl font-black text-slate-900">
+      <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-4">
+
+        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-white p-10 text-center shadow-sm">
+
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-red-50">
+            <Building2 className="h-10 w-10 text-red-500" />
+          </div>
+
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-slate-800">
             Investor Not Found
           </h1>
 
-          <button
-            onClick={() =>
-              router.push(
-                "/founder/investors"
-              )
-            }
-            className="mt-8 bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 text-white px-7 py-4 rounded-2xl font-semibold"
+          <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-slate-500">
+            The investor profile you are
+            trying to access does not
+            exist or may have been
+            removed.
+          </p>
+
+          <Link
+            href="/founder/investors"
+            className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 font-semibold text-white transition hover:opacity-90"
           >
+            <ArrowLeft className="h-4 w-4" />
             Back To Investors
-          </button>
+          </Link>
+
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#f8fafc]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-8">
+    <main className="min-h-screen bg-[#f8fbff]">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+
+        {/* BACK */}
+        <div>
+          <Link
+            href="/founder/investors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-800"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back To Investors
+          </Link>
+        </div>
 
         {/* HERO */}
-        <section className="relative overflow-hidden bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] shadow-[0_15px_60px_rgba(59,130,246,0.12)] p-6 md:p-8 lg:p-10">
+        <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-white p-6 shadow-sm md:p-8 lg:p-10">
 
-          <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-200 rounded-full blur-3xl opacity-25" />
+          <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl opacity-60" />
 
-          <div className="relative z-10 flex flex-col xl:flex-row xl:justify-between gap-10">
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-sky-100 blur-3xl opacity-60" />
+
+          <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
 
             {/* LEFT */}
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col gap-6 md:flex-row">
 
-              <div className="w-28 h-28 rounded-[28px] bg-gradient-to-br from-cyan-500 via-blue-500 to-violet-500 flex items-center justify-center text-5xl font-black text-white shadow-lg shadow-cyan-500/25">
-                {investor.initials}
+              {/* AVATAR */}
+              <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-[28px] bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-500 text-4xl font-black text-white shadow-[0_20px_60px_rgba(14,165,233,0.25)]">
+                {investor.fullName
+                  ?.charAt(0)
+                  ?.toUpperCase()}
               </div>
 
+              {/* INFO */}
               <div>
 
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-cyan-50 border border-cyan-100 text-cyan-700 text-xs font-semibold mb-5">
+                <div className="inline-flex items-center rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
                   {
-                    investor.availability
+                    investor.availabilityStatus
                   }
                 </div>
 
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900">
-                  {investor.name}
+                <h1 className="mt-5 text-4xl font-black tracking-tight text-slate-800 md:text-5xl">
+                  {investor.fullName}
                 </h1>
 
-                <p className="text-lg text-slate-500 mt-3">
-                  {investor.firm}
+                <p className="mt-3 text-lg text-slate-500">
+                  {investor.firmName}
                 </p>
 
-                <div className="flex flex-wrap gap-3 mt-6">
+                {/* TAGS */}
+                <div className="mt-6 flex flex-wrap gap-3">
 
                   {investor.industries.map(
-                    (
-                      item: string,
-                      index: number
-                    ) => (
-                      <button
+                    (item, index) => (
+                      <div
                         key={index}
-                        className="px-4 py-2 rounded-2xl bg-cyan-50 text-cyan-700 text-sm border border-cyan-100 font-medium hover:bg-cyan-100 transition"
+                        className="rounded-2xl border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700"
                       >
                         {item}
-                      </button>
+                      </div>
                     )
                   )}
 
                 </div>
 
-                <div className="mt-6 text-sm text-slate-500">
-                  {investor.stage}
+                {/* META */}
+                <div className="mt-8 flex flex-wrap gap-4">
+
+                  <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-slate-50 px-4 py-3">
+                    <Briefcase className="h-4 w-4 text-cyan-500" />
+
+                    <span className="text-sm font-semibold text-slate-700">
+                      {
+                        investor.investmentStage
+                      }
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 rounded-2xl border border-border/60 bg-slate-50 px-4 py-3">
+                    <CircleDollarSign className="h-4 w-4 text-emerald-500" />
+
+                    <span className="text-sm font-semibold text-slate-700">
+                      {
+                        investor.ticketSize
+                      }
+                    </span>
+                  </div>
+
                 </div>
 
               </div>
-
             </div>
 
             {/* RIGHT */}
-            <div className="w-full xl:w-[320px] space-y-4">
+            <div className="w-full space-y-4 xl:w-[320px]">
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/programs"
-                  )
-                }
-                className="w-full bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 text-white px-6 py-4 rounded-2xl font-semibold"
-              >
+              <button className="w-full rounded-2xl bg-primary px-6 py-4 font-semibold text-white transition hover:opacity-90">
                 Connect Investor
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/resources"
-                  )
-                }
-                className="w-full border border-cyan-100 bg-white text-slate-700 px-6 py-4 rounded-2xl hover:bg-cyan-50 transition font-semibold"
-              >
+              <button className="w-full rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
                 Funding Resources
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/investors"
-                  )
-                }
-                className="w-full border border-slate-200 bg-white text-slate-700 px-6 py-4 rounded-2xl hover:bg-slate-50 transition font-semibold"
-              >
-                Back To Investors
+              <button className="w-full rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
+                Startup Readiness
               </button>
 
             </div>
-
           </div>
-
         </section>
 
-        {/* GRID */}
-        <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* CONTENT */}
+        <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
 
           {/* LEFT */}
           <div className="xl:col-span-2 space-y-6">
 
             {/* ABOUT */}
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 md:p-8 shadow-sm">
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
 
-              <h2 className="text-3xl font-black text-slate-900">
-                About Investor
+              <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                Investor Overview
               </h2>
 
-              <p className="text-slate-500 leading-relaxed mt-5">
-                {investor.about}
+              <p className="mt-5 leading-8 text-slate-500">
+                {investor.fullName} actively
+                supports startups aligned
+                with scalable execution,
+                long-term growth and strong
+                founder-market fit. This
+                profile architecture is now
+                backend-ready for future
+                dynamic investor data.
               </p>
 
             </div>
 
-            {/* STATS */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* FUNDING INFO */}
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
 
-              <div className="rounded-[32px] border border-slate-200 bg-white p-6">
-                <p className="text-sm text-slate-500">
-                  Ticket Size
-                </p>
+              <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                Funding Focus
+              </h2>
 
-                <h3 className="text-3xl font-black text-slate-900 mt-3">
-                  {investor.ticket}
-                </h3>
-              </div>
+              <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
 
-              <div className="rounded-[32px] border border-slate-200 bg-white p-6">
-                <p className="text-sm text-slate-500">
-                  Portfolio
-                </p>
+                <div className="rounded-3xl border border-border/60 bg-slate-50 p-6">
 
-                <h3 className="text-3xl font-black text-slate-900 mt-3">
-                  {
-                    investor.portfolio
-                  }
-                </h3>
+                  <p className="text-sm text-slate-500">
+                    Investment Stage
+                  </p>
+
+                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                    {
+                      investor.investmentStage
+                    }
+                  </h3>
+
+                </div>
+
+                <div className="rounded-3xl border border-border/60 bg-slate-50 p-6">
+
+                  <p className="text-sm text-slate-500">
+                    Ticket Size
+                  </p>
+
+                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                    {
+                      investor.ticketSize
+                    }
+                  </h3>
+
+                </div>
+
               </div>
 
             </div>
@@ -267,45 +304,51 @@ export default function InvestorProfilePage() {
           {/* RIGHT */}
           <div className="space-y-6">
 
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 shadow-sm">
+            {/* PORTFOLIO */}
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
 
-              <h2 className="text-2xl font-black text-slate-900">
-                Investment Focus
+              <h2 className="text-2xl font-black text-slate-800">
+                Portfolio Activity
               </h2>
 
-              <p className="text-slate-500 mt-4 leading-relaxed">
-                Interested in scalable
-                startups with strong
-                execution-focused founding
-                teams and long-term market
-                potential.
-              </p>
+              <div className="mt-6 rounded-3xl border border-border/60 bg-slate-50 p-5">
+
+                <p className="text-sm text-slate-500">
+                  Startup Portfolio
+                </p>
+
+                <h3 className="mt-3 text-2xl font-black text-slate-800">
+                  {
+                    investor.portfolioCount
+                  }
+                </h3>
+
+              </div>
 
             </div>
 
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/50 rounded-[32px] p-6 shadow-sm">
+            {/* SUPPORT */}
+            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
 
-              <h2 className="text-2xl font-black text-slate-900">
-                Founder Support
+              <h2 className="text-2xl font-black text-slate-800">
+                Founder Funding Support
               </h2>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/founder/resources"
-                  )
-                }
-                className="w-full mt-6 bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 text-white px-6 py-4 rounded-2xl font-semibold"
-              >
-                Explore Resources
+              <p className="mt-4 leading-8 text-slate-500">
+                Improve investor readiness,
+                strengthen your startup
+                positioning and prepare for
+                fundraising conversations.
+              </p>
+
+              <button className="mt-6 w-full rounded-2xl border border-border/60 bg-slate-50 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-100">
+                Explore Founder Resources
               </button>
 
             </div>
 
           </div>
-
         </section>
-
       </div>
     </main>
   );

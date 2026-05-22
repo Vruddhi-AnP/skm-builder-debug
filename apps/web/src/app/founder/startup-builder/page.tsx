@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import {
   ArrowRight,
   Lightbulb,
@@ -15,52 +16,57 @@ const builderModules = [
   {
     title: "Idea Definition",
     description:
-      "Define your startup vision, mission and core business idea.",
+      "Define your startup vision, mission and business idea.",
     href: "/founder/startup-builder/idea-definition",
     icon: Lightbulb,
     progress: 80,
     status: "Completed",
   },
+
   {
     title: "Problem Definition",
     description:
-      "Clearly identify the real-world problem your startup solves.",
+      "Identify the core real-world problem your startup solves.",
     href: "/founder/startup-builder/problem-definition",
     icon: CircleHelp,
     progress: 60,
     status: "In Progress",
   },
+
   {
     title: "Market Research",
     description:
-      "Validate competitors, market demand and target audience.",
+      "Analyze competitors, target audience and market demand.",
     href: "/founder/startup-builder/market-research",
     icon: BarChart3,
     progress: 40,
     status: "In Progress",
   },
+
   {
     title: "Solution Design",
     description:
-      "Design product workflows, features and user experience.",
+      "Structure product workflows, user journeys and features.",
     href: "/founder/startup-builder/solution-design",
     icon: Sparkles,
     progress: 20,
     status: "Pending",
   },
+
   {
     title: "Business Model",
     description:
-      "Create pricing strategy and revenue generation structure.",
+      "Define pricing, revenue strategy and business scalability.",
     href: "/founder/startup-builder/business-model",
     icon: BriefcaseBusiness,
     progress: 15,
     status: "Pending",
   },
+
   {
     title: "Summary",
     description:
-      "Review complete startup insights and execution roadmap.",
+      "Review startup execution insights and readiness roadmap.",
     href: "/founder/startup-builder/summary",
     icon: FileText,
     progress: 0,
@@ -72,64 +78,65 @@ const stats = [
   {
     title: "Startup Progress",
     value: "35%",
-    subtitle: "Overall completion",
+    subtitle: "Overall workflow completion",
   },
+
   {
     title: "Completed Modules",
     value: "2/7",
-    subtitle: "Builder workflow",
+    subtitle: "Builder workflow completed",
   },
+
   {
     title: "Readiness Score",
     value: "72",
-    subtitle: "Investor readiness",
+    subtitle: "Investor readiness stage",
   },
+
   {
     title: "Pending Tasks",
     value: "11",
-    subtitle: "Remaining actions",
+    subtitle: "Remaining execution tasks",
   },
 ];
 
 export default function StartupBuilderPage() {
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8">
+    <div className="space-y-8">
       {/* HERO */}
-      <section className="relative overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm">
-        <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl" />
-
-        <div className="relative z-10 grid gap-10 px-6 py-8 lg:grid-cols-[1.2fr_0.8fr] lg:px-10 lg:py-10">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+        <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
-            <div className="inline-flex items-center rounded-full bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700">
+            <div className="inline-flex items-center rounded-full border border-primary/10 bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">
               Startup Execution Workspace
             </div>
 
-            <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl">
+            <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
               Build Your Startup
-              <span className="block text-cyan-600">
+              <span className="block text-primary">
                 Step-by-Step
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
-              Validate your startup idea, structure your business,
-              analyze your market and prepare investor-ready
-              documentation through guided execution workflows.
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+              Validate your startup idea, structure your
+              business model, analyze market demand and
+              prepare investor-ready execution workflows.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/founder/startup-builder/idea-definition"
-                className="inline-flex items-center gap-2 rounded-2xl bg-cyan-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-cyan-700"
+                className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
               >
                 Start Building
-                <ArrowRight className="h-4 w-4" />
+
               </Link>
 
               <Link
                 href="/founder/dashboard"
-                className="rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600"
+                className="rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
               >
                 Back to Dashboard
               </Link>
@@ -137,25 +144,25 @@ export default function StartupBuilderPage() {
           </div>
 
           {/* RIGHT */}
-          <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6">
+          <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-500">
                   Startup Readiness
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-900">
+                <h3 className="mt-2 text-5xl font-black text-slate-800">
                   72%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-emerald-100 p-4 text-emerald-600">
+              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
                 <ShieldCheck className="h-8 w-8" />
               </div>
             </div>
 
             <div className="mt-8 h-3 w-full overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[72%] rounded-full bg-cyan-500" />
+              <div className="h-full w-[72%] rounded-full bg-primary" />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -186,21 +193,21 @@ export default function StartupBuilderPage() {
         {stats.map((item) => (
           <div
             key={item.title}
-            className="flex min-h-[180px] flex-col justify-between rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="flex min-h-[180px] flex-col justify-between rounded-[28px] border border-border/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div>
               <p className="text-sm font-medium text-slate-500">
                 {item.title}
               </p>
 
-              <h3 className="mt-4 text-5xl font-black tracking-tight text-slate-900">
+              <h3 className="mt-4 text-5xl font-black tracking-tight text-slate-800">
                 {item.value}
               </h3>
             </div>
 
             <div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                <div className="h-full w-[70%] rounded-full bg-cyan-500" />
+                <div className="h-full w-[70%] rounded-full bg-primary" />
               </div>
 
               <p className="mt-3 text-sm text-slate-500">
@@ -212,28 +219,31 @@ export default function StartupBuilderPage() {
       </section>
 
       {/* MODULES */}
-      <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+      <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="text-3xl font-black tracking-tight text-slate-900">
+            <h2 className="text-3xl font-black tracking-tight text-slate-800">
               Startup Builder Modules
             </h2>
 
             <p className="mt-2 max-w-2xl text-slate-600">
-              Complete each workflow module to prepare your startup
-              for validation, scale and fundraising.
+              Complete each startup workflow module to
+              improve execution clarity and investor
+              readiness.
             </p>
           </div>
 
           <Link
             href="/founder/startup-builder/readiness-score"
-            className="inline-flex w-fit items-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600"
+            className="inline-flex w-fit items-center gap-2 rounded-2xl border border-border/60 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
           >
             View Full Readiness
+
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
+        {/* GRID */}
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           {builderModules.map((module) => {
             const Icon = module.icon;
@@ -241,52 +251,60 @@ export default function StartupBuilderPage() {
             return (
               <div
                 key={module.title}
-                className="group rounded-[28px] border border-slate-200 bg-slate-50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300 hover:bg-white hover:shadow-md"
+                className="group rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-white hover:shadow-lg"
               >
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                  {/* LEFT */}
                   <div className="flex items-start gap-4">
-                    <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
+                    <div className="rounded-2xl bg-primary/10 p-4 text-primary">
                       <Icon className="h-6 w-6" />
                     </div>
 
                     <div>
-                      <h3 className="text-2xl font-bold text-slate-900">
+                      <h3 className="text-2xl font-black tracking-tight text-slate-800">
                         {module.title}
                       </h3>
 
-                      <p className="mt-3 max-w-md leading-relaxed text-slate-600">
+                      <p className="mt-3 max-w-md leading-7 text-slate-600">
                         {module.description}
                       </p>
                     </div>
                   </div>
 
+                  {/* STATUS */}
                   <div
-                    className={`w-fit rounded-full px-4 py-2 text-xs font-bold ${
-                      module.status === "Completed"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : module.status === "In Progress"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-slate-200 text-slate-700"
-                    }`}
+                    className={`w-fit rounded-full px-4 py-2 text-xs font-bold
+                      
+                      ${
+                        module.status ===
+                        "Completed"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : module.status ===
+                            "In Progress"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-slate-200 text-slate-700"
+                      }
+                    `}
                   >
                     {module.status}
                   </div>
                 </div>
 
+                {/* PROGRESS */}
                 <div className="mt-6">
                   <div className="mb-2 flex items-center justify-between">
                     <p className="text-sm font-medium text-slate-500">
                       Progress
                     </p>
 
-                    <p className="text-sm font-bold text-cyan-700">
+                    <p className="text-sm font-bold text-primary">
                       {module.progress}%
                     </p>
                   </div>
 
                   <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-200">
                     <div
-                      className="h-full rounded-full bg-cyan-500"
+                      className="h-full rounded-full bg-primary"
                       style={{
                         width: `${module.progress}%`,
                       }}
@@ -294,6 +312,7 @@ export default function StartupBuilderPage() {
                   </div>
                 </div>
 
+                {/* CTA */}
                 <div className="mt-8 flex items-center justify-between">
                   <p className="text-sm text-slate-500">
                     Continue startup workflow
@@ -301,10 +320,10 @@ export default function StartupBuilderPage() {
 
                   <Link
                     href={module.href}
-                    className="inline-flex items-center gap-2 rounded-xl bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-700"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
                   >
                     Open
-                    <ArrowRight className="h-4 w-4" />
+
                   </Link>
                 </div>
               </div>

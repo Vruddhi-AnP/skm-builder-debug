@@ -1,15 +1,50 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   ArrowRight,
   LayoutDashboard,
   Sparkles,
   Workflow,
   Wand2,
+  Save,
+  CheckCircle2,
+  Rocket,
+  ShieldCheck,
 } from "lucide-react";
 
+interface SolutionDesignForm {
+  solutionType: string;
+  selectedFeatures: string[];
+  platformType: string;
+  businessModel: string;
+  userJourney: string[];
+  experienceGoals: string[];
+  solutionNotes: string;
+  productVision: string;
+  scalabilityPlan: string;
+  automationStrategy: string;
+}
+
 export default function SolutionDesignPage() {
+  const router = useRouter();
+
+  const [formData, setFormData] =
+    useState<SolutionDesignForm>({
+      solutionType: "",
+      selectedFeatures: [],
+      platformType: "",
+      businessModel: "",
+      userJourney: [],
+      experienceGoals: [],
+      solutionNotes: "",
+      productVision: "",
+      scalabilityPlan: "",
+      automationStrategy: "",
+    });
+
   const solutionTypes = [
     "AI Automation",
     "Workflow Platform",
@@ -61,178 +96,229 @@ export default function SolutionDesignPage() {
     "Scalable Usage",
   ];
 
-  const [selectedSolution, setSelectedSolution] =
-    useState("");
+  const toggleArrayValue = (
+    field:
+      | "selectedFeatures"
+      | "userJourney"
+      | "experienceGoals",
+    value: string
+  ) => {
+    const existingValues = formData[field];
 
-  const [selectedFeatures, setSelectedFeatures] =
-    useState<string[]>([]);
+    if (existingValues.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: existingValues.filter(
+          (item) => item !== value
+        ),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: [...existingValues, value],
+      }));
+    }
+  };
 
-  const [selectedPlatform, setSelectedPlatform] =
-    useState("");
-
-  const [selectedModel, setSelectedModel] =
-    useState("");
-
-  const [selectedJourney, setSelectedJourney] =
-    useState<string[]>([]);
-
-  const [selectedExperience, setSelectedExperience] =
-    useState<string[]>([]);
+  const handleChange = (
+    field: keyof SolutionDesignForm,
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="space-y-8">
-      {/* HEADER */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <div className="mb-4 inline-flex items-center rounded-full bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700">
-            Step 4 • Startup Builder
-          </div>
+      {/* HERO */}
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+        <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
+          {/* LEFT */}
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-cyan-700">
+              <Rocket className="h-4 w-4" />
+              Startup Builder • Module 4
+            </div>
 
-          <h1 className="text-4xl font-black tracking-tight text-slate-900">
-            Solution Design
-          </h1>
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+              Design Your
+              <span className="block text-primary">
+                Product Solution
+              </span>
+            </h1>
 
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-            Design scalable startup experiences,
-            product flows and feature systems
-            through interactive startup workflows.
-          </p>
-        </div>
-
-        {/* PROGRESS */}
-        <div className="w-full rounded-[28px] border border-slate-200 bg-slate-50 p-6 lg:max-w-sm">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-600">
-              Module Progress
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+              Build scalable startup experiences,
+              feature systems and product workflows
+              through structured product execution
+              planning.
             </p>
-
-            <span className="text-sm font-bold text-cyan-600">
-              20%
-            </span>
           </div>
 
-          <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-slate-200">
-            <div className="h-full w-[20%] rounded-full bg-cyan-500" />
-          </div>
+          {/* RIGHT */}
+          <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Product Readiness
+                </p>
 
-          <p className="mt-4 text-sm text-slate-500">
-            Continue building your startup
-            solution architecture.
-          </p>
+                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                  20%
+                </h3>
+              </div>
+
+              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+                <Sparkles className="h-8 w-8" />
+              </div>
+            </div>
+
+            <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
+              <div className="h-full w-[20%] rounded-full bg-primary" />
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {[
+                "Core solution structure defined",
+                "Scalable workflows identified",
+                "Feature architecture improving",
+                "Product execution evolving",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3"
+                >
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+
+                  <p className="text-sm font-medium text-slate-600">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* MAIN GRID */}
+      {/* MAIN */}
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         {/* LEFT */}
         <div className="space-y-6">
-          {/* SOLUTION OVERVIEW */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-cyan-100 p-3 text-cyan-700">
-                <Sparkles className="h-5 w-5" />
+          {/* SOLUTION ARCHITECTURE */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
+                <Sparkles className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Solution Architecture
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Define how your startup solution
-                  works
+                <p className="mt-1 text-sm text-slate-500">
+                  Define your startup solution system
                 </p>
               </div>
             </div>
 
-            {/* SOLUTION TYPE */}
+            {/* SOLUTION TYPES */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Select Solution Type
+                Solution Type
               </label>
 
               <div className="grid gap-4 md:grid-cols-2">
-                {solutionTypes.map((solution) => (
+                {solutionTypes.map((item) => (
                   <button
-                    key={solution}
+                    key={item}
+                    type="button"
                     onClick={() =>
-                      setSelectedSolution(solution)
+                      handleChange(
+                        "solutionType",
+                        item
+                      )
                     }
-                    className={`rounded-2xl border p-5 text-left transition-all ${
-                      selectedSolution === solution
-                        ? "border-cyan-500 bg-cyan-50 shadow-lg shadow-cyan-100"
-                        : "border-slate-200 hover:border-cyan-400 hover:bg-cyan-50"
-                    }`}
+                    className={`rounded-3xl border p-5 text-left transition-all
+                      
+                      ${
+                        formData.solutionType ===
+                        item
+                          ? "border-cyan-500 bg-cyan-50"
+                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                      }
+                    `}
                   >
-                    <h3 className="font-semibold text-slate-900">
-                      {solution}
+                    <h3 className="font-bold text-slate-800">
+                      {item}
                     </h3>
 
-                    <p className="mt-2 text-sm text-slate-500">
-                      Scalable startup solution
-                      structure for modern founders.
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      Modern scalable startup product
+                      system.
                     </p>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* UVP */}
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {[
-                "AI Powered",
-                "Fast Execution",
-                "Automation First",
-                "Scalable Workflow",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:border-cyan-400 hover:shadow-lg"
-                >
-                  <h3 className="font-semibold text-slate-900">
-                    {item}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-slate-500">
-                    Core startup differentiation
-                    advantage.
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* OPTIONAL NOTES */}
+            {/* PRODUCT VISION */}
             <div className="mt-8">
-              <label className="mb-2 block text-sm font-semibold text-slate-700">
-                Additional Solution Notes
-                <span className="ml-2 text-xs font-medium text-slate-400">
-                  (Optional)
-                </span>
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Product Vision
               </label>
 
               <textarea
                 rows={4}
-                placeholder="Add additional startup solution details..."
-                className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-500"
+                value={formData.productVision}
+                onChange={(e) =>
+                  handleChange(
+                    "productVision",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe how your product will transform user workflows..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              />
+            </div>
+
+            {/* NOTES */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Additional Solution Notes
+              </label>
+
+              <textarea
+                rows={4}
+                value={formData.solutionNotes}
+                onChange={(e) =>
+                  handleChange(
+                    "solutionNotes",
+                    e.target.value
+                  )
+                }
+                placeholder="Add additional startup solution strategy..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
           </section>
 
-          {/* CORE FEATURES */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-violet-100 p-3 text-violet-700">
-                <LayoutDashboard className="h-5 w-5" />
+          {/* PRODUCT FEATURES */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
+                <LayoutDashboard className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Product Features
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Define major product
-                  functionalities
+                <p className="mt-1 text-sm text-slate-500">
+                  Structure product functionality
                 </p>
               </div>
             </div>
@@ -240,303 +326,297 @@ export default function SolutionDesignPage() {
             {/* FEATURES */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Select Core Features
+                Core Features
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {coreFeatures.map((feature) => {
+                {coreFeatures.map((item) => {
                   const active =
-                    selectedFeatures.includes(
-                      feature
+                    formData.selectedFeatures.includes(
+                      item
                     );
 
                   return (
                     <button
-                      key={feature}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedFeatures(
-                            selectedFeatures.filter(
-                              (p) => p !== feature
-                            )
-                          );
-                        } else {
-                          setSelectedFeatures([
-                            ...selectedFeatures,
-                            feature,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "selectedFeatures",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-violet-500 bg-violet-500 text-white shadow-lg shadow-violet-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-violet-400 hover:bg-violet-50"
-                      }`}
+                          ? "border-violet-500 bg-violet-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50"
+                      }
+                    `}
                     >
-                      {feature}
+                      {item}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* PLATFORM TYPE */}
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {/* PLATFORM + MODEL */}
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              {/* PLATFORM */}
               <div>
                 <label className="mb-4 block text-sm font-semibold text-slate-700">
                   Platform Type
                 </label>
 
                 <div className="space-y-3">
-                  {platformTypes.map((platform) => (
+                  {platformTypes.map((item) => (
                     <button
-                      key={platform}
+                      key={item}
+                      type="button"
                       onClick={() =>
-                        setSelectedPlatform(platform)
+                        handleChange(
+                          "platformType",
+                          item
+                        )
                       }
-                      className={`w-full rounded-2xl border p-4 text-left text-sm font-semibold transition-all ${
-                        selectedPlatform === platform
+                      className={`w-full rounded-2xl border p-4 text-left text-sm font-semibold transition-all
+                      
+                      ${
+                        formData.platformType ===
+                        item
                           ? "border-violet-500 bg-violet-50"
-                          : "border-slate-200 hover:border-violet-400"
-                      }`}
+                          : "border-border/60 bg-white hover:border-violet-300"
+                      }
+                    `}
                     >
-                      {platform}
+                      {item}
                     </button>
                   ))}
                 </div>
               </div>
 
+              {/* MODEL */}
               <div>
                 <label className="mb-4 block text-sm font-semibold text-slate-700">
                   Business Model
                 </label>
 
                 <div className="space-y-3">
-                  {businessModels.map((model) => (
+                  {businessModels.map((item) => (
                     <button
-                      key={model}
+                      key={item}
+                      type="button"
                       onClick={() =>
-                        setSelectedModel(model)
+                        handleChange(
+                          "businessModel",
+                          item
+                        )
                       }
-                      className={`w-full rounded-2xl border p-4 text-left text-sm font-semibold transition-all ${
-                        selectedModel === model
+                      className={`w-full rounded-2xl border p-4 text-left text-sm font-semibold transition-all
+                      
+                      ${
+                        formData.businessModel ===
+                        item
                           ? "border-violet-500 bg-violet-50"
-                          : "border-slate-200 hover:border-violet-400"
-                      }`}
+                          : "border-border/60 bg-white hover:border-violet-300"
+                      }
+                    `}
                     >
-                      {model}
+                      {item}
                     </button>
                   ))}
                 </div>
               </div>
             </div>
+
+            {/* SCALABILITY */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Scalability Strategy
+              </label>
+
+              <textarea
+                rows={4}
+                value={formData.scalabilityPlan}
+                onChange={(e) =>
+                  handleChange(
+                    "scalabilityPlan",
+                    e.target.value
+                  )
+                }
+                placeholder="How will your platform scale for large user growth?"
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+              />
+            </div>
           </section>
 
           {/* USER EXPERIENCE */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
-                <Workflow className="h-5 w-5" />
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
+                <Workflow className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   User Experience Flow
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Design user interaction journey
+                <p className="mt-1 text-sm text-slate-500">
+                  Design seamless user interaction
                 </p>
               </div>
             </div>
 
-            {/* USER JOURNEY */}
+            {/* JOURNEY */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
                 User Journey Flow
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {userJourney.map((step) => {
+                {userJourney.map((item) => {
                   const active =
-                    selectedJourney.includes(step);
+                    formData.userJourney.includes(
+                      item
+                    );
 
                   return (
                     <button
-                      key={step}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedJourney(
-                            selectedJourney.filter(
-                              (p) => p !== step
-                            )
-                          );
-                        } else {
-                          setSelectedJourney([
-                            ...selectedJourney,
-                            step,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "userJourney",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-amber-500 bg-amber-500 text-white shadow-lg shadow-amber-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50"
-                      }`}
+                          ? "border-amber-500 bg-amber-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                      }
+                    `}
                     >
-                      {step}
+                      {item}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* EXPERIENCE GOALS */}
+            {/* EXPERIENCE */}
             <div className="mt-8">
               <label className="mb-4 block text-sm font-semibold text-slate-700">
                 Experience Goals
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {experienceGoals.map((goal) => {
+                {experienceGoals.map((item) => {
                   const active =
-                    selectedExperience.includes(
-                      goal
+                    formData.experienceGoals.includes(
+                      item
                     );
 
                   return (
                     <button
-                      key={goal}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedExperience(
-                            selectedExperience.filter(
-                              (p) => p !== goal
-                            )
-                          );
-                        } else {
-                          setSelectedExperience([
-                            ...selectedExperience,
-                            goal,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "experienceGoals",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-amber-500 bg-amber-500 text-white shadow-lg shadow-amber-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50"
-                      }`}
+                          ? "border-amber-500 bg-amber-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                      }
+                    `}
                     >
-                      {goal}
+                      {item}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* PRODUCT INSIGHTS */}
-                <div className="mt-10 rounded-[24px] border border-slate-200 bg-slate-50 p-6">
-                  <div className="flex items-start justify-between gap-6">
-                    <div>
-                      <p className="inline-flex rounded-full bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-cyan-700">
-                        Product Insights
-                      </p>
+            {/* AUTOMATION */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Automation Strategy
+              </label>
 
-                      <h3 className="mt-4 text-2xl font-black text-slate-900">
-                        Solution Strategy Summary
-                      </h3>
-
-                      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
-                        Your selected product structure indicates
-                        strong potential for scalable digital
-                        workflows, streamlined user journeys and
-                        modern startup execution systems.
-                      </p>
-                    </div>
-
-                    <div className="hidden h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-sm lg:flex">
-                      <span className="text-3xl">🛠️</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 grid gap-4 md:grid-cols-3">
-                    {[
-                      {
-                        title: "Product Scope",
-                        value: "Scalable",
-                      },
-                      {
-                        title: "User Experience",
-                        value: "Strong",
-                      },
-                      {
-                        title: "Execution Flow",
-                        value: "High",
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.title}
-                        className="rounded-2xl border border-white bg-white p-5"
-                      >
-                        <p className="text-sm font-medium text-slate-500">
-                          {item.title}
-                        </p>
-
-                        <h4 className="mt-2 text-xl font-black text-slate-900">
-                          {item.value}
-                        </h4>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              <textarea
+                rows={4}
+                value={formData.automationStrategy}
+                onChange={(e) =>
+                  handleChange(
+                    "automationStrategy",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe automation systems and AI workflow integrations..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+              />
+            </div>
           </section>
         </div>
 
-        {/* RIGHT SIDEBAR */}
+        {/* RIGHT */}
         <div className="space-y-6">
-          {/* PRODUCT GUIDANCE */}
-          <section className="rounded-[28px] border border-cyan-100 bg-gradient-to-br from-cyan-50 to-violet-50 p-6">
+          {/* PRODUCT INSIGHTS */}
+          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
             <div className="flex items-center gap-3">
-              <Wand2 className="h-6 w-6 text-cyan-700" />
+              <Wand2 className="h-6 w-6 text-primary" />
 
-              <h3 className="text-xl font-bold text-slate-900">
+              <h3 className="text-2xl font-black tracking-tight text-slate-800">
                 Product Insights
               </h3>
             </div>
 
             <div className="mt-6 space-y-4">
               {[
-                "Simple UX increases product adoption",
-                "AI automation improves retention",
-                "Scalable SaaS architecture recommended",
+                "AI automation increases retention",
+                "Simple UX improves adoption",
+                "Scalable SaaS workflows recommended",
                 "Focus on MVP-first execution",
-              ].map((tip) => (
+              ].map((item) => (
                 <div
-                  key={tip}
-                  className="rounded-2xl bg-white p-4 text-sm font-medium text-slate-700 shadow-sm"
+                  key={item}
+                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
                 >
-                  {tip}
+                  {item}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* PRODUCT READINESS */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <h3 className="text-xl font-bold text-slate-900">
+          {/* SCORE */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-slate-800">
               Product Readiness
             </h3>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-8 space-y-5">
               {[
                 {
                   label: "Feature Clarity",
                   value: "82%",
                 },
+
                 {
                   label: "Scalability",
                   value: "71%",
                 },
+
                 {
                   label: "User Experience",
                   value: "77%",
@@ -548,14 +628,14 @@ export default function SolutionDesignPage() {
                       {item.label}
                     </p>
 
-                    <span className="text-sm font-bold text-cyan-600">
+                    <span className="text-sm font-bold text-primary">
                       {item.value}
                     </span>
                   </div>
 
                   <div className="h-2 overflow-hidden rounded-full bg-slate-200">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-violet-500"
+                      className="h-full rounded-full bg-primary"
                       style={{
                         width: item.value,
                       }}
@@ -569,14 +649,25 @@ export default function SolutionDesignPage() {
       </div>
 
       {/* FOOTER */}
-      <div className="flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button className="rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600">
+      <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* SAVE */}
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+          <Save className="h-4 w-4" />
+
           Save Draft
         </button>
 
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-cyan-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-cyan-700">
+        {/* NEXT */}
+        <button
+          onClick={() =>
+            router.push(
+              "/founder/startup-builder/business-model"
+            )
+          }
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+        >
           Continue to Business Model
-          <ArrowRight className="h-4 w-4" />
+
         </button>
       </div>
     </div>

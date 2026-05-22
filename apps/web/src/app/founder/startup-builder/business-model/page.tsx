@@ -1,15 +1,52 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   ArrowRight,
   BriefcaseBusiness,
   Coins,
   CreditCard,
   TrendingUp,
+  Save,
+  Rocket,
+  CheckCircle2,
+  Target,
 } from "lucide-react";
 
+interface BusinessModelForm {
+  revenueModel: string;
+  pricingStrategy: string;
+  acquisitionChannels: string[];
+  costStructures: string[];
+  scalingChallenges: string[];
+  revenueTimeline: string;
+  targetRevenue: string;
+  monetizationStrategy: string;
+  customerAcquisitionStrategy: string;
+  growthStrategy: string;
+  founderBusinessNotes: string;
+}
+
 export default function BusinessModelPage() {
+  const router = useRouter();
+
+  const [formData, setFormData] =
+    useState<BusinessModelForm>({
+      revenueModel: "",
+      pricingStrategy: "",
+      acquisitionChannels: [],
+      costStructures: [],
+      scalingChallenges: [],
+      revenueTimeline: "",
+      targetRevenue: "",
+      monetizationStrategy: "",
+      customerAcquisitionStrategy: "",
+      growthStrategy: "",
+      founderBusinessNotes: "",
+    });
+
   const revenueModels = [
     "Subscription",
     "Freemium",
@@ -51,82 +88,137 @@ export default function BusinessModelPage() {
     "Infrastructure Costs",
   ];
 
-  const [selectedRevenue, setSelectedRevenue] =
-    useState("");
+  const revenueTimelines = [
+    "0-6 Months",
+    "6-12 Months",
+    "1-2 Years",
+    "2+ Years",
+  ];
 
-  const [
-    selectedChannels,
-    setSelectedChannels,
-  ] = useState<string[]>([]);
+  const toggleArrayValue = (
+    field:
+      | "acquisitionChannels"
+      | "costStructures"
+      | "scalingChallenges",
+    value: string
+  ) => {
+    const existingValues = formData[field];
 
-  const [selectedPricing, setSelectedPricing] =
-    useState("");
+    if (existingValues.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: existingValues.filter(
+          (item) => item !== value
+        ),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: [...existingValues, value],
+      }));
+    }
+  };
 
-  const [selectedCosts, setSelectedCosts] =
-    useState<string[]>([]);
+  const handleChange = (
+    field: keyof BusinessModelForm,
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="space-y-8">
-      {/* HEADER */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <div className="mb-4 inline-flex items-center rounded-full bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700">
-            Step 5 • Startup Builder
-          </div>
+      {/* HERO */}
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+        <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
+          {/* LEFT */}
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-cyan-700">
+              <Rocket className="h-4 w-4" />
+              Startup Builder • Module 5
+            </div>
 
-          <h1 className="text-4xl font-black tracking-tight text-slate-900">
-            Business Model
-          </h1>
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+              Build Your
+              <span className="block text-primary">
+                Business Model
+              </span>
+            </h1>
 
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
-            Build scalable monetization, growth and
-            revenue systems through interactive
-            startup business workflows.
-          </p>
-        </div>
-
-        {/* PROGRESS */}
-        <div className="w-full rounded-[28px] border border-slate-200 bg-slate-50 p-6 lg:max-w-sm">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-600">
-              Module Progress
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+              Create scalable monetization systems,
+              acquisition channels and sustainable
+              startup revenue architecture for
+              long-term growth.
             </p>
-
-            <span className="text-sm font-bold text-cyan-600">
-              15%
-            </span>
           </div>
 
-          <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-slate-200">
-            <div className="h-full w-[15%] rounded-full bg-cyan-500" />
-          </div>
+          {/* RIGHT */}
+          <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Business Readiness
+                </p>
 
-          <p className="mt-4 text-sm text-slate-500">
-            Continue building your revenue and
-            growth strategy.
-          </p>
+                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                  15%
+                </h3>
+              </div>
+
+              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+                <Coins className="h-8 w-8" />
+              </div>
+            </div>
+
+            <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
+              <div className="h-full w-[15%] rounded-full bg-primary" />
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {[
+                "Revenue structure initialized",
+                "Growth channels identified",
+                "Scaling strategy improving",
+                "Recurring monetization potential detected",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3"
+                >
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+
+                  <p className="text-sm font-medium text-slate-600">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* MAIN GRID */}
+      {/* MAIN */}
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
-        {/* LEFT CONTENT */}
+        {/* LEFT */}
         <div className="space-y-6">
-          {/* REVENUE MODEL */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-cyan-100 p-3 text-cyan-700">
-                <Coins className="h-5 w-5" />
+          {/* REVENUE ENGINE */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
+                <Coins className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Revenue Engine
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Define how your startup earns and
-                  scales revenue
+                <p className="mt-1 text-sm text-slate-500">
+                  Define startup monetization systems
                 </p>
               </div>
             </div>
@@ -134,29 +226,37 @@ export default function BusinessModelPage() {
             {/* REVENUE MODELS */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Select Revenue Model
+                Revenue Model
               </label>
 
               <div className="grid gap-4 md:grid-cols-2">
-                {revenueModels.map((model) => (
+                {revenueModels.map((item) => (
                   <button
-                    key={model}
+                    key={item}
+                    type="button"
                     onClick={() =>
-                      setSelectedRevenue(model)
+                      handleChange(
+                        "revenueModel",
+                        item
+                      )
                     }
-                    className={`rounded-2xl border p-5 text-left transition-all ${
-                      selectedRevenue === model
-                        ? "border-cyan-500 bg-cyan-50 shadow-lg shadow-cyan-100"
-                        : "border-slate-200 hover:border-cyan-400 hover:bg-cyan-50"
-                    }`}
+                    className={`rounded-3xl border p-5 text-left transition-all
+                      
+                      ${
+                        formData.revenueModel ===
+                        item
+                          ? "border-cyan-500 bg-cyan-50"
+                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                      }
+                    `}
                   >
-                    <h3 className="font-semibold text-slate-900">
-                      {model}
+                    <h3 className="font-bold text-slate-800">
+                      {item}
                     </h3>
 
-                    <p className="mt-2 text-sm text-slate-500">
-                      Scalable monetization structure
-                      for startup growth.
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      Scalable recurring startup
+                      monetization strategy.
                     </p>
                   </button>
                 ))}
@@ -166,23 +266,31 @@ export default function BusinessModelPage() {
             {/* PRICING */}
             <div className="mt-8">
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Pricing Positioning
+                Pricing Strategy
               </label>
 
               <div className="grid gap-4 md:grid-cols-4">
                 {pricingStrategies.map((item) => (
                   <button
                     key={item}
+                    type="button"
                     onClick={() =>
-                      setSelectedPricing(item)
+                      handleChange(
+                        "pricingStrategy",
+                        item
+                      )
                     }
-                    className={`rounded-2xl border p-5 text-center transition-all ${
-                      selectedPricing === item
-                        ? "border-cyan-500 bg-cyan-50 shadow-lg shadow-cyan-100"
-                        : "border-slate-200 hover:border-cyan-400 hover:bg-cyan-50"
-                    }`}
+                    className={`rounded-3xl border p-5 text-center transition-all
+                      
+                      ${
+                        formData.pricingStrategy ===
+                        item
+                          ? "border-cyan-500 bg-cyan-50"
+                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                      }
+                    `}
                   >
-                    <p className="font-semibold text-slate-900">
+                    <p className="font-bold text-slate-800">
                       {item}
                     </p>
                   </button>
@@ -197,40 +305,89 @@ export default function BusinessModelPage() {
               </label>
 
               <div className="grid gap-4 md:grid-cols-4">
-                {[
-                  "0-6 Months",
-                  "6-12 Months",
-                  "1-2 Years",
-                  "2+ Years",
-                ].map((timeline) => (
-                  <div
-                    key={timeline}
-                    className="cursor-pointer rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center transition hover:-translate-y-1 hover:border-cyan-400 hover:bg-cyan-50 hover:shadow-lg"
+                {revenueTimelines.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() =>
+                      handleChange(
+                        "revenueTimeline",
+                        item
+                      )
+                    }
+                    className={`rounded-3xl border p-5 text-center transition-all
+                      
+                      ${
+                        formData.revenueTimeline ===
+                        item
+                          ? "border-cyan-500 bg-cyan-50"
+                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                      }
+                    `}
                   >
-                    <p className="font-semibold text-slate-800">
-                      {timeline}
+                    <p className="font-bold text-slate-800">
+                      {item}
                     </p>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
+
+            {/* TARGET */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Target Revenue Goal
+              </label>
+
+              <input
+                type="text"
+                value={formData.targetRevenue}
+                onChange={(e) =>
+                  handleChange(
+                    "targetRevenue",
+                    e.target.value
+                  )
+                }
+                placeholder="Example: ₹10L ARR within 12 months"
+                className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              />
+            </div>
+
+            {/* MONETIZATION */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Monetization Strategy
+              </label>
+
+              <textarea
+                rows={4}
+                value={formData.monetizationStrategy}
+                onChange={(e) =>
+                  handleChange(
+                    "monetizationStrategy",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe how your startup generates sustainable revenue..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              />
+            </div>
           </section>
 
-          {/* CUSTOMER ACQUISITION */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-violet-100 p-3 text-violet-700">
-                <TrendingUp className="h-5 w-5" />
+          {/* GROWTH STRATEGY */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
+                <TrendingUp className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Growth Strategy
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Define acquisition and scaling
-                  channels
+                <p className="mt-1 text-sm text-slate-500">
+                  Build customer acquisition systems
                 </p>
               </div>
             </div>
@@ -238,102 +395,99 @@ export default function BusinessModelPage() {
             {/* CHANNELS */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Customer Acquisition Channels
+                Acquisition Channels
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {acquisitionChannels.map((channel) => {
+                {acquisitionChannels.map((item) => {
                   const active =
-                    selectedChannels.includes(
-                      channel
+                    formData.acquisitionChannels.includes(
+                      item
                     );
 
                   return (
                     <button
-                      key={channel}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedChannels(
-                            selectedChannels.filter(
-                              (p) => p !== channel
-                            )
-                          );
-                        } else {
-                          setSelectedChannels([
-                            ...selectedChannels,
-                            channel,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "acquisitionChannels",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-violet-500 bg-violet-500 text-white shadow-lg shadow-violet-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-violet-400 hover:bg-violet-50"
-                      }`}
+                          ? "border-violet-500 bg-violet-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50"
+                      }
+                    `}
                     >
-                      {channel}
+                      {item}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* GROWTH CARDS */}
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {[
-                "Organic Growth",
-                "Paid Growth",
-                "Community Driven",
-                "Enterprise Sales",
-              ].map((strategy) => (
-                <div
-                  key={strategy}
-                  className="cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:border-violet-400 hover:shadow-lg"
-                >
-                  <h3 className="font-semibold text-slate-900">
-                    {strategy}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-slate-500">
-                    Scalable startup growth
-                    strategy for long-term expansion.
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* OPTIONAL NOTES */}
+            {/* STRATEGY */}
             <div className="mt-8">
-              <label className="mb-2 block text-sm font-semibold text-slate-700">
-                Additional Growth Notes
-                <span className="ml-2 text-xs font-medium text-slate-400">
-                  (Optional)
-                </span>
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Customer Acquisition Strategy
               </label>
 
               <textarea
                 rows={4}
-                placeholder="Add additional acquisition or growth insights..."
-                className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-500"
+                value={
+                  formData.customerAcquisitionStrategy
+                }
+                onChange={(e) =>
+                  handleChange(
+                    "customerAcquisitionStrategy",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe how you will acquire and retain users..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+              />
+            </div>
+
+            {/* GROWTH PLAN */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Long-Term Growth Strategy
+              </label>
+
+              <textarea
+                rows={4}
+                value={formData.growthStrategy}
+                onChange={(e) =>
+                  handleChange(
+                    "growthStrategy",
+                    e.target.value
+                  )
+                }
+                placeholder="Describe startup scaling and expansion plans..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
             </div>
           </section>
 
           {/* COST STRUCTURE */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <div className="mb-8 flex items-center gap-3">
-              <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
-                <CreditCard className="h-5 w-5" />
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
+                <CreditCard className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-black tracking-tight text-slate-800">
                   Cost Structure
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                  Analyze operational and scaling
-                  expenses
+                <p className="mt-1 text-sm text-slate-500">
+                  Analyze operational business costs
                 </p>
               </div>
             </div>
@@ -345,162 +499,146 @@ export default function BusinessModelPage() {
               </label>
 
               <div className="flex flex-wrap gap-3">
-                {costStructures.map((cost) => {
+                {costStructures.map((item) => {
                   const active =
-                    selectedCosts.includes(cost);
+                    formData.costStructures.includes(
+                      item
+                    );
 
                   return (
                     <button
-                      key={cost}
-                      onClick={() => {
-                        if (active) {
-                          setSelectedCosts(
-                            selectedCosts.filter(
-                              (p) => p !== cost
-                            )
-                          );
-                        } else {
-                          setSelectedCosts([
-                            ...selectedCosts,
-                            cost,
-                          ]);
-                        }
-                      }}
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all ${
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "costStructures",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
                         active
-                          ? "border-amber-500 bg-amber-500 text-white shadow-lg shadow-amber-200"
-                          : "border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50"
-                      }`}
+                          ? "border-amber-500 bg-amber-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                      }
+                    `}
                     >
-                      {cost}
+                      {item}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* SCALING CHALLENGES */}
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {scalingChallenges.map((challenge) => (
-                <div
-                  key={challenge}
-                  className="cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:border-amber-400 hover:shadow-lg"
-                >
-                  <h3 className="font-semibold text-slate-900">
-                    {challenge}
-                  </h3>
+            {/* CHALLENGES */}
+            <div className="mt-8">
+              <label className="mb-4 block text-sm font-semibold text-slate-700">
+                Scaling Challenges
+              </label>
 
-                  <p className="mt-2 text-sm text-slate-500">
-                    Potential scaling bottleneck for
-                    future business expansion.
-                  </p>
-                </div>
-              ))}
+              <div className="flex flex-wrap gap-3">
+                {scalingChallenges.map((item) => {
+                  const active =
+                    formData.scalingChallenges.includes(
+                      item
+                    );
+
+                  return (
+                    <button
+                      key={item}
+                      type="button"
+                      onClick={() =>
+                        toggleArrayValue(
+                          "scalingChallenges",
+                          item
+                        )
+                      }
+                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
+                      
+                      ${
+                        active
+                          ? "border-amber-500 bg-amber-500 text-white"
+                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                      }
+                    `}
+                    >
+                      {item}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-           {/* BUSINESS INSIGHTS */}
-            <div className="mt-10 rounded-[24px] border border-slate-200 bg-slate-50 p-6">
-              <div className="flex items-start justify-between gap-6">
-                <div>
-                  <p className="inline-flex rounded-full bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-cyan-700">
-                    Startup Insights
-                  </p>
+            {/* NOTES */}
+            <div className="mt-8">
+              <label className="mb-3 block text-sm font-semibold text-slate-700">
+                Founder Business Notes
+              </label>
 
-                  <h3 className="mt-4 text-2xl font-black text-slate-900">
-                    Business Strategy Summary
-                  </h3>
-
-                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
-                    Your selections indicate strong revenue
-                    scalability potential with recurring
-                    monetization opportunities and sustainable
-                    acquisition channels.
-                  </p>
-                </div>
-
-                <div className="hidden h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-sm lg:flex">
-                  <span className="text-3xl">📈</span>
-                </div>
-              </div>
-
-              <div className="mt-8 grid gap-4 md:grid-cols-3">
-                {[
-                  {
-                    title: "Revenue Model",
-                    value: "Scalable",
-                  },
-                  {
-                    title: "Growth Potential",
-                    value: "Strong",
-                  },
-                  {
-                    title: "Cost Efficiency",
-                    value: "Moderate",
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-2xl border border-white bg-white p-5"
-                  >
-                    <p className="text-sm font-medium text-slate-500">
-                      {item.title}
-                    </p>
-
-                    <h4 className="mt-2 text-xl font-black text-slate-900">
-                      {item.value}
-                    </h4>
-                  </div>
-                ))}
-              </div>
+              <textarea
+                rows={4}
+                value={formData.founderBusinessNotes}
+                onChange={(e) =>
+                  handleChange(
+                    "founderBusinessNotes",
+                    e.target.value
+                  )
+                }
+                placeholder="Add additional startup business observations..."
+                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+              />
             </div>
           </section>
         </div>
 
-        {/* RIGHT SIDEBAR */}
+        {/* RIGHT */}
         <div className="space-y-6">
-          {/* BUSINESS INSIGHTS */}
-          <section className="rounded-[28px] border border-cyan-100 bg-gradient-to-br from-cyan-50 to-violet-50 p-6">
+          {/* INSIGHTS */}
+          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
             <div className="flex items-center gap-3">
-              <BriefcaseBusiness className="h-6 w-6 text-cyan-700" />
+              <BriefcaseBusiness className="h-6 w-6 text-primary" />
 
-              <h3 className="text-xl font-bold text-slate-900">
-                 Business Insights
+              <h3 className="text-2xl font-black tracking-tight text-slate-800">
+                Business Insights
               </h3>
             </div>
 
             <div className="mt-6 space-y-4">
               {[
                 "Recurring revenue model recommended",
-                "Strong SaaS monetization potential",
-                "LinkedIn acquisition channel scalable",
-                "Operational costs appear manageable",
-              ].map((tip) => (
+                "Strong SaaS monetization detected",
+                "LinkedIn acquisition appears scalable",
+                "Operational costs look manageable",
+              ].map((item) => (
                 <div
-                  key={tip}
-                  className="rounded-2xl bg-white p-4 text-sm font-medium text-slate-700 shadow-sm"
+                  key={item}
+                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
                 >
-                  {tip}
+                  {item}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* BUSINESS HEALTH */}
-          <section className="rounded-[28px] border border-slate-200 bg-white p-6">
-            <h3 className="text-xl font-bold text-slate-900">
+          {/* SCORE */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-slate-800">
               Business Readiness
             </h3>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-8 space-y-5">
               {[
                 {
                   label: "Revenue Scalability",
                   value: "84%",
                 },
+
                 {
                   label: "Growth Potential",
                   value: "72%",
                 },
+
                 {
                   label: "Cost Efficiency",
                   value: "67%",
@@ -512,14 +650,14 @@ export default function BusinessModelPage() {
                       {item.label}
                     </p>
 
-                    <span className="text-sm font-bold text-cyan-600">
+                    <span className="text-sm font-bold text-primary">
                       {item.value}
                     </span>
                   </div>
 
                   <div className="h-2 overflow-hidden rounded-full bg-slate-200">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-violet-500"
+                      className="h-full rounded-full bg-primary"
                       style={{
                         width: item.value,
                       }}
@@ -529,18 +667,78 @@ export default function BusinessModelPage() {
               ))}
             </div>
           </section>
+
+          {/* SUMMARY */}
+          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+            <div className="flex items-center gap-3">
+              <Target className="h-6 w-6 text-primary" />
+
+              <h3 className="text-2xl font-black tracking-tight text-slate-800">
+                Strategy Summary
+              </h3>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-sm font-medium text-slate-500">
+                  Revenue Model
+                </p>
+
+                <h4 className="mt-2 text-lg font-black text-slate-800">
+                  {formData.revenueModel ||
+                    "Not Selected"}
+                </h4>
+              </div>
+
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-sm font-medium text-slate-500">
+                  Pricing Position
+                </p>
+
+                <h4 className="mt-2 text-lg font-black text-slate-800">
+                  {formData.pricingStrategy ||
+                    "Not Selected"}
+                </h4>
+              </div>
+
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-sm font-medium text-slate-500">
+                  Growth Channels
+                </p>
+
+                <h4 className="mt-2 text-lg font-black text-slate-800">
+                  {
+                    formData.acquisitionChannels
+                      .length
+                  }{" "}
+                  Selected
+                </h4>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
       {/* FOOTER */}
-      <div className="flex flex-col gap-4 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button className="rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600">
+      <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* SAVE */}
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+          <Save className="h-4 w-4" />
+
           Save Draft
         </button>
 
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl bg-cyan-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-cyan-700">
+        {/* NEXT */}
+        <button
+          onClick={() =>
+            router.push(
+              "/founder/startup-builder/summary"
+            )
+          }
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+        >
           Continue to Summary
-          <ArrowRight className="h-4 w-4" />
+
         </button>
       </div>
     </div>
