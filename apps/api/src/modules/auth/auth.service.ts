@@ -110,7 +110,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 
-import { AuthResponseData } from './types/auth-response.type';
+import { AuthResponseDataDto } from './types/auth-response.type';
 
 import { Role } from '../../common/enums/role.enum';
 
@@ -121,7 +121,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(dto: CreateUserDto): Promise<AuthResponseData> {
+  async signup(dto: CreateUserDto): Promise<AuthResponseDataDto> {
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -161,7 +161,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginDto): Promise<AuthResponseData> {
+  async login(dto: LoginDto): Promise<AuthResponseDataDto> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,

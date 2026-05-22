@@ -1,10 +1,9 @@
-// import { Injectable } from '@nestjs/common';
-
-// @Injectable()
-// export class BuilderService {}
-
 import { Injectable } from '@nestjs/common';
+
+import { Prisma } from '@prisma/client';
+
 import { PrismaService } from '../../prisma/prisma.service';
+
 import { CreateBuilderDto } from './dto/create-builder.dto';
 
 @Injectable()
@@ -13,7 +12,11 @@ export class BuilderService {
 
   async saveBuilder(dto: CreateBuilderDto) {
     return this.prisma.builder.create({
-      data: dto,
+      data: {
+        startupId: dto.startupId,
+
+        data: dto.data as Prisma.InputJsonValue,
+      },
     });
   }
 }

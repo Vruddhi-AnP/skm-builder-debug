@@ -9,7 +9,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 
 import { CreateStartupDto } from './dto/create-startup.dto';
 
-import { StartupResponseData } from './types/startup-response.type';
+import { StartupResponseDataDto } from './types/startup-response.type';
 
 @Injectable()
 export class StartupService {
@@ -18,7 +18,7 @@ export class StartupService {
   async create(
     dto: CreateStartupDto,
     founderId: string,
-  ): Promise<StartupResponseData> {
+  ): Promise<StartupResponseDataDto> {
     return this.prisma.startup.create({
       data: {
         name: dto.name,

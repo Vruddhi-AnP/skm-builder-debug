@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 
 import { NestFactory } from '@nestjs/core';
 
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
@@ -31,6 +33,29 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('SKM Platform API')
+    .setDescription('Enterprise startup ecosystem API')
+    .setVersion('1.0')
+    .addServer(`/${API_PREFIX}`)
+    .addBearerAuth(
+      {
+        type: 'http',
+
+        scheme: 'bearer',
+
+        bearerFormat: 'JWT',
+
+        description: 'Enter JWT access token',
+      },
+      'access-token',
+    )
+    .build();
+
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+
+  SwaggerModule.setup('docs', app, swaggerDocument);
 
   app.enableCors({
     origin: true,
@@ -69,7 +94,12 @@ async function bootstrap() {
 http://localhost:${port}/${API_PREFIX}
 `);
 
-logger.log(`
+  logger.log(`
+📘 Swagger Docs:
+http://localhost:${port}/docs
+`);
+
+  logger.log(`
 🌍 Environment:
 ${configService.get<string>('NODE_ENV') ?? 'development'}
 `);
