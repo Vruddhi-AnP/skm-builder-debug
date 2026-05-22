@@ -59,56 +59,64 @@ export default function SignupPage() {
       return;
     }
 
-    try {
-      setLoading(true);
+   try {
+  setLoading(true);
 
-      const response =
-        await signupUser(formData);
+  const response =
+    await signupUser(formData);
 
-      localStorage.setItem(
-        "accessToken",
-        response.accessToken
-      );
+  const authData =
+    response.data;
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(response.user)
-      );
+  localStorage.setItem(
+    "accessToken",
+    authData.accessToken
+  );
 
-      const role =
-        response.user.role;
+  localStorage.setItem(
+    "user",
+    JSON.stringify(authData.user)
+  );
 
-      if (
-        role?.toLowerCase() ===
-        "founder"
-      ) {
-        router.push(
-          "/onboarding/founder"
-        );
-      } else if (
-        role?.toLowerCase() ===
-        "advisor"
-      ) {
-        router.push(
-          "/onboarding/advisor"
-        );
-      } else if (
-        role?.toLowerCase() ===
-        "investor"
-      ) {
-        router.push(
-          "/onboarding/investor"
-        );
-      } else {
-        alert("Invalid role");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert("Signup failed");
-      }
-    } finally {
+  const role =
+    authData.user.role;
+
+  console.log(role);
+
+  if (
+    role?.toLowerCase() ===
+    "founder"
+  ) {
+    router.push(
+      "/onboarding/founder/profile"
+    );
+  } else if (
+    role?.toLowerCase() ===
+    "advisor"
+  ) {
+    router.push(
+      "/onboarding/advisor/profile"
+    );
+  } else if (
+    role?.toLowerCase() ===
+    "investor"
+  ) {
+    router.push(
+      "/onboarding/investor/investor-profile"
+    );
+  } else {
+    alert("Invalid role");
+  }
+} catch (error) {
+  console.log(error);
+
+  if (error instanceof Error) {
+    alert(error.message);
+  } else {
+    alert("Signup failed");
+  }
+}
+    finally {
       setLoading(false);
     }
   };

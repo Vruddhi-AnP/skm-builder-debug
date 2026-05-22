@@ -27,63 +27,84 @@ export default function LoginPage() {
     });
   };
 
-  const handleLogin = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+ const handleLogin = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
+  e.preventDefault();
 
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(formData.email)) {
-      alert("Invalid email address");
-      return;
+  if (!emailRegex.test(formData.email)) {
+    alert("Invalid email address");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const response =
+      await loginUser(formData);
+
+    const authData =
+      response.data;
+
+    localStorage.setItem(
+      "accessToken",
+      authData.accessToken
+    );
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(authData.user)
+    );
+
+    const role =
+      authData.user.role;
+
+    if (
+      role?.toLowerCase() ===
+      "founder"
+    ) {
+      router.push(
+        "/founder/dashboard"
+      );
+    } else if (
+      role?.toLowerCase() ===
+      "advisor"
+    ) {
+      router.push(
+        "/advisor/dashboard"
+      );
+    } else if (
+      role?.toLowerCase() ===
+      "investor"
+    ) {
+      router.push(
+        "/investor/dashboard"
+      );
+    } else if (
+      role?.toLowerCase() ===
+      "admin"
+    ) {
+      router.push(
+        "/admin/dashboard"
+      );
+    } else {
+      alert("Invalid user role");
     }
+  } catch (error) {
+    console.log(error);
 
-    try {
-      setLoading(true);
-
-      const response = await loginUser(
-        formData
-      );
-
-      localStorage.setItem(
-        "accessToken",
-        response.accessToken
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(response.user)
-      );
-
-      const role = response.user.role;
-
-      if (role === "founder") {
-        router.push("/founder/dashboard");
-      } else if (
-        role === "advisor"
-      ) {
-        router.push("/advisor/dashboard");
-      } else if (
-        role === "investor"
-      ) {
-        router.push("/investor/dashboard");
-      } else if (role === "admin") {
-        router.push("/admin/dashboard");
-      } else {
-        alert("Invalid user role");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert("Login failed");
-      }
-    } finally {
-      setLoading(false);
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert("Login failed");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10 sm:px-6">
