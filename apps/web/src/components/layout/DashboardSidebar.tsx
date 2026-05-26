@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import { usePathname } from "next/navigation";
 
@@ -53,22 +54,16 @@ export default function DashboardSidebar() {
       {/* LOGO */}
       <div className="flex items-center gap-3">
 
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground">
-          S
-        </div>
-
-        <div>
-          <h1 className="text-lg font-black text-slate-800">
-            Startup Ka Mall
-          </h1>
-
-          <p className="text-sm text-slate-500">
-            Founder Workspace
-          </p>
-        </div>
-
+      <Image
+        src="/logo.png"
+        alt="Startup Ka Mall"
+        width={220}
+        height={70}
+        priority
+        className="h-auto w-auto object-contain"
+      />
       </div>
-
+      
       {/* NAVIGATION */}
       <div className="mt-10 space-y-2">
 
@@ -88,7 +83,7 @@ export default function DashboardSidebar() {
               className={`group flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-slate-600 hover:bg-accent hover:text-slate-900"
+                  : "text-[#6B6B6B] hover:bg-accent hover:text-slate-900"
               }`}
             >
               <Icon className="h-5 w-5 transition-transform group-hover:scale-105" />
@@ -107,7 +102,7 @@ export default function DashboardSidebar() {
           Startup Readiness
         </p>
 
-        <h2 className="mt-4 text-5xl font-black text-slate-800">
+        <h2 className="mt-4 text-5xl font-black text-[#16214A]">
           72%
         </h2>
 
@@ -131,7 +126,7 @@ export default function DashboardSidebar() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-slate-800">
+            <h3 className="font-semibold text-[#16214A]">
               Krishna Shah
             </h3>
 

@@ -132,7 +132,7 @@ export default function BusinessModelPage() {
   return (
     <div className="space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -141,14 +141,14 @@ export default function BusinessModelPage() {
               Startup Builder • Module 5
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
               Build Your
               <span className="block text-primary">
                 Business Model
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
               Create scalable monetization systems,
               acquisition channels and sustainable
               startup revenue architecture for
@@ -164,12 +164,12 @@ export default function BusinessModelPage() {
                   Business Readiness
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                <h3 className="mt-2 text-5xl font-black text-[#16214A]">
                   15%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+              <div className="rounded-2xl bg-[#F7F4EE]/95 p-4 text-primary shadow-sm">
                 <Coins className="h-8 w-8" />
               </div>
             </div>
@@ -191,7 +191,7 @@ export default function BusinessModelPage() {
                 >
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
 
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-sm font-medium text-[#6B6B6B]">
                     {item}
                   </p>
                 </div>
@@ -206,14 +206,14 @@ export default function BusinessModelPage() {
         {/* LEFT */}
         <div className="space-y-6">
           {/* REVENUE ENGINE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
                 <Coins className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Revenue Engine
                 </h2>
 
@@ -246,11 +246,11 @@ export default function BusinessModelPage() {
                         formData.revenueModel ===
                         item
                           ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
                       }
                     `}
                   >
-                    <h3 className="font-bold text-slate-800">
+                    <h3 className="font-bold text-[#16214A]">
                       {item}
                     </h3>
 
@@ -286,11 +286,11 @@ export default function BusinessModelPage() {
                         formData.pricingStrategy ===
                         item
                           ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
                       }
                     `}
                   >
-                    <p className="font-bold text-slate-800">
+                    <p className="font-bold text-[#16214A]">
                       {item}
                     </p>
                   </button>
@@ -321,11 +321,11 @@ export default function BusinessModelPage() {
                         formData.revenueTimeline ===
                         item
                           ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
                       }
                     `}
                   >
-                    <p className="font-bold text-slate-800">
+                    <p className="font-bold text-[#16214A]">
                       {item}
                     </p>
                   </button>
@@ -349,7 +349,7 @@ export default function BusinessModelPage() {
                   )
                 }
                 placeholder="Example: ₹10L ARR within 12 months"
-                className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
 
@@ -369,20 +369,20 @@ export default function BusinessModelPage() {
                   )
                 }
                 placeholder="Describe how your startup generates sustainable revenue..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
           </section>
 
           {/* GROWTH STRATEGY */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
                 <TrendingUp className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Growth Strategy
                 </h2>
 
@@ -420,7 +420,7 @@ export default function BusinessModelPage() {
                       ${
                         active
                           ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
                       }
                     `}
                     >
@@ -449,7 +449,7 @@ export default function BusinessModelPage() {
                   )
                 }
                 placeholder="Describe how you will acquire and retain users..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
             </div>
 
@@ -469,20 +469,20 @@ export default function BusinessModelPage() {
                   )
                 }
                 placeholder="Describe startup scaling and expansion plans..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
             </div>
           </section>
 
           {/* COST STRUCTURE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
                 <CreditCard className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Cost Structure
                 </h2>
 
@@ -520,7 +520,7 @@ export default function BusinessModelPage() {
                       ${
                         active
                           ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
                       }
                     `}
                     >
@@ -559,7 +559,7 @@ export default function BusinessModelPage() {
                       ${
                         active
                           ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
                       }
                     `}
                     >
@@ -586,7 +586,7 @@ export default function BusinessModelPage() {
                   )
                 }
                 placeholder="Add additional startup business observations..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
               />
             </div>
           </section>
@@ -599,7 +599,7 @@ export default function BusinessModelPage() {
             <div className="flex items-center gap-3">
               <BriefcaseBusiness className="h-6 w-6 text-primary" />
 
-              <h3 className="text-2xl font-black tracking-tight text-slate-800">
+              <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
                 Business Insights
               </h3>
             </div>
@@ -613,7 +613,7 @@ export default function BusinessModelPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
+                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
                 >
                   {item}
                 </div>
@@ -622,8 +622,8 @@ export default function BusinessModelPage() {
           </section>
 
           {/* SCORE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Business Readiness
             </h3>
 
@@ -669,11 +669,11 @@ export default function BusinessModelPage() {
           </section>
 
           {/* SUMMARY */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
             <div className="flex items-center gap-3">
               <Target className="h-6 w-6 text-primary" />
 
-              <h3 className="text-2xl font-black tracking-tight text-slate-800">
+              <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
                 Strategy Summary
               </h3>
             </div>
@@ -684,7 +684,7 @@ export default function BusinessModelPage() {
                   Revenue Model
                 </p>
 
-                <h4 className="mt-2 text-lg font-black text-slate-800">
+                <h4 className="mt-2 text-lg font-black text-[#16214A]">
                   {formData.revenueModel ||
                     "Not Selected"}
                 </h4>
@@ -695,7 +695,7 @@ export default function BusinessModelPage() {
                   Pricing Position
                 </p>
 
-                <h4 className="mt-2 text-lg font-black text-slate-800">
+                <h4 className="mt-2 text-lg font-black text-[#16214A]">
                   {formData.pricingStrategy ||
                     "Not Selected"}
                 </h4>
@@ -706,7 +706,7 @@ export default function BusinessModelPage() {
                   Growth Channels
                 </p>
 
-                <h4 className="mt-2 text-lg font-black text-slate-800">
+                <h4 className="mt-2 text-lg font-black text-[#16214A]">
                   {
                     formData.acquisitionChannels
                       .length
@@ -722,7 +722,7 @@ export default function BusinessModelPage() {
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* SAVE */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Save className="h-4 w-4" />
 
           Save Draft

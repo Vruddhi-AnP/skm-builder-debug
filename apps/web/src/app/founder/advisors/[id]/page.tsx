@@ -62,19 +62,19 @@ export default function AdvisorProfilePage() {
     return (
       <main className="min-h-screen bg-[#f8fbff]">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <div className="h-[320px] animate-pulse rounded-[32px] bg-white" />
+          <div className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <div className="xl:col-span-2 space-y-6">
-              <div className="h-[240px] animate-pulse rounded-[32px] bg-white" />
+              <div className="h-[240px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
-              <div className="h-[220px] animate-pulse rounded-[32px] bg-white" />
+              <div className="h-[220px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
             </div>
 
             <div className="space-y-6">
-              <div className="h-[220px] animate-pulse rounded-[32px] bg-white" />
+              <div className="h-[220px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
-              <div className="h-[200px] animate-pulse rounded-[32px] bg-white" />
+              <div className="h-[200px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
             </div>
           </div>
         </div>
@@ -86,12 +86,12 @@ export default function AdvisorProfilePage() {
   if (!advisor) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-4">
-        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-white p-10 text-center shadow-sm">
+        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-red-50">
             <Users className="h-10 w-10 text-red-500" />
           </div>
 
-          <h1 className="mt-8 text-4xl font-black tracking-tight text-slate-800">
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-[#16214A]">
             Advisor Not Found
           </h1>
 
@@ -122,7 +122,7 @@ export default function AdvisorProfilePage() {
         <div>
           <Link
             href="/founder/advisors"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-800"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#16214A]"
           >
             <ArrowLeft className="h-4 w-4" />
             Back To Advisors
@@ -130,7 +130,7 @@ export default function AdvisorProfilePage() {
         </div>
 
         {/* HERO */}
-        <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-white p-6 shadow-sm md:p-8 lg:p-10">
+        <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8 lg:p-10">
           <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl opacity-60" />
 
           <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-sky-100 blur-3xl opacity-60" />
@@ -154,7 +154,7 @@ export default function AdvisorProfilePage() {
                   }
                 </div>
 
-                <h1 className="mt-5 text-4xl font-black tracking-tight text-slate-800 md:text-5xl">
+                <h1 className="mt-5 text-4xl font-black tracking-tight text-[#16214A] md:text-5xl">
                   {advisor.fullName}
                 </h1>
 
@@ -217,11 +217,11 @@ export default function AdvisorProfilePage() {
                 Book Consultation
               </button>
 
-              <button className="w-full rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
+              <button className="w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
                 Schedule Discovery Call
               </button>
 
-              <button className="w-full rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
+              <button className="w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
                 View Founder Resources
               </button>
             </div>
@@ -235,8 +235,8 @@ export default function AdvisorProfilePage() {
           <div className="xl:col-span-2 space-y-6">
 
             {/* ABOUT */}
-            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
-              <h2 className="text-3xl font-black tracking-tight text-slate-800">
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
+              <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                 About Advisor
               </h2>
 
@@ -255,8 +255,8 @@ export default function AdvisorProfilePage() {
             </div>
 
             {/* EXPERIENCE */}
-            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
-              <h2 className="text-3xl font-black tracking-tight text-slate-800">
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
+              <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                 Mentorship Experience
               </h2>
 
@@ -266,7 +266,7 @@ export default function AdvisorProfilePage() {
                     Experience
                   </p>
 
-                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                  <h3 className="mt-3 text-3xl font-black text-[#16214A]">
                     {
                       advisor.yearsExperience
                     }+
@@ -282,7 +282,7 @@ export default function AdvisorProfilePage() {
                     Sessions
                   </p>
 
-                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                  <h3 className="mt-3 text-3xl font-black text-[#16214A]">
                     {
                       advisor.totalSessions
                     }
@@ -298,7 +298,7 @@ export default function AdvisorProfilePage() {
                     Startups
                   </p>
 
-                  <h3 className="mt-3 text-3xl font-black text-slate-800">
+                  <h3 className="mt-3 text-3xl font-black text-[#16214A]">
                     {
                       advisor.startupCount
                     }
@@ -316,11 +316,11 @@ export default function AdvisorProfilePage() {
               <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-40" />
 
               <div className="relative z-10">
-                <div className="inline-flex items-center rounded-full border border-white bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
+                <div className="inline-flex items-center rounded-full border border-white bg-[#F7F4EE]/95/80 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
                   Founder Mentorship
                 </div>
 
-                <h2 className="mt-5 text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="mt-5 text-3xl font-black tracking-tight text-[#16214A]">
                   Build Faster With Expert
                   Startup Guidance
                 </h2>
@@ -345,8 +345,8 @@ export default function AdvisorProfilePage() {
           <div className="space-y-6">
 
             {/* AVAILABILITY */}
-            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
-              <h2 className="text-2xl font-black text-slate-800">
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+              <h2 className="text-2xl font-black text-[#16214A]">
                 Session Availability
               </h2>
 
@@ -356,7 +356,7 @@ export default function AdvisorProfilePage() {
                   Next Available Session
                 </div>
 
-                <h3 className="mt-3 text-2xl font-black text-slate-800">
+                <h3 className="mt-3 text-2xl font-black text-[#16214A]">
                   Saturday • 7 PM
                 </h3>
 
@@ -372,8 +372,8 @@ export default function AdvisorProfilePage() {
             </div>
 
             {/* SUPPORT */}
-            <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
-              <h2 className="text-2xl font-black text-slate-800">
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+              <h2 className="text-2xl font-black text-[#16214A]">
                 Founder Support
               </h2>
 

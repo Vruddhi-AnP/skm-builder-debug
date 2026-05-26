@@ -30,7 +30,7 @@ export default function OnboardingLayout({
   return (
     <div className="min-h-screen bg-[#f8fbff]">
       {/* TOP NAVBAR */}
-      <header className="border-b border-border/60 bg-white/95 backdrop-blur-xl">
+      <header className="border-b border-border/60 bg-[#F7F4EE]/95 backdrop-blur-xl">
         <div className="page-container flex h-20 items-center justify-between">
           {/* LOGO */}
           <Link
@@ -42,7 +42,7 @@ export default function OnboardingLayout({
             </div>
 
             <div>
-              <h2 className="text-lg font-black tracking-tight text-slate-800">
+              <h2 className="text-lg font-black tracking-tight text-[#16214A]">
                 Startup Ka Mall
               </h2>
 
@@ -64,7 +64,7 @@ export default function OnboardingLayout({
       <main className="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
         <div className="w-full max-w-5xl">
           {/* PROGRESS */}
-          <div className="mb-8 rounded-3xl border border-border/60 bg-white p-6 shadow-sm">
+          <div className="mb-8 rounded-3xl border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
             {/* TOP */}
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               {/* LEFT */}
@@ -73,7 +73,7 @@ export default function OnboardingLayout({
                   Founder Onboarding
                 </div>
 
-                <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-800 sm:text-4xl">
+                <h1 className="mt-4 text-3xl font-black tracking-tight text-[#16214A] sm:text-4xl">
                   {title}
                 </h1>
 
@@ -88,7 +88,7 @@ export default function OnboardingLayout({
                   Current Step
                 </p>
 
-                <h3 className="mt-2 text-lg font-black text-slate-800">
+                <h3 className="mt-2 text-lg font-black text-[#16214A]">
                   {
                     steps[currentStep - 1]
                       ?.title
@@ -138,7 +138,7 @@ export default function OnboardingLayout({
                     className={`rounded-2xl border p-4 transition-all ${
                       isActive
                         ? "border-primary/20 bg-primary/5"
-                        : "border-border/60 bg-white"
+                        : "border-border/60 bg-[#F7F4EE]/95"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -159,7 +159,7 @@ export default function OnboardingLayout({
                       </div>
 
                       <div>
-                        <h3 className="text-sm font-semibold text-slate-800">
+                        <h3 className="text-sm font-semibold text-[#16214A]">
                           {step.title}
                         </h3>
 
@@ -175,7 +175,7 @@ export default function OnboardingLayout({
           </div>
 
           {/* CONTENT */}
-          <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm sm:p-10">
+          <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm sm:p-10">
             {children}
           </div>
         </div>

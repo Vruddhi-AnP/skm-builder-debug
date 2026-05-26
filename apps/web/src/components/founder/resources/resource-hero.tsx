@@ -6,7 +6,7 @@ export default function ResourceHero() {
   const router = useRouter();
 
   return (
-    <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-white p-6 shadow-sm md:p-8 lg:p-10">
+    <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8 lg:p-10">
 
       <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl opacity-60" />
 
@@ -21,7 +21,7 @@ export default function ResourceHero() {
             Founder Knowledge Hub
           </div>
 
-          <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-800 md:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-4xl font-black tracking-tight text-[#16214A] md:text-5xl lg:text-6xl">
             Startup Resources &
 
             <span className="mt-2 block bg-gradient-to-r from-sky-500 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
@@ -55,7 +55,7 @@ export default function ResourceHero() {
                   "/founder/programs"
                 )
               }
-              className="rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50"
+              className="rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50"
             >
               Explore Programs
             </button>
@@ -95,7 +95,7 @@ export default function ResourceHero() {
                 {item.label}
               </p>
 
-              <h3 className="mt-2 text-3xl font-black text-slate-800">
+              <h3 className="mt-2 text-3xl font-black text-[#16214A]">
                 {item.value}
               </h3>
             </div>

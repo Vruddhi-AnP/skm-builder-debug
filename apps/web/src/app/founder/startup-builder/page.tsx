@@ -104,7 +104,7 @@ export default function StartupBuilderPage() {
   return (
     <div className="space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -112,14 +112,14 @@ export default function StartupBuilderPage() {
               Startup Execution Workspace
             </div>
 
-            <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
               Build Your Startup
               <span className="block text-primary">
                 Step-by-Step
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
               Validate your startup idea, structure your
               business model, analyze market demand and
               prepare investor-ready execution workflows.
@@ -136,7 +136,7 @@ export default function StartupBuilderPage() {
 
               <Link
                 href="/founder/dashboard"
-                className="rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+                className="rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
               >
                 Back to Dashboard
               </Link>
@@ -151,12 +151,12 @@ export default function StartupBuilderPage() {
                   Startup Readiness
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                <h3 className="mt-2 text-5xl font-black text-[#16214A]">
                   72%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+              <div className="rounded-2xl bg-[#F7F4EE]/95 p-4 text-primary shadow-sm">
                 <ShieldCheck className="h-8 w-8" />
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function StartupBuilderPage() {
                 >
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
 
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-sm font-medium text-[#6B6B6B]">
                     {item}
                   </p>
                 </div>
@@ -193,14 +193,14 @@ export default function StartupBuilderPage() {
         {stats.map((item) => (
           <div
             key={item.title}
-            className="flex min-h-[180px] flex-col justify-between rounded-[28px] border border-border/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="flex min-h-[180px] flex-col justify-between rounded-[28px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div>
               <p className="text-sm font-medium text-slate-500">
                 {item.title}
               </p>
 
-              <h3 className="mt-4 text-5xl font-black tracking-tight text-slate-800">
+              <h3 className="mt-4 text-5xl font-black tracking-tight text-[#16214A]">
                 {item.value}
               </h3>
             </div>
@@ -219,14 +219,14 @@ export default function StartupBuilderPage() {
       </section>
 
       {/* MODULES */}
-      <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+      <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="text-3xl font-black tracking-tight text-slate-800">
+            <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
               Startup Builder Modules
             </h2>
 
-            <p className="mt-2 max-w-2xl text-slate-600">
+            <p className="mt-2 max-w-2xl text-[#6B6B6B]">
               Complete each startup workflow module to
               improve execution clarity and investor
               readiness.
@@ -235,7 +235,7 @@ export default function StartupBuilderPage() {
 
           <Link
             href="/founder/startup-builder/readiness-score"
-            className="inline-flex w-fit items-center gap-2 rounded-2xl border border-border/60 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+            className="inline-flex w-fit items-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
           >
             View Full Readiness
 
@@ -251,7 +251,7 @@ export default function StartupBuilderPage() {
             return (
               <div
                 key={module.title}
-                className="group rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-white hover:shadow-lg"
+                className="group rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:bg-[#F7F4EE]/95 hover:shadow-lg"
               >
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                   {/* LEFT */}
@@ -261,11 +261,11 @@ export default function StartupBuilderPage() {
                     </div>
 
                     <div>
-                      <h3 className="text-2xl font-black tracking-tight text-slate-800">
+                      <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
                         {module.title}
                       </h3>
 
-                      <p className="mt-3 max-w-md leading-7 text-slate-600">
+                      <p className="mt-3 max-w-md leading-7 text-[#6B6B6B]">
                         {module.description}
                       </p>
                     </div>

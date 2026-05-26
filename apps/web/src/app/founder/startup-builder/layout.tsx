@@ -64,7 +64,7 @@ export default function StartupBuilderLayout({
   return (
     <div className="min-h-screen bg-[#f8fbff]">
       {/* HEADER */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-[#F7F4EE]/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
           {/* LEFT */}
           <div>
@@ -73,7 +73,7 @@ export default function StartupBuilderLayout({
               Startup Builder Workspace
             </div>
 
-            <h1 className="mt-4 text-2xl font-black tracking-tight text-slate-800 sm:text-3xl">
+            <h1 className="mt-4 text-2xl font-black tracking-tight text-[#16214A] sm:text-3xl">
               Build Your Startup
               Systematically
             </h1>
@@ -114,14 +114,14 @@ export default function StartupBuilderLayout({
         <div className="grid gap-6 xl:grid-cols-[340px_1fr]">
           {/* SIDEBAR */}
           <aside className="h-fit xl:sticky xl:top-28">
-            <div className="overflow-hidden rounded-[32px] border border-border/60 bg-white shadow-sm">
+            <div className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 shadow-sm">
               {/* HEADER */}
               <div className="border-b border-border/60 p-6">
                 <div className="inline-flex rounded-full border border-primary/10 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                   Builder Modules
                 </div>
 
-                <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-800">
+                <h2 className="mt-4 text-2xl font-black tracking-tight text-[#16214A]">
                   Founder Workflow
                 </h2>
 
@@ -145,7 +145,7 @@ export default function StartupBuilderLayout({
                       ${
                         isActive
                           ? "border-primary/20 bg-primary/5"
-                          : "border-border/60 bg-white hover:border-primary/20 hover:bg-[#f8fbff]"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-primary/20 hover:bg-[#f8fbff]"
                       }
                     `}
                     >
@@ -156,7 +156,7 @@ export default function StartupBuilderLayout({
                         ${
                           isActive
                             ? "bg-primary text-white"
-                            : "bg-slate-100 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary"
+                            : "bg-slate-100 text-[#6B6B6B] group-hover:bg-primary/10 group-hover:text-primary"
                         }
                       `}
                       >
@@ -208,7 +208,7 @@ export default function StartupBuilderLayout({
 
           {/* CONTENT */}
           <main className="min-w-0">
-            <div className="rounded-[32px] border border-border/60 bg-white p-5 shadow-sm md:p-8 lg:p-10">
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-5 shadow-sm md:p-8 lg:p-10">
               {children}
             </div>
           </main>

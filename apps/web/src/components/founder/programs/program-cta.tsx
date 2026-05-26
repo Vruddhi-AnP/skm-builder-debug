@@ -8,11 +8,11 @@ export default function ProgramCTA() {
 
       <div className="relative z-10 text-center">
 
-        <div className="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+        <div className="inline-flex items-center rounded-full border border-white bg-[#F7F4EE]/95/80 px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm">
           Founder Growth Programs
         </div>
 
-        <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-black tracking-tight text-slate-800">
+        <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-black tracking-tight text-[#16214A]">
           Accelerate Your Startup
           Journey With Structured
           Execution

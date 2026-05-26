@@ -133,7 +133,7 @@ export default function AdvisorDashboardPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[270px] bg-white h-full border-r border-[#edf1f7] flex flex-col">
+          <div className="w-[270px] bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
             {/* TOP */}
             <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
               <div>
@@ -221,7 +221,7 @@ export default function AdvisorDashboardPage() {
                 className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 ${
                   item.active
                     ? "bg-[#eef2ff] text-violet-600"
-                    : "text-gray-600 hover:bg-white"
+                    : "text-gray-600 hover:bg-[#F7F4EE]/95"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -236,7 +236,7 @@ export default function AdvisorDashboardPage() {
 
         {/* BOTTOM CARD */}
         <div className="p-4">
-          <div className="rounded-[28px] border border-violet-200 bg-white p-5">
+          <div className="rounded-[28px] border border-violet-200 bg-[#F7F4EE]/95 p-5">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-500">
               Advisor Impact
             </p>
@@ -263,7 +263,7 @@ export default function AdvisorDashboardPage() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden h-11 w-11 rounded-xl bg-white border border-[#edf1f7] flex items-center justify-center"
+              className="lg:hidden h-11 w-11 rounded-xl bg-[#F7F4EE]/95 border border-[#edf1f7] flex items-center justify-center"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -282,7 +282,7 @@ export default function AdvisorDashboardPage() {
           <div className="flex items-center gap-3">
             <Link
                 href="/advisor/notifications"
-                className="relative h-12 w-12 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center hover:bg-[#fafafa] transition"
+                className="relative h-12 w-12 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center hover:bg-[#fafafa] transition"
               >
               <Bell className="w-5 h-5 text-gray-700" />
 
@@ -291,7 +291,7 @@ export default function AdvisorDashboardPage() {
 
             <Link
               href="/advisor/profile"
-              className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-white flex items-center gap-3 hover:bg-[#fafafa] transition"
+              className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center gap-3 hover:bg-[#fafafa] transition"
             >
               <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
                 K
@@ -313,7 +313,7 @@ export default function AdvisorDashboardPage() {
         {/* CONTENT */}
         <main className="flex-1 p-5 lg:p-7 overflow-x-hidden space-y-7">
           {/* HERO */}
-          <section className="rounded-[36px] border border-[#e8edf5] bg-white p-6 lg:p-8">
+          <section className="rounded-[36px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6 lg:p-8">
             <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_360px] gap-8 items-center">
               {/* LEFT */}
               <div>
@@ -347,7 +347,7 @@ export default function AdvisorDashboardPage() {
 
                   <Link
                     href="/advisor/sessions"
-                    className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-gray-700 flex items-center justify-center"
+                    className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-gray-700 flex items-center justify-center"
                   >
                     View Sessions
                   </Link>
@@ -355,7 +355,7 @@ export default function AdvisorDashboardPage() {
               </div>
 
               {/* SCORE */}
-              <div className="rounded-[30px] border-2 border-violet-500 bg-white p-6">
+              <div className="rounded-[30px] border-2 border-violet-500 bg-[#F7F4EE]/95 p-6">
                 <p className="text-base font-semibold text-[#0f172a]">
                   Advisor Impact
                 </p>
@@ -376,7 +376,7 @@ export default function AdvisorDashboardPage() {
           </section>
 
           {/* SEARCH + FILTER */}
-          <section className="rounded-[32px] border border-[#e8edf5] bg-white p-5">
+          <section className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
             <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
               {/* SEARCH */}
               <div className="relative w-full lg:max-w-md">
@@ -404,7 +404,7 @@ export default function AdvisorDashboardPage() {
                     className={`h-11 px-5 rounded-2xl text-sm font-semibold transition ${
                       selectedCategory === category
                         ? "bg-violet-500 text-white"
-                        : "border border-[#e8edf5] bg-white text-gray-700 hover:bg-[#fafafa]"
+                        : "border border-[#e8edf5] bg-[#F7F4EE]/95 text-gray-700 hover:bg-[#fafafa]"
                     }`}
                   >
                     {category}
@@ -416,7 +416,7 @@ export default function AdvisorDashboardPage() {
 
           {/* STATS */}
           <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center justify-between">
                 <Briefcase className="w-6 h-6 text-violet-500" />
 
@@ -434,7 +434,7 @@ export default function AdvisorDashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center justify-between">
                 <CalendarDays className="w-6 h-6 text-blue-500" />
 
@@ -452,7 +452,7 @@ export default function AdvisorDashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center justify-between">
                 <Wallet className="w-6 h-6 text-fuchsia-500" />
 
@@ -470,7 +470,7 @@ export default function AdvisorDashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center justify-between">
                 <Users className="w-6 h-6 text-orange-500" />
 
@@ -492,7 +492,7 @@ export default function AdvisorDashboardPage() {
           {/* CONTENT */}
           <section className="grid grid-cols-1 xl:grid-cols-[1.4fr_360px] gap-5">
             {/* REQUESTS */}
-            <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight text-[#0f172a]">
@@ -546,7 +546,7 @@ export default function AdvisorDashboardPage() {
 
                       <div className="flex flex-wrap gap-3">
                         <button
-                          className="h-11 px-4 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center"
+                          className="h-11 px-4 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center"
                         >
                           View Profile
                         </button>
@@ -584,7 +584,7 @@ export default function AdvisorDashboardPage() {
             {/* RIGHT */}
             <div className="space-y-5">
               {/* SESSIONS */}
-              <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
+              <div className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-bold tracking-tight text-[#0f172a]">
                     Upcoming Sessions
@@ -630,7 +630,7 @@ export default function AdvisorDashboardPage() {
               </div>
 
               {/* QUICK ACTIONS */}
-              <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
+              <div className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
                 <h3 className="text-2xl font-bold tracking-tight text-[#0f172a]">
                   Quick Actions
                 </h3>
@@ -638,7 +638,7 @@ export default function AdvisorDashboardPage() {
 
                   <Link
                     href="/advisor/earnings"
-                    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-white transition"
+                    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
                   >
                     <Wallet className="w-5 h-5 text-fuchsia-500 mx-auto" />
 
@@ -651,7 +651,7 @@ export default function AdvisorDashboardPage() {
 
                   <Link
                     href="/advisor/profile"
-                    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-white transition"
+                    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
                   >
                     <Star className="w-5 h-5 text-orange-500 mx-auto" />
 

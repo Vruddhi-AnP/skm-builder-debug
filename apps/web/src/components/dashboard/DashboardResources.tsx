@@ -26,10 +26,10 @@ const resources = [
 
 export default function DashboardResources() {
   return (
-    <aside className="rounded-[32px] border border-border/60 bg-white p-6 md:p-8">
+    <aside className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 md:p-8">
       {/* HEADER */}
       <div>
-        <h2 className="text-2xl font-black tracking-tight text-slate-800">
+        <h2 className="text-2xl font-black tracking-tight text-[#16214A]">
           Resources
         </h2>
 
@@ -60,7 +60,7 @@ export default function DashboardResources() {
                     {item.type}
                   </div>
 
-                  <h3 className="mt-3 text-base font-bold leading-7 text-slate-800">
+                  <h3 className="mt-3 text-base font-bold leading-7 text-[#16214A]">
                     {item.title}
                   </h3>
                 </div>
@@ -72,11 +72,11 @@ export default function DashboardResources() {
 
       {/* BOTTOM */}
       <div className="mt-8 rounded-[28px] border border-primary/10 bg-primary/5 p-5">
-        <h3 className="text-lg font-black text-slate-800">
+        <h3 className="text-lg font-black text-[#16214A]">
           Founder Tip
         </h3>
 
-        <p className="mt-3 text-sm leading-7 text-slate-600">
+        <p className="mt-3 text-sm leading-7 text-[#6B6B6B]">
           Consistent execution and structured validation
           are the strongest indicators of startup success.
         </p>

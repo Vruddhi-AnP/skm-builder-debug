@@ -111,7 +111,7 @@ export default function InvestorsPage() {
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 
           <div>
-            <h2 className="text-3xl font-black tracking-tight text-slate-800">
+            <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
               Recommended Investors
             </h2>
 
@@ -123,7 +123,7 @@ export default function InvestorsPage() {
             </p>
           </div>
 
-          <div className="w-fit rounded-2xl border border-border/60 bg-white px-4 py-3 text-sm font-medium text-slate-600 shadow-sm">
+          <div className="w-fit rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-4 py-3 text-sm font-medium text-[#6B6B6B] shadow-sm">
             {
               filteredInvestors.length
             }{" "}
@@ -139,7 +139,7 @@ export default function InvestorsPage() {
               (item) => (
                 <div
                   key={item}
-                  className="h-[320px] animate-pulse rounded-[32px] bg-white"
+                  className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
                 />
               )
             )}
@@ -150,9 +150,9 @@ export default function InvestorsPage() {
         {!loading &&
           filteredInvestors.length ===
             0 && (
-            <div className="rounded-[32px] border border-border/60 bg-white p-10 text-center shadow-sm">
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
 
-              <h3 className="text-3xl font-black text-slate-800">
+              <h3 className="text-3xl font-black text-[#16214A]">
                 No Investors Found
               </h3>
 

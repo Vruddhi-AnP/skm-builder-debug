@@ -19,7 +19,7 @@ export default function AdvisorFilters({
   setSelectedExpertise,
 }: Props) {
   return (
-    <div className="rounded-[32px] border border-border/60 bg-white p-5 shadow-sm">
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-5 shadow-sm">
       <div className="flex flex-col gap-4 xl:flex-row">
         <div className="flex-1">
           <input
@@ -71,7 +71,7 @@ export default function AdvisorFilters({
               "All Expertise"
             );
           }}
-          className="h-14 rounded-2xl border border-border/60 bg-white px-6 font-semibold text-slate-700 transition hover:bg-slate-50"
+          className="h-14 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 font-semibold text-slate-700 transition hover:bg-slate-50"
         >
           Reset
         </button>

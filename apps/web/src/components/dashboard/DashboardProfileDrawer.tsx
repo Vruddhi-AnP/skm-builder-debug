@@ -36,7 +36,7 @@ export default function DashboardProfileDrawer({
 
       {/* DRAWER */}
       <div
-        className={`fixed right-0 top-0 z-[100] h-screen w-full max-w-md border-l border-border/60 bg-white shadow-2xl transition-transform duration-300
+        className={`fixed right-0 top-0 z-[100] h-screen w-full max-w-md border-l border-border/60 bg-[#F7F4EE]/95 shadow-2xl transition-transform duration-300
         
         ${
           profileOpen
@@ -48,7 +48,7 @@ export default function DashboardProfileDrawer({
         {/* HEADER */}
         <div className="flex items-center justify-between border-b border-border/60 p-6">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-800">
+            <h2 className="text-2xl font-black tracking-tight text-[#16214A]">
               Founder Profile
             </h2>
 
@@ -61,7 +61,7 @@ export default function DashboardProfileDrawer({
             onClick={() =>
               setProfileOpen(false)
             }
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 bg-white transition hover:bg-muted"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 bg-[#F7F4EE]/95 transition hover:bg-muted"
           >
             <X className="h-5 w-5" />
           </button>
@@ -75,7 +75,7 @@ export default function DashboardProfileDrawer({
               K
             </div>
 
-            <h3 className="mt-5 text-2xl font-black text-slate-800">
+            <h3 className="mt-5 text-2xl font-black text-[#16214A]">
               Krishna Shah
             </h3>
 
@@ -96,7 +96,7 @@ export default function DashboardProfileDrawer({
                   Role
                 </p>
 
-                <h4 className="mt-1 font-bold text-slate-800">
+                <h4 className="mt-1 font-bold text-[#16214A]">
                   Founder
                 </h4>
               </div>
@@ -112,7 +112,7 @@ export default function DashboardProfileDrawer({
                   Email
                 </p>
 
-                <h4 className="mt-1 font-bold text-slate-800">
+                <h4 className="mt-1 font-bold text-[#16214A]">
                   founder@startup.com
                 </h4>
               </div>
@@ -128,7 +128,7 @@ export default function DashboardProfileDrawer({
                   Startup
                 </p>
 
-                <h4 className="mt-1 font-bold text-slate-800">
+                <h4 className="mt-1 font-bold text-[#16214A]">
                   Startup Ka Mall
                 </h4>
               </div>

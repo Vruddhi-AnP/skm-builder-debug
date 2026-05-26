@@ -14,7 +14,7 @@ export default function AdvisorCard({
   const router = useRouter();
 
   return (
-    <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
       <div className="flex items-start justify-between gap-5">
         <div className="flex items-center gap-4">
           <button
@@ -35,7 +35,7 @@ export default function AdvisorCard({
                   `/founder/advisors/${advisor.id}`
                 )
               }
-              className="text-2xl font-black text-slate-800 hover:text-primary"
+              className="text-2xl font-black text-[#16214A] hover:text-primary"
             >
               {advisor.fullName}
             </button>
@@ -66,7 +66,7 @@ export default function AdvisorCard({
         )}
       </div>
 
-      <div className="mt-6 space-y-2 text-sm text-slate-600">
+      <div className="mt-6 space-y-2 text-sm text-[#6B6B6B]">
         <p>
           {advisor.yearsExperience}
           + Years Experience
@@ -96,7 +96,7 @@ export default function AdvisorCard({
           View Profile
         </button>
 
-        <button className="flex-1 rounded-2xl border border-border/60 bg-white px-5 py-3 font-semibold text-slate-700">
+        <button className="flex-1 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-3 font-semibold text-slate-700">
           Book Session
         </button>
       </div>

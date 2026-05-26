@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -10,6 +12,11 @@ import {
   CreditCard,
   WalletCards,
 } from "lucide-react";
+
+import {
+  getAdvisorOnboarding,
+  saveAdvisorOnboarding,
+} from "@/lib/advisor-onboarding";
 
 const pricingPlans = [
   {
@@ -40,181 +47,339 @@ const pricingPlans = [
 export default function AdvisorPricingPage() {
   const router = useRouter();
 
+  const [formData, setFormData] =
+    useState(() => ({
+      pricingModel: "",
+      sessionPricing: "",
+      monthlyRetainer: "",
+      equityInterest: "",
+      consultationType: "",
+      pricingNotes: "",
+
+      ...getAdvisorOnboarding(),
+    }));
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]:
+        e.target.value,
+    });
+  };
+
+  const handlePlanSelect = (
+    plan: string
+  ) => {
+    setFormData({
+      ...formData,
+      pricingModel: plan,
+    });
+  };
+
+  const handleComplete = () => {
+    saveAdvisorOnboarding(
+      formData
+    );
+
+    router.push(
+      "/onboarding/advisor/success"
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#eef2ff,white_40%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_80px_rgba(99,102,241,0.12)] backdrop-blur-xl sm:p-10 lg:p-14">
+    <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
+
+      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
+
         {/* TOP */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+
           {/* LEFT */}
           <div className="max-w-3xl">
-            <div className="inline-flex rounded-full bg-violet-100 px-4 py-1 text-sm font-semibold text-violet-700">
+
+            <div className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
               Advisor Pricing
             </div>
 
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-800 sm:text-5xl">
-              Setup Your Advisory Pricing
+            <h1 className="mt-5 text-4xl font-black tracking-tight text-foreground sm:text-5xl">
+              Setup Your Advisory
+              Pricing
             </h1>
 
-            <p className="mt-5 text-base leading-8 text-slate-500">
-              Configure your mentorship pricing structure, consultation
-              preferences and startup engagement model.
+            <p className="mt-5 text-base leading-8 text-muted-foreground">
+              Configure your mentorship
+              pricing structure,
+              consultation preferences
+              and startup engagement
+              model.
             </p>
 
-            {/* Tags */}
+            {/* TAGS */}
             <div className="mt-8 flex flex-wrap gap-3">
-              <div className="rounded-full bg-violet-100 px-5 py-2 text-sm font-semibold text-violet-700">
+
+              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
                 Advisory Monetization
               </div>
 
-              <div className="rounded-full bg-cyan-100 px-5 py-2 text-sm font-semibold text-cyan-700">
+              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
                 Founder Engagement
               </div>
+
             </div>
           </div>
 
-          {/* RIGHT PROGRESS */}
-          <div className="w-full max-w-sm rounded-[2rem] border border-violet-200 bg-white p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
+          {/* RIGHT */}
+          <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-slate-700">
+
+              <span className="text-sm font-semibold text-muted-foreground">
                 Progress
               </span>
 
-              <span className="text-sm font-bold text-violet-600">
+              <span className="text-sm font-bold text-primary">
                 Step 4/5
               </span>
+
             </div>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full w-4/5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500" />
+            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+
+              <div className="h-full w-4/5 rounded-full bg-primary" />
+
             </div>
 
-            <p className="mt-5 text-sm leading-6 text-slate-500">
-              Pricing setup in progress
+            <p className="mt-5 text-sm leading-6 text-muted-foreground">
+              Pricing setup in
+              progress
             </p>
+
           </div>
         </div>
 
         {/* FORM */}
         <div className="mt-14">
+
           <div>
-            <h2 className="text-3xl font-bold text-slate-800">
-              Pricing & Advisory Setup
+
+            <h2 className="text-3xl font-black text-foreground">
+              Pricing & Advisory
+              Setup
             </h2>
 
-            <p className="mt-3 text-base text-slate-500">
-              Define how founders can engage and collaborate with you
+            <p className="mt-3 text-base text-muted-foreground">
+              Define how founders can
+              engage and collaborate
+              with you
             </p>
+
           </div>
 
-          {/* Pricing Cards */}
+          {/* PRICING CARDS */}
           <div className="mt-10 grid gap-6 md:grid-cols-2">
+
             {pricingPlans.map((item) => (
+
               <button
                 key={item.title}
-                className="rounded-[2rem] border border-slate-200 bg-white p-6 text-left transition-all hover:-translate-y-1 hover:border-violet-300 hover:shadow-[0_10px_30px_rgba(99,102,241,0.12)]"
+                type="button"
+                onClick={() =>
+                  handlePlanSelect(
+                    item.title
+                  )
+                }
+                className={`rounded-[2rem] border bg-card p-6 text-left transition-all hover:-translate-y-1 hover:shadow-lg ${
+                  formData.pricingModel ===
+                  item.title
+                    ? "border-primary ring-4 ring-primary/10"
+                    : "border-border hover:border-primary/30"
+                }`}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-lg">
+
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
+
                   <WalletCards className="h-5 w-5" />
+
                 </div>
 
-                <h3 className="mt-5 text-xl font-bold text-slate-800">
+                <h3 className="mt-5 text-xl font-black text-foreground">
                   {item.title}
                 </h3>
 
-                <p className="mt-3 text-sm leading-7 text-slate-500">
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">
                   {item.description}
                 </p>
+
               </button>
+
             ))}
           </div>
 
-          {/* Inputs */}
+          {/* INPUTS */}
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {/* Session Pricing */}
+
+            {/* SESSION PRICING */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Session Pricing
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <BadgeIndianRupee className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <BadgeIndianRupee className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="sessionPricing"
+                  value={
+                    formData.sessionPricing ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Ex: ₹2,000 per session"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Monthly Advisory */}
+            {/* MONTHLY */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Monthly Advisory Retainer
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
+                Monthly Advisory
+                Retainer
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <CreditCard className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <CreditCard className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="monthlyRetainer"
+                  value={
+                    formData.monthlyRetainer ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Ex: ₹25,000 monthly"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Equity Interest */}
+            {/* EQUITY */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Equity Interest
               </label>
 
-              <select className="h-14 w-full rounded-2xl border border-slate-200 bg-white px-5 text-sm text-slate-700 outline-none transition-all focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
-                <option>Select preference</option>
-                <option>Open to Equity Advisory</option>
-                <option>Only Paid Advisory</option>
-                <option>Flexible Engagement</option>
+              <select
+                name="equityInterest"
+                value={
+                  formData.equityInterest ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
+                className="h-14 w-full rounded-2xl border border-border bg-background px-5 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
+              >
+                <option value="">
+                  Select preference
+                </option>
+
+                <option value="equity-advisory">
+                  Open to Equity
+                  Advisory
+                </option>
+
+                <option value="paid-only">
+                  Only Paid Advisory
+                </option>
+
+                <option value="flexible">
+                  Flexible Engagement
+                </option>
+
               </select>
             </div>
 
-            {/* Consultation Type */}
+            {/* CONSULTATION */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Consultation Type
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <BriefcaseBusiness className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <BriefcaseBusiness className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="consultationType"
+                  value={
+                    formData.consultationType ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Ex: Strategy, GTM, Product Scaling"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Pricing Notes */}
+            {/* NOTES */}
             <div className="md:col-span-2">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Advisory Notes & Expectations
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
+                Advisory Notes &
+                Expectations
               </label>
 
               <textarea
+                name="pricingNotes"
+                value={
+                  formData.pricingNotes ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Describe your pricing expectations, collaboration style, founder engagement model and any additional mentorship guidelines..."
-                className="min-h-[140px] w-full rounded-[1.8rem] border border-slate-200 bg-white px-5 py-4 text-sm leading-7 outline-none transition-all placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+                className="min-h-[140px] w-full rounded-[1.8rem] border border-border bg-background px-5 py-4 text-sm leading-7 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
+
             </div>
           </div>
 
-          {/* Bottom */}
-          <div className="mt-14 flex flex-col gap-4 border-t border-slate-100 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          {/* BOTTOM */}
+          <div className="mt-14 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+
             <button
               onClick={() =>
-                router.push("/onboarding/advisor/availability")
+                router.push(
+                  "/onboarding/advisor/availability"
+                )
               }
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-8 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-border bg-card px-8 text-sm font-semibold text-foreground transition-all hover:bg-muted"
             >
               <ArrowLeft className="h-4 w-4" />
 
@@ -222,15 +387,16 @@ export default function AdvisorPricingPage() {
             </button>
 
             <button
-              onClick={() =>
-                router.push("/onboarding/advisor/success")
+              onClick={
+                handleComplete
               }
-              className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 px-8 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(99,102,241,0.25)] transition-all hover:scale-[1.02]"
+              className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
               Complete Onboarding
 
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
+
           </div>
         </div>
       </div>

@@ -132,7 +132,7 @@ export default function InvestorSavedPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[280px] bg-white h-full border-r border-[#edf1f7] flex flex-col">
+          <div className="w-[280px] bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
             <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
               <div>
                 <h2 className="text-xl font-bold text-[#0f172a]">
@@ -192,7 +192,7 @@ export default function InvestorSavedPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[280px] bg-white border-r border-[#edf1f7] flex-col">
+      <aside className="hidden lg:flex w-[280px] bg-[#F7F4EE]/95 border-r border-[#edf1f7] flex-col">
         <div className="h-24 border-b border-[#edf1f7] flex items-center px-6">
           <div className="flex items-center gap-4">
             <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
@@ -265,7 +265,7 @@ export default function InvestorSavedPage() {
               onClick={() =>
                 setSidebarOpen(true)
               }
-              className="lg:hidden h-11 w-11 rounded-xl bg-white border border-[#edf1f7] flex items-center justify-center"
+              className="lg:hidden h-11 w-11 rounded-xl bg-[#F7F4EE]/95 border border-[#edf1f7] flex items-center justify-center"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -282,13 +282,13 @@ export default function InvestorSavedPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="h-12 w-12 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center">
+            <button className="h-12 w-12 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center">
               <Bell className="w-5 h-5 text-gray-700" />
             </button>
 
             <Link
               href="/investor/profile"
-              className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-white flex items-center gap-3"
+              className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center gap-3"
             >
               <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
                 K
@@ -310,7 +310,7 @@ export default function InvestorSavedPage() {
         {/* CONTENT */}
         <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
           {/* HERO */}
-          <section className="rounded-[36px] border border-[#e8edf5] bg-white p-6 lg:p-8">
+          <section className="rounded-[36px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6 lg:p-8">
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2">
@@ -351,7 +351,7 @@ export default function InvestorSavedPage() {
                 className={`h-11 px-5 rounded-2xl text-sm font-semibold transition ${
                   selectedCategory === category
                     ? "bg-violet-500 text-white"
-                    : "border border-[#e8edf5] bg-white text-gray-700 hover:bg-[#fafafa]"
+                    : "border border-[#e8edf5] bg-[#F7F4EE]/95 text-gray-700 hover:bg-[#fafafa]"
                 }`}
               >
                 {category}
@@ -361,7 +361,7 @@ export default function InvestorSavedPage() {
 
           {/* STATS */}
           <section className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="rounded-[30px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <Bookmark className="w-6 h-6 text-violet-500" />
 
               <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
@@ -373,7 +373,7 @@ export default function InvestorSavedPage() {
               </p>
             </div>
 
-            <div className="rounded-[30px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <Users className="w-6 h-6 text-fuchsia-500" />
 
               <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
@@ -385,7 +385,7 @@ export default function InvestorSavedPage() {
               </p>
             </div>
 
-            <div className="rounded-[30px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <TrendingUp className="w-6 h-6 text-emerald-500" />
 
               <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
@@ -403,7 +403,7 @@ export default function InvestorSavedPage() {
             {filteredStartups.map((startup) => (
               <div
                 key={startup.id}
-                className="rounded-[32px] border border-[#e8edf5] bg-white p-6 hover:shadow-sm transition"
+                className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6 hover:shadow-sm transition"
               >
                 <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
                   {/* LEFT */}
@@ -465,14 +465,14 @@ export default function InvestorSavedPage() {
 
                     <Link
                       href={`/investor/startup/${startup.id}`}
-                      className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center"
+                      className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center"
                     >
                       View Startup
                     </Link>
 
                     <Link
                       href={`/investor/startup/${startup.id}`}
-                      className="h-11 px-4 rounded-2xl border border-[#e8edf5] bg-white flex items-center justify-center hover:bg-[#fafafa] transition"
+                      className="h-11 px-4 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 flex items-center justify-center hover:bg-[#fafafa] transition"
                     >
                       <ChevronRight className="w-5 h-5 text-gray-500" />
                     </Link>
@@ -482,7 +482,7 @@ export default function InvestorSavedPage() {
             ))}
 
             {filteredStartups.length === 0 && (
-              <div className="rounded-[32px] border border-dashed border-[#dbe2ea] bg-white p-16 text-center">
+              <div className="rounded-[32px] border border-dashed border-[#dbe2ea] bg-[#F7F4EE]/95 p-16 text-center">
                 <Star className="w-12 h-12 text-violet-500 mx-auto" />
 
                 <h3 className="mt-5 text-2xl font-bold text-[#0f172a]">

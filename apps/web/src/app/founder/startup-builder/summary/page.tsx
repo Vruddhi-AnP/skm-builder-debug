@@ -14,6 +14,9 @@ import {
   Rocket,
   ShieldCheck,
   Download,
+  Users,
+  GraduationCap,
+  ArrowUpRight,
 } from "lucide-react";
 
 const summarySections = [
@@ -69,7 +72,7 @@ export default function SummaryPage() {
   return (
     <div className="space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -78,14 +81,14 @@ export default function SummaryPage() {
               Startup Builder • Module 6
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
               Startup Execution
               <span className="block text-primary">
                 Summary & Insights
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
               Review your startup execution blueprint,
               business strategy, market opportunity and
               product direction before investor readiness
@@ -101,12 +104,12 @@ export default function SummaryPage() {
                   Builder Completion
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                <h3 className="mt-2 text-5xl font-black text-[#16214A]">
                   72%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+              <div className="rounded-2xl bg-[#F7F4EE]/95 p-4 text-primary shadow-sm">
                 <ShieldCheck className="h-8 w-8" />
               </div>
             </div>
@@ -128,7 +131,7 @@ export default function SummaryPage() {
                 >
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
 
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-sm font-medium text-[#6B6B6B]">
                     {item}
                   </p>
                 </div>
@@ -143,16 +146,16 @@ export default function SummaryPage() {
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           {/* LEFT */}
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-primary shadow-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#F7F4EE]/95 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
               <FileText className="h-4 w-4" />
               Executive Startup Summary
             </div>
 
-            <h2 className="mt-6 text-4xl font-black tracking-tight text-slate-800">
+            <h2 className="mt-6 text-4xl font-black tracking-tight text-[#16214A]">
               Startup Ka Mall
             </h2>
 
-            <p className="mt-5 max-w-4xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-4xl text-base leading-8 text-[#6B6B6B]">
               Startup Ka Mall is building an integrated
               startup execution ecosystem enabling
               founders to validate, structure and scale
@@ -163,12 +166,12 @@ export default function SummaryPage() {
           </div>
 
           {/* SCORE */}
-          <div className="rounded-[28px] border border-white/80 bg-white p-8 shadow-sm">
+          <div className="rounded-[28px] border border-white/80 bg-[#F7F4EE]/95 p-8 shadow-sm">
             <p className="text-sm font-medium text-slate-500">
               Investor Readiness
             </p>
 
-            <h3 className="mt-3 text-6xl font-black text-slate-800">
+            <h3 className="mt-3 text-6xl font-black text-[#16214A]">
               72
             </h3>
 
@@ -184,13 +187,13 @@ export default function SummaryPage() {
       </section>
 
       {/* WORKFLOW SUMMARY */}
-      <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+      <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-black tracking-tight text-slate-800">
+          <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
             Builder Workflow Summary
           </h2>
 
-          <p className="mt-2 text-slate-600">
+          <p className="mt-2 text-[#6B6B6B]">
             Review startup execution progress across all
             completed modules.
           </p>
@@ -203,7 +206,7 @@ export default function SummaryPage() {
             return (
               <div
                 key={section.title}
-                className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition hover:-translate-y-1 hover:border-primary/20 hover:bg-white hover:shadow-lg"
+                className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition hover:-translate-y-1 hover:border-primary/20 hover:bg-[#F7F4EE]/95 hover:shadow-lg"
               >
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                   {/* LEFT */}
@@ -213,11 +216,11 @@ export default function SummaryPage() {
                     </div>
 
                     <div>
-                      <h3 className="text-2xl font-black text-slate-800">
+                      <h3 className="text-2xl font-black text-[#16214A]">
                         {section.title}
                       </h3>
 
-                      <p className="mt-3 max-w-3xl leading-8 text-slate-600">
+                      <p className="mt-3 max-w-3xl leading-8 text-[#6B6B6B]">
                         {section.description}
                       </p>
                     </div>
@@ -242,7 +245,7 @@ export default function SummaryPage() {
                       {section.status}
                     </div>
 
-                    <div className="rounded-2xl bg-white px-4 py-3 shadow-sm">
+                    <div className="rounded-2xl bg-[#F7F4EE]/95 px-4 py-3 shadow-sm">
                       <p className="text-xs font-medium text-slate-500">
                         Module Score
                       </p>
@@ -259,17 +262,165 @@ export default function SummaryPage() {
         </div>
       </section>
 
+          {/* RECOMMENDED FOUNDER ACTIONS */}
+<section className="grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
+  {/* LEFT */}
+  <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
+    <div className="mb-8">
+      <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+        Recommended Founder Actions
+      </h2>
+
+      <p className="mt-2 text-[#6B6B6B]">
+        Suggested execution steps before startup readiness analysis.
+      </p>
+    </div>
+
+    <div className="space-y-5">
+      {[
+        {
+          title: "Validate Founder-Market Fit",
+          desc: "Conduct structured founder interviews and collect execution feedback.",
+        },
+
+        {
+          title: "Prepare Investor Documents",
+          desc: "Build pitch deck, roadmap and startup execution summary.",
+        },
+
+        {
+          title: "Strengthen Go-To-Market",
+          desc: "Improve acquisition channels and onboarding systems.",
+        },
+
+        {
+          title: "Build MVP Execution Roadmap",
+          desc: "Define scalable milestone execution and launch strategy.",
+        },
+
+        {
+          title: "Improve Startup Metrics",
+          desc: "Track traction KPIs, founder activity and execution progress.",
+        },
+      ].map((item, index) => (
+        <div
+          key={item.title}
+          className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-5 transition hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div className="flex gap-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-black text-primary">
+              {index + 1}
+            </div>
+
+            <div className="flex-1">
+              <h3 className="text-lg font-black text-[#16214A]">
+                {item.title}
+              </h3>
+
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                {item.desc}
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-3">
+                <button
+                  onClick={() =>
+                    router.push(
+                      "/founder/startup-builder/readiness-score"
+                    )
+                  }
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-white transition hover:opacity-90"
+                >
+                  Generate Score
+                </button>
+
+                <button
+                  onClick={() =>
+                    router.push("/founder/advisors")
+                  }
+                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary/30 hover:bg-primary/5"
+                >
+                  <Users className="h-3.5 w-3.5" />
+                  Advisors
+                </button>
+
+                <button
+                  onClick={() =>
+                    router.push("/founder/resources")
+                  }
+                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary/30 hover:bg-primary/5"
+                >
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  Resources
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* RIGHT */}
+  <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
+    <h3 className="text-2xl font-black text-[#16214A]">
+      Founder Status
+    </h3>
+
+    <div className="mt-6 space-y-4">
+      {[
+        {
+          title: "Startup Stage",
+          value: "Validation Stage",
+        },
+
+        {
+          title: "Founder Readiness",
+          value: "Strong Direction",
+        },
+
+        {
+          title: "Execution Status",
+          value: "In Progress",
+        },
+      ].map((item) => (
+        <div
+          key={item.title}
+          className="rounded-2xl bg-[#F7F4EE]/95 p-5 shadow-sm"
+        >
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            {item.title}
+          </p>
+
+          <h4 className="mt-2 text-lg font-black text-primary">
+            {item.value}
+          </h4>
+        </div>
+      ))}
+
+      <button
+        onClick={() =>
+          router.push("/founder/dashboard")
+        }
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+      >
+        Go To Founder Dashboard
+        <ArrowUpRight className="h-4 w-4" />
+      </button>
+    </div>
+  </div>
+</section>
+
       {/* INSIGHTS */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* STRENGTHS */}
-        <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+        <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
             <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">
               <CheckCircle2 className="h-5 w-5" />
             </div>
 
             <div>
-              <h2 className="text-2xl font-black text-slate-800">
+              <h2 className="text-2xl font-black text-[#16214A]">
                 Startup Strengths
               </h2>
 
@@ -298,14 +449,14 @@ export default function SummaryPage() {
         </section>
 
         {/* FOCUS */}
-        <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+        <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
             <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
               <BarChart3 className="h-5 w-5" />
             </div>
 
             <div>
-              <h2 className="text-2xl font-black text-slate-800">
+              <h2 className="text-2xl font-black text-[#16214A]">
                 Key Focus Areas
               </h2>
 
@@ -363,13 +514,13 @@ export default function SummaryPage() {
         ].map((item) => (
           <div
             key={item.title}
-            className="rounded-[28px] border border-border/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="rounded-[28px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <p className="text-sm font-medium text-slate-500">
               {item.title}
             </p>
 
-            <h3 className="mt-4 text-5xl font-black tracking-tight text-slate-800">
+            <h3 className="mt-4 text-5xl font-black tracking-tight text-[#16214A]">
               {item.value}
             </h3>
 
@@ -392,7 +543,7 @@ export default function SummaryPage() {
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* EXPORT */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Download className="h-4 w-4" />
 
           Export Summary

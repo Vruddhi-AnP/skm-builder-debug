@@ -61,7 +61,7 @@ export default function ProgramDetailsPage() {
       <main className="min-h-screen bg-[#f8fbff]">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
-          <div className="h-[320px] animate-pulse rounded-[32px] bg-white" />
+          <div className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 
@@ -69,14 +69,14 @@ export default function ProgramDetailsPage() {
               (item) => (
                 <div
                   key={item}
-                  className="h-[180px] animate-pulse rounded-[32px] bg-white"
+                  className="h-[180px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
                 />
               )
             )}
 
           </div>
 
-          <div className="h-[240px] animate-pulse rounded-[32px] bg-white" />
+          <div className="h-[240px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
         </div>
       </main>
@@ -88,13 +88,13 @@ export default function ProgramDetailsPage() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-4">
 
-        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-white p-10 text-center shadow-sm">
+        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
 
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-red-50">
             <GraduationCap className="h-10 w-10 text-red-500" />
           </div>
 
-          <h1 className="mt-8 text-4xl font-black tracking-tight text-slate-800">
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-[#16214A]">
             Program Not Found
           </h1>
 
@@ -125,7 +125,7 @@ export default function ProgramDetailsPage() {
         <div>
           <Link
             href="/founder/programs"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-800"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#16214A]"
           >
             <ArrowLeft className="h-4 w-4" />
             Back To Programs
@@ -133,7 +133,7 @@ export default function ProgramDetailsPage() {
         </div>
 
         {/* HERO */}
-        <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-white p-6 shadow-sm md:p-8 lg:p-10">
+        <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8 lg:p-10">
 
           <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl opacity-60" />
 
@@ -143,7 +143,7 @@ export default function ProgramDetailsPage() {
               {program.category}
             </div>
 
-            <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 text-4xl font-black tracking-tight text-[#16214A] md:text-5xl">
               {program.title}
             </h1>
 
@@ -188,37 +188,37 @@ export default function ProgramDetailsPage() {
         {/* STATS */}
         <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
 
-          <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+          <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
 
             <p className="text-sm text-slate-500">
               Program Duration
             </p>
 
-            <h2 className="mt-3 text-3xl font-black text-slate-800">
+            <h2 className="mt-3 text-3xl font-black text-[#16214A]">
               {program.duration}
             </h2>
 
           </div>
 
-          <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+          <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
 
             <p className="text-sm text-slate-500">
               Learning Mode
             </p>
 
-            <h2 className="mt-3 text-3xl font-black text-slate-800">
+            <h2 className="mt-3 text-3xl font-black text-[#16214A]">
               {program.mode}
             </h2>
 
           </div>
 
-          <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+          <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
 
             <p className="text-sm text-slate-500">
               Mentorship Access
             </p>
 
-            <h2 className="mt-3 text-3xl font-black text-slate-800">
+            <h2 className="mt-3 text-3xl font-black text-[#16214A]">
               {
                 program.mentorCount
               }{" "}
@@ -238,7 +238,7 @@ export default function ProgramDetailsPage() {
 
             <div>
 
-              <h2 className="text-4xl font-black tracking-tight text-slate-800">
+              <h2 className="text-4xl font-black tracking-tight text-[#16214A]">
                 Ready To Join?
               </h2>
 
@@ -260,7 +260,7 @@ export default function ProgramDetailsPage() {
 
               <Link
                 href="/founder/startup-builder"
-                className="rounded-2xl border border-border/60 bg-white px-7 py-4 text-center font-semibold text-slate-700 transition hover:bg-slate-50"
+                className="rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-7 py-4 text-center font-semibold text-slate-700 transition hover:bg-slate-50"
               >
                 Startup Builder
               </Link>

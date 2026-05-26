@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -12,207 +14,371 @@ import {
   User2,
 } from "lucide-react";
 
+import {
+  getAdvisorOnboarding,
+  saveAdvisorOnboarding,
+} from "@/lib/advisor-onboarding";
+
 export default function AdvisorProfilePage() {
   const router = useRouter();
 
+  const [formData, setFormData] =
+    useState(() => ({
+      fullName: "",
+      email: "",
+      phone: "",
+      linkedinUrl: "",
+      currentRole: "",
+      company: "",
+      experience: "",
+
+      ...getAdvisorOnboarding(),
+    }));
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]:
+        e.target.value,
+    });
+  };
+
+  const handleContinue = () => {
+    saveAdvisorOnboarding(
+      formData
+    );
+
+    router.push(
+      "/onboarding/advisor/expertise"
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#eef2ff,white_40%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_80px_rgba(99,102,241,0.12)] backdrop-blur-xl sm:p-10 lg:p-14">
+    <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
+
+      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
+
         {/* TOP */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+
           {/* LEFT */}
           <div className="max-w-3xl">
-            <div className="inline-flex rounded-full bg-violet-100 px-4 py-1 text-sm font-semibold text-violet-700">
+
+            <div className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
               Advisor Onboarding
             </div>
 
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-800 sm:text-5xl">
-              Setup Your Advisor Profile
+            <h1 className="mt-5 text-4xl font-black tracking-tight text-foreground sm:text-5xl">
+              Setup Your Advisor
+              Profile
             </h1>
 
-            <p className="mt-5 text-base leading-8 text-slate-500">
-              Build your advisor identity and showcase your expertise
-              to help founders grow, execute and scale their startups.
+            <p className="mt-5 text-base leading-8 text-muted-foreground">
+              Build your advisor
+              identity and showcase
+              your expertise to help
+              founders grow,
+              execute and scale
+              their startups.
             </p>
 
-            {/* Tags */}
+            {/* TAGS */}
             <div className="mt-8 flex flex-wrap gap-3">
-              <div className="rounded-full bg-violet-100 px-5 py-2 text-sm font-semibold text-violet-700">
+
+              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
                 Advisor Identity
               </div>
 
-              <div className="rounded-full bg-cyan-100 px-5 py-2 text-sm font-semibold text-cyan-700">
-                Professional Background
+              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
+                Professional
+                Background
               </div>
+
             </div>
           </div>
 
-          {/* RIGHT PROGRESS */}
-          <div className="w-full max-w-sm rounded-[2rem] border border-violet-200 bg-white p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
+          {/* RIGHT */}
+          <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-slate-700">
+
+              <span className="text-sm font-semibold text-muted-foreground">
                 Progress
               </span>
 
-              <span className="text-sm font-bold text-violet-600">
+              <span className="text-sm font-bold text-primary">
                 Step 1/5
               </span>
+
             </div>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full w-1/5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500" />
+            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+
+              <div className="h-full w-1/5 rounded-full bg-primary" />
+
             </div>
 
-            <p className="mt-5 text-sm leading-6 text-slate-500">
-              Advisor profile setup in progress
+            <p className="mt-5 text-sm leading-6 text-muted-foreground">
+              Advisor profile
+              setup in progress
             </p>
+
           </div>
         </div>
 
         {/* FORM */}
         <div className="mt-14">
+
           <div>
-            <h2 className="text-3xl font-bold text-slate-800">
+
+            <h2 className="text-3xl font-black text-foreground">
               Advisor Details
             </h2>
 
-            <p className="mt-3 text-base text-slate-500">
-              Share your professional background and advisor identity
+            <p className="mt-3 text-base text-muted-foreground">
+              Share your
+              professional
+              background and
+              advisor identity
             </p>
+
           </div>
 
-          {/* Inputs */}
+          {/* INPUTS */}
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {/* Full Name */}
+
+            {/* FULL NAME */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Full Name
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <User2 className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <User2 className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="fullName"
+                  value={
+                    formData.fullName ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter your full name"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Email */}
+            {/* EMAIL */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Email Address
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <Mail className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <Mail className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="email"
+                  name="email"
+                  value={
+                    formData.email ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter your email address"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Phone */}
+            {/* PHONE */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Phone Number
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <Phone className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <Phone className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="phone"
+                  value={
+                    formData.phone ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter your phone number"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* LinkedIn */}
+            {/* LINKEDIN */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 LinkedIn URL
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <LinkIcon className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <LinkIcon className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="linkedinUrl"
+                  value={
+                    formData.linkedinUrl ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="https://linkedin.com/in/yourprofile"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Current Role */}
+            {/* ROLE */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Current Role
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <BriefcaseBusiness className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <BriefcaseBusiness className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="currentRole"
+                  value={
+                    formData.currentRole ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Ex: Startup Mentor, Product Leader"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Company */}
+            {/* COMPANY */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Company / Organization
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
+                Company /
+                Organization
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <Building2 className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <Building2 className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="company"
+                  value={
+                    formData.company ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Enter your company name"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Experience */}
+            {/* EXPERIENCE */}
             <div className="md:col-span-2">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Years of Experience
               </label>
 
-              <select className="h-14 w-full rounded-2xl border border-slate-200 bg-white px-5 text-sm text-slate-700 outline-none transition-all focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
-                <option>Select experience level</option>
-                <option>1 - 3 Years</option>
-                <option>3 - 5 Years</option>
-                <option>5 - 10 Years</option>
-                <option>10+ Years</option>
+              <select
+                name="experience"
+                value={
+                  formData.experience ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
+                className="h-14 w-full rounded-2xl border border-border bg-background px-5 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
+              >
+                <option value="">
+                  Select experience
+                  level
+                </option>
+
+                <option value="1-3">
+                  1 - 3 Years
+                </option>
+
+                <option value="3-5">
+                  3 - 5 Years
+                </option>
+
+                <option value="5-10">
+                  5 - 10 Years
+                </option>
+
+                <option value="10+">
+                  10+ Years
+                </option>
+
               </select>
             </div>
           </div>
 
-          {/* Bottom */}
-          <div className="mt-14 flex justify-end border-t border-slate-100 pt-8">
+          {/* BOTTOM */}
+          <div className="mt-14 flex justify-end border-t border-border pt-8">
+
             <button
-              onClick={() =>
-                router.push("/onboarding/advisor/expertise")
+              onClick={
+                handleContinue
               }
-              className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 px-8 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(99,102,241,0.25)] transition-all hover:scale-[1.02]"
+              className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
-              Continue to Expertise
+              Continue to
+              Expertise
 
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+
             </button>
+
           </div>
         </div>
       </div>

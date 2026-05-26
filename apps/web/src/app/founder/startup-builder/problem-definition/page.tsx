@@ -135,7 +135,7 @@ export default function ProblemDefinitionPage() {
   return (
     <div className="space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -144,14 +144,14 @@ export default function ProblemDefinitionPage() {
               Startup Builder • Module 2
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
               Define The Real
               <span className="block text-primary">
                 Market Problem
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
               Identify operational inefficiencies,
               customer frustrations and real-world
               business problems worth solving through
@@ -167,12 +167,12 @@ export default function ProblemDefinitionPage() {
                   Validation Progress
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                <h3 className="mt-2 text-5xl font-black text-[#16214A]">
                   60%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+              <div className="rounded-2xl bg-[#F7F4EE]/95 p-4 text-primary shadow-sm">
                 <AlertTriangle className="h-8 w-8" />
               </div>
             </div>
@@ -194,7 +194,7 @@ export default function ProblemDefinitionPage() {
                 >
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
 
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-sm font-medium text-[#6B6B6B]">
                     {item}
                   </p>
                 </div>
@@ -209,14 +209,14 @@ export default function ProblemDefinitionPage() {
         {/* LEFT */}
         <div className="space-y-6">
           {/* PROBLEM DISCOVERY */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-rose-100 p-4 text-rose-700">
                 <CircleHelp className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Problem Discovery
                 </h2>
 
@@ -242,7 +242,7 @@ export default function ProblemDefinitionPage() {
                   )
                 }
                 placeholder="Describe the primary real-world problem your startup is solving..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
               />
             </div>
 
@@ -274,7 +274,7 @@ export default function ProblemDefinitionPage() {
                       ${
                         active
                           ? "border-rose-500 bg-rose-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-rose-300 hover:bg-rose-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-rose-300 hover:bg-rose-50"
                       }
                     `}
                     >
@@ -307,12 +307,12 @@ export default function ProblemDefinitionPage() {
                         formData.problemSeverity ===
                         item.label
                           ? "border-rose-400 bg-rose-50"
-                          : "border-border/60 bg-white hover:border-rose-300 hover:bg-rose-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-rose-300 hover:bg-rose-50"
                       }
                     `}
                   >
 
-                    <p className="mt-3 font-bold text-slate-800">
+                    <p className="mt-3 font-bold text-[#16214A]">
                       {item.label}
                     </p>
                   </button>
@@ -336,20 +336,20 @@ export default function ProblemDefinitionPage() {
                   )
                 }
                 placeholder="How does this problem affect businesses and users?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
               />
             </div>
           </section>
 
           {/* MARKET GAP */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
                 <Target className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Market Gap Analysis
                 </h2>
 
@@ -387,7 +387,7 @@ export default function ProblemDefinitionPage() {
                       ${
                         active
                           ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
                       }
                     `}
                     >
@@ -414,7 +414,7 @@ export default function ProblemDefinitionPage() {
                   )
                 }
                 placeholder="What weaknesses exist in current solutions?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
               />
             </div>
 
@@ -434,20 +434,20 @@ export default function ProblemDefinitionPage() {
                   )
                 }
                 placeholder="What frustrates users most about existing workflows?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
               />
             </div>
           </section>
 
           {/* AFFECTED USERS */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
                 <Users className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Affected Users
                 </h2>
 
@@ -485,7 +485,7 @@ export default function ProblemDefinitionPage() {
                       ${
                         active
                           ? "border-cyan-500 bg-cyan-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-cyan-300 hover:bg-cyan-50"
                       }
                     `}
                     >
@@ -513,7 +513,7 @@ export default function ProblemDefinitionPage() {
                     )
                   }
                   placeholder="Daily / Weekly / Monthly"
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
                 />
               </div>
 
@@ -532,7 +532,7 @@ export default function ProblemDefinitionPage() {
                     )
                   }
                   placeholder="Low / Medium / High"
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
                 />
               </div>
             </div>
@@ -553,7 +553,7 @@ export default function ProblemDefinitionPage() {
                   )
                 }
                 placeholder="Describe insights gathered from customers, research or observations..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
           </section>
@@ -563,7 +563,7 @@ export default function ProblemDefinitionPage() {
         <div className="space-y-6">
           {/* INSIGHTS */}
           <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
-            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Problem Insights
             </h3>
 
@@ -576,7 +576,7 @@ export default function ProblemDefinitionPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
+                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
                 >
                   {item}
                 </div>
@@ -585,8 +585,8 @@ export default function ProblemDefinitionPage() {
           </section>
 
           {/* VALIDATION SCORE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Validation Score
             </h3>
 
@@ -636,7 +636,7 @@ export default function ProblemDefinitionPage() {
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* SAVE */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Save className="h-4 w-4" />
 
           Save Draft

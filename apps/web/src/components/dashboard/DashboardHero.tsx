@@ -1,6 +1,6 @@
 export default function DashboardHero() {
   return (
-    <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white p-6 md:p-8">
+    <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 md:p-8">
       <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
         {/* LEFT */}
         <div className="max-w-2xl">
@@ -8,7 +8,7 @@ export default function DashboardHero() {
             Founder Workspace Active
           </div>
 
-          <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+          <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
             Welcome Back,
             <br />
             Founder
@@ -24,11 +24,11 @@ export default function DashboardHero() {
 
         {/* RIGHT */}
         <div className="w-full rounded-[32px] border border-primary/20 bg-primary/10 p-6 xl:w-[340px]">
-          <p className="text-sm font-semibold text-slate-600">
+          <p className="text-sm font-semibold text-[#6B6B6B]">
             Startup Readiness
           </p>
 
-          <h2 className="mt-4 text-6xl font-black tracking-tight text-slate-800">
+          <h2 className="mt-4 text-6xl font-black tracking-tight text-[#16214A]">
             72
           </h2>
 

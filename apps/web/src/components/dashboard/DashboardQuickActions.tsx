@@ -44,11 +44,11 @@ const actions = [
 
 export default function DashboardQuickActions() {
   return (
-    <section className="rounded-[32px] border border-border/60 bg-white p-6 md:p-8">
+    <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 md:p-8">
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-black tracking-tight text-slate-800">
+          <h2 className="text-2xl font-black tracking-tight text-[#16214A]">
             Quick Actions
           </h2>
 
@@ -75,7 +75,7 @@ export default function DashboardQuickActions() {
               </div>
 
               {/* TITLE */}
-              <h3 className="mt-6 text-xl font-black tracking-tight text-slate-800">
+              <h3 className="mt-6 text-xl font-black tracking-tight text-[#16214A]">
                 {item.title}
               </h3>
 

@@ -12,7 +12,7 @@ export default function InvestorCard({
   investor,
 }: Props) {
   return (
-    <div className="group relative overflow-hidden rounded-[32px] border border-border/60 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(14,165,233,0.12)]">
+    <div className="group relative overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(14,165,233,0.12)]">
 
       <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-cyan-100 blur-3xl opacity-40" />
 
@@ -33,7 +33,7 @@ export default function InvestorCard({
 
               <Link
                 href={`/founder/investors/${investor.id}`}
-                className="text-2xl font-black tracking-tight text-slate-800 transition hover:text-sky-600"
+                className="text-2xl font-black tracking-tight text-[#16214A] transition hover:text-sky-600"
               >
                 {investor.fullName}
               </Link>
@@ -84,7 +84,7 @@ export default function InvestorCard({
               Investment Stage
             </p>
 
-            <h3 className="mt-2 text-lg font-black text-slate-800">
+            <h3 className="mt-2 text-lg font-black text-[#16214A]">
               {
                 investor.investmentStage
               }
@@ -98,7 +98,7 @@ export default function InvestorCard({
               Ticket Size
             </p>
 
-            <h3 className="mt-2 text-lg font-black text-slate-800">
+            <h3 className="mt-2 text-lg font-black text-[#16214A]">
               {
                 investor.ticketSize
               }

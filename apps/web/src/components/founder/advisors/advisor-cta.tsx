@@ -9,12 +9,12 @@ export default function AdvisorCTA() {
     <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-8">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-2xl">
-          <h2 className="text-4xl font-black tracking-tight text-slate-800">
+          <h2 className="text-4xl font-black tracking-tight text-[#16214A]">
             Need Dedicated Startup
             Guidance?
           </h2>
 
-          <p className="mt-4 text-base leading-8 text-slate-600">
+          <p className="mt-4 text-base leading-8 text-[#6B6B6B]">
             Unlock structured founder
             mentorship and execution
             support.
@@ -28,7 +28,7 @@ export default function AdvisorCTA() {
                 "/founder/dashboard"
               )
             }
-            className="rounded-2xl border border-border/60 bg-white px-6 py-4 font-semibold text-slate-700"
+            className="rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-4 font-semibold text-slate-700"
           >
             Back to Dashboard
           </button>

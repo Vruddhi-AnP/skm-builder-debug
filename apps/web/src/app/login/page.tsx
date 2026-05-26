@@ -136,7 +136,7 @@ export default function LoginPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
               />
             </div>
 
@@ -149,7 +149,7 @@ export default function LoginPage() {
 
                 <Link
                   href="#"
-                  className="text-sm text-slate-500 transition hover:text-slate-800"
+                  className="text-sm text-slate-500 transition hover:text-[#16214A]"
                 >
                   Forgot password?
                 </Link>
@@ -163,7 +163,7 @@ export default function LoginPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"
-                className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
               />
             </div>
 

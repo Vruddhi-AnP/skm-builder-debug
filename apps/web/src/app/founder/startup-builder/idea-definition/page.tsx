@@ -103,7 +103,7 @@ export default function IdeaDefinitionPage() {
   return (
     <div className="space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -112,14 +112,14 @@ export default function IdeaDefinitionPage() {
               Startup Builder • Module 1
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
               Define Your Startup
               <span className="block text-primary">
                 Vision & Direction
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
               Structure your startup idea, founder
               vision, target audience and execution
               direction through a guided startup
@@ -135,12 +135,12 @@ export default function IdeaDefinitionPage() {
                   Module Progress
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                <h3 className="mt-2 text-5xl font-black text-[#16214A]">
                   80%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+              <div className="rounded-2xl bg-[#F7F4EE]/95 p-4 text-primary shadow-sm">
                 <Lightbulb className="h-8 w-8" />
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function IdeaDefinitionPage() {
                 >
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
 
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-sm font-medium text-[#6B6B6B]">
                     {item}
                   </p>
                 </div>
@@ -177,14 +177,14 @@ export default function IdeaDefinitionPage() {
         {/* LEFT */}
         <div className="space-y-6">
           {/* STARTUP FOUNDATION */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-primary/10 p-4 text-primary">
                 <Lightbulb className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Startup Foundation
                 </h2>
 
@@ -211,7 +211,7 @@ export default function IdeaDefinitionPage() {
                     )
                   }
                   placeholder="Enter startup name"
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
                 />
               </div>
 
@@ -229,7 +229,7 @@ export default function IdeaDefinitionPage() {
                       e.target.value
                     )
                   }
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-white px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
                 >
                   <option value="">
                     Select Startup Stage
@@ -270,7 +270,7 @@ export default function IdeaDefinitionPage() {
                         formData.startupCategory ===
                         item
                           ? "border-primary bg-primary text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-primary/20 hover:bg-primary/5"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-primary/20 hover:bg-primary/5"
                       }
                     `}
                   >
@@ -296,20 +296,20 @@ export default function IdeaDefinitionPage() {
                   )
                 }
                 placeholder="Describe your startup vision and long-term direction..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
               />
             </div>
           </section>
 
           {/* EXECUTION ENGINE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
                 <Sparkles className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Startup Execution Engine
                 </h2>
 
@@ -335,7 +335,7 @@ export default function IdeaDefinitionPage() {
                   )
                 }
                 placeholder="What real-world problem are you solving?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
             </div>
 
@@ -362,7 +362,7 @@ export default function IdeaDefinitionPage() {
                         formData.targetAudience ===
                         item
                           ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
                       }
                     `}
                   >
@@ -395,11 +395,11 @@ export default function IdeaDefinitionPage() {
                         formData.solutionType ===
                         item
                           ? "border-violet-400 bg-violet-50"
-                          : "border-border/60 bg-white hover:border-violet-300"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-violet-300"
                       }
                     `}
                   >
-                    <h3 className="font-bold text-slate-800">
+                    <h3 className="font-bold text-[#16214A]">
                       {item}
                     </h3>
 
@@ -429,20 +429,20 @@ export default function IdeaDefinitionPage() {
                   )
                 }
                 placeholder="What makes your startup unique?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
             </div>
           </section>
 
           {/* FOUNDER GOALS */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-emerald-100 p-4 text-emerald-700">
                 <Target className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Founder Goals
                 </h2>
 
@@ -471,11 +471,11 @@ export default function IdeaDefinitionPage() {
                     formData.founderGoal ===
                     goal
                       ? "border-emerald-400 bg-emerald-50"
-                      : "border-border/60 bg-white hover:border-emerald-300"
+                      : "border-border/60 bg-[#F7F4EE]/95 hover:border-emerald-300"
                   }
                 `}
                 >
-                  <h3 className="font-bold text-slate-800">
+                  <h3 className="font-bold text-[#16214A]">
                     {goal}
                   </h3>
 
@@ -502,7 +502,7 @@ export default function IdeaDefinitionPage() {
                   )
                 }
                 placeholder="Why are you building this startup?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
               />
             </div>
 
@@ -522,7 +522,7 @@ export default function IdeaDefinitionPage() {
                   )
                 }
                 placeholder="Add additional startup context..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
               />
             </div>
           </section>
@@ -532,7 +532,7 @@ export default function IdeaDefinitionPage() {
         <div className="space-y-6">
           {/* INSIGHTS */}
           <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
-            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Startup Insights
             </h3>
 
@@ -545,7 +545,7 @@ export default function IdeaDefinitionPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
+                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
                 >
                   {item}
                 </div>
@@ -554,8 +554,8 @@ export default function IdeaDefinitionPage() {
           </section>
 
           {/* READINESS */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Startup Readiness
             </h3>
 
@@ -605,7 +605,7 @@ export default function IdeaDefinitionPage() {
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* SAVE */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Save className="h-4 w-4" />
 
           Save Draft

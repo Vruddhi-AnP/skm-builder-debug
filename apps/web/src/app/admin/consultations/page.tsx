@@ -158,7 +158,7 @@ export default function AdminConsultationsPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[280px] bg-white border-r border-[#e9eef5] h-full flex flex-col">
+          <div className="w-[280px] bg-[#F7F4EE]/95 border-r border-[#e9eef5] h-full flex flex-col">
             {/* TOP */}
             <div className="h-20 border-b border-[#edf1f7] px-5 flex items-center justify-between">
               <div>
@@ -220,7 +220,7 @@ export default function AdminConsultationsPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-white border-r border-[#e9eef5] flex-col">
+      <aside className="hidden lg:flex w-[270px] bg-[#F7F4EE]/95 border-r border-[#e9eef5] flex-col">
         {/* TOP */}
         <div className="h-20 border-b border-[#edf1f7] px-6 flex items-center">
           <div>
@@ -269,7 +269,7 @@ export default function AdminConsultationsPage() {
               onClick={() =>
                 setSidebarOpen(true)
               }
-              className="lg:hidden h-10 w-10 rounded-xl border border-[#e9eef5] bg-white flex items-center justify-center"
+              className="lg:hidden h-10 w-10 rounded-xl border border-[#e9eef5] bg-[#F7F4EE]/95 flex items-center justify-center"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -287,7 +287,7 @@ export default function AdminConsultationsPage() {
 
           {/* RIGHT */}
           <div className="flex items-center gap-3">
-            <button className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center">
+            <button className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center">
               <Bell className="w-5 h-5 text-[#475569]" />
             </button>
 
@@ -315,7 +315,7 @@ export default function AdminConsultationsPage() {
             </div>
 
             {/* SEARCH */}
-            <div className="h-12 w-full xl:w-[280px] rounded-full border border-[#e2e8f0] bg-white px-5 flex items-center gap-3">
+            <div className="h-12 w-full xl:w-[280px] rounded-full border border-[#e2e8f0] bg-[#F7F4EE]/95 px-5 flex items-center gap-3">
               <Search className="w-4 h-4 text-[#94a3b8]" />
 
               <input
@@ -332,7 +332,7 @@ export default function AdminConsultationsPage() {
 
           {/* STATS */}
           <section className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-5">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
               <CalendarDays className="w-6 h-6 text-sky-500" />
 
               <h3 className="mt-5 text-4xl font-bold text-[#0f172a]">
@@ -344,7 +344,7 @@ export default function AdminConsultationsPage() {
               </p>
             </div>
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-5">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
               <Clock3 className="w-6 h-6 text-orange-500" />
 
               <h3 className="mt-5 text-4xl font-bold text-[#0f172a]">
@@ -356,7 +356,7 @@ export default function AdminConsultationsPage() {
               </p>
             </div>
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-5">
+            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
               <CheckCircle2 className="w-6 h-6 text-emerald-500" />
 
               <h3 className="mt-5 text-4xl font-bold text-[#0f172a]">
@@ -380,7 +380,7 @@ export default function AdminConsultationsPage() {
                 className={`h-11 px-5 rounded-full text-sm font-semibold transition ${
                   selectedFilter === filter
                     ? "bg-[#071133] text-white"
-                    : "bg-white border border-[#e8edf5] text-[#475569]"
+                    : "bg-[#F7F4EE]/95 border border-[#e8edf5] text-[#475569]"
                 }`}
               >
                 {filter}
@@ -394,7 +394,7 @@ export default function AdminConsultationsPage() {
               (consultation) => (
                 <div
                   key={consultation.id}
-                  className="rounded-[30px] border border-[#e8edf5] bg-white p-6"
+                  className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6"
                 >
                   <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
                     {/* LEFT */}
@@ -465,7 +465,7 @@ export default function AdminConsultationsPage() {
 
                     {/* RIGHT */}
                     <div className="flex flex-wrap gap-3">
-                      <button className="h-11 px-5 rounded-full border border-[#e8edf5] bg-white text-sm font-semibold text-[#475569] hover:bg-[#fafafa] transition flex items-center gap-2">
+                      <button className="h-11 px-5 rounded-full border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-[#475569] hover:bg-[#fafafa] transition flex items-center gap-2">
                         <MessageSquare className="w-4 h-4" />
                         Message
                       </button>

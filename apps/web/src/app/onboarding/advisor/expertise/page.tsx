@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -11,183 +13,339 @@ import {
   Target,
 } from "lucide-react";
 
+import {
+  getAdvisorOnboarding,
+  saveAdvisorOnboarding,
+} from "@/lib/advisor-onboarding";
+
 export default function AdvisorExpertisePage() {
   const router = useRouter();
 
+  const [formData, setFormData] =
+    useState(() => ({
+      expertiseAreas: "",
+      industries: "",
+      startupStages: "",
+      mentorshipType: "",
+      skills: "",
+      advisoryGoal: "",
+
+      ...getAdvisorOnboarding(),
+    }));
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]:
+        e.target.value,
+    });
+  };
+
+  const handleContinue = () => {
+    saveAdvisorOnboarding(
+      formData
+    );
+
+    router.push(
+      "/onboarding/advisor/availability"
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#eef2ff,white_40%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_80px_rgba(99,102,241,0.12)] backdrop-blur-xl sm:p-10 lg:p-14">
+    <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
+
+      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
+
         {/* TOP */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+
           {/* LEFT */}
           <div className="max-w-3xl">
-            <div className="inline-flex rounded-full bg-violet-100 px-4 py-1 text-sm font-semibold text-violet-700">
+
+            <div className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
               Advisor Expertise
             </div>
 
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-800 sm:text-5xl">
+            <h1 className="mt-5 text-4xl font-black tracking-tight text-foreground sm:text-5xl">
               Define Your Expertise
             </h1>
 
-            <p className="mt-5 text-base leading-8 text-slate-500">
-              Showcase your advisory strengths, startup experience and
-              mentorship focus areas to help founders discover the
-              right guidance.
+            <p className="mt-5 text-base leading-8 text-muted-foreground">
+              Showcase your advisory strengths,
+              startup experience and mentorship
+              focus areas to help founders
+              discover the right guidance.
             </p>
 
-            {/* Tags */}
+            {/* TAGS */}
             <div className="mt-8 flex flex-wrap gap-3">
-              <div className="rounded-full bg-violet-100 px-5 py-2 text-sm font-semibold text-violet-700">
+
+              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
                 Startup Advisory
               </div>
 
-              <div className="rounded-full bg-cyan-100 px-5 py-2 text-sm font-semibold text-cyan-700">
+              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
                 Founder Mentorship
               </div>
+
             </div>
           </div>
 
-          {/* RIGHT PROGRESS */}
-          <div className="w-full max-w-sm rounded-[2rem] border border-violet-200 bg-white p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
+          {/* RIGHT */}
+          <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-slate-700">
+
+              <span className="text-sm font-semibold text-muted-foreground">
                 Progress
               </span>
 
-              <span className="text-sm font-bold text-violet-600">
+              <span className="text-sm font-bold text-primary">
                 Step 2/5
               </span>
+
             </div>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full w-2/5 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500" />
+            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+
+              <div className="h-full w-2/5 rounded-full bg-primary" />
+
             </div>
 
-            <p className="mt-5 text-sm leading-6 text-slate-500">
+            <p className="mt-5 text-sm leading-6 text-muted-foreground">
               Expertise setup in progress
             </p>
+
           </div>
         </div>
 
         {/* FORM */}
         <div className="mt-14">
+
           <div>
-            <h2 className="text-3xl font-bold text-slate-800">
+
+            <h2 className="text-3xl font-black text-foreground">
               Expertise Details
             </h2>
 
-            <p className="mt-3 text-base text-slate-500">
-              Share your specialization, industries and mentorship
+            <p className="mt-3 text-base text-muted-foreground">
+              Share your specialization,
+              industries and mentorship
               capabilities
             </p>
+
           </div>
 
-          {/* Inputs */}
+          {/* INPUTS */}
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {/* Expertise Areas */}
+
+            {/* EXPERTISE */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Expertise Areas
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <Sparkles className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <Sparkles className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="expertiseAreas"
+                  value={
+                    formData.expertiseAreas ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Ex: Product Strategy, Growth, Fundraising"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Industries */}
+            {/* INDUSTRIES */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Industries
               </label>
 
-              <div className="flex h-14 items-center rounded-2xl border border-slate-200 bg-white px-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <BriefcaseBusiness className="h-5 w-5 text-slate-400" />
+              <div className="flex h-14 items-center rounded-2xl border border-border bg-background px-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <BriefcaseBusiness className="h-5 w-5 text-muted-foreground" />
 
                 <input
                   type="text"
+                  name="industries"
+                  value={
+                    formData.industries ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Ex: SaaS, Fintech, AI, Healthcare"
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none placeholder:text-slate-400"
+                  className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Startup Stages */}
+            {/* STAGES */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Startup Stages Supported
               </label>
 
-              <select className="h-14 w-full rounded-2xl border border-slate-200 bg-white px-5 text-sm text-slate-700 outline-none transition-all focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
-                <option>Select startup stage</option>
-                <option>Idea Stage</option>
-                <option>MVP Stage</option>
-                <option>Early Revenue</option>
-                <option>Scaling Stage</option>
+              <select
+                name="startupStages"
+                value={
+                  formData.startupStages ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
+                className="h-14 w-full rounded-2xl border border-border bg-background px-5 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
+              >
+                <option value="">
+                  Select startup stage
+                </option>
+
+                <option value="idea-stage">
+                  Idea Stage
+                </option>
+
+                <option value="mvp-stage">
+                  MVP Stage
+                </option>
+
+                <option value="early-revenue">
+                  Early Revenue
+                </option>
+
+                <option value="scaling-stage">
+                  Scaling Stage
+                </option>
+
               </select>
             </div>
 
-            {/* Mentorship Type */}
+            {/* MENTORSHIP */}
             <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Mentorship Type
               </label>
 
-              <select className="h-14 w-full rounded-2xl border border-slate-200 bg-white px-5 text-sm text-slate-700 outline-none transition-all focus:border-violet-500 focus:ring-4 focus:ring-violet-100">
-                <option>Select mentorship type</option>
-                <option>1:1 Advisory</option>
-                <option>Group Mentorship</option>
-                <option>Execution Guidance</option>
-                <option>Strategic Consulting</option>
+              <select
+                name="mentorshipType"
+                value={
+                  formData.mentorshipType ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
+                className="h-14 w-full rounded-2xl border border-border bg-background px-5 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
+              >
+                <option value="">
+                  Select mentorship type
+                </option>
+
+                <option value="1-1-advisory">
+                  1:1 Advisory
+                </option>
+
+                <option value="group-mentorship">
+                  Group Mentorship
+                </option>
+
+                <option value="execution-guidance">
+                  Execution Guidance
+                </option>
+
+                <option value="strategic-consulting">
+                  Strategic Consulting
+                </option>
+
               </select>
             </div>
 
-            {/* Skills */}
+            {/* SKILLS */}
             <div className="md:col-span-2">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Key Skills & Strengths
               </label>
 
-              <div className="flex min-h-[120px] rounded-[1.8rem] border border-slate-200 bg-white px-5 py-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <BadgeCheck className="mt-1 h-5 w-5 text-slate-400" />
+              <div className="flex min-h-[120px] rounded-[1.8rem] border border-border bg-background px-5 py-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <BadgeCheck className="mt-1 h-5 w-5 text-muted-foreground" />
 
                 <textarea
+                  name="skills"
+                  value={
+                    formData.skills || ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Mention your advisory strengths, startup execution skills, founder support areas and operational expertise..."
-                  className="min-h-[90px] w-full resize-none bg-transparent px-3 text-sm leading-7 outline-none placeholder:text-slate-400"
+                  className="min-h-[90px] w-full resize-none bg-transparent px-3 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
 
-            {/* Advisory Goal */}
+            {/* GOAL */}
             <div className="md:col-span-2">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
+
+              <label className="mb-3 block text-sm font-semibold text-foreground">
                 Advisory Goal
               </label>
 
-              <div className="flex min-h-[120px] rounded-[1.8rem] border border-slate-200 bg-white px-5 py-4 transition-all focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
-                <Target className="mt-1 h-5 w-5 text-slate-400" />
+              <div className="flex min-h-[120px] rounded-[1.8rem] border border-border bg-background px-5 py-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+
+                <Target className="mt-1 h-5 w-5 text-muted-foreground" />
 
                 <textarea
+                  name="advisoryGoal"
+                  value={
+                    formData.advisoryGoal ||
+                    ""
+                  }
+                  onChange={
+                    handleChange
+                  }
                   placeholder="Describe how you want to support founders and what kind of startup impact you want to create..."
-                  className="min-h-[90px] w-full resize-none bg-transparent px-3 text-sm leading-7 outline-none placeholder:text-slate-400"
+                  className="min-h-[90px] w-full resize-none bg-transparent px-3 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
                 />
+
               </div>
             </div>
           </div>
 
-          {/* Bottom */}
-          <div className="mt-14 flex flex-col gap-4 border-t border-slate-100 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          {/* BOTTOM */}
+          <div className="mt-14 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+
             <button
               onClick={() =>
-                router.push("/onboarding/advisor/profile")
+                router.push(
+                  "/onboarding/advisor/profile"
+                )
               }
-              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-8 text-sm font-semibold text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl border border-border bg-card px-8 text-sm font-semibold text-foreground transition-all hover:bg-muted"
             >
               <ArrowLeft className="h-4 w-4" />
 
@@ -195,15 +353,16 @@ export default function AdvisorExpertisePage() {
             </button>
 
             <button
-              onClick={() =>
-                router.push("/onboarding/advisor/availability")
+              onClick={
+                handleContinue
               }
-              className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-cyan-500 px-8 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(99,102,241,0.25)] transition-all hover:scale-[1.02]"
+              className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
               Continue to Availability
 
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
+
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 
 import {
   Award,
@@ -23,6 +24,8 @@ import {
   Wallet,
   X,
 } from "lucide-react"
+
+import AdvisorStatCard from "@/components/advisor/AdvisorStatCard"
 
 const navigation = [
   {
@@ -72,33 +75,38 @@ export default function AdvisorProfilePage() {
     useState(false)
 
   return (
-    <div className="min-h-screen bg-[#f6f8fc] flex">
+    <div className="flex min-h-screen bg-background">
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[270px] bg-white h-full border-r border-[#edf1f7] flex flex-col">
-            <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
-              <div>
-                <h2 className="text-xl font-bold text-[#0f172a]">
-                  Startup Ka Mall
-                </h2>
-
-                <p className="text-xs text-gray-500 mt-1">
-                  Advisor Workspace
-                </p>
-              </div>
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+            {/* LOGO */}
+            <div className="flex h-24 items-center justify-between border-b border-border px-5">
+              <Link
+                href="/advisor/dashboard"
+                className="flex items-center"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Startup Ka Mall"
+                  width={190}
+                  height={50}
+                  className="h-auto w-[170px] object-contain"
+                />
+              </Link>
 
               <button
                 onClick={() =>
                   setSidebarOpen(false)
                 }
-                className="h-10 w-10 rounded-xl bg-gray-100 flex items-center justify-center"
+                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-muted"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
+            {/* NAVIGATION */}
+            <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
               {navigation.map((item) => {
                 const Icon = item.icon
 
@@ -109,17 +117,15 @@ export default function AdvisorProfilePage() {
                     onClick={() =>
                       setSidebarOpen(false)
                     }
-                    className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition ${
+                    className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all duration-200 ${
                       item.active
-                        ? "bg-[#eef2ff] text-violet-600"
-                        : "text-gray-600 hover:bg-[#f8fafc]"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="h-5 w-5" />
 
-                    <span className="font-semibold text-sm">
-                      {item.name}
-                    </span>
+                    <span>{item.name}</span>
                   </Link>
                 )
               })}
@@ -127,7 +133,7 @@ export default function AdvisorProfilePage() {
           </div>
 
           <div
-            className="flex-1 bg-black/20"
+            className="flex-1 bg-black/40 backdrop-blur-sm"
             onClick={() =>
               setSidebarOpen(false)
             }
@@ -135,27 +141,26 @@ export default function AdvisorProfilePage() {
         </div>
       )}
 
-      {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-white border-r border-[#e9eef5] flex-col">
-        <div className="h-24 border-b border-[#edf1f7] flex items-center px-6">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
-              A
-            </div>
-
-            <div>
-              <h2 className="text-[24px] font-bold text-[#0f172a]">
-                Startup Ka Mall
-              </h2>
-
-              <p className="text-xs text-gray-500 mt-1">
-                Advisor Workspace
-              </p>
-            </div>
-          </div>
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+        {/* LOGO */}
+        <div className="flex h-24 items-center border-b border-border px-6">
+          <Link
+            href="/advisor/dashboard"
+            className="flex items-center"
+          >
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={220}
+              height={60}
+              className="h-auto w-[190px] object-contain"
+            />
+          </Link>
         </div>
 
-        <div className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        {/* NAVIGATION */}
+        <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
           {navigation.map((item) => {
             const Icon = item.icon
 
@@ -163,17 +168,15 @@ export default function AdvisorProfilePage() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition ${
+                className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all duration-200 ${
                   item.active
-                    ? "bg-[#eef2ff] text-violet-600"
-                    : "text-gray-600 hover:bg-[#f8fafc]"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="h-5 w-5" />
 
-                <span className="font-semibold text-sm">
-                  {item.name}
-                </span>
+                <span>{item.name}</span>
               </Link>
             )
           })}
@@ -181,96 +184,99 @@ export default function AdvisorProfilePage() {
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* HEADER */}
-        <header className="sticky top-0 z-30 h-20 bg-[#f6f8fc]/90 backdrop-blur-xl border-b border-[#edf1f7] flex items-center justify-between px-5 lg:px-8">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:px-8">
           <div className="flex items-center gap-4">
             <button
               onClick={() =>
                 setSidebarOpen(true)
               }
-              className="lg:hidden h-11 w-11 rounded-xl bg-white border border-[#edf1f7] flex items-center justify-center"
+              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card lg:hidden"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="h-5 w-5" />
             </button>
 
             <div>
-              <h1 className="text-[28px] font-bold text-[#0f172a]">
+              <h1 className="text-3xl font-black tracking-tight text-foreground">
                 Advisor Profile
               </h1>
 
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Professional ecosystem advisor profile
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="relative h-12 w-12 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center">
-              <Bell className="w-5 h-5 text-gray-700" />
+            <button className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
+              <Bell className="h-5 w-5 text-foreground" />
             </button>
 
-            <button className="h-12 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold">
+            <button className="inline-flex h-12 items-center rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
               Save Profile
             </button>
           </div>
         </header>
 
         {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden p-5 lg:p-7">
           {/* HERO */}
-          <section className="rounded-[36px] border border-[#e8edf5] bg-white p-6 lg:p-8">
-            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
-              <div className="flex flex-col sm:flex-row gap-6">
+          <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
+            <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
+              <div className="flex flex-col gap-6 sm:flex-row">
+                {/* AVATAR */}
                 <div className="relative">
-                  <div className="h-32 w-32 rounded-[32px] bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-5xl font-bold">
+                  <div className="flex h-32 w-32 items-center justify-center rounded-[32px] bg-primary text-5xl font-black text-primary-foreground shadow-lg">
                     K
                   </div>
 
-                  <button className="absolute -bottom-2 -right-2 h-11 w-11 rounded-2xl bg-white border border-[#edf1f7] flex items-center justify-center">
-                    <Camera className="w-5 h-5 text-gray-600" />
+                  <button className="absolute -bottom-2 -right-2 flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card">
+                    <Camera className="h-5 w-5 text-muted-foreground" />
                   </button>
                 </div>
 
+                {/* INFO */}
                 <div>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <h2 className="text-4xl font-bold text-[#0f172a]">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h2 className="text-4xl font-black tracking-tight text-foreground">
                       Krishna Shah
                     </h2>
 
-                    <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                       Platinum Advisor
                     </span>
                   </div>
 
-                  <p className="mt-4 text-lg text-gray-600">
-                    Startup Growth & Fundraising Advisor
+                  <p className="mt-4 text-lg text-muted-foreground">
+                    Startup Growth &
+                    Fundraising Advisor
                   </p>
 
-                  <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                  <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
+                      <MapPin className="h-4 w-4" />
                       Mumbai, India
                     </span>
 
                     <span className="flex items-center gap-2">
-                      <Users className="w-4 h-4" />
+                      <Users className="h-4 w-4" />
                       22 Active Founders
                     </span>
 
                     <span className="flex items-center gap-2">
-                      <Star className="w-4 h-4" />
+                      <Star className="h-4 w-4" />
                       4.9 Rating
                     </span>
                   </div>
 
-                  <div className="mt-6 flex gap-3 flex-wrap">
-                    <button className="h-11 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold flex items-center gap-2">
-                      <Edit3 className="w-4 h-4" />
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <button className="inline-flex h-11 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
+                      <Edit3 className="h-4 w-4" />
                       Edit Profile
                     </button>
 
-                    <button className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-[#0f172a]">
+                    <button className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
                       Share Profile
                     </button>
                   </div>
@@ -278,105 +284,94 @@ export default function AdvisorProfilePage() {
               </div>
 
               {/* PROFILE SCORE */}
-              <div className="w-full xl:w-[320px] rounded-[28px] border border-violet-200 bg-[#fafbff] p-6">
-                <p className="text-sm font-semibold text-violet-600">
+              <div className="w-full rounded-[28px] border border-primary/10 bg-primary/5 p-6 xl:w-[320px]">
+                <p className="text-sm font-semibold text-primary">
                   PROFILE STRENGTH
                 </p>
 
-                <h2 className="mt-5 text-6xl font-bold text-[#0f172a]">
+                <h2 className="mt-5 text-6xl font-black tracking-tight text-foreground">
                   92%
                 </h2>
 
-                <p className="mt-3 text-sm text-gray-500">
-                  Trusted ecosystem advisor profile
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Trusted ecosystem advisor
+                  profile
                 </p>
 
-                <div className="mt-6 h-3 w-full rounded-full bg-gray-100 overflow-hidden">
-                  <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+                <div className="mt-6 h-3 overflow-hidden rounded-full bg-primary/10">
+                  <div className="h-full w-[92%] rounded-full bg-primary" />
                 </div>
               </div>
             </div>
           </section>
 
           {/* STATS */}
-          <section className="mt-7 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <Wallet className="w-6 h-6 text-violet-500" />
+          <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <AdvisorStatCard
+              icon={Wallet}
+              title="₹2.4L"
+              subtitle="Total Earnings"
+              iconBg="bg-primary/10"
+              iconColor="text-primary"
+            />
 
-              <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-                ₹2.4L
-              </h3>
+            <AdvisorStatCard
+              icon={CalendarDays}
+              title="71"
+              subtitle="Sessions Conducted"
+              iconBg="bg-emerald-100"
+              iconColor="text-emerald-600"
+            />
 
-              <p className="mt-2 text-sm text-gray-500">
-                Total Earnings
-              </p>
-            </div>
+            <AdvisorStatCard
+              icon={Award}
+              title="14"
+              subtitle="Investor Ready Startups"
+              iconBg="bg-fuchsia-100"
+              iconColor="text-fuchsia-600"
+            />
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <CalendarDays className="w-6 h-6 text-emerald-500" />
-
-              <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-                71
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                Sessions Conducted
-              </p>
-            </div>
-
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <Award className="w-6 h-6 text-fuchsia-500" />
-
-              <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-                14
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                Investor Ready Startups
-              </p>
-            </div>
-
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <Star className="w-6 h-6 text-orange-500" />
-
-              <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-                4.9
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                Advisor Rating
-              </p>
-            </div>
+            <AdvisorStatCard
+              icon={Star}
+              title="4.9"
+              subtitle="Advisor Rating"
+              iconBg="bg-orange-100"
+              iconColor="text-orange-500"
+            />
           </section>
 
           {/* DETAILS */}
-          <section className="mt-7 grid grid-cols-1 xl:grid-cols-[1.3fr_420px] gap-5">
+          <section className="mt-7 grid grid-cols-1 gap-5 xl:grid-cols-[1.3fr_420px]">
             {/* LEFT */}
             <div className="space-y-5">
               {/* ABOUT */}
-              <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+              <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+                <h3 className="text-2xl font-black tracking-tight text-foreground">
                   About
                 </h3>
 
-                <p className="mt-5 text-sm leading-relaxed text-gray-500">
-                  Startup ecosystem advisor helping founders with fundraising,
-                  investor readiness, GTM execution, startup scaling and
-                  business growth strategy across early-stage ventures.
+                <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                  Startup ecosystem advisor
+                  helping founders with
+                  fundraising, investor
+                  readiness, GTM execution,
+                  startup scaling and
+                  business growth strategy
+                  across early-stage ventures.
                 </p>
               </div>
 
               {/* EXPERTISE */}
-              <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+              <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+                <h3 className="text-2xl font-black tracking-tight text-foreground">
                   Expertise
                 </h3>
 
                 <div className="mt-6 flex flex-wrap gap-3">
-                  {expertise.map((item, index) => (
+                  {expertise.map((item) => (
                     <div
-                      key={index}
-                      className="h-11 px-5 rounded-2xl bg-violet-50 text-violet-700 text-sm font-semibold flex items-center"
+                      key={item}
+                      className="flex h-11 items-center rounded-2xl bg-primary/10 px-5 text-sm font-semibold text-primary"
                     >
                       {item}
                     </div>
@@ -388,59 +383,66 @@ export default function AdvisorProfilePage() {
             {/* RIGHT */}
             <div className="space-y-5">
               {/* CONTACT */}
-              <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+              <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+                <h3 className="text-2xl font-black tracking-tight text-foreground">
                   Contact
                 </h3>
 
                 <div className="mt-6 space-y-4">
-                  <div className="flex items-center gap-4 rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                    <Mail className="w-5 h-5 text-violet-500" />
+                  {[
+                    {
+                      icon: Mail,
+                      label: "Email",
+                      value:
+                        "krishna@startupkamall.com",
+                      color: "text-primary",
+                    },
+                    {
+                      icon: Phone,
+                      label: "Phone",
+                      value:
+                        "+91 98765 43210",
+                      color:
+                        "text-fuchsia-600",
+                    },
+                    {
+                      icon: Globe,
+                      label: "Website",
+                      value:
+                        "startupkamall.com",
+                      color:
+                        "text-emerald-600",
+                    },
+                  ].map((item) => {
+                    const Icon = item.icon
 
-                    <div>
-                      <p className="text-xs text-gray-500">
-                        Email
-                      </p>
+                    return (
+                      <div
+                        key={item.label}
+                        className="flex items-center gap-4 rounded-[22px] border border-border bg-muted/40 p-4"
+                      >
+                        <Icon
+                          className={`h-5 w-5 ${item.color}`}
+                        />
 
-                      <p className="text-sm font-semibold text-[#0f172a]">
-                        krishna@startupkamall.com
-                      </p>
-                    </div>
-                  </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">
+                            {item.label}
+                          </p>
 
-                  <div className="flex items-center gap-4 rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                    <Phone className="w-5 h-5 text-fuchsia-500" />
-
-                    <div>
-                      <p className="text-xs text-gray-500">
-                        Phone
-                      </p>
-
-                      <p className="text-sm font-semibold text-[#0f172a]">
-                        +91 98765 43210
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                    <Globe className="w-5 h-5 text-emerald-500" />
-
-                    <div>
-                      <p className="text-xs text-gray-500">
-                        Website
-                      </p>
-
-                      <p className="text-sm font-semibold text-[#0f172a]">
-                        startupkamall.com
-                      </p>
-                    </div>
-                  </div>
+                          <p className="text-sm font-semibold text-foreground">
+                            {item.value}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 
               {/* ACHIEVEMENTS */}
-              <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+              <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+                <h3 className="text-2xl font-black tracking-tight text-foreground">
                   Achievements
                 </h3>
 
@@ -450,16 +452,16 @@ export default function AdvisorProfilePage() {
                     "50+ Startups Mentored",
                     "Investor Readiness Expert",
                     "Growth Ecosystem Contributor",
-                  ].map((item, index) => (
+                  ].map((item) => (
                     <div
-                      key={index}
-                      className="flex items-center gap-3 rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4"
+                      key={item}
+                      className="flex items-center gap-3 rounded-[22px] border border-border bg-muted/40 p-4"
                     >
-                      <div className="h-10 w-10 rounded-2xl bg-violet-100 flex items-center justify-center">
-                        <Award className="w-5 h-5 text-violet-600" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
+                        <Award className="h-5 w-5 text-primary" />
                       </div>
 
-                      <p className="text-sm font-semibold text-[#0f172a]">
+                      <p className="text-sm font-semibold text-foreground">
                         {item}
                       </p>
                     </div>

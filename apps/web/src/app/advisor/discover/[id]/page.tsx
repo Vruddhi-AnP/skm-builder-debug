@@ -1,20 +1,18 @@
 "use client"
 
-import { useParams } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
+import { useParams } from "next/navigation"
 
 import {
   ArrowLeft,
   BarChart3,
   Bell,
-  Briefcase,
-  CalendarDays,
   CheckCircle2,
   Globe,
   Lightbulb,
   MapPin,
   Rocket,
-  Search,
   Sparkles,
   Target,
   TrendingUp,
@@ -22,6 +20,8 @@ import {
   Users,
   Wallet,
 } from "lucide-react"
+
+import InvestorStatCard from "@/components/investor/InvestorStatCard"
 
 const startups = [
   {
@@ -32,16 +32,20 @@ const startups = [
     stage: "Seed Stage",
     location: "Mumbai, India",
     description:
-      "AI-powered financial intelligence platform helping startups and SMEs automate forecasting, analytics and investment readiness.",
+      "AI-powered financial intelligence platform helping startups automate forecasting, analytics and investor readiness.",
+
     problem:
       "SMEs struggle with fragmented financial insights and manual forecasting workflows.",
+
     solution:
       "Unified AI-driven dashboard for forecasting, analytics and investor reporting.",
+
     traction: "12K+ active users",
     funding: "Raising $500K",
     team: "14 Members",
     website: "www.finverseai.com",
   },
+
   {
     id: "2",
     name: "HealthSync",
@@ -50,11 +54,14 @@ const startups = [
     stage: "Pre-Series A",
     location: "Bangalore, India",
     description:
-      "Digital healthcare infrastructure platform connecting clinics, diagnostics and patient records in one ecosystem.",
+      "Digital healthcare infrastructure platform connecting clinics, diagnostics and patient records.",
+
     problem:
       "Healthcare providers operate with disconnected systems and inefficient patient data management.",
+
     solution:
       "Centralized digital health infrastructure with smart patient workflows.",
+
     traction: "150+ clinics onboarded",
     funding: "Raising $1.2M",
     team: "22 Members",
@@ -71,15 +78,15 @@ export default function StartupDetailsPage() {
 
   if (!startup) {
     return (
-      <div className="min-h-screen bg-[#f6f8fc] flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[#0f172a]">
+          <h2 className="text-3xl font-black text-foreground">
             Startup Not Found
           </h2>
 
           <Link
             href="/advisor/discover"
-            className="mt-6 inline-flex h-11 px-5 rounded-2xl bg-violet-500 text-white text-sm font-semibold items-center justify-center"
+            className="mt-6 inline-flex h-11 items-center justify-center rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground"
           >
             Back To Discover
           </Link>
@@ -89,47 +96,48 @@ export default function StartupDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f8fc]">
+    <div className="min-h-screen bg-background">
       {/* HEADER */}
-      <header className="sticky top-0 z-30 h-20 bg-[#f6f8fc]/90 backdrop-blur-xl border-b border-[#edf1f7] flex items-center justify-between px-5 lg:px-8">
+      <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:px-8">
         <div className="flex items-center gap-4">
           <Link
             href="/advisor/discover"
-            className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center hover:bg-[#fafafa] transition"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="h-5 w-5" />
           </Link>
 
           <div>
-            <h1 className="text-[28px] font-bold tracking-tight text-[#0f172a] leading-none">
+            <h1 className="text-3xl font-black tracking-tight text-foreground">
               Startup Details
             </h1>
 
-            <p className="text-sm text-gray-500 mt-1">
-              Founder startup overview & insights
+            <p className="mt-1 text-sm text-muted-foreground">
+              Founder overview &
+              startup insights
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="relative h-12 w-12 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center">
-            <Bell className="w-5 h-5 text-gray-700" />
+          <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
+            <Bell className="h-5 w-5" />
           </button>
 
           <Link
             href="/advisor/profile"
-            className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-white flex items-center gap-3"
+            className="flex h-12 items-center gap-3 rounded-2xl border border-border bg-card px-3"
           >
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
               K
             </div>
 
-            <div className="hidden sm:block text-left">
-              <p className="text-sm font-semibold text-[#0f172a]">
+            <div className="hidden sm:block">
+              <p className="text-sm font-semibold text-foreground">
                 Krishna Shah
               </p>
 
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Platinum Advisor
               </p>
             </div>
@@ -140,44 +148,44 @@ export default function StartupDetailsPage() {
       {/* CONTENT */}
       <main className="p-5 lg:p-7">
         {/* HERO */}
-        <section className="rounded-[36px] border border-[#e8edf5] bg-white p-6 lg:p-8">
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
+        <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
+          <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2">
-                <Sparkles className="w-4 h-4 text-violet-600" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-2">
+                <Sparkles className="h-4 w-4 text-primary" />
 
-                <span className="text-sm font-semibold text-violet-700">
+                <span className="text-sm font-semibold text-primary">
                   Startup Overview
                 </span>
               </div>
 
-              <div className="mt-6 flex items-center gap-3 flex-wrap">
-                <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#0f172a]">
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <h2 className="text-4xl font-black tracking-tight text-foreground lg:text-5xl">
                   {startup.name}
                 </h2>
 
-                <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                   {startup.stage}
                 </span>
               </div>
 
-              <p className="mt-5 text-base leading-relaxed text-gray-500">
+              <p className="mt-5 text-base leading-8 text-muted-foreground">
                 {startup.description}
               </p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
+                  <User className="h-4 w-4" />
                   {startup.founder}
                 </span>
 
                 <span className="flex items-center gap-2">
-                  <Globe className="w-4 h-4" />
+                  <Globe className="h-4 w-4" />
                   {startup.category}
                 </span>
 
                 <span className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
+                  <MapPin className="h-4 w-4" />
                   {startup.location}
                 </span>
               </div>
@@ -185,11 +193,11 @@ export default function StartupDetailsPage() {
 
             {/* ACTIONS */}
             <div className="flex flex-wrap gap-3">
-              <button className="h-12 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold">
+              <button className="h-12 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground">
                 Accept Request
               </button>
 
-              <button className="h-12 px-5 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-[#0f172a]">
+              <button className="h-12 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground">
                 Schedule Session
               </button>
             </div>
@@ -197,192 +205,173 @@ export default function StartupDetailsPage() {
         </section>
 
         {/* STATS */}
-        <section className="mt-7 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-          <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-            <TrendingUp className="w-6 h-6 text-violet-500" />
+        <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <InvestorStatCard
+            icon={TrendingUp}
+            title={startup.traction}
+            subtitle="Startup Traction"
+            iconBg="bg-primary/10"
+            iconColor="text-primary"
+          />
 
-            <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-              {startup.traction}
-            </h3>
+          <InvestorStatCard
+            icon={Wallet}
+            title={startup.funding}
+            subtitle="Current Raise"
+            iconBg="bg-emerald-100"
+            iconColor="text-emerald-600"
+          />
 
-            <p className="mt-2 text-sm text-gray-500">
-              Startup Traction
-            </p>
-          </div>
+          <InvestorStatCard
+            icon={Users}
+            title={startup.team}
+            subtitle="Team Size"
+            iconBg="bg-fuchsia-100"
+            iconColor="text-fuchsia-600"
+          />
 
-          <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-            <Wallet className="w-6 h-6 text-emerald-500" />
-
-            <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-              {startup.funding}
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Current Raise
-            </p>
-          </div>
-
-          <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-            <Users className="w-6 h-6 text-fuchsia-500" />
-
-            <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-              {startup.team}
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Team Size
-            </p>
-          </div>
-
-          <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-            <CheckCircle2 className="w-6 h-6 text-orange-500" />
-
-            <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-              92%
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Advisor Match
-            </p>
-          </div>
+          <InvestorStatCard
+            icon={CheckCircle2}
+            title="92%"
+            subtitle="Advisor Match"
+            iconBg="bg-orange-100"
+            iconColor="text-orange-500"
+          />
         </section>
 
         {/* DETAILS */}
-        <section className="mt-7 grid grid-cols-1 xl:grid-cols-[1.3fr_420px] gap-5">
+        <section className="mt-7 grid grid-cols-1 gap-5 xl:grid-cols-[1.3fr_420px]">
           {/* LEFT */}
           <div className="space-y-5">
-            {/* PROBLEM */}
-            <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-violet-500" />
+                <Target className="h-5 w-5 text-primary" />
 
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+                <h3 className="text-2xl font-black text-foreground">
                   Problem Statement
                 </h3>
               </div>
 
-              <p className="mt-5 text-sm leading-relaxed text-gray-500">
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
                 {startup.problem}
               </p>
             </div>
 
-            {/* SOLUTION */}
-            <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
               <div className="flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-fuchsia-500" />
+                <Lightbulb className="h-5 w-5 text-fuchsia-500" />
 
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+                <h3 className="text-2xl font-black text-foreground">
                   Solution
                 </h3>
               </div>
 
-              <p className="mt-5 text-sm leading-relaxed text-gray-500">
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
                 {startup.solution}
               </p>
             </div>
 
-            {/* BUSINESS */}
-            <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
               <div className="flex items-center gap-2">
-                <Rocket className="w-5 h-5 text-orange-500" />
+                <Rocket className="h-5 w-5 text-orange-500" />
 
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+                <h3 className="text-2xl font-black text-foreground">
                   Growth Potential
                 </h3>
               </div>
 
-              <p className="mt-5 text-sm leading-relaxed text-gray-500">
-                Strong early-stage traction with scalable business model,
-                expanding market opportunity and investor-ready positioning.
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                Strong early-stage
+                traction with scalable
+                business model and
+                investor-ready positioning.
               </p>
             </div>
           </div>
 
           {/* RIGHT */}
           <div className="space-y-5">
-            {/* INFO */}
-            <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
-              <h3 className="text-2xl font-bold text-[#0f172a]">
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+              <h3 className="text-2xl font-black text-foreground">
                 Startup Information
               </h3>
 
               <div className="mt-6 space-y-4">
-                <div className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                  <p className="text-xs text-gray-500">
-                    Founder
-                  </p>
+                {[
+                  {
+                    label: "Founder",
+                    value: startup.founder,
+                  },
 
-                  <p className="mt-1 text-sm font-semibold text-[#0f172a]">
-                    {startup.founder}
-                  </p>
-                </div>
+                  {
+                    label: "Industry",
+                    value: startup.category,
+                  },
 
-                <div className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                  <p className="text-xs text-gray-500">
-                    Industry
-                  </p>
+                  {
+                    label: "Website",
+                    value: startup.website,
+                  },
 
-                  <p className="mt-1 text-sm font-semibold text-[#0f172a]">
-                    {startup.category}
-                  </p>
-                </div>
+                  {
+                    label: "Startup Stage",
+                    value: startup.stage,
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-[22px] border border-border bg-muted/30 p-4"
+                  >
+                    <p className="text-xs text-muted-foreground">
+                      {item.label}
+                    </p>
 
-                <div className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                  <p className="text-xs text-gray-500">
-                    Website
-                  </p>
-
-                  <p className="mt-1 text-sm font-semibold text-[#0f172a]">
-                    {startup.website}
-                  </p>
-                </div>
-
-                <div className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-4">
-                  <p className="text-xs text-gray-500">
-                    Startup Stage
-                  </p>
-
-                  <p className="mt-1 text-sm font-semibold text-[#0f172a]">
-                    {startup.stage}
-                  </p>
-                </div>
+                    <p className="mt-1 text-sm font-semibold text-foreground">
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* MATCH */}
-            <div className="rounded-[32px] border border-violet-200 bg-white p-6">
+            <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
               <div className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-violet-500" />
+                <BarChart3 className="h-5 w-5 text-primary" />
 
-                <h3 className="text-xl font-bold text-[#0f172a]">
+                <h3 className="text-xl font-black text-foreground">
                   Advisor Match
                 </h3>
               </div>
 
-              <h2 className="mt-6 text-6xl font-bold text-[#0f172a]">
+              <h2 className="mt-6 text-6xl font-black text-foreground">
                 92%
               </h2>
 
-              <p className="mt-3 text-sm text-gray-500">
-                High alignment with advisor expertise & mentorship goals
+              <p className="mt-3 text-sm text-muted-foreground">
+                High alignment with
+                advisor expertise &
+                mentorship goals
               </p>
 
-              <div className="mt-6 h-3 w-full rounded-full bg-gray-100 overflow-hidden">
-                <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+              <div className="mt-6 h-3 overflow-hidden rounded-full bg-primary/10">
+                <div className="h-full w-[92%] rounded-full bg-primary" />
               </div>
             </div>
 
             {/* CTA */}
-            <div className="rounded-[32px] border border-[#e8edf5] bg-white p-6">
-              <h3 className="text-2xl font-bold text-[#0f172a]">
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+              <h3 className="text-2xl font-black text-foreground">
                 Interested In Mentoring?
               </h3>
 
-              <p className="mt-3 text-sm text-gray-500">
-                Accept mentorship request and begin startup advisory journey.
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                Accept mentorship request
+                and begin startup advisory
+                journey.
               </p>
 
-              <button className="mt-6 w-full h-12 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold">
+              <button className="mt-6 h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
                 Accept Startup Request
               </button>
             </div>

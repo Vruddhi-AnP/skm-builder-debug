@@ -21,7 +21,7 @@ export default function ProgramFilters({
   setSelectedCategory,
 }: Props) {
   return (
-    <section className="rounded-[32px] border border-border/60 bg-white p-5 shadow-sm md:p-6">
+    <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-5 shadow-sm md:p-6">
 
       <div className="flex flex-col gap-4 xl:flex-row">
 

@@ -21,7 +21,7 @@ export default function AuthCard({
   footerLinkText,
 }: AuthCardProps) {
   return (
-    <div className="relative w-full max-w-lg overflow-hidden rounded-[32px] border border-border/60 bg-white/90 p-8 shadow-[0_20px_80px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-10">
+    <div className="relative w-full max-w-lg overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95/90 p-8 shadow-[0_20px_80px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-10">
       {/* LOGO */}
       <Link
         href="/"
@@ -32,7 +32,7 @@ export default function AuthCard({
         </div>
 
         <div>
-          <h1 className="text-lg font-black text-slate-800">
+          <h1 className="text-lg font-black text-[#16214A]">
             Startup Ka Mall
           </h1>
 
@@ -44,7 +44,7 @@ export default function AuthCard({
 
       {/* HEADER */}
       <div>
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-800">
+        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-[#16214A]">
           {title}
         </h1>
 
@@ -63,7 +63,7 @@ export default function AuthCard({
         {footerText}{" "}
         <Link
           href={footerLink}
-          className="font-semibold text-slate-800 transition hover:opacity-70"
+          className="font-semibold text-[#16214A] transition hover:opacity-70"
         >
           {footerLinkText}
         </Link>

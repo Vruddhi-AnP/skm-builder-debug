@@ -133,7 +133,7 @@ export default function SolutionDesignPage() {
   return (
     <div className="space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-white">
+      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -142,14 +142,14 @@ export default function SolutionDesignPage() {
               Startup Builder • Module 4
             </div>
 
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-slate-800 md:text-5xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
               Design Your
               <span className="block text-primary">
                 Product Solution
               </span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
               Build scalable startup experiences,
               feature systems and product workflows
               through structured product execution
@@ -165,12 +165,12 @@ export default function SolutionDesignPage() {
                   Product Readiness
                 </p>
 
-                <h3 className="mt-2 text-5xl font-black text-slate-800">
+                <h3 className="mt-2 text-5xl font-black text-[#16214A]">
                   20%
                 </h3>
               </div>
 
-              <div className="rounded-2xl bg-white p-4 text-primary shadow-sm">
+              <div className="rounded-2xl bg-[#F7F4EE]/95 p-4 text-primary shadow-sm">
                 <Sparkles className="h-8 w-8" />
               </div>
             </div>
@@ -192,7 +192,7 @@ export default function SolutionDesignPage() {
                 >
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
 
-                  <p className="text-sm font-medium text-slate-600">
+                  <p className="text-sm font-medium text-[#6B6B6B]">
                     {item}
                   </p>
                 </div>
@@ -207,14 +207,14 @@ export default function SolutionDesignPage() {
         {/* LEFT */}
         <div className="space-y-6">
           {/* SOLUTION ARCHITECTURE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
                 <Sparkles className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Solution Architecture
                 </h2>
 
@@ -247,11 +247,11 @@ export default function SolutionDesignPage() {
                         formData.solutionType ===
                         item
                           ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-white hover:border-cyan-300 hover:bg-cyan-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
                       }
                     `}
                   >
-                    <h3 className="font-bold text-slate-800">
+                    <h3 className="font-bold text-[#16214A]">
                       {item}
                     </h3>
 
@@ -280,7 +280,7 @@ export default function SolutionDesignPage() {
                   )
                 }
                 placeholder="Describe how your product will transform user workflows..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
 
@@ -300,20 +300,20 @@ export default function SolutionDesignPage() {
                   )
                 }
                 placeholder="Add additional startup solution strategy..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
               />
             </div>
           </section>
 
           {/* PRODUCT FEATURES */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
                 <LayoutDashboard className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   Product Features
                 </h2>
 
@@ -351,7 +351,7 @@ export default function SolutionDesignPage() {
                       ${
                         active
                           ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-violet-300 hover:bg-violet-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
                       }
                     `}
                     >
@@ -387,7 +387,7 @@ export default function SolutionDesignPage() {
                         formData.platformType ===
                         item
                           ? "border-violet-500 bg-violet-50"
-                          : "border-border/60 bg-white hover:border-violet-300"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-violet-300"
                       }
                     `}
                     >
@@ -420,7 +420,7 @@ export default function SolutionDesignPage() {
                         formData.businessModel ===
                         item
                           ? "border-violet-500 bg-violet-50"
-                          : "border-border/60 bg-white hover:border-violet-300"
+                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-violet-300"
                       }
                     `}
                     >
@@ -447,20 +447,20 @@ export default function SolutionDesignPage() {
                   )
                 }
                 placeholder="How will your platform scale for large user growth?"
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
               />
             </div>
           </section>
 
           {/* USER EXPERIENCE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm lg:p-8">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
             <div className="mb-8 flex items-center gap-4">
               <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
                 <Workflow className="h-6 w-6" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-slate-800">
+                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                   User Experience Flow
                 </h2>
 
@@ -498,7 +498,7 @@ export default function SolutionDesignPage() {
                       ${
                         active
                           ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
                       }
                     `}
                     >
@@ -537,7 +537,7 @@ export default function SolutionDesignPage() {
                       ${
                         active
                           ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50"
+                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
                       }
                     `}
                     >
@@ -564,7 +564,7 @@ export default function SolutionDesignPage() {
                   )
                 }
                 placeholder="Describe automation systems and AI workflow integrations..."
-                className="w-full rounded-3xl border border-border/60 bg-white px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
               />
             </div>
           </section>
@@ -577,7 +577,7 @@ export default function SolutionDesignPage() {
             <div className="flex items-center gap-3">
               <Wand2 className="h-6 w-6 text-primary" />
 
-              <h3 className="text-2xl font-black tracking-tight text-slate-800">
+              <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
                 Product Insights
               </h3>
             </div>
@@ -591,7 +591,7 @@ export default function SolutionDesignPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-white/60 bg-white p-4 text-sm font-medium text-slate-700"
+                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
                 >
                   {item}
                 </div>
@@ -600,8 +600,8 @@ export default function SolutionDesignPage() {
           </section>
 
           {/* SCORE */}
-          <section className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-slate-800">
+          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Product Readiness
             </h3>
 
@@ -651,7 +651,7 @@ export default function SolutionDesignPage() {
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* SAVE */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Save className="h-4 w-4" />
 
           Save Draft

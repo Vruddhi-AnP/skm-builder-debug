@@ -2,9 +2,9 @@
 
 export default function ProfileForm() {
   return (
-    <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm md:p-8">
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
 
-      <h2 className="text-3xl font-black tracking-tight text-slate-800">
+      <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
         Founder Information
       </h2>
 

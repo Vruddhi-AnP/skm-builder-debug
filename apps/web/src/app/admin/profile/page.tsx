@@ -100,7 +100,7 @@ export default function AdminProfilePage() {
   return (
     <div className="min-h-screen bg-[#f5f7fb] flex">
       {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-white border-r border-[#e9eef5] flex-col">
+      <aside className="hidden lg:flex w-[270px] bg-[#F7F4EE]/95 border-r border-[#e9eef5] flex-col">
         {/* TOP */}
         <div className="h-20 border-b border-[#edf1f7] px-6 flex items-center">
           <div>
@@ -156,7 +156,7 @@ export default function AdminProfilePage() {
 
           {/* RIGHT */}
           <div className="flex items-center gap-3">
-            <button className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center">
+            <button className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center">
               <Bell className="w-5 h-5 text-[#475569]" />
             </button>
 
@@ -169,7 +169,7 @@ export default function AdminProfilePage() {
         {/* CONTENT */}
         <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
           {/* PROFILE CARD */}
-          <section className="rounded-[32px] border border-[#e8edf5] bg-white p-6 lg:p-8">
+          <section className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6 lg:p-8">
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
               {/* LEFT */}
               <div className="flex flex-col sm:flex-row sm:items-center gap-6">
@@ -228,7 +228,7 @@ export default function AdminProfilePage() {
             {stats.map((item) => (
               <div
                 key={item.title}
-                className="rounded-[28px] border border-[#e8edf5] bg-white p-5"
+                className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5"
               >
                 <p className="text-sm text-[#64748b]">
                   {item.title}
@@ -244,7 +244,7 @@ export default function AdminProfilePage() {
           {/* DETAILS */}
           <section className="mt-7 grid grid-cols-1 xl:grid-cols-2 gap-5">
             {/* ABOUT */}
-            <div className="rounded-[30px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-2xl bg-sky-100 flex items-center justify-center">
                   <ShieldCheck className="w-5 h-5 text-sky-600" />
@@ -302,7 +302,7 @@ export default function AdminProfilePage() {
             </div>
 
             {/* PLATFORM ACCESS */}
-            <div className="rounded-[30px] border border-[#e8edf5] bg-white p-6">
+            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-2xl bg-emerald-100 flex items-center justify-center">
                   <Award className="w-5 h-5 text-emerald-600" />

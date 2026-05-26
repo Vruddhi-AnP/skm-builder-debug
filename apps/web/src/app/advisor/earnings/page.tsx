@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 
 import {
   ArrowUpRight,
-  BarChart3,
   Bell,
   Briefcase,
   CalendarDays,
@@ -14,6 +14,7 @@ import {
   CreditCard,
   Download,
   IndianRupee,
+  LayoutDashboard,
   Menu,
   Search,
   Sparkles,
@@ -23,11 +24,13 @@ import {
   X,
 } from "lucide-react"
 
+import AdvisorStatCard from "@/components/advisor/AdvisorStatCard"
+
 const navigation = [
   {
     name: "Dashboard",
     href: "/advisor/dashboard",
-    icon: BarChart3,
+    icon: LayoutDashboard,
   },
   {
     name: "Discover",
@@ -62,23 +65,25 @@ const earningsData = [
     id: 1,
     startup: "FinVerse AI",
     session: "Growth Strategy Session",
-    amount: "₹25,000",
+    amount: 25000,
     date: "18 May 2026",
     status: "Paid",
   },
+
   {
     id: 2,
     startup: "HealthSync",
     session: "Fundraising Guidance",
-    amount: "₹18,000",
+    amount: 18000,
     date: "16 May 2026",
     status: "Pending",
   },
+
   {
     id: 3,
     startup: "GreenByte",
     session: "Mentorship Call",
-    amount: "₹12,000",
+    amount: 12000,
     date: "14 May 2026",
     status: "Paid",
   },
@@ -91,46 +96,86 @@ export default function AdvisorEarningsPage() {
   const [selectedFilter, setSelectedFilter] =
     useState("All")
 
-  const filters = ["All", "Paid", "Pending"]
+  const filters = [
+    "All",
+    "Paid",
+    "Pending",
+  ]
 
   const filteredEarnings = useMemo(() => {
     return earningsData.filter((item) => {
-      if (selectedFilter === "All") return true
+      if (selectedFilter === "All")
+        return true
 
-      return item.status === selectedFilter
+      return (
+        item.status === selectedFilter
+      )
     })
   }, [selectedFilter])
 
+  const totalEarnings = useMemo(() => {
+    return earningsData.reduce(
+      (acc, item) => acc + item.amount,
+      0
+    )
+  }, [])
+
+  const paidEarnings = useMemo(() => {
+    return earningsData
+      .filter(
+        (item) => item.status === "Paid"
+      )
+      .reduce(
+        (acc, item) => acc + item.amount,
+        0
+      )
+  }, [])
+
+  const pendingEarnings = useMemo(() => {
+    return earningsData
+      .filter(
+        (item) =>
+          item.status === "Pending"
+      )
+      .reduce(
+        (acc, item) => acc + item.amount,
+        0
+      )
+  }, [])
+
   return (
-    <div className="min-h-screen bg-[#f6f8fc] flex">
+    <div className="flex min-h-screen bg-background">
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[270px] bg-white h-full border-r border-[#edf1f7] flex flex-col">
-            {/* TOP */}
-            <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
-              <div>
-                <h2 className="text-xl font-bold tracking-tight text-[#0f172a]">
-                  Startup Ka Mall
-                </h2>
-
-                <p className="text-xs text-gray-500 mt-1">
-                  Advisor Workspace
-                </p>
-              </div>
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+            {/* LOGO */}
+            <div className="flex h-24 items-center justify-between border-b border-border px-5">
+              <Link
+                href="/advisor/dashboard"
+                className="flex items-center"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Startup Ka Mall"
+                  width={190}
+                  height={50}
+                  className="h-auto w-[170px] object-contain"
+                />
+              </Link>
 
               <button
                 onClick={() =>
                   setSidebarOpen(false)
                 }
-                className="h-10 w-10 rounded-xl bg-gray-100 flex items-center justify-center"
+                className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-muted"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
-            {/* NAV */}
-            <div className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
+            {/* NAVIGATION */}
+            <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
               {navigation.map((item) => {
                 const Icon = item.icon
 
@@ -141,25 +186,44 @@ export default function AdvisorEarningsPage() {
                     onClick={() =>
                       setSidebarOpen(false)
                     }
-                    className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 ${
+                    className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all duration-200 ${
                       item.active
-                        ? "bg-[#eef2ff] text-violet-600"
-                        : "text-gray-600 hover:bg-[#f8fafc]"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="h-5 w-5" />
 
-                    <span className="font-semibold text-[14px]">
-                      {item.name}
-                    </span>
+                    <span>{item.name}</span>
                   </Link>
                 )
               })}
             </div>
+
+            {/* CARD */}
+            <div className="p-4">
+              <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                  Monthly Revenue
+                </p>
+
+                <h3 className="mt-3 text-4xl font-black tracking-tight text-foreground">
+                  ₹2.4L
+                </h3>
+
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Advisor earnings this month
+                </p>
+
+                <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
+                  <div className="h-full w-[84%] rounded-full bg-primary" />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div
-            className="flex-1 bg-black/20"
+            className="flex-1 bg-black/40 backdrop-blur-sm"
             onClick={() =>
               setSidebarOpen(false)
             }
@@ -167,29 +231,26 @@ export default function AdvisorEarningsPage() {
         </div>
       )}
 
-      {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-[#fcfcfd] border-r border-[#e9eef5] flex-col">
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
         {/* LOGO */}
-        <div className="h-24 border-b border-[#edf1f7] flex items-center px-6">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
-              A
-            </div>
-
-            <div>
-              <h2 className="text-[24px] font-bold tracking-tight text-[#0f172a] leading-none">
-                Startup Ka Mall
-              </h2>
-
-              <p className="text-xs text-gray-500 mt-2">
-                Advisor Workspace
-              </p>
-            </div>
-          </div>
+        <div className="flex h-24 items-center border-b border-border px-6">
+          <Link
+            href="/advisor/dashboard"
+            className="flex items-center"
+          >
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={220}
+              height={60}
+              className="h-auto w-[190px] object-contain"
+            />
+          </Link>
         </div>
 
-        {/* NAV */}
-        <div className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        {/* NAVIGATION */}
+        <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
           {navigation.map((item) => {
             const Icon = item.icon
 
@@ -197,88 +258,88 @@ export default function AdvisorEarningsPage() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 ${
+                className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm font-semibold transition-all duration-200 ${
                   item.active
-                    ? "bg-[#eef2ff] text-violet-600"
-                    : "text-gray-600 hover:bg-white"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="h-5 w-5" />
 
-                <span className="font-semibold text-[14px]">
-                  {item.name}
-                </span>
+                <span>{item.name}</span>
               </Link>
             )
           })}
         </div>
 
-        {/* CARD */}
+        {/* REVENUE CARD */}
         <div className="p-4">
-          <div className="rounded-[28px] border border-violet-200 bg-white p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-500">
+          <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
               Monthly Revenue
             </p>
 
-            <h3 className="mt-3 text-4xl font-bold text-[#0f172a]">
+            <h3 className="mt-3 text-4xl font-black tracking-tight text-foreground">
               ₹2.4L
             </h3>
 
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               Advisor earnings this month
             </p>
 
-            <div className="mt-5 h-2 w-full rounded-full bg-gray-100 overflow-hidden">
-              <div className="h-full w-[84%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+            <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
+              <div className="h-full w-[84%] rounded-full bg-primary" />
             </div>
           </div>
         </div>
       </aside>
 
       {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* HEADER */}
-        <header className="sticky top-0 z-30 h-20 bg-[#f6f8fc]/90 backdrop-blur-xl border-b border-[#edf1f7] flex items-center justify-between px-5 lg:px-8">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:px-8">
           <div className="flex items-center gap-4">
             <button
               onClick={() =>
                 setSidebarOpen(true)
               }
-              className="lg:hidden h-11 w-11 rounded-xl bg-white border border-[#edf1f7] flex items-center justify-center"
+              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card lg:hidden"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="h-5 w-5" />
             </button>
 
             <div>
-              <h1 className="text-[28px] font-bold tracking-tight text-[#0f172a] leading-none">
+              <h1 className="text-3xl font-black tracking-tight text-foreground">
                 Earnings
               </h1>
 
-              <p className="text-sm text-gray-500 mt-1">
-                Track payments & mentorship revenue
+              <p className="mt-1 text-sm text-muted-foreground">
+                Track mentorship revenue &
+                advisor payouts
               </p>
             </div>
           </div>
 
+          {/* RIGHT */}
           <div className="flex items-center gap-3">
-            <button className="relative h-12 w-12 rounded-2xl border border-[#edf1f7] bg-white flex items-center justify-center hover:bg-[#fafafa] transition">
-              <Bell className="w-5 h-5 text-gray-700" />
+            <button className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
+              <Bell className="h-5 w-5 text-foreground" />
             </button>
 
             <Link
               href="/advisor/profile"
-              className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-white flex items-center gap-3 hover:bg-[#fafafa] transition"
+              className="flex h-12 items-center gap-3 rounded-2xl border border-border bg-card px-3"
             >
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
                 K
               </div>
 
-              <div className="hidden sm:block text-left">
-                <p className="text-sm font-semibold text-[#0f172a]">
+              <div className="hidden sm:block">
+                <p className="text-sm font-semibold text-foreground">
                   Krishna Shah
                 </p>
 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Platinum Advisor
                 </p>
               </div>
@@ -287,38 +348,41 @@ export default function AdvisorEarningsPage() {
         </header>
 
         {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden p-5 lg:p-7">
           {/* HERO */}
-          <section className="rounded-[36px] border border-[#e8edf5] bg-white p-6 lg:p-8">
-            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
+          <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
+            <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
               <div className="max-w-2xl">
-                <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-2">
-                  <Sparkles className="w-4 h-4 text-violet-600" />
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-2">
+                  <Sparkles className="h-4 w-4 text-primary" />
 
-                  <span className="text-sm font-semibold text-violet-700">
+                  <span className="text-sm font-semibold text-primary">
                     Revenue Overview
                   </span>
                 </div>
 
-                <h2 className="mt-6 text-4xl lg:text-5xl font-bold tracking-tight text-[#0f172a] leading-[1.1]">
-                  Track Advisor Earnings
+                <h2 className="mt-6 text-4xl font-black tracking-tight text-foreground lg:text-5xl">
+                  Advisor Revenue Dashboard
                 </h2>
 
-                <p className="mt-5 text-base leading-relaxed text-gray-500">
-                  Monitor mentorship payments, payouts
-                  and monthly advisor income performance.
+                <p className="mt-5 text-base leading-8 text-muted-foreground">
+                  Track mentorship earnings,
+                  startup consultations,
+                  payouts and advisor income
+                  analytics across the
+                  ecosystem.
                 </p>
               </div>
 
               {/* ACTIONS */}
               <div className="flex flex-wrap gap-3">
-                <button className="h-12 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold flex items-center gap-2">
-                  <Download className="w-4 h-4" />
+                <button className="inline-flex h-12 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
+                  <Download className="h-4 w-4" />
                   Download Report
                 </button>
 
-                <button className="h-12 px-5 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-[#0f172a] flex items-center gap-2">
-                  <CreditCard className="w-4 h-4" />
+                <button className="inline-flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
+                  <CreditCard className="h-4 w-4" />
                   Withdraw Funds
                 </button>
               </div>
@@ -326,54 +390,44 @@ export default function AdvisorEarningsPage() {
           </section>
 
           {/* STATS */}
-          <section className="mt-7 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <IndianRupee className="w-6 h-6 text-violet-500" />
+          <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <AdvisorStatCard
+              icon={IndianRupee}
+              title={`₹${(
+                totalEarnings / 1000
+              ).toFixed(0)}K`}
+              subtitle="Total Earnings"
+              iconBg="bg-primary/10"
+              iconColor="text-primary"
+            />
 
-              <h3 className="mt-5 text-3xl font-bold tracking-tight text-[#0f172a]">
-                ₹2.4L
-              </h3>
+            <AdvisorStatCard
+              icon={CheckCircle2}
+              title={`₹${(
+                paidEarnings / 1000
+              ).toFixed(0)}K`}
+              subtitle="Paid Earnings"
+              iconBg="bg-emerald-100"
+              iconColor="text-emerald-600"
+            />
 
-              <p className="mt-2 text-sm text-gray-500">
-                Total Earnings
-              </p>
-            </div>
+            <AdvisorStatCard
+              icon={Clock3}
+              title={`₹${(
+                pendingEarnings / 1000
+              ).toFixed(0)}K`}
+              subtitle="Pending Payouts"
+              iconBg="bg-orange-100"
+              iconColor="text-orange-500"
+            />
 
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <CheckCircle2 className="w-6 h-6 text-emerald-500" />
-
-              <h3 className="mt-5 text-3xl font-bold tracking-tight text-[#0f172a]">
-                ₹1.8L
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                Paid Earnings
-              </p>
-            </div>
-
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <Clock3 className="w-6 h-6 text-orange-500" />
-
-              <h3 className="mt-5 text-3xl font-bold tracking-tight text-[#0f172a]">
-                ₹60K
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                Pending Payouts
-              </p>
-            </div>
-
-            <div className="rounded-[28px] border border-[#e8edf5] bg-white p-6">
-              <TrendingUp className="w-6 h-6 text-fuchsia-500" />
-
-              <h3 className="mt-5 text-3xl font-bold tracking-tight text-[#0f172a]">
-                +18%
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                Monthly Growth
-              </p>
-            </div>
+            <AdvisorStatCard
+              icon={TrendingUp}
+              title="+18%"
+              subtitle="Monthly Growth"
+              iconBg="bg-fuchsia-100"
+              iconColor="text-fuchsia-600"
+            />
           </section>
 
           {/* FILTERS */}
@@ -384,10 +438,10 @@ export default function AdvisorEarningsPage() {
                 onClick={() =>
                   setSelectedFilter(filter)
                 }
-                className={`h-11 px-5 rounded-2xl text-sm font-semibold transition ${
+                className={`h-11 rounded-2xl px-5 text-sm font-semibold transition ${
                   selectedFilter === filter
-                    ? "bg-violet-500 text-white"
-                    : "border border-[#e8edf5] bg-white text-gray-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border bg-card text-muted-foreground hover:bg-muted"
                 }`}
               >
                 {filter}
@@ -395,75 +449,84 @@ export default function AdvisorEarningsPage() {
             ))}
           </section>
 
-          {/* TABLE */}
+          {/* EARNINGS LIST */}
           <section className="mt-7 space-y-5">
-            {filteredEarnings.map((earning) => (
-              <div
-                key={earning.id}
-                className="rounded-[32px] border border-[#e8edf5] bg-white p-6"
-              >
-                <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
-                  {/* LEFT */}
-                  <div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="text-2xl font-bold tracking-tight text-[#0f172a]">
-                        {earning.startup}
-                      </h3>
+            {filteredEarnings.map(
+              (earning) => (
+                <div
+                  key={earning.id}
+                  className="rounded-[32px] border border-border bg-card p-6 shadow-sm"
+                >
+                  <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+                    {/* LEFT */}
+                    <div>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h3 className="text-2xl font-black tracking-tight text-foreground">
+                          {earning.startup}
+                        </h3>
 
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          earning.status === "Paid"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : "bg-orange-100 text-orange-700"
-                        }`}
-                      >
-                        {earning.status}
-                      </span>
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            earning.status ===
+                            "Paid"
+                              ? "bg-emerald-100 text-emerald-700"
+                              : "bg-orange-100 text-orange-700"
+                          }`}
+                        >
+                          {earning.status}
+                        </span>
+                      </div>
+
+                      <p className="mt-4 text-sm text-muted-foreground">
+                        {earning.session}
+                      </p>
+
+                      <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                        <span>
+                          {earning.date}
+                        </span>
+
+                        <span>•</span>
+
+                        <span>
+                          Advisor Mentorship
+                          Session
+                        </span>
+                      </div>
                     </div>
 
-                    <p className="mt-4 text-sm text-gray-500">
-                      {earning.session}
-                    </p>
+                    {/* RIGHT */}
+                    <div className="flex flex-col gap-4 xl:items-end">
+                      <h2 className="text-3xl font-black tracking-tight text-foreground">
+                        ₹
+                        {earning.amount.toLocaleString()}
+                      </h2>
 
-                    <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                      <span>{earning.date}</span>
+                      <div className="flex flex-wrap gap-3">
+                        <button className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
+                          Download Invoice
+                        </button>
 
-                      <span>•</span>
+                        <button className="inline-flex h-11 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
+                          View Details
 
-                      <span>
-                        Advisor Mentorship Session
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* RIGHT */}
-                  <div className="flex flex-col items-start xl:items-end gap-4">
-                    <h2 className="text-3xl font-bold tracking-tight text-[#0f172a]">
-                      {earning.amount}
-                    </h2>
-
-                    <div className="flex flex-wrap gap-3">
-                      <button className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition">
-                        Download Invoice
-                      </button>
-
-                      <button className="h-11 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold flex items-center gap-2">
-                        View Details
-                        <ArrowUpRight className="w-4 h-4" />
-                      </button>
+                          <ArrowUpRight className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
 
-            {filteredEarnings.length === 0 && (
-              <div className="rounded-[32px] border border-dashed border-[#dbe2ea] bg-white p-16 text-center">
-                <h3 className="text-2xl font-bold text-[#0f172a]">
+            {filteredEarnings.length ===
+              0 && (
+              <div className="rounded-[32px] border border-dashed border-border bg-card p-16 text-center">
+                <h3 className="text-2xl font-black text-foreground">
                   No earnings found
                 </h3>
 
-                <p className="mt-3 text-sm text-gray-500">
+                <p className="mt-3 text-sm text-muted-foreground">
                   Try changing filters.
                 </p>
               </div>

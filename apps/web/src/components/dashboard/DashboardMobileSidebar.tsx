@@ -35,7 +35,7 @@ export default function DashboardMobileSidebar({
 
       {/* SIDEBAR */}
       <div
-        className={`fixed left-0 top-0 z-[100] h-screen w-[290px] border-r border-border/60 bg-white shadow-2xl transition-transform duration-300 lg:hidden
+        className={`fixed left-0 top-0 z-[100] h-screen w-[290px] border-r border-border/60 bg-[#F7F4EE]/95 shadow-2xl transition-transform duration-300 lg:hidden
         
         ${
           mobileSidebar
@@ -47,7 +47,7 @@ export default function DashboardMobileSidebar({
         {/* TOP */}
         <div className="flex items-center justify-between border-b border-border/60 p-5">
 
-          <h2 className="text-xl font-black tracking-tight text-slate-800">
+          <h2 className="text-xl font-black tracking-tight text-[#16214A]">
             Workspace
           </h2>
 
@@ -55,7 +55,7 @@ export default function DashboardMobileSidebar({
             onClick={() =>
               setMobileSidebar(false)
             }
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 bg-white transition hover:bg-muted"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 bg-[#F7F4EE]/95 transition hover:bg-muted"
           >
             <X className="h-5 w-5" />
           </button>

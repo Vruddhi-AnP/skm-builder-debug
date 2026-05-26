@@ -2,9 +2,9 @@
 
 export default function ProfileStartupCard() {
   return (
-    <div className="rounded-[32px] border border-border/60 bg-white p-6 shadow-sm">
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
 
-      <h2 className="text-2xl font-black tracking-tight text-slate-800">
+      <h2 className="text-2xl font-black tracking-tight text-[#16214A]">
         Startup Progress
       </h2>
 
@@ -16,7 +16,7 @@ export default function ProfileStartupCard() {
             Startup Stage
           </p>
 
-          <h3 className="mt-2 text-2xl font-black text-slate-800">
+          <h3 className="mt-2 text-2xl font-black text-[#16214A]">
             Early Validation
           </h3>
 
@@ -28,7 +28,7 @@ export default function ProfileStartupCard() {
             Readiness Score
           </p>
 
-          <h3 className="mt-2 text-2xl font-black text-slate-800">
+          <h3 className="mt-2 text-2xl font-black text-[#16214A]">
             72%
           </h3>
 
@@ -44,7 +44,7 @@ export default function ProfileStartupCard() {
             Completed Modules
           </p>
 
-          <h3 className="mt-2 text-2xl font-black text-slate-800">
+          <h3 className="mt-2 text-2xl font-black text-[#16214A]">
             5 / 7
           </h3>
 
