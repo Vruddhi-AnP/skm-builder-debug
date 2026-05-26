@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Check } from "lucide-react";
-import { ReactNode } from "react";
+import { Check, ShieldCheck } from "lucide-react";
+import { ReactNode } from "react"
+import Image from "next/image";;
 
 interface Step {
   title: string;
@@ -37,14 +38,24 @@ export default function OnboardingLayout({
             href="/"
             className="flex items-center gap-4"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-lg font-black text-white shadow-sm">
-              S
-            </div>
+           {/* LOGO */}
+        <div className="mb-10 flex justify-center">
 
-            <div>
-              <h2 className="text-lg font-black tracking-tight text-[#16214A]">
-                Startup Ka Mall
-              </h2>
+          <Link
+            href="/"
+            className="transition hover:scale-[1.02]"
+          >
+
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={220}
+              height={70}
+              priority
+              className="h-auto w-[190px] object-contain sm:w-[220px]"
+            />
+
+          </Link>
 
               <p className="text-sm text-slate-500">
                 Founder Ecosystem
@@ -69,9 +80,21 @@ export default function OnboardingLayout({
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               {/* LEFT */}
               <div>
-                <div className="inline-flex rounded-full border border-primary/10 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
-                  Founder Onboarding
-                </div>
+                <div className="flex flex-wrap items-center gap-3">
+              {/* TAG */}
+              <div className="inline-flex rounded-full border border-primary/10 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+                Founder Onboarding
+              </div>
+
+              {/* SECURITY */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-10 py-1.5">
+                <ShieldCheck className="h-5 w-10 text-emerald-600" />
+
+                <p className="text-s font-medium text-emerald-800">
+                  Secure founder onboarding & encrypted workflows
+                </p>
+              </div>
+            </div>
 
                 <h1 className="mt-4 text-3xl font-black tracking-tight text-[#16214A] sm:text-4xl">
                   {title}
@@ -83,6 +106,7 @@ export default function OnboardingLayout({
               </div>
 
               {/* STEP STATUS */}
+
               <div className="rounded-2xl border border-border/60 bg-[#f8fbff] px-5 py-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   Current Step

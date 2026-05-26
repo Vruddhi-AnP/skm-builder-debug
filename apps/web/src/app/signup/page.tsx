@@ -8,6 +8,7 @@ import AuthCard from "@/components/layout/AuthCard";
 import { signupUser } from "@/services/auth.service";
 
 import type { SignupPayload } from "@/types/auth";
+import { ShieldCheck } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -226,6 +227,17 @@ export default function SignupPage() {
                 ? "Creating Account..."
                 : "Create Account"}
             </button>
+
+                <div className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3">
+  <div className="flex items-start gap-3">
+    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-700" />
+
+    <p className="text-xs leading-6 text-cyan-900">
+      Startup Ka Mall securely protects founder information, startup workflows and platform activity through encrypted systems and controlled access infrastructure.
+    </p>
+  </div>
+</div>
+
           </form>
         </AuthCard>
       </div>

@@ -1,10 +1,14 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 
 import {
   ArrowRight,
   Check,
+  ShieldCheck,
   Sparkles,
   Users2,
   WalletCards,
@@ -39,7 +43,36 @@ export default function AdvisorSuccessPage() {
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
 
-      <div className="mx-auto max-w-4xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
+      <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
+
+        {/* TOP BAR */}
+        <div className="mb-10 flex items-center justify-between">
+
+          <Link
+            href="/"
+            className="flex items-center gap-4"
+          >
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={190}
+              height={60}
+              priority
+              className="h-auto w-[170px] object-contain sm:w-[190px]"
+            />
+
+            <div>
+              <p className="text-sm text-slate-500">
+                Startup Ecosystem
+              </p>
+            </div>
+          </Link>
+
+          <div className="hidden items-center gap-3 rounded-full border border-primary/10 bg-primary/5 px-5 py-2 text-sm font-semibold text-primary sm:flex">
+            Step 5 of 5
+          </div>
+
+        </div>
 
         {/* SUCCESS ICON */}
         <div className="flex justify-center">
@@ -56,11 +89,23 @@ export default function AdvisorSuccessPage() {
           </div>
         </div>
 
-        {/* BADGE */}
-        <div className="mt-8 flex justify-center">
+        {/* BADGES */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
 
+          {/* SUCCESS */}
           <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
             Advisor Onboarding Completed
+          </div>
+
+          {/* SECURITY */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2">
+
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+
+            <p className="text-xs font-medium text-emerald-800">
+              Secure advisor ecosystem & protected workflows
+            </p>
+
           </div>
 
         </div>
@@ -77,9 +122,7 @@ export default function AdvisorSuccessPage() {
           </h2>
 
           <p className="mx-auto mt-8 max-w-2xl text-base leading-8 text-muted-foreground">
-            Your advisor profile has been successfully created. You can
-            now connect with startup founders, provide mentorship and
-            contribute to startup growth across the platform.
+            Your advisor profile has been successfully created. You can now connect with startup founders, provide mentorship and contribute to startup growth across the platform.
           </p>
 
         </div>

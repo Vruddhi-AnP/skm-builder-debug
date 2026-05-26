@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import Link from "next/link";
+import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -9,6 +12,7 @@ import {
   ArrowRight,
   BadgeCheck,
   BriefcaseBusiness,
+  ShieldCheck,
   Sparkles,
   Target,
 } from "lucide-react";
@@ -61,7 +65,34 @@ export default function AdvisorExpertisePage() {
 
       <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
 
-        {/* TOP */}
+        {/* TOP BAR */}
+        <div className="mb-10 flex items-center justify-between">
+          <Link
+            href="/"
+            className="flex items-center gap-4"
+          >
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={190}
+              height={60}
+              priority
+              className="h-auto w-[170px] object-contain sm:w-[190px]"
+            />
+
+            <div>
+              <p className="text-sm text-slate-500">
+                Startup Ecosystem
+              </p>
+            </div>
+          </Link>
+
+          <div className="hidden items-center gap-3 rounded-full border border-primary/10 bg-primary/5 px-5 py-2 text-sm font-semibold text-primary sm:flex">
+            Step 2 of 5
+          </div>
+        </div>
+
+        {/* HERO */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
 
           {/* LEFT */}
@@ -76,10 +107,7 @@ export default function AdvisorExpertisePage() {
             </h1>
 
             <p className="mt-5 text-base leading-8 text-muted-foreground">
-              Showcase your advisory strengths,
-              startup experience and mentorship
-              focus areas to help founders
-              discover the right guidance.
+              Showcase your advisory strengths, startup experience and mentorship focus areas to help founders discover the right guidance.
             </p>
 
             {/* TAGS */}
@@ -97,30 +125,43 @@ export default function AdvisorExpertisePage() {
           </div>
 
           {/* RIGHT */}
-          <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+          <div>
 
-            <div className="flex items-center justify-between">
+            {/* SECURITY */}
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-6 py-2">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
 
-              <span className="text-sm font-semibold text-muted-foreground">
-                Progress
-              </span>
-
-              <span className="text-sm font-bold text-primary">
-                Step 2/5
-              </span>
-
+              <p className="text-xs font-medium text-emerald-800">
+                Secure advisor onboarding & protected ecosystem workflows
+              </p>
             </div>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+            {/* STEP */}
+            <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
 
-              <div className="h-full w-2/5 rounded-full bg-primary" />
+              <div className="flex items-center justify-between">
+
+                <span className="text-sm font-semibold text-muted-foreground">
+                  Progress
+                </span>
+
+                <span className="text-sm font-bold text-primary">
+                  Step 2/5
+                </span>
+
+              </div>
+
+              <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+
+                <div className="h-full w-2/5 rounded-full bg-primary" />
+
+              </div>
+
+              <p className="mt-5 text-sm leading-6 text-muted-foreground">
+                Expertise setup in progress
+              </p>
 
             </div>
-
-            <p className="mt-5 text-sm leading-6 text-muted-foreground">
-              Expertise setup in progress
-            </p>
-
           </div>
         </div>
 
@@ -134,9 +175,7 @@ export default function AdvisorExpertisePage() {
             </h2>
 
             <p className="mt-3 text-base text-muted-foreground">
-              Share your specialization,
-              industries and mentorship
-              capabilities
+              Share your specialization, industries and mentorship capabilities
             </p>
 
           </div>

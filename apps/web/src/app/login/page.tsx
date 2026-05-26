@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import AuthCard from "@/components/layout/AuthCard";
 import { loginUser } from "@/services/auth.service";
+import { ShieldCheck } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -177,6 +178,17 @@ export default function LoginPage() {
                 ? "Logging In..."
                 : "Login"}
             </button>
+            
+                <div className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
+  <div className="flex items-start gap-3">
+    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+
+    <p className="text-xs leading-6 text-emerald-800">
+      Your account credentials and founder activity are securely protected through encrypted authentication and privacy-first platform systems.
+    </p>
+  </div>
+</div>
+
           </form>
         </AuthCard>
       </div>

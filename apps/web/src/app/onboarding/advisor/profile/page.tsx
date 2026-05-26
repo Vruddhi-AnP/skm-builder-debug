@@ -4,6 +4,10 @@ import { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
+import Link from "next/link";
+
+import Image from "next/image";
+
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -11,6 +15,7 @@ import {
   LinkIcon,
   Mail,
   Phone,
+  ShieldCheck,
   User2,
 } from "lucide-react";
 
@@ -62,73 +67,109 @@ export default function AdvisorProfilePage() {
 
       <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
 
-        {/* TOP */}
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+        {/* TOP BAR */}
+<div className="mb-10 flex items-center justify-between">
 
-          {/* LEFT */}
-          <div className="max-w-3xl">
+  <Link
+    href="/"
+    className="flex items-center gap-4"
+  >
+    <Image
+      src="/logo.png"
+      alt="Startup Ka Mall"
+      width={190}
+      height={60}
+      priority
+      className="h-auto w-[170px] object-contain sm:w-[190px]"
+    />
 
-            <div className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
-              Advisor Onboarding
-            </div>
+    <div>
+      <p className="text-sm text-slate-500">
+        Startup Ecosystem
+      </p>
+    </div>
+  </Link>
 
-            <h1 className="mt-5 text-4xl font-black tracking-tight text-foreground sm:text-5xl">
-              Setup Your Advisor
-              Profile
-            </h1>
+  <div className="hidden items-center gap-3 rounded-full border border-primary/10 bg-primary/5 px-5 py-2 text-sm font-semibold text-primary sm:flex">
+    Step 1 of 5
+  </div>
 
-            <p className="mt-5 text-base leading-8 text-muted-foreground">
-              Build your advisor
-              identity and showcase
-              your expertise to help
-              founders grow,
-              execute and scale
-              their startups.
-            </p>
+</div>
 
-            {/* TAGS */}
-            <div className="mt-8 flex flex-wrap gap-3">
+{/* TOP */}
+<div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
 
-              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
-                Advisor Identity
-              </div>
+  {/* LEFT */}
+  <div className="max-w-3xl">
 
-              <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
-                Professional
-                Background
-              </div>
+    <div className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+      Advisor Onboarding
+    </div>
 
-            </div>
-          </div>
+    <h1 className="mt-5 text-4xl font-black tracking-tight text-foreground sm:text-5xl">
+      Setup Your Advisor Profile
+    </h1>
 
-          {/* RIGHT */}
-          <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+    <p className="mt-5 text-base leading-8 text-muted-foreground">
+      Build your advisor identity and showcase your expertise to help founders grow, execute and scale their startups.
+    </p>
 
-            <div className="flex items-center justify-between">
+    {/* TAGS */}
+    <div className="mt-8 flex flex-wrap gap-3">
 
-              <span className="text-sm font-semibold text-muted-foreground">
-                Progress
-              </span>
+      <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
+        Advisor Identity
+      </div>
 
-              <span className="text-sm font-bold text-primary">
-                Step 1/5
-              </span>
+      <div className="rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-sm font-semibold text-primary">
+        Professional Background
+      </div>
 
-            </div>
+    </div>
+  </div>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+  {/* RIGHT */}
+  <div>
 
-              <div className="h-full w-1/5 rounded-full bg-primary" />
+    {/* SECURITY */}
+    <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-6 py-2">
 
-            </div>
+      <ShieldCheck className="h-4 w-4 text-emerald-600" />
 
-            <p className="mt-5 text-sm leading-6 text-muted-foreground">
-              Advisor profile
-              setup in progress
-            </p>
+      <p className="text-xs font-medium text-emerald-800">
+        Secure advisor onboarding & protected ecosystem workflows
+      </p>
 
-          </div>
-        </div>
+    </div>
+
+    {/* STEP */}
+    <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+
+      <div className="flex items-center justify-between">
+
+        <span className="text-sm font-semibold text-muted-foreground">
+          Progress
+        </span>
+
+        <span className="text-sm font-bold text-primary">
+          Step 1/5
+        </span>
+
+      </div>
+
+      <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+
+        <div className="h-full w-1/5 rounded-full bg-primary" />
+
+      </div>
+
+      <p className="mt-5 text-sm leading-6 text-muted-foreground">
+        Advisor profile setup in progress
+      </p>
+
+    </div>
+  </div>
+</div>
 
         {/* FORM */}
         <div className="mt-14">

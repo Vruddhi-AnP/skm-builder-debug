@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import Link from "next/link";
+import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -11,6 +14,7 @@ import {
   Clock3,
   Globe2,
   Languages,
+  ShieldCheck,
   Video,
 } from "lucide-react";
 
@@ -61,7 +65,34 @@ export default function AdvisorAvailabilityPage() {
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
 
-        {/* TOP */}
+        {/* TOP BAR */}
+        <div className="mb-10 flex items-center justify-between">
+          <Link
+            href="/"
+            className="flex items-center gap-4"
+          >
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={190}
+              height={60}
+              priority
+              className="h-auto w-[170px] object-contain sm:w-[190px]"
+            />
+
+            <div>
+              <p className="text-sm text-slate-500">
+                Startup Ecosystem
+              </p>
+            </div>
+          </Link>
+
+          <div className="hidden items-center gap-3 rounded-full border border-primary/10 bg-primary/5 px-5 py-2 text-sm font-semibold text-primary sm:flex">
+            Step 3 of 5
+          </div>
+        </div>
+
+        {/* HERO */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
 
           {/* LEFT */}
@@ -76,10 +107,7 @@ export default function AdvisorAvailabilityPage() {
             </h1>
 
             <p className="mt-5 text-base leading-8 text-muted-foreground">
-              Configure your mentorship
-              schedule, preferred session
-              formats and communication
-              preferences for founders.
+              Configure your mentorship schedule, preferred session formats and communication preferences for founders.
             </p>
 
             {/* TAGS */}
@@ -97,31 +125,42 @@ export default function AdvisorAvailabilityPage() {
           </div>
 
           {/* RIGHT */}
-          <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+          <div>
+            {/* SECURITY */}
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-6 py-2">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
 
-            <div className="flex items-center justify-between">
-
-              <span className="text-sm font-semibold text-muted-foreground">
-                Progress
-              </span>
-
-              <span className="text-sm font-bold text-primary">
-                Step 3/5
-              </span>
-
+              <p className="text-xs font-medium text-emerald-800">
+                Secure advisor onboarding & protected ecosystem workflows
+              </p>
             </div>
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+            {/* STEP */}
+            <div className="w-full max-w-sm rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
 
-              <div className="h-full w-3/5 rounded-full bg-primary" />
+              <div className="flex items-center justify-between">
+
+                <span className="text-sm font-semibold text-muted-foreground">
+                  Progress
+                </span>
+
+                <span className="text-sm font-bold text-primary">
+                  Step 3/5
+                </span>
+
+              </div>
+
+              <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+
+                <div className="h-full w-3/5 rounded-full bg-primary" />
+
+              </div>
+
+              <p className="mt-5 text-sm leading-6 text-muted-foreground">
+                Availability setup in progress
+              </p>
 
             </div>
-
-            <p className="mt-5 text-sm leading-6 text-muted-foreground">
-              Availability setup in
-              progress
-            </p>
-
           </div>
         </div>
 
@@ -135,9 +174,7 @@ export default function AdvisorAvailabilityPage() {
             </h2>
 
             <p className="mt-3 text-base text-muted-foreground">
-              Share your schedule
-              preferences and session
-              setup
+              Share your schedule preferences and session setup
             </p>
 
           </div>
@@ -357,8 +394,7 @@ export default function AdvisorAvailabilityPage() {
             <div className="md:col-span-2">
 
               <label className="mb-3 block text-sm font-semibold text-foreground">
-                Founder Engagement
-                Preferences
+                Founder Engagement Preferences
               </label>
 
               <textarea

@@ -14,6 +14,7 @@ import {
   Building2,
   LinkIcon,
   MapPin,
+  ShieldCheck,
   Sparkles,
   User,
 } from "lucide-react";
@@ -73,6 +74,15 @@ export default function InvestorProfilePage() {
           </Link>
 
         </div>
+
+        {/* SECURITY */}
+<div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-10 py-1.5">
+  <ShieldCheck className="h-5 w-8 text-emerald-600" />
+
+  <p className="text-s font-medium text-emerald-800">
+    Secure advisor onboarding & protected ecosystem workflows
+  </p>
+</div>
 
         {/* TOP */}
         <div className="mb-8">
