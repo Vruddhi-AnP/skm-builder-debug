@@ -1,0 +1,67 @@
+@media print {
+  html,
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  nav,
+  aside,
+  header,
+  button,
+  .print-hide,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .print-report {
+    width: 100%;
+    background: white !important;
+  }
+
+  .print-page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 0 auto;
+    background: white !important;
+
+    page-break-after: always;
+    break-after: page;
+
+    overflow: hidden;
+    position: relative;
+  }
+
+  .print-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .print-card,
+  .print-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-footer {
+    position: absolute;
+    bottom: 10mm;
+    left: 20mm;
+    right: 20mm;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 11px;
+    color: #64748b;
+
+    border-top: 1px solid #e2e8f0;
+
+    padding-top: 10px;
+  }
+}

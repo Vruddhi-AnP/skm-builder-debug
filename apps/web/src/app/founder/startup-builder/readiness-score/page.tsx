@@ -3,6 +3,10 @@
 import { useRouter } from "next/navigation";
 
 import {
+  exportReadinessReport,
+} from "@/services/export.service";
+
+import {
   AlertTriangle,
   ArrowRight,
   BarChart3,
@@ -65,9 +69,9 @@ export default function ReadinessScorePage() {
   const router = useRouter();
 
   return (
-    <div className="space-y-8">
+    <div className="print-report space-y-8">
       {/* HERO */}
-      <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
+      <section className="print-page print-card overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
           {/* LEFT */}
           <div>
@@ -125,10 +129,21 @@ export default function ReadinessScorePage() {
             </p>
           </div>
         </div>
+
+      <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
       </section>
 
       {/* METRICS */}
-      <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
+      <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
         <div className="mb-8">
           <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
             Readiness Breakdown
@@ -196,12 +211,23 @@ export default function ReadinessScorePage() {
             </div>
           ))}
         </div>
+
+      <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
       </section>
 
       {/* STRENGTHS + IMPROVEMENTS */}
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-6">
         {/* STRENGTHS */}
-        <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+        <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
             <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">
               <CheckCircle2 className="h-5 w-5" />
@@ -232,10 +258,21 @@ export default function ReadinessScorePage() {
               </div>
             ))}
           </div>
+
+            <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
         </section>
 
         {/* IMPROVEMENTS */}
-        <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+        <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
             <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
               <AlertTriangle className="h-5 w-5" />
@@ -266,11 +303,22 @@ export default function ReadinessScorePage() {
               </div>
             ))}
           </div>
+
+                       <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
         </section>
       </div>
 
       {/* INVESTOR ANALYSIS */}
-      <section className="rounded-[32px] border border-primary/10 bg-gradient-to-r from-primary/5 to-cyan-50 p-8">
+      <section className="print-page print-card rounded-[32px] border border-primary/10 bg-gradient-to-r from-primary/5 to-cyan-50 p-8">
         <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
           {/* LEFT */}
           <div>
@@ -331,10 +379,21 @@ export default function ReadinessScorePage() {
             </div>
           </div>
         </div>
+
+            <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
       </section>
 
       {/* FINAL METRICS */}
-      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <section className="print-page grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         {[
           {
             title: "Founder Clarity",
@@ -390,12 +449,23 @@ export default function ReadinessScorePage() {
             </p>
           </div>
         ))}
+
+                          <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
       </section>
 
         {/* RECOMMENDED NEXT STEPS */}
-<section className="grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
+<section className="print-page grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
   {/* LEFT */}
-  <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
+  <div className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
     <div className="mb-8">
       <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
         Recommended Next Steps
@@ -480,6 +550,7 @@ export default function ReadinessScorePage() {
                   <GraduationCap className="h-3.5 w-3.5" />
                   Programs
                 </button>
+
               </div>
             </div>
           </div>
@@ -489,7 +560,7 @@ export default function ReadinessScorePage() {
   </div>
 
   {/* RIGHT */}
-  <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
+  <div className="print-card rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
     <h3 className="text-2xl font-black text-[#16214A]">
       Founder Status
     </h3>
@@ -525,21 +596,32 @@ export default function ReadinessScorePage() {
         </div>
       ))}
 
-      <button
-        onClick={() =>
-          router.push("/founder/dashboard")
-        }
-        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
+<button
+  onClick={() =>
+    router.push("/founder/dashboard")
+  }
+  className="print:hidden inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
       >
         Go To Dashboard
-        <ArrowUpRight className="h-4 w-4" />
+
       </button>
     </div>
   </div>
+
+                  <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
 </section>
 
       {/* FINAL CTA */}
-      <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-8 text-center">
+      <section className="print-page print-card rounded-[32px] border border-primary/10 bg-primary/5 p-8 text-center">
         <div className="mx-auto max-w-3xl">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-[#F7F4EE]/95 text-primary shadow-sm">
             <Target className="h-10 w-10" />
@@ -555,12 +637,26 @@ export default function ReadinessScorePage() {
             product, business and readiness insights.
           </p>
         </div>
+
+  <div className="report-footer">
+  <span>
+    Startup Ka Mall • Founder Report
+  </span>
+
+  <span>
+    Confidential Document
+  </span>
+</div>
+
       </section>
 
       {/* FOOTER */}
-      <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="print:hidden flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* EXPORT */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button
+          onClick={exportReadinessReport}
+          className="print:hidden inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+        >
           <Download className="h-4 w-4" />
 
           Export Readiness Report
@@ -571,7 +667,7 @@ export default function ReadinessScorePage() {
           onClick={() =>
             router.push("/founder/dashboard")
           }
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+          className="print:inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
         >
           Complete Startup Builder
 
