@@ -437,7 +437,6 @@ export default function AdvisorAvailabilityPage() {
             >
               Continue to Pricing
 
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
 
           </div>

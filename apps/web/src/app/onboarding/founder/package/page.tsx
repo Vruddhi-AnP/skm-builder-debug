@@ -533,8 +533,7 @@ export default function PackageSelectionPage() {
             className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
           >
             Complete Onboarding
-
-            <ArrowRight className="h-4 w-4" />
+            
           </button>
         </div>
       </div>

@@ -413,10 +413,7 @@ export default function AdvisorProfilePage() {
               }
               className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
-              Continue to
-              Expertise
-
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              Continue to Expertise
 
             </button>
 

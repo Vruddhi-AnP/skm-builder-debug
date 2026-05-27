@@ -399,7 +399,6 @@ export default function AdvisorExpertisePage() {
             >
               Continue to Availability
 
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
 
           </div>

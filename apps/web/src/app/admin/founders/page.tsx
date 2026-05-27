@@ -462,7 +462,6 @@ export default function AdminFoundersPage() {
 
                     <button className="h-11 px-5 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0b173f] transition flex items-center gap-2">
                       View Profile
-                      <ArrowUpRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>

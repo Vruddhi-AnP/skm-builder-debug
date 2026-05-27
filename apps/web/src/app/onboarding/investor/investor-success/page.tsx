@@ -5,9 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 import {
+  ArrowLeft,
   ArrowRight,
   CheckCircle2,
   Rocket,
+  ShieldCheck,
   Sparkles,
   TrendingUp,
   Users,
@@ -15,18 +17,19 @@ import {
 
 export default function InvestorSuccessPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+    <div className="min-h-screen bg-[#f4f1ea] px-4 py-10">
+      <div className="mx-auto max-w-6xl">
 
-      <div className="w-full max-w-4xl">
+        {/* MAIN SHELL */}
+        <div className="overflow-hidden rounded-[40px] border border-[#ddd7cb] bg-[#f8f6f1] shadow-sm">
 
-        <div className="rounded-[40px] border border-border bg-card p-8 shadow-sm lg:p-12">
+          {/* HEADER */}
+          <div className="flex flex-col gap-6 border-b border-[#e1dbcf] px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
 
-          {/* LOGO */}
-          <div className="mb-10 flex justify-center">
-
+            {/* LOGO */}
             <Link
               href="/"
-              className="transition hover:scale-[1.02]"
+              className="transition hover:opacity-90"
             >
 
               <Image
@@ -35,151 +38,264 @@ export default function InvestorSuccessPage() {
                 width={220}
                 height={70}
                 priority
-                className="h-auto w-[190px] object-contain sm:w-[220px]"
+                className="h-auto w-[180px] object-contain sm:w-[220px]"
               />
 
             </Link>
 
-          </div>
+            {/* STEP */}
+            <div className="inline-flex h-12 items-center rounded-full border border-[#d9d3c8] bg-[#f1eee7] px-6">
 
-          {/* ICON */}
-          <div className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-primary text-primary-foreground shadow-lg">
-
-            <CheckCircle2 className="h-10 w-10" />
-
-          </div>
-
-          {/* CONTENT */}
-          <div className="mt-8">
-
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2">
-
-              <Sparkles className="h-4 w-4 text-primary" />
-
-              <span className="text-sm font-semibold text-primary">
-                Investor Profile Completed
+              <span className="text-sm font-semibold text-[#13235b]">
+                Setup Completed
               </span>
 
             </div>
 
-            <h1 className="mt-6 text-4xl font-black tracking-tight text-foreground leading-[1.1] lg:text-5xl">
-              Welcome To Startup Ka Mall
-            </h1>
-
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              Your investor onboarding is complete. You
-              can now discover curated startup investment
-              opportunities, connect with founders and
-              explore ecosystem growth opportunities.
-            </p>
-
           </div>
 
-          {/* STATS */}
-          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          {/* CONTENT */}
+          <div className="px-6 py-10 lg:px-10 lg:py-12">
 
-            {/* STARTUPS */}
-            <div className="rounded-[28px] border border-border bg-background p-6">
+            {/* TOP */}
+            <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+              {/* LEFT */}
+              <div className="max-w-3xl">
 
-                <Rocket className="h-6 w-6 text-primary" />
+                {/* SUCCESS ICON */}
+                <div className="flex h-24 w-24 items-center justify-center rounded-[32px] bg-[#13235b] shadow-lg shadow-[#13235b]/20">
+
+                  <CheckCircle2 className="h-12 w-12 text-white" />
+
+                </div>
+
+                {/* BADGE */}
+                <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-[#c8cedd] bg-[#eceef5] px-5 py-3">
+
+                  <Sparkles className="h-4 w-4 text-[#13235b]" />
+
+                  <span className="text-sm font-semibold text-[#13235b]">
+                    Investor Profile Completed
+                  </span>
+
+                </div>
+
+                {/* TITLE */}
+                <h1 className="mt-7 text-4xl font-black leading-[1.05] tracking-tight text-[#13235b] lg:text-6xl">
+                  Welcome To
+                  <br />
+                  Startup Ka Mall
+                </h1>
+
+                {/* DESC */}
+                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#676c79]">
+                  Your investor onboarding is now
+                  complete. Start discovering curated
+                  startup investment opportunities,
+                  connect with founders and access
+                  ecosystem-driven growth programs.
+                </p>
 
               </div>
 
-              <h3 className="mt-5 text-3xl font-black text-foreground">
-                500+
-              </h3>
+              {/* RIGHT PANEL */}
+              <div className="w-full max-w-[340px] space-y-5">
 
-              <p className="mt-2 text-sm text-muted-foreground">
-                Verified Startups
-              </p>
+                {/* SECURITY */}
+                <div className="rounded-[28px] border border-[#cbe7d7] bg-[#ddf3e5] p-5">
 
-            </div>
+                  <div className="flex items-start gap-3">
 
-            {/* INVESTORS */}
-            <div className="rounded-[28px] border border-border bg-background p-6">
+                    <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/70">
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+                      <ShieldCheck className="h-5 w-5 text-[#12905a]" />
 
-                <Users className="h-6 w-6 text-primary" />
+                    </div>
+
+                    <div>
+
+                      <p className="text-xs font-bold uppercase tracking-wide text-[#12905a]">
+                        Verified Access
+                      </p>
+
+                      <p className="mt-2 text-sm leading-relaxed text-[#146b4b]">
+                        Your investor profile is now
+                        connected with the Startup Ka
+                        Mall ecosystem and founder
+                        network.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {/* SUCCESS CARD */}
+                <div className="rounded-[32px] border border-[#d8d2c7] bg-[#ece8e2] p-6">
+
+                  <div className="flex items-center justify-between">
+
+                    <div>
+
+                      <p className="text-[11px] uppercase tracking-wider text-[#6b6558]">
+                        Investor Access
+                      </p>
+
+                      <h3 className="mt-2 text-4xl font-black text-[#13235b]">
+                        100%
+                      </h3>
+
+                    </div>
+
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#13235b] text-white">
+                      <Rocket className="h-8 w-8" />
+                    </div>
+
+                  </div>
+
+                  <div className="mt-6 h-3 overflow-hidden rounded-full bg-[#ddd6cb]">
+
+                    <div className="h-full w-full rounded-full bg-[#13235b]" />
+
+                  </div>
+
+                  <p className="mt-5 text-sm leading-relaxed text-[#6b6558]">
+                    Investor onboarding completed
+                    successfully with ecosystem-ready
+                    access enabled.
+                  </p>
+
+                </div>
 
               </div>
 
-              <h3 className="mt-5 text-3xl font-black text-foreground">
-                120+
-              </h3>
-
-              <p className="mt-2 text-sm text-muted-foreground">
-                Active Investors
-              </p>
-
             </div>
 
-            {/* FUNDING */}
-            <div className="rounded-[28px] border border-border bg-background p-6">
+            {/* STATS */}
+            <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+              {/* STARTUPS */}
+              <div className="rounded-[32px] border border-[#ddd7cb] bg-[#f6f3ed] p-6">
 
-                <TrendingUp className="h-6 w-6 text-primary" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#eceef5]">
+
+                  <Rocket className="h-7 w-7 text-[#13235b]" />
+
+                </div>
+
+                <h3 className="mt-6 text-4xl font-black text-[#13235b]">
+                  500+
+                </h3>
+
+                <p className="mt-2 text-sm text-[#6b7280]">
+                  Verified Startups
+                </p>
 
               </div>
 
-              <h3 className="mt-5 text-3xl font-black text-foreground">
-                ₹50Cr+
-              </h3>
+              {/* INVESTORS */}
+              <div className="rounded-[32px] border border-[#ddd7cb] bg-[#f6f3ed] p-6">
 
-              <p className="mt-2 text-sm text-muted-foreground">
-                Ecosystem Funding
-              </p>
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#eceef5]">
+
+                  <Users className="h-7 w-7 text-[#13235b]" />
+
+                </div>
+
+                <h3 className="mt-6 text-4xl font-black text-[#13235b]">
+                  120+
+                </h3>
+
+                <p className="mt-2 text-sm text-[#6b7280]">
+                  Active Investors
+                </p>
+
+              </div>
+
+              {/* FUNDING */}
+              <div className="rounded-[32px] border border-[#ddd7cb] bg-[#f6f3ed] p-6">
+
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#eceef5]">
+
+                  <TrendingUp className="h-7 w-7 text-[#13235b]" />
+
+                </div>
+
+                <h3 className="mt-6 text-4xl font-black text-[#13235b]">
+                  ₹50Cr+
+                </h3>
+
+                <p className="mt-2 text-sm text-[#6b7280]">
+                  Ecosystem Funding
+                </p>
+
+              </div>
 
             </div>
 
-          </div>
+            {/* INFO CARD */}
+            <div className="mt-10 rounded-[32px] border border-[#c8cedd] bg-[#eceef5] p-6 lg:p-7">
 
-          {/* INFO CARD */}
-          <div className="mt-10 rounded-[28px] border border-primary/20 bg-primary/5 p-6">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
 
-            <h3 className="text-lg font-black text-foreground">
-              Investor Ecosystem Access
-            </h3>
+                <div className="max-w-3xl">
 
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">
-              Your investor profile and preferences will
-              now personalize startup discovery,
-              investment opportunities, founder matching
-              and ecosystem recommendations across the
-              platform.
-            </p>
+                  <h3 className="text-xl font-black text-[#13235b]">
+                    Investor Ecosystem Access
+                  </h3>
 
-          </div>
+                  <p className="mt-3 text-sm leading-7 text-[#5f6473]">
+                    Your investor profile and
+                    investment preferences will now
+                    personalize startup discovery,
+                    founder matching, ecosystem
+                    recommendations and investment
+                    opportunities across the platform.
+                  </p>
 
-          {/* ACTIONS */}
-          <div className="mt-10 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row">
+                </div>
 
-            {/* BACK */}
-            <Link
-              href="/onboarding/investor/investor-preferences"
-              className="inline-flex h-12 items-center justify-center rounded-2xl border border-border bg-background px-6 text-sm font-semibold text-foreground transition hover:bg-muted"
-            >
-              Back
-            </Link>
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f8f6f1] text-xl font-black text-[#13235b] shadow-sm">
+                  ✓
+                </div>
 
-            {/* DASHBOARD */}
-            <Link
-              href="/investor/dashboard"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-            >
+              </div>
 
-              Go To Dashboard
+            </div>
 
-              <ArrowRight className="h-4 w-4" />
+            {/* ACTIONS */}
+            <div className="mt-10 flex flex-col gap-4 border-t border-[#ddd7cb] pt-8 sm:flex-row sm:items-center sm:justify-between">
 
-            </Link>
+              {/* BACK */}
+              <Link
+                href="/onboarding/investor/investor-preferences"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#d7d2c7] bg-[#f1efe9] px-6 text-sm font-semibold text-[#13235b] transition hover:bg-[#ebe7de]"
+              >
+
+                <ArrowLeft className="h-4 w-4" />
+
+                Back
+
+              </Link>
+
+              {/* DASHBOARD */}
+              <Link
+                href="/investor/dashboard"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#13235b] px-6 text-sm font-semibold text-white transition hover:opacity-90"
+              >
+
+                Go To Dashboard
+
+              </Link>
+
+            </div>
 
           </div>
 
         </div>
+
       </div>
     </div>
   );

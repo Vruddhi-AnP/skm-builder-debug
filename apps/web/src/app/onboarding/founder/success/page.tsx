@@ -263,7 +263,6 @@ export default function FounderSuccessPage() {
             >
               Go To Founder Dashboard
 
-              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
