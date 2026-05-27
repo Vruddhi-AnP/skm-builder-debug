@@ -1,81 +1,20 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import { useState } from "react";
 
 import {
   Award,
-  BarChart3,
-  Bell,
-  Briefcase,
-  CalendarDays,
   Edit3,
-  FileText,
-  Flame,
-  FolderOpen,
   Globe,
-  LayoutDashboard,
   Mail,
   MapPin,
   Phone,
   ShieldCheck,
-  UserCheck,
-  Users,
-  Wallet,
-} from "lucide-react"
+} from "lucide-react";
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/admin/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Consultations",
-    href: "/admin/consultations",
-    icon: CalendarDays,
-  },
-  {
-    name: "Investor Interests",
-    href: "/admin/investor-interests",
-    icon: Wallet,
-  },
-  {
-    name: "Program Applications",
-    href: "/admin/program-applications",
-    icon: FileText,
-  },
-  {
-    name: "Founders",
-    href: "/admin/founders",
-    icon: Users,
-  },
-  {
-    name: "Advisors",
-    href: "/admin/advisors",
-    icon: UserCheck,
-  },
-  {
-    name: "Investors",
-    href: "/admin/investors",
-    icon: Flame,
-  },
-  {
-    name: "Programs",
-    href: "/admin/programs",
-    icon: BarChart3,
-  },
-  {
-    name: "Resources",
-    href: "/admin/resources",
-    icon: FolderOpen,
-  },
-  {
-    name: "Profile",
-    href: "/admin/profile",
-    icon: ShieldCheck,
-    active: true,
-  },
-]
+import AdminHeader from "@/components/admin/AdminHeader";
+import AdminSidebar from "@/components/admin/AdminSidebar";
+import AdminStatCard from "@/components/admin/AdminStatCard";
 
 const stats = [
   {
@@ -94,94 +33,63 @@ const stats = [
     title: "Resources Published",
     value: "84",
   },
-]
+];
 
 export default function AdminProfilePage() {
+  const [sidebarOpen, setSidebarOpen] =
+    useState(false);
+
   return (
-    <div className="min-h-screen bg-[#f5f7fb] flex">
-      {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-[#F7F4EE]/95 border-r border-[#e9eef5] flex-col">
-        {/* TOP */}
-        <div className="h-20 border-b border-[#edf1f7] px-6 flex items-center">
-          <div>
-            <h2 className="text-[26px] font-bold text-[#0f172a]">
-              Startup Ka Mall
-            </h2>
+    <div className="min-h-screen bg-[#F5F7FB] flex">
+      {/* MOBILE SIDEBAR */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          <AdminSidebar
+            mobile
+            onClose={() =>
+              setSidebarOpen(false)
+            }
+          />
 
-            <p className="text-xs text-gray-500 mt-2">
-              Admin Workspace
-            </p>
-          </div>
+          <div
+            className="flex-1 bg-black/20 backdrop-blur-sm"
+            onClick={() =>
+              setSidebarOpen(false)
+            }
+          />
         </div>
+      )}
 
-        {/* NAV */}
-        <div className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
-          {navigation.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`h-12 px-4 rounded-2xl flex items-center gap-3 transition ${
-                  item.active
-                    ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white"
-                    : "text-[#475569] hover:bg-[#f8fafc]"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-
-                <span className="font-semibold text-sm">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-      </aside>
+      {/* DESKTOP SIDEBAR */}
+      <AdminSidebar />
 
       {/* MAIN */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* HEADER */}
-        <header className="h-20 border-b border-[#edf1f7] bg-[#f5f7fb]/90 backdrop-blur-xl px-5 lg:px-8 flex items-center justify-between sticky top-0 z-30">
-          <div>
-            <h1 className="text-[28px] font-bold text-[#0f172a]">
-              Admin Profile
-            </h1>
-
-            <p className="text-sm text-gray-500 mt-1">
-              Manage administrator profile and platform access
-            </p>
-          </div>
-
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
-            <button className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center">
-              <Bell className="w-5 h-5 text-[#475569]" />
-            </button>
-
-            <div className="h-11 w-11 rounded-full bg-gradient-to-r from-sky-500 to-blue-500 flex items-center justify-center text-white font-bold">
-              A
-            </div>
-          </div>
-        </header>
+        <AdminHeader
+          title="Admin Profile"
+          subtitle="Manage administrator profile and platform access"
+          onMenuClick={() =>
+            setSidebarOpen(true)
+          }
+        />
 
         {/* CONTENT */}
         <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
-          {/* PROFILE CARD */}
-          <section className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6 lg:p-8">
-            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
+          {/* PROFILE HERO */}
+          <section className="rounded-[32px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 lg:p-8 shadow-sm">
+            <div className="flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-8">
               {/* LEFT */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                 {/* AVATAR */}
-                <div className="h-28 w-28 rounded-[32px] bg-gradient-to-r from-sky-500 to-blue-500 flex items-center justify-center text-white text-4xl font-bold shadow-lg shadow-sky-100">
+                <div className="h-28 w-28 rounded-[32px] bg-gradient-to-r from-sky-500 to-blue-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl shadow-sky-500/20 shrink-0">
                   A
                 </div>
 
                 {/* INFO */}
-                <div>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <h2 className="text-4xl font-bold text-[#0f172a]">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-[#0F172A]">
                       Admin Team
                     </h2>
 
@@ -190,32 +98,47 @@ export default function AdminProfilePage() {
                     </span>
                   </div>
 
-                  <p className="mt-3 text-[16px] text-[#64748b]">
-                    Platform Operations & Ecosystem Management
+                  <p className="mt-3 text-[16px] text-[#64748B] max-w-2xl leading-relaxed">
+                    Platform Operations &
+                    Ecosystem Management
                   </p>
 
-                  <div className="mt-5 flex flex-wrap gap-4 text-sm text-[#475569]">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      admin@startupkamall.com
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-sm text-[#475569]">
+                    <div className="flex items-center gap-2 rounded-2xl border border-[#E8EDF5] bg-white/70 px-4 py-3">
+                      <Mail className="w-4 h-4 text-sky-500 shrink-0" />
+
+                      <span className="truncate">
+                        admin@startupkamall.com
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4" />
-                      +91 98765 43210
+                    <div className="flex items-center gap-2 rounded-2xl border border-[#E8EDF5] bg-white/70 px-4 py-3">
+                      <Phone className="w-4 h-4 text-emerald-500 shrink-0" />
+
+                      <span>
+                        +91 98765 43210
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      Mumbai, India
+                    <div className="flex items-center gap-2 rounded-2xl border border-[#E8EDF5] bg-white/70 px-4 py-3">
+                      <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
+
+                      <span>
+                        Mumbai, India
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* BUTTON */}
-              <div>
-                <button className="h-12 px-6 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0b173f] transition flex items-center gap-2">
+              <div className="flex flex-wrap gap-3">
+                <button className="h-12 px-6 rounded-full border border-[#E8EDF5] bg-white text-sm font-semibold text-[#475569] hover:bg-[#F8FAFC] transition-all duration-200 flex items-center gap-2">
+                  <Globe className="w-4 h-4" />
+                  View Activity
+                </button>
+
+                <button className="h-12 px-6 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0B173F] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#071133]/20">
                   <Edit3 className="w-4 h-4" />
                   Edit Profile
                 </button>
@@ -226,75 +149,75 @@ export default function AdminProfilePage() {
           {/* STATS */}
           <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             {stats.map((item) => (
-              <div
+              <AdminStatCard
                 key={item.title}
-                className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5"
-              >
-                <p className="text-sm text-[#64748b]">
-                  {item.title}
-                </p>
-
-                <h3 className="mt-4 text-4xl font-bold text-[#0f172a]">
-                  {item.value}
-                </h3>
-              </div>
+                title={item.title}
+                value={item.value}
+                icon={Award}
+                iconColor="text-sky-500"
+              />
             ))}
           </section>
 
           {/* DETAILS */}
-          <section className="mt-7 grid grid-cols-1 xl:grid-cols-2 gap-5">
+          <section className="mt-7 grid grid-cols-1 2xl:grid-cols-2 gap-5">
             {/* ABOUT */}
-            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
+            <div className="rounded-[30px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-2xl bg-sky-100 flex items-center justify-center">
                   <ShieldCheck className="w-5 h-5 text-sky-600" />
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-bold text-[#0f172a]">
+                  <h3 className="text-2xl font-bold text-[#0F172A]">
                     About
                   </h3>
 
-                  <p className="text-sm text-[#64748b] mt-1">
+                  <p className="text-sm text-[#64748B] mt-1">
                     Administrative overview
                   </p>
                 </div>
               </div>
 
               <p className="mt-6 text-[15px] leading-relaxed text-[#475569]">
-                Responsible for managing the Startup Ka Mall ecosystem,
-                including founder onboarding, advisor coordination,
-                investor engagement, startup programs and platform
+                Responsible for
+                managing the Startup Ka
+                Mall ecosystem,
+                including founder
+                onboarding, advisor
+                coordination, investor
+                engagement, startup
+                programs and platform
                 operations.
               </p>
 
               <div className="mt-6 space-y-4">
-                <div className="flex items-center justify-between border-b border-[#edf1f7] pb-4">
-                  <span className="text-sm text-[#64748b]">
+                <div className="flex items-center justify-between border-b border-[#EDF1F7] pb-4 gap-5">
+                  <span className="text-sm text-[#64748B]">
                     Role
                   </span>
 
-                  <span className="font-semibold text-[#0f172a]">
+                  <span className="font-semibold text-[#0F172A] text-right">
                     Super Admin
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between border-b border-[#edf1f7] pb-4">
-                  <span className="text-sm text-[#64748b]">
+                <div className="flex items-center justify-between border-b border-[#EDF1F7] pb-4 gap-5">
+                  <span className="text-sm text-[#64748B]">
                     Access Level
                   </span>
 
-                  <span className="font-semibold text-[#0f172a]">
+                  <span className="font-semibold text-[#0F172A] text-right">
                     Full Platform Access
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#64748b]">
+                <div className="flex items-center justify-between gap-5">
+                  <span className="text-sm text-[#64748B]">
                     Joined
                   </span>
 
-                  <span className="font-semibold text-[#0f172a]">
+                  <span className="font-semibold text-[#0F172A] text-right">
                     January 2026
                   </span>
                 </div>
@@ -302,18 +225,18 @@ export default function AdminProfilePage() {
             </div>
 
             {/* PLATFORM ACCESS */}
-            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
+            <div className="rounded-[30px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-2xl bg-emerald-100 flex items-center justify-center">
                   <Award className="w-5 h-5 text-emerald-600" />
                 </div>
 
                 <div>
-                  <h3 className="text-2xl font-bold text-[#0f172a]">
+                  <h3 className="text-2xl font-bold text-[#0F172A]">
                     Platform Access
                   </h3>
 
-                  <p className="text-sm text-[#64748b] mt-1">
+                  <p className="text-sm text-[#64748B] mt-1">
                     Administrative permissions
                   </p>
                 </div>
@@ -330,18 +253,18 @@ export default function AdminProfilePage() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="flex items-center gap-3 rounded-2xl border border-[#edf1f7] px-4 py-4"
+                    className="flex items-center gap-3 rounded-2xl border border-[#EDF1F7] bg-white/70 px-4 py-4"
                   >
-                    <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-emerald-500 shrink-0" />
 
-                    <p className="text-sm font-medium text-[#0f172a]">
+                    <p className="text-sm font-medium text-[#0F172A]">
                       {item}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <button className="mt-6 h-12 w-full rounded-2xl bg-[#071133] text-white text-sm font-semibold hover:bg-[#0b173f] transition flex items-center justify-center gap-2">
+              <button className="mt-6 h-12 w-full rounded-2xl bg-[#071133] text-white text-sm font-semibold hover:bg-[#0B173F] transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-[#071133]/20">
                 View Admin Activity
                 <Globe className="w-4 h-4" />
               </button>
@@ -350,5 +273,5 @@ export default function AdminProfilePage() {
         </main>
       </div>
     </div>
-  )
+  );
 }

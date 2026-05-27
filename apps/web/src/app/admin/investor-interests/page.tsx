@@ -1,81 +1,22 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
-import Link from "next/link"
+import { useMemo, useState } from "react";
 
 import {
   ArrowUpRight,
-  BarChart3,
-  Bell,
-  Briefcase,
   Building2,
   Eye,
-  FileText,
   Flame,
-  FolderOpen,
-  LayoutDashboard,
-  Menu,
   Search,
-  ShieldCheck,
-  UserCheck,
+  TrendingUp,
   Users,
   Wallet,
-  X,
-} from "lucide-react"
+} from "lucide-react";
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/admin/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Consultations",
-    href: "/admin/consultations",
-    icon: Briefcase,
-  },
-  {
-    name: "Investor Interests",
-    href: "/admin/investor-interests",
-    icon: Wallet,
-    active: true,
-  },
-  {
-    name: "Program Applications",
-    href: "/admin/program-applications",
-    icon: FileText,
-  },
-  {
-    name: "Founders",
-    href: "/admin/founders",
-    icon: Users,
-  },
-  {
-    name: "Advisors",
-    href: "/admin/advisors",
-    icon: UserCheck,
-  },
-  {
-    name: "Investors",
-    href: "/admin/investors",
-    icon: Flame,
-  },
-  {
-    name: "Programs",
-    href: "/admin/programs",
-    icon: BarChart3,
-  },
-  {
-    name: "Resources",
-    href: "/admin/resources",
-    icon: FolderOpen,
-  },
-  {
-    name: "Profile",
-    href: "/admin/profile",
-    icon: ShieldCheck,
-  },
-]
+import AdminSidebar from "@/components/admin/AdminSidebar";
+import AdminHeader from "@/components/admin/AdminHeader";
+import AdminStatCard from "@/components/admin/AdminStatCard";
+import AdminEmptyState from "@/components/admin/AdminEmptyState";
 
 const interestsData = [
   {
@@ -108,108 +49,77 @@ const interestsData = [
     amount: "₹2Cr",
     status: "Connected",
   },
-]
+];
 
 export default function InvestorInterestsPage() {
   const [sidebarOpen, setSidebarOpen] =
-    useState(false)
+    useState(false);
 
   const [selectedFilter, setSelectedFilter] =
-    useState("All")
+    useState("All");
 
   const [searchQuery, setSearchQuery] =
-    useState("")
+    useState("");
 
   const filters = [
     "All",
     "Interested",
     "Under Review",
     "Connected",
-  ]
+  ];
 
   const filteredData = useMemo(() => {
-  return interestsData.filter((item) => {
-    const matchesFilter =
-      selectedFilter === "All" ||
-      item.status === selectedFilter
+    return interestsData.filter(
+      (item) => {
+        const matchesFilter =
+          selectedFilter === "All" ||
+          item.status ===
+            selectedFilter;
 
-    const matchesSearch =
-      item.investor
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      item.startup
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      item.founder
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      item.sector
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+        const matchesSearch =
+          item.investor
+            .toLowerCase()
+            .includes(
+              searchQuery.toLowerCase()
+            ) ||
+          item.startup
+            .toLowerCase()
+            .includes(
+              searchQuery.toLowerCase()
+            ) ||
+          item.founder
+            .toLowerCase()
+            .includes(
+              searchQuery.toLowerCase()
+            ) ||
+          item.sector
+            .toLowerCase()
+            .includes(
+              searchQuery.toLowerCase()
+            );
 
-    return matchesFilter && matchesSearch
-  })
-}, [selectedFilter, searchQuery])
+        return (
+          matchesFilter &&
+          matchesSearch
+        );
+      }
+    );
+  }, [selectedFilter, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb] flex">
+    <div className="min-h-screen bg-[#F5F7FB] flex">
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[280px] bg-[#F7F4EE]/95 border-r border-[#e9eef5] h-full flex flex-col">
-            {/* TOP */}
-            <div className="h-20 border-b border-[#edf1f7] px-5 flex items-center justify-between">
-              <div>
-                <h2 className="text-[24px] font-bold text-[#0f172a]">
-                  Startup Ka Mall
-                </h2>
-
-                <p className="text-xs text-gray-500 mt-1">
-                  Admin Workspace
-                </p>
-              </div>
-
-              <button
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                className="h-10 w-10 rounded-xl bg-[#f5f7fb] flex items-center justify-center"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* NAV */}
-            <div className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
-              {navigation.map((item) => {
-                const Icon = item.icon
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() =>
-                      setSidebarOpen(false)
-                    }
-                    className={`h-12 px-4 rounded-2xl flex items-center gap-3 transition ${
-                      item.active
-                        ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white"
-                        : "text-[#475569] hover:bg-[#f8fafc]"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-
-                    <span className="font-semibold text-sm">
-                      {item.name}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
+          <AdminSidebar
+            mobile
+            onClose={() =>
+              setSidebarOpen(false)
+            }
+          />
 
           <div
-            className="flex-1 bg-black/20"
+            className="flex-1 bg-black/20 backdrop-blur-sm"
             onClick={() =>
               setSidebarOpen(false)
             }
@@ -217,154 +127,78 @@ export default function InvestorInterestsPage() {
         </div>
       )}
 
-      {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-[#F7F4EE]/95 border-r border-[#e9eef5] flex-col">
-        {/* TOP */}
-        <div className="h-20 border-b border-[#edf1f7] px-6 flex items-center">
-          <div>
-            <h2 className="text-[26px] font-bold text-[#0f172a]">
-              Startup Ka Mall
-            </h2>
-
-            <p className="text-xs text-gray-500 mt-2">
-              Admin Workspace
-            </p>
-          </div>
-        </div>
-
-        {/* NAV */}
-        <div className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
-          {navigation.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`h-12 px-4 rounded-2xl flex items-center gap-3 transition ${
-                  item.active
-                    ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white"
-                    : "text-[#475569] hover:bg-[#f8fafc]"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-
-                <span className="font-semibold text-sm">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-      </aside>
+      {/* DESKTOP SIDEBAR */}
+      <AdminSidebar />
 
       {/* MAIN */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* HEADER */}
-        <header className="h-20 border-b border-[#edf1f7] bg-[#f5f7fb]/90 backdrop-blur-xl px-5 lg:px-8 flex items-center justify-between sticky top-0 z-30">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setSidebarOpen(true)
-              }
-              className="lg:hidden h-10 w-10 rounded-xl border border-[#e9eef5] bg-[#F7F4EE]/95 flex items-center justify-center"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-
-            <div>
-              <h1 className="text-[28px] font-bold text-[#0f172a]">
-                Investor Interests
-              </h1>
-
-              <p className="text-sm text-gray-500 mt-1">
-                Track startup investment interest activity
-              </p>
-            </div>
-          </div>
-
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
-            <button className="h-11 w-11 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center">
-              <Bell className="w-5 h-5 text-[#475569]" />
-            </button>
-
-            <Link
-              href="/admin/profile"
-              className="h-11 w-11 rounded-full bg-gradient-to-r from-sky-500 to-blue-500 flex items-center justify-center text-white font-bold"
-            >
-              A
-            </Link>
-          </div>
-        </header>
+        <AdminHeader
+          title="Investor Interests"
+          subtitle="Track startup investment interest activity"
+          onMenuClick={() =>
+            setSidebarOpen(true)
+          }
+        />
 
         {/* CONTENT */}
         <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
           {/* TOP */}
           <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
             <div>
-              <h2 className="text-[38px] font-bold text-[#0f172a]">
+              <h2 className="text-3xl lg:text-[38px] font-bold text-[#0F172A] leading-tight">
                 Investor Interest Pipeline
               </h2>
 
-              <p className="mt-2 text-[15px] text-[#64748b]">
-                Monitor startup-investor ecosystem engagement.
+              <p className="mt-2 text-[15px] text-[#64748B] max-w-2xl">
+                Monitor startup-investor
+                engagement, investment
+                opportunities, and funding
+                pipeline activities across
+                the ecosystem.
               </p>
             </div>
 
             {/* SEARCH */}
-            <div className="h-12 w-full xl:w-[280px] rounded-full border border-[#e2e8f0] bg-[#F7F4EE]/95 px-5 flex items-center gap-3">
-              <Search className="w-4 h-4 text-[#94a3b8]" />
+            <div className="h-12 w-full xl:w-[320px] rounded-full border border-[#E2E8F0] bg-[#F7F4EE]/95 px-5 flex items-center gap-3 shadow-sm">
+              <Search className="w-4 h-4 text-[#94A3B8]" />
 
               <input
                 type="text"
                 placeholder="Search interests..."
                 value={searchQuery}
                 onChange={(e) =>
-                  setSearchQuery(e.target.value)
+                  setSearchQuery(
+                    e.target.value
+                  )
                 }
-                className="flex-1 bg-transparent outline-none text-sm placeholder:text-[#94a3b8]"
+                className="flex-1 bg-transparent outline-none text-sm placeholder:text-[#94A3B8]"
               />
             </div>
           </div>
 
           {/* STATS */}
-          <section className="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
-              <Wallet className="w-6 h-6 text-emerald-500" />
+          <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            <AdminStatCard
+              title="Total Interests"
+              value="91"
+              icon={Wallet}
+              iconColor="text-emerald-500"
+            />
 
-              <h3 className="mt-5 text-4xl font-bold text-[#0f172a]">
-                91
-              </h3>
+            <AdminStatCard
+              title="Active Startups"
+              value="34"
+              icon={Building2}
+              iconColor="text-sky-500"
+            />
 
-              <p className="mt-1 text-sm text-[#64748b]">
-                Total Interests
-              </p>
-            </div>
-
-            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
-              <Building2 className="w-6 h-6 text-sky-500" />
-
-              <h3 className="mt-5 text-4xl font-bold text-[#0f172a]">
-                34
-              </h3>
-
-              <p className="mt-1 text-sm text-[#64748b]">
-                Active Startups
-              </p>
-            </div>
-
-            <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
-              <Flame className="w-6 h-6 text-orange-500" />
-
-              <h3 className="mt-5 text-4xl font-bold text-[#0f172a]">
-                18
-              </h3>
-
-              <p className="mt-1 text-sm text-[#64748b]">
-                Connected Deals
-              </p>
-            </div>
+            <AdminStatCard
+              title="Connected Deals"
+              value="18"
+              icon={TrendingUp}
+              iconColor="text-orange-500"
+            />
           </section>
 
           {/* FILTERS */}
@@ -373,12 +207,15 @@ export default function InvestorInterestsPage() {
               <button
                 key={filter}
                 onClick={() =>
-                  setSelectedFilter(filter)
+                  setSelectedFilter(
+                    filter
+                  )
                 }
-                className={`h-11 px-5 rounded-full text-sm font-semibold transition ${
-                  selectedFilter === filter
-                    ? "bg-[#071133] text-white"
-                    : "bg-[#F7F4EE]/95 border border-[#e8edf5] text-[#475569]"
+                className={`h-11 px-5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  selectedFilter ===
+                  filter
+                    ? "bg-[#071133] text-white shadow-lg shadow-[#071133]/20"
+                    : "bg-[#F7F4EE]/95 border border-[#E8EDF5] text-[#475569] hover:bg-white"
                 }`}
               >
                 {filter}
@@ -388,104 +225,113 @@ export default function InvestorInterestsPage() {
 
           {/* LIST */}
           <section className="mt-7 space-y-5">
-            {filteredData.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6"
-              >
-                <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
-                  {/* LEFT */}
-                  <div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="text-2xl font-bold text-[#0f172a]">
-                        {item.startup}
-                      </h3>
+            {filteredData.length ===
+            0 ? (
+              <AdminEmptyState
+                title="No Investor Interests Found"
+                description="No investor interests matched your current search or selected filters."
+              />
+            ) : (
+              filteredData.map((item) => (
+                <div
+                  key={item.id}
+                  className="rounded-[30px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <div className="flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-6">
+                    {/* LEFT */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h3 className="text-2xl font-bold text-[#0F172A]">
+                          {item.startup}
+                        </h3>
 
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          item.status === "Connected"
-                            ? "bg-emerald-100 text-emerald-700"
-                            : item.status ===
-                              "Under Review"
-                            ? "bg-orange-100 text-orange-700"
-                            : "bg-sky-100 text-sky-700"
-                        }`}
-                      >
-                        {item.status}
-                      </span>
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            item.status ===
+                            "Connected"
+                              ? "bg-emerald-100 text-emerald-700"
+                              : item.status ===
+                                "Under Review"
+                              ? "bg-orange-100 text-orange-700"
+                              : "bg-sky-100 text-sky-700"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+
+                      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+                        <div>
+                          <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                            Investor
+                          </p>
+
+                          <p className="mt-1 font-semibold text-[#0F172A]">
+                            {item.investor}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                            Founder
+                          </p>
+
+                          <p className="mt-1 font-semibold text-[#0F172A]">
+                            {item.founder}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                            Sector
+                          </p>
+
+                          <p className="mt-1 font-semibold text-[#0F172A]">
+                            {item.sector}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                            Stage
+                          </p>
+
+                          <p className="mt-1 font-semibold text-[#0F172A]">
+                            {item.stage}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                            Interest Amount
+                          </p>
+
+                          <p className="mt-1 font-semibold text-[#0F172A]">
+                            {item.amount}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-[#94a3b8]">
-                          Investor
-                        </p>
+                    {/* RIGHT */}
+                    <div className="flex flex-wrap gap-3">
+                      <button className="h-11 px-5 rounded-full border border-[#E8EDF5] bg-[#F7F4EE]/95 text-sm font-semibold text-[#475569] hover:bg-white transition-all duration-200 flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
+                        View Startup
+                      </button>
 
-                        <p className="mt-1 font-semibold text-[#0f172a]">
-                          {item.investor}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-[#94a3b8]">
-                          Founder
-                        </p>
-
-                        <p className="mt-1 font-semibold text-[#0f172a]">
-                          {item.founder}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-[#94a3b8]">
-                          Sector
-                        </p>
-
-                        <p className="mt-1 font-semibold text-[#0f172a]">
-                          {item.sector}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-[#94a3b8]">
-                          Stage
-                        </p>
-
-                        <p className="mt-1 font-semibold text-[#0f172a]">
-                          {item.stage}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-[#94a3b8]">
-                          Interest Amount
-                        </p>
-
-                        <p className="mt-1 font-semibold text-[#0f172a]">
-                          {item.amount}
-                        </p>
-                      </div>
+                      <button className="h-11 px-5 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0B173F] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#071133]/20">
+                        Open Details
+                        <ArrowUpRight className="w-4 h-4" />
+                      </button>
                     </div>
-                  </div>
-
-                  {/* RIGHT */}
-                  <div className="flex flex-wrap gap-3">
-                    <button className="h-11 px-5 rounded-full border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-[#475569] hover:bg-[#fafafa] transition flex items-center gap-2">
-                      <Eye className="w-4 h-4" />
-                      View Startup
-                    </button>
-
-                    <button className="h-11 px-5 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0b173f] transition flex items-center gap-2">
-                      Open Details
-                      <ArrowUpRight className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </section>
         </main>
       </div>
     </div>
-  )
+  );
 }
