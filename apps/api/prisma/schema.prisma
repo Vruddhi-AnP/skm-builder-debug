@@ -22,15 +22,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  founder
+  builder
+  investor
+  advisor
+  admin
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String?
-  role      String
-  createdAt DateTime @default(now())
+  role      Role
 
-  startups  Startup[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  startups  Startup[] @relation("FounderStartups")
 }
 
 model Startup {
@@ -40,14 +50,28 @@ model Startup {
   description String?
 
   founderId   String
-  founder     User     @relation(fields: [founderId], references: [id])
 
-  createdAt   DateTime @default(now())
+ founder User @relation("FounderStartups", fields: [founderId], references: [id])
+
+  builders Builder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([founderId])
 }
 
 model Builder {
-  id        String   @id @default(uuid())
+  id        String @id @default(uuid())
+
   startupId String
-  data      Json
+
+  startup Startup @relation(fields: [startupId], references: [id])
+
+  data Json
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([startupId])
 }
