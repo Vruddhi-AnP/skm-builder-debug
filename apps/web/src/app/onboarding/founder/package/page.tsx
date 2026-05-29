@@ -523,18 +523,36 @@ export default function PackageSelectionPage() {
             }
             className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-card px-6 text-sm font-semibold text-foreground transition hover:bg-muted"
           >
-            <ArrowLeft className="h-4 w-4" />
 
             Back
           </button>
 
-          <button
-            onClick={handleContinue}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-          >
-            Complete Onboarding
-            
-          </button>
+          {selectedPackage ===
+"Builder Access" ? (
+  <Link
+    href="/founder/dashboard"
+    className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+  >
+    Continue Free
+
+  </Link>
+) : (
+  <Link
+    href={`/payment?role=founder&plan=${
+      selectedPackage ===
+      "Growth Package"
+        ? "growth"
+        : selectedPackage ===
+          "Advisor Access"
+        ? "advisor"
+        : "investor"
+    }`}
+    className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+  >
+    Proceed to Payment
+
+  </Link>
+)}
         </div>
       </div>
     </div>

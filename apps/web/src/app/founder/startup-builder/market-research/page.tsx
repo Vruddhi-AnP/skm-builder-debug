@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
-  ArrowRight,
   BarChart3,
   Globe2,
   SearchCheck,
@@ -243,131 +242,120 @@ export default function MarketResearchPage() {
               </div>
             </div>
 
-            {/* MARKET CATEGORY */}
-            <div>
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Market Category
-              </label>
+           {/* MARKET CATEGORY */}
+<div>
+  <label className="mb-4 block text-sm font-semibold text-slate-700">
+    Market Category
+  </label>
 
-              <div className="flex flex-wrap gap-3">
-                {marketSegments.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "marketCategory",
-                        item
-                      )
-                    }
-                    className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        formData.marketCategory ===
-                        item
-                          ? "border-cyan-500 bg-cyan-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
+  <select
+    value={formData.marketCategory}
+    onChange={(e) =>
+      handleChange(
+        "marketCategory",
+        e.target.value
+      )
+    }
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+  >
+    <option value="">
+      Select Market Category
+    </option>
 
-            {/* MARKET SIZE */}
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {[
-                {
-                  title: "TAM",
-                  desc: "Total Addressable Market",
-                },
+    {marketSegments.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-                {
-                  title: "SAM",
-                  desc: "Serviceable Available Market",
-                },
+{/* MARKET SIZE */}
+<div className="mt-8 grid gap-4 md:grid-cols-3">
+  {[
+    {
+      title: "TAM",
+      desc: "Total Addressable Market",
+    },
 
-                {
-                  title: "SOM",
-                  desc: "Serviceable Obtainable Market",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-3xl border border-border/60 bg-[#f8fbff] p-5 transition hover:-translate-y-1 hover:border-cyan-300 hover:shadow-lg"
-                >
-                  <h3 className="text-xl font-black text-[#16214A]">
-                    {item.title}
-                  </h3>
+    {
+      title: "SAM",
+      desc: "Serviceable Available Market",
+    },
 
-                  <p className="mt-2 text-sm leading-6 text-slate-500">
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
+    {
+      title: "SOM",
+      desc: "Serviceable Obtainable Market",
+    },
+  ].map((item) => (
+    <div
+      key={item.title}
+      className="rounded-3xl border border-border/60 bg-[#f8fbff] p-5 transition hover:-translate-y-1 hover:border-cyan-300 hover:shadow-lg"
+    >
+      <h3 className="text-xl font-black text-[#16214A]">
+        {item.title}
+      </h3>
 
-            {/* MARKET DEMAND */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Market Demand Analysis
-              </label>
+      <p className="mt-2 text-sm leading-6 text-slate-500">
+        {item.desc}
+      </p>
+    </div>
+  ))}
+</div>
 
-              <textarea
-                rows={4}
-                value={formData.marketDemand}
-                onChange={(e) =>
-                  handleChange(
-                    "marketDemand",
-                    e.target.value
-                  )
-                }
-                placeholder="Describe demand signals and market potential..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
-              />
-            </div>
+{/* MARKET DEMAND */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Market Demand Analysis
+  </label>
 
-            {/* TRENDS */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Growing Market Trends
-              </label>
+  <textarea
+    rows={4}
+    value={formData.marketDemand}
+    onChange={(e) =>
+      handleChange(
+        "marketDemand",
+        e.target.value
+      )
+    }
+    placeholder="Describe demand signals and market potential..."
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+  />
+</div>
 
-              <div className="flex flex-wrap gap-3">
-                {marketTrends.map((item) => {
-                  const active =
-                    formData.marketTrends.includes(
-                      item
-                    );
+{/* TRENDS */}
+<div className="mt-8">
+  <label className="mb-4 block text-sm font-semibold text-slate-700">
+    Growing Market Trends
+  </label>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "marketTrends",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-cyan-500 bg-cyan-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "marketTrends",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Market Trend
+    </option>
+
+    {marketTrends.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
+</section>
 
           {/* CUSTOMER INTELLIGENCE */}
           <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
@@ -386,105 +374,87 @@ export default function MarketResearchPage() {
                 </p>
               </div>
             </div>
+            </section>
 
             {/* CUSTOMERS */}
-            <div>
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Target Customer Segments
-              </label>
+<div>
+  <label className="mb-4 block text-sm font-semibold text-slate-700">
+    Target Customer Segments
+  </label>
 
-              <div className="flex flex-wrap gap-3">
-                {customerTypes.map((item) => {
-                  const active =
-                    formData.targetCustomers.includes(
-                      item
-                    );
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "targetCustomers",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Customer Segment
+    </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "targetCustomers",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    {customerTypes.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-            {/* PAIN POINTS */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Customer Pain Points
-              </label>
+{/* PAIN POINTS */}
+<div className="mt-8">
+  <label className="mb-4 block text-sm font-semibold text-slate-700">
+    Customer Pain Points
+  </label>
 
-              <div className="flex flex-wrap gap-3">
-                {painPoints.map((item) => {
-                  const active =
-                    formData.customerPainPoints.includes(
-                      item
-                    );
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "customerPainPoints",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Pain Point
+    </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "customerPainPoints",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    {painPoints.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-            {/* BEHAVIOR */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Customer Buying Behavior
-              </label>
+{/* BEHAVIOR */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Customer Buying Behavior
+  </label>
 
-              <textarea
-                rows={4}
-                value={formData.customerBehavior}
-                onChange={(e) =>
-                  handleChange(
-                    "customerBehavior",
-                    e.target.value
-                  )
-                }
-                placeholder="Describe customer buying patterns and behavior..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-              />
-            </div>
-          </section>
+  <textarea
+    rows={4}
+    value={formData.customerBehavior}
+    onChange={(e) =>
+      handleChange(
+        "customerBehavior",
+        e.target.value
+      )
+    }
+    placeholder="Describe customer buying patterns and behavior..."
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+  />
+</div>
 
           {/* COMPETITOR ANALYSIS */}
           <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
@@ -503,126 +473,107 @@ export default function MarketResearchPage() {
                 </p>
               </div>
             </div>
+            </section>
 
-            {/* COMPETITORS */}
-            <div>
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Existing Competitors
-              </label>
+           {/* COMPETITORS */}
+<div>
+  <label className="mb-4 block text-sm font-semibold text-slate-700">
+    Existing Competitors
+  </label>
 
-              <div className="flex flex-wrap gap-3">
-                {competitors.map((item) => {
-                  const active =
-                    formData.competitors.includes(
-                      item
-                    );
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "competitors",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Competitor
+    </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "competitors",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    {competitors.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-            {/* ADVANTAGES */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Competitive Advantages
-              </label>
+{/* ADVANTAGES */}
+<div className="mt-8">
+  <label className="mb-4 block text-sm font-semibold text-slate-700">
+    Competitive Advantages
+  </label>
 
-              <div className="flex flex-wrap gap-3">
-                {advantages.map((item) => {
-                  const active =
-                    formData.competitiveAdvantages.includes(
-                      item
-                    );
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "competitiveAdvantages",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Competitive Advantage
+    </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "competitiveAdvantages",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    {advantages.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-            {/* GROWTH */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Growth Opportunity Insights
-              </label>
+{/* GROWTH */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Growth Opportunity Insights
+  </label>
 
-              <textarea
-                rows={4}
-                value={formData.growthOpportunity}
-                onChange={(e) =>
-                  handleChange(
-                    "growthOpportunity",
-                    e.target.value
-                  )
-                }
-                placeholder="Describe startup scalability and growth opportunities..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-              />
-            </div>
+  <textarea
+    rows={4}
+    value={formData.growthOpportunity}
+    onChange={(e) =>
+      handleChange(
+        "growthOpportunity",
+        e.target.value
+      )
+    }
+    placeholder="Describe startup scalability and growth opportunities..."
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+  />
+</div>
 
-            {/* FOUNDER NOTES */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Founder Research Insights
-              </label>
+{/* FOUNDER NOTES */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Founder Research Insights
+  </label>
 
-              <textarea
-                rows={4}
-                value={formData.founderInsights}
-                onChange={(e) =>
-                  handleChange(
-                    "founderInsights",
-                    e.target.value
-                  )
-                }
-                placeholder="Add founder research observations and market learnings..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-              />
-            </div>
-          </section>
-        </div>
+  <textarea
+    rows={4}
+    value={formData.founderInsights}
+    onChange={(e) =>
+      handleChange(
+        "founderInsights",
+        e.target.value
+      )
+    }
+    placeholder="Add founder research observations and market learnings..."
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+  />
+</div>
 
         {/* RIGHT */}
         <div className="space-y-6">
@@ -724,6 +675,7 @@ export default function MarketResearchPage() {
 
         </button>
       </div>
+    </div>
     </div>
   );
 }

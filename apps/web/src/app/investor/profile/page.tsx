@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import {
   BarChart3,
@@ -66,6 +67,8 @@ const navigation = [
 export default function InvestorProfilePage() {
   const [sidebarOpen, setSidebarOpen] =
     useState(false)
+
+  const router = useRouter()
 
   const [profileSaved, setProfileSaved] =
     useState(false)
@@ -261,32 +264,71 @@ export default function InvestorProfilePage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
-              <Bell className="h-5 w-5 text-foreground" />
-            </button>
+          <div className="flex flex-wrap items-center gap-3">
+  {/* NOTIFICATION */}
+  <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
+    <Bell className="h-5 w-5 text-foreground" />
+  </button>
 
-            <button
-              onClick={handleSave}
-              className={`flex h-12 items-center gap-2 rounded-2xl px-5 text-sm font-semibold transition ${
-                profileSaved
-                  ? "bg-emerald-500 text-white"
-                  : "bg-primary text-primary-foreground hover:opacity-90"
-              }`}
-            >
-              {profileSaved ? (
-                <>
-                  <CheckCircle2 className="h-4 w-4" />
-                  Saved
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4" />
-                  Save Changes
-                </>
-              )}
-            </button>
-          </div>
+  {/* SAVE */}
+  <button
+    onClick={handleSave}
+    className={`flex h-12 items-center gap-2 rounded-2xl px-5 text-sm font-semibold transition ${
+      profileSaved
+        ? "bg-emerald-500 text-white"
+        : "bg-primary text-primary-foreground hover:opacity-90"
+    }`}
+  >
+    {profileSaved ? (
+      <>
+        <CheckCircle2 className="h-4 w-4" />
+        Saved
+      </>
+    ) : (
+      <>
+        <Save className="h-4 w-4" />
+        Save Changes
+      </>
+    )}
+  </button>
+
+  {/* UPGRADE */}
+  <button
+    onClick={() =>
+      router.push(
+        "/onboarding/investor/package"
+      )
+    }
+    className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted"
+  >
+    <Sparkles className="h-4 w-4 text-primary" />
+
+    Upgrade Plan
+  </button>
+
+  {/* SETTINGS */}
+  <button className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
+    <User className="h-4 w-4" />
+
+    Settings
+  </button>
+
+  {/* LOGOUT */}
+  <button
+    onClick={() => {
+      localStorage.clear()
+
+      sessionStorage.clear()
+
+      router.push("/login")
+    }}
+    className="flex h-12 items-center gap-2 rounded-2xl border border-red-100 bg-red-50 px-5 text-sm font-semibold text-red-600 transition hover:bg-red-100"
+  >
+    <X className="h-4 w-4" />
+
+    Logout
+  </button>
+</div>
         </header>
 
         {/* CONTENT */}

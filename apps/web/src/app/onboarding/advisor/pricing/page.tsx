@@ -424,7 +424,11 @@ export default function AdvisorPricingPage() {
               }
               className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
-              Complete Onboarding
+              <Link
+                  href="/payment?role=advisor&plan=pro"
+                >
+                  Proceed to Payment
+                </Link>
 
             </button>
 

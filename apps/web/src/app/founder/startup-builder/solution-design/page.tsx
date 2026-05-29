@@ -12,7 +12,6 @@ import {
   Save,
   CheckCircle2,
   Rocket,
-  ShieldCheck,
 } from "lucide-react";
 
 interface SolutionDesignForm {
@@ -103,21 +102,18 @@ export default function SolutionDesignPage() {
       | "experienceGoals",
     value: string
   ) => {
+    if (!value) return;
+
     const existingValues = formData[field];
 
     if (existingValues.includes(value)) {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: existingValues.filter(
-          (item) => item !== value
-        ),
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: [...existingValues, value],
-      }));
+      return;
     }
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: [...existingValues, value],
+    }));
   };
 
   const handleChange = (
@@ -224,44 +220,35 @@ export default function SolutionDesignPage() {
               </div>
             </div>
 
-            {/* SOLUTION TYPES */}
+            {/* SOLUTION TYPE */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
                 Solution Type
               </label>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                {solutionTypes.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "solutionType",
-                        item
-                      )
-                    }
-                    className={`rounded-3xl border p-5 text-left transition-all
-                      
-                      ${
-                        formData.solutionType ===
-                        item
-                          ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
-                  >
-                    <h3 className="font-bold text-[#16214A]">
-                      {item}
-                    </h3>
+              <select
+                value={formData.solutionType}
+                onChange={(e) =>
+                  handleChange(
+                    "solutionType",
+                    e.target.value
+                  )
+                }
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              >
+                <option value="">
+                  Select Solution Type
+                </option>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-500">
-                      Modern scalable startup product
-                      system.
-                    </p>
-                  </button>
+                {solutionTypes.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
 
             {/* PRODUCT VISION */}
@@ -329,37 +316,28 @@ export default function SolutionDesignPage() {
                 Core Features
               </label>
 
-              <div className="flex flex-wrap gap-3">
-                {coreFeatures.map((item) => {
-                  const active =
-                    formData.selectedFeatures.includes(
-                      item
-                    );
+              <select
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                onChange={(e) =>
+                  toggleArrayValue(
+                    "selectedFeatures",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select Core Feature
+                </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "selectedFeatures",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+                {coreFeatures.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* PLATFORM + MODEL */}
@@ -370,31 +348,29 @@ export default function SolutionDesignPage() {
                   Platform Type
                 </label>
 
-                <div className="space-y-3">
+                <select
+                  value={formData.platformType}
+                  onChange={(e) =>
+                    handleChange(
+                      "platformType",
+                      e.target.value
+                    )
+                  }
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                >
+                  <option value="">
+                    Select Platform Type
+                  </option>
+
                   {platformTypes.map((item) => (
-                    <button
+                    <option
                       key={item}
-                      type="button"
-                      onClick={() =>
-                        handleChange(
-                          "platformType",
-                          item
-                        )
-                      }
-                      className={`w-full rounded-2xl border p-4 text-left text-sm font-semibold transition-all
-                      
-                      ${
-                        formData.platformType ===
-                        item
-                          ? "border-violet-500 bg-violet-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-violet-300"
-                      }
-                    `}
+                      value={item}
                     >
                       {item}
-                    </button>
+                    </option>
                   ))}
-                </div>
+                </select>
               </div>
 
               {/* MODEL */}
@@ -403,31 +379,29 @@ export default function SolutionDesignPage() {
                   Business Model
                 </label>
 
-                <div className="space-y-3">
+                <select
+                  value={formData.businessModel}
+                  onChange={(e) =>
+                    handleChange(
+                      "businessModel",
+                      e.target.value
+                    )
+                  }
+                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                >
+                  <option value="">
+                    Select Business Model
+                  </option>
+
                   {businessModels.map((item) => (
-                    <button
+                    <option
                       key={item}
-                      type="button"
-                      onClick={() =>
-                        handleChange(
-                          "businessModel",
-                          item
-                        )
-                      }
-                      className={`w-full rounded-2xl border p-4 text-left text-sm font-semibold transition-all
-                      
-                      ${
-                        formData.businessModel ===
-                        item
-                          ? "border-violet-500 bg-violet-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-violet-300"
-                      }
-                    `}
+                      value={item}
                     >
                       {item}
-                    </button>
+                    </option>
                   ))}
-                </div>
+                </select>
               </div>
             </div>
 
@@ -476,37 +450,28 @@ export default function SolutionDesignPage() {
                 User Journey Flow
               </label>
 
-              <div className="flex flex-wrap gap-3">
-                {userJourney.map((item) => {
-                  const active =
-                    formData.userJourney.includes(
-                      item
-                    );
+              <select
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                onChange={(e) =>
+                  toggleArrayValue(
+                    "userJourney",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select User Journey Step
+                </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "userJourney",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+                {userJourney.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* EXPERIENCE */}
@@ -515,37 +480,28 @@ export default function SolutionDesignPage() {
                 Experience Goals
               </label>
 
-              <div className="flex flex-wrap gap-3">
-                {experienceGoals.map((item) => {
-                  const active =
-                    formData.experienceGoals.includes(
-                      item
-                    );
+              <select
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                onChange={(e) =>
+                  toggleArrayValue(
+                    "experienceGoals",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select Experience Goal
+                </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "experienceGoals",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+                {experienceGoals.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* AUTOMATION */}
@@ -650,14 +606,12 @@ export default function SolutionDesignPage() {
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        {/* SAVE */}
         <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Save className="h-4 w-4" />
 
           Save Draft
         </button>
 
-        {/* NEXT */}
         <button
           onClick={() =>
             router.push(
@@ -668,6 +622,7 @@ export default function SolutionDesignPage() {
         >
           Continue to Business Model
 
+          <ArrowRight className="h-4 w-4" />
         </button>
       </div>
     </div>

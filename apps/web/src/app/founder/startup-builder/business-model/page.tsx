@@ -102,21 +102,18 @@ export default function BusinessModelPage() {
       | "scalingChallenges",
     value: string
   ) => {
+    if (!value) return;
+
     const existingValues = formData[field];
 
     if (existingValues.includes(value)) {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: existingValues.filter(
-          (item) => item !== value
-        ),
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: [...existingValues, value],
-      }));
+      return;
     }
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: [...existingValues, value],
+    }));
   };
 
   const handleChange = (
@@ -223,44 +220,35 @@ export default function BusinessModelPage() {
               </div>
             </div>
 
-            {/* REVENUE MODELS */}
+            {/* REVENUE MODEL */}
             <div>
               <label className="mb-4 block text-sm font-semibold text-slate-700">
                 Revenue Model
               </label>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                {revenueModels.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "revenueModel",
-                        item
-                      )
-                    }
-                    className={`rounded-3xl border p-5 text-left transition-all
-                      
-                      ${
-                        formData.revenueModel ===
-                        item
-                          ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
-                  >
-                    <h3 className="font-bold text-[#16214A]">
-                      {item}
-                    </h3>
+              <select
+                value={formData.revenueModel}
+                onChange={(e) =>
+                  handleChange(
+                    "revenueModel",
+                    e.target.value
+                  )
+                }
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              >
+                <option value="">
+                  Select Revenue Model
+                </option>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-500">
-                      Scalable recurring startup
-                      monetization strategy.
-                    </p>
-                  </button>
+                {revenueModels.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
 
             {/* PRICING */}
@@ -269,33 +257,29 @@ export default function BusinessModelPage() {
                 Pricing Strategy
               </label>
 
-              <div className="grid gap-4 md:grid-cols-4">
+              <select
+                value={formData.pricingStrategy}
+                onChange={(e) =>
+                  handleChange(
+                    "pricingStrategy",
+                    e.target.value
+                  )
+                }
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              >
+                <option value="">
+                  Select Pricing Strategy
+                </option>
+
                 {pricingStrategies.map((item) => (
-                  <button
+                  <option
                     key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "pricingStrategy",
-                        item
-                      )
-                    }
-                    className={`rounded-3xl border p-5 text-center transition-all
-                      
-                      ${
-                        formData.pricingStrategy ===
-                        item
-                          ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
+                    value={item}
                   >
-                    <p className="font-bold text-[#16214A]">
-                      {item}
-                    </p>
-                  </button>
+                    {item}
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
 
             {/* TIMELINE */}
@@ -304,33 +288,29 @@ export default function BusinessModelPage() {
                 Expected Revenue Timeline
               </label>
 
-              <div className="grid gap-4 md:grid-cols-4">
+              <select
+                value={formData.revenueTimeline}
+                onChange={(e) =>
+                  handleChange(
+                    "revenueTimeline",
+                    e.target.value
+                  )
+                }
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+              >
+                <option value="">
+                  Select Revenue Timeline
+                </option>
+
                 {revenueTimelines.map((item) => (
-                  <button
+                  <option
                     key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "revenueTimeline",
-                        item
-                      )
-                    }
-                    className={`rounded-3xl border p-5 text-center transition-all
-                      
-                      ${
-                        formData.revenueTimeline ===
-                        item
-                          ? "border-cyan-500 bg-cyan-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
+                    value={item}
                   >
-                    <p className="font-bold text-[#16214A]">
-                      {item}
-                    </p>
-                  </button>
+                    {item}
+                  </option>
                 ))}
-              </div>
+              </select>
             </div>
 
             {/* TARGET */}
@@ -398,37 +378,28 @@ export default function BusinessModelPage() {
                 Acquisition Channels
               </label>
 
-              <div className="flex flex-wrap gap-3">
-                {acquisitionChannels.map((item) => {
-                  const active =
-                    formData.acquisitionChannels.includes(
-                      item
-                    );
+              <select
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                onChange={(e) =>
+                  toggleArrayValue(
+                    "acquisitionChannels",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select Acquisition Channel
+                </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "acquisitionChannels",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+                {acquisitionChannels.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* STRATEGY */}
@@ -453,7 +424,7 @@ export default function BusinessModelPage() {
               />
             </div>
 
-            {/* GROWTH PLAN */}
+            {/* GROWTH */}
             <div className="mt-8">
               <label className="mb-3 block text-sm font-semibold text-slate-700">
                 Long-Term Growth Strategy
@@ -498,37 +469,28 @@ export default function BusinessModelPage() {
                 Major Startup Costs
               </label>
 
-              <div className="flex flex-wrap gap-3">
-                {costStructures.map((item) => {
-                  const active =
-                    formData.costStructures.includes(
-                      item
-                    );
+              <select
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                onChange={(e) =>
+                  toggleArrayValue(
+                    "costStructures",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select Cost Structure
+                </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "costStructures",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+                {costStructures.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* CHALLENGES */}
@@ -537,37 +499,28 @@ export default function BusinessModelPage() {
                 Scaling Challenges
               </label>
 
-              <div className="flex flex-wrap gap-3">
-                {scalingChallenges.map((item) => {
-                  const active =
-                    formData.scalingChallenges.includes(
-                      item
-                    );
+              <select
+                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                onChange={(e) =>
+                  toggleArrayValue(
+                    "scalingChallenges",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">
+                  Select Scaling Challenge
+                </option>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "scalingChallenges",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
+                {scalingChallenges.map((item) => (
+                  <option
+                    key={item}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* NOTES */}
@@ -721,14 +674,12 @@ export default function BusinessModelPage() {
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        {/* SAVE */}
         <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
           <Save className="h-4 w-4" />
 
           Save Draft
         </button>
 
-        {/* NEXT */}
         <button
           onClick={() =>
             router.push(
@@ -739,6 +690,7 @@ export default function BusinessModelPage() {
         >
           Continue to Summary
 
+          <ArrowRight className="h-4 w-4" />
         </button>
       </div>
     </div>

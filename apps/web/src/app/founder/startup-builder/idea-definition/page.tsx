@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import {
   ArrowRight,
@@ -175,358 +183,248 @@ export default function IdeaDefinitionPage() {
       {/* MAIN GRID */}
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         {/* LEFT */}
-        <div className="space-y-6">
+        <Accordion
+          type="single"
+          collapsible
+          defaultValue="foundation"
+          className="space-y-6"
+        >
           {/* STARTUP FOUNDATION */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="rounded-2xl bg-primary/10 p-4 text-primary">
-                <Lightbulb className="h-6 w-6" />
+          <AccordionItem
+            value="foundation"
+            className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 px-6 shadow-sm lg:px-8"
+          >
+            <AccordionTrigger className="py-6 hover:no-underline">
+              <div className="flex items-center gap-4 text-left">
+                <div className="rounded-2xl bg-primary/10 p-4 text-primary">
+                  <Lightbulb className="h-6 w-6" />
+                </div>
+
+                <div>
+                  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                    Startup Foundation
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Define startup identity and direction
+                  </p>
+                </div>
+              </div>
+            </AccordionTrigger>
+
+            <AccordionContent className="pb-8">
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* STARTUP NAME */}
+                <div>
+                  <label className="mb-3 block text-sm font-semibold text-slate-700">
+                    Startup Name
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.startupName}
+                    onChange={(e) =>
+                      handleChange(
+                        "startupName",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Enter startup name"
+                    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+                  />
+                </div>
+
+                {/* STAGE */}
+                <div>
+                  <label className="mb-3 block text-sm font-semibold text-slate-700">
+                    Startup Stage
+                  </label>
+
+                  <select
+                    value={formData.startupStage}
+                    onChange={(e) =>
+                      handleChange(
+                        "startupStage",
+                        e.target.value
+                      )
+                    }
+                    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+                  >
+                    <option value="">
+                      Select Startup Stage
+                    </option>
+
+                    {startupStages.map((item) => (
+                      <option
+                        key={item}
+                        value={item}
+                      >
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              <div>
-                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                  Startup Foundation
-                </h2>
+              {/* CATEGORY */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Startup Category
+  </label>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Define startup identity and direction
-                </p>
-              </div>
-            </div>
+  <select
+    value={formData.startupCategory}
+    onChange={(e) =>
+      handleChange(
+        "startupCategory",
+        e.target.value
+      )
+    }
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+  >
+    <option value="">
+      Select Startup Category
+    </option>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* STARTUP NAME */}
-              <div>
+    {startupCategories.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
+              {/* STARTUP VISION */}
+              <div className="mt-8">
                 <label className="mb-3 block text-sm font-semibold text-slate-700">
-                  Startup Name
+                  Startup Vision
                 </label>
 
-                <input
-                  type="text"
-                  value={formData.startupName}
+                <textarea
+                  rows={5}
+                  value={formData.startupVision}
                   onChange={(e) =>
                     handleChange(
-                      "startupName",
+                      "startupVision",
                       e.target.value
                     )
                   }
-                  placeholder="Enter startup name"
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+                  placeholder="Describe your startup vision and long-term direction..."
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
                 />
               </div>
+            </AccordionContent>
+          </AccordionItem>
 
-              {/* STAGE */}
+          {/* EXECUTION ENGINE */}
+          <AccordionItem
+            value="execution"
+            className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 px-6 shadow-sm lg:px-8"
+          >
+            <AccordionTrigger className="py-6 hover:no-underline">
+              <div className="flex items-center gap-4 text-left">
+                <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+
+                <div>
+                  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                    Startup Execution Engine
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Define problem, audience and execution
+                  </p>
+                </div>
+              </div>
+            </AccordionTrigger>
+
+            <AccordionContent className="pb-8">
+              {/* PROBLEM */}
               <div>
                 <label className="mb-3 block text-sm font-semibold text-slate-700">
-                  Startup Stage
+                  Problem Statement
                 </label>
 
-                <select
-                  value={formData.startupStage}
+                <textarea
+                  rows={4}
+                  value={formData.problemStatement}
                   onChange={(e) =>
                     handleChange(
-                      "startupStage",
+                      "problemStatement",
                       e.target.value
                     )
                   }
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
-                >
-                  <option value="">
-                    Select Startup Stage
-                  </option>
-
-                  {startupStages.map((item) => (
-                    <option
-                      key={item}
-                      value={item}
-                    >
-                      {item}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="What real-world problem are you solving?"
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+                />
               </div>
-            </div>
-
-            {/* CATEGORY */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Startup Category
-              </label>
-
-              <div className="flex flex-wrap gap-3">
-                {startupCategories.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "startupCategory",
-                        item
-                      )
-                    }
-                    className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        formData.startupCategory ===
-                        item
-                          ? "border-primary bg-primary text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-primary/20 hover:bg-primary/5"
-                      }
-                    `}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* STARTUP VISION */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Startup Vision
-              </label>
-
-              <textarea
-                rows={5}
-                value={formData.startupVision}
-                onChange={(e) =>
-                  handleChange(
-                    "startupVision",
-                    e.target.value
-                  )
-                }
-                placeholder="Describe your startup vision and long-term direction..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
-              />
-            </div>
-          </section>
-
-          {/* EXECUTION ENGINE */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="rounded-2xl bg-violet-100 p-4 text-violet-700">
-                <Sparkles className="h-6 w-6" />
-              </div>
-
-              <div>
-                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                  Startup Execution Engine
-                </h2>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Define problem, audience and execution
-                </p>
-              </div>
-            </div>
-
-            {/* PROBLEM */}
-            <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Problem Statement
-              </label>
-
-              <textarea
-                rows={4}
-                value={formData.problemStatement}
-                onChange={(e) =>
-                  handleChange(
-                    "problemStatement",
-                    e.target.value
-                  )
-                }
-                placeholder="What real-world problem are you solving?"
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-              />
-            </div>
-
-            {/* AUDIENCE */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Target Audience
-              </label>
-
-              <div className="flex flex-wrap gap-3">
-                {audiences.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "targetAudience",
-                        item
-                      )
-                    }
-                    className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        formData.targetAudience ===
-                        item
-                          ? "border-violet-500 bg-violet-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-violet-300 hover:bg-violet-50"
-                      }
-                    `}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* SOLUTION */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Solution Type
-              </label>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                {solutionTypes.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "solutionType",
-                        item
-                      )
-                    }
-                    className={`rounded-3xl border p-5 text-left transition-all
-                      
-                      ${
-                        formData.solutionType ===
-                        item
-                          ? "border-violet-400 bg-violet-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-violet-300"
-                      }
-                    `}
-                  >
-                    <h3 className="font-bold text-[#16214A]">
-                      {item}
-                    </h3>
-
-                    <p className="mt-2 text-sm text-slate-500">
-                      Scalable startup execution system
-                    </p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* UVP */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Unique Value Proposition
-              </label>
-
-              <textarea
-                rows={4}
-                value={
-                  formData.uniqueValueProposition
-                }
-                onChange={(e) =>
-                  handleChange(
-                    "uniqueValueProposition",
-                    e.target.value
-                  )
-                }
-                placeholder="What makes your startup unique?"
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-              />
-            </div>
-          </section>
+            </AccordionContent>
+          </AccordionItem>
 
           {/* FOUNDER GOALS */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="rounded-2xl bg-emerald-100 p-4 text-emerald-700">
-                <Target className="h-6 w-6" />
-              </div>
+          <AccordionItem
+              value="goals"
+              className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 px-6 shadow-sm lg:px-8"
+            >
+                <AccordionTrigger
+              className="py-6 hover:no-underline">
+              <div className="flex items-center gap-4 text-left">
+                <div className="rounded-2xl bg-emerald-100 p-4 text-emerald-700">
+                  <Target className="h-6 w-6" />
+                </div>
 
-              <div>
-                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                  Founder Goals
-                </h2>
+                <div>
+                  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                    Founder Goals
+                  </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Define founder motivation and business
-                  goals
-                </p>
-              </div>
-            </div>
-
-            {/* GOALS */}
-            <div className="grid gap-4 md:grid-cols-2">
-              {founderGoals.map((goal) => (
-                <button
-                  key={goal}
-                  type="button"
-                  onClick={() =>
-                    handleChange(
-                      "founderGoal",
-                      goal
-                    )
-                  }
-                  className={`rounded-3xl border p-5 text-left transition-all
-                  
-                  ${
-                    formData.founderGoal ===
-                    goal
-                      ? "border-emerald-400 bg-emerald-50"
-                      : "border-border/60 bg-[#F7F4EE]/95 hover:border-emerald-300"
-                  }
-                `}
-                >
-                  <h3 className="font-bold text-[#16214A]">
-                    {goal}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-slate-500">
-                    Startup execution focus area
+                  <p className="mt-1 text-sm text-slate-500">
+                    Define founder motivation and business
+                    goals
                   </p>
-                </button>
-              ))}
-            </div>
+                </div>
+              </div>
+            </AccordionTrigger>
 
-            {/* MOTIVATION */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Founder Motivation
-              </label>
+            <AccordionContent className="pb-8">
 
-              <textarea
-                rows={4}
-                value={formData.founderMotivation}
-                onChange={(e) =>
-                  handleChange(
-                    "founderMotivation",
-                    e.target.value
-                  )
-                }
-                placeholder="Why are you building this startup?"
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
-              />
-            </div>
+             {/* GOALS */}
+<div>
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Founder Goal
+  </label>
 
-            {/* NOTES */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Additional Founder Notes
-              </label>
+  <select
+    value={formData.founderGoal}
+    onChange={(e) =>
+      handleChange(
+        "founderGoal",
+        e.target.value
+      )
+    }
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+  >
+    <option value="">
+      Select Founder Goal
+    </option>
 
-              <textarea
-                rows={4}
-                value={formData.additionalNotes}
-                onChange={(e) =>
-                  handleChange(
-                    "additionalNotes",
-                    e.target.value
-                  )
-                }
-                placeholder="Add additional startup context..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
-              />
-            </div>
-          </section>
-        </div>
+    {founderGoals.map((goal) => (
+      <option
+        key={goal}
+        value={goal}
+      >
+        {goal}
+      </option>
+    ))}
+  </select>
+</div>
+
+</AccordionContent>
+</AccordionItem>
+</Accordion>
 
         {/* RIGHT SIDEBAR */}
         <div className="space-y-6">

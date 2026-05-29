@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import {
   AlertTriangle,
@@ -80,22 +88,18 @@ export default function ProblemDefinitionPage() {
   const severityLevels = [
     {
       label: "Low",
-      emoji: "🙂",
     },
 
     {
       label: "Moderate",
-      emoji: "😐",
     },
 
     {
       label: "High",
-      emoji: "🔥",
     },
 
     {
       label: "Critical",
-      emoji: "🚨",
     },
   ];
 
@@ -207,357 +211,354 @@ export default function ProblemDefinitionPage() {
       {/* MAIN GRID */}
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         {/* LEFT */}
-        <div className="space-y-6">
+        <Accordion
+          type="single"
+          collapsible
+          defaultValue="discovery"
+          className="space-y-6"
+        >
           {/* PROBLEM DISCOVERY */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="rounded-2xl bg-rose-100 p-4 text-rose-700">
-                <CircleHelp className="h-6 w-6" />
-              </div>
+          <AccordionItem
+            value="discovery"
+            className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 px-6 shadow-sm lg:px-8"
+          >
+            <AccordionTrigger className="py-6 hover:no-underline">
+              <div className="flex items-center gap-4 text-left">
+                <div className="rounded-2xl bg-rose-100 p-4 text-rose-700">
+                  <CircleHelp className="h-6 w-6" />
+                </div>
 
+                <div>
+                  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                    Problem Discovery
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Identify high-value market pain points
+                  </p>
+                </div>
+              </div>
+            </AccordionTrigger>
+
+            <AccordionContent className="pb-8">
+              {/* CORE PROBLEM */}
               <div>
-                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                  Problem Discovery
-                </h2>
+                <label className="mb-3 block text-sm font-semibold text-slate-700">
+                  Core Problem Statement
+                </label>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Identify high-value market pain points
-                </p>
+                <textarea
+                  rows={5}
+                  value={formData.coreProblemStatement}
+                  onChange={(e) =>
+                    handleChange(
+                      "coreProblemStatement",
+                      e.target.value
+                    )
+                  }
+                  placeholder="Describe the primary real-world problem your startup is solving..."
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+                />
               </div>
-            </div>
 
-            {/* CORE PROBLEM */}
-            <div>
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Core Problem Statement
-              </label>
+              {/* PROBLEM AREAS */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Core Problem Areas
+  </label>
 
-              <textarea
-                rows={5}
-                value={formData.coreProblemStatement}
-                onChange={(e) =>
-                  handleChange(
-                    "coreProblemStatement",
-                    e.target.value
-                  )
-                }
-                placeholder="Describe the primary real-world problem your startup is solving..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
-              />
-            </div>
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "currentAlternatives",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Problem Area
+    </option>
 
-            {/* PROBLEM AREAS */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Core Problem Areas
-              </label>
+    {problemAreas.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-              <div className="flex flex-wrap gap-3">
-                {problemAreas.map((item) => {
-                  const active =
-                    formData.currentAlternatives.includes(
-                      item
-                    );
+{/* SEVERITY */}
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Problem Severity
+  </label>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "currentAlternatives",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-rose-500 bg-rose-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-rose-300 hover:bg-rose-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
+  <select
+    value={formData.problemSeverity}
+    onChange={(e) =>
+      handleChange(
+        "problemSeverity",
+        e.target.value
+      )
+    }
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+  >
+    <option value="">
+      Select Severity
+    </option>
+
+    {severityLevels.map((item) => (
+      <option
+        key={item.label}
+        value={item.label}
+      >
+        {item.label}
+      </option>
+    ))}
+  </select>
+</div>
+
+              {/* IMPACT */}
+              <div className="mt-8">
+                <label className="mb-3 block text-sm font-semibold text-slate-700">
+                  Operational Impact
+                </label>
+
+                <textarea
+                  rows={4}
+                  value={formData.operationalImpact}
+                  onChange={(e) =>
+                    handleChange(
+                      "operationalImpact",
+                      e.target.value
+                    )
+                  }
+                  placeholder="How does this problem affect businesses and users?"
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+                />
               </div>
-            </div>
-
-            {/* SEVERITY */}
-            <div className="mt-8">
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Problem Severity
-              </label>
-
-              <div className="grid gap-4 md:grid-cols-4">
-                {severityLevels.map((item) => (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() =>
-                      handleChange(
-                        "problemSeverity",
-                        item.label
-                      )
-                    }
-                    className={`rounded-2xl border p-2 text-center transition-all
-                      ${
-                        formData.problemSeverity ===
-                        item.label
-                          ? "border-rose-400 bg-rose-50"
-                          : "border-border/60 bg-[#F7F4EE]/95 hover:border-rose-300 hover:bg-rose-50"
-                      }
-                    `}
-                  >
-
-                    <p className="mt-3 font-bold text-[#16214A]">
-                      {item.label}
-                    </p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* OPERATIONAL IMPACT */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Operational Impact
-              </label>
-
-              <textarea
-                rows={4}
-                value={formData.operationalImpact}
-                onChange={(e) =>
-                  handleChange(
-                    "operationalImpact",
-                    e.target.value
-                  )
-                }
-                placeholder="How does this problem affect businesses and users?"
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
-              />
-            </div>
-          </section>
+            </AccordionContent>
+          </AccordionItem>
 
           {/* MARKET GAP */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
-                <Target className="h-6 w-6" />
+          <AccordionItem
+            value="market-gap"
+            className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 px-6 shadow-sm lg:px-8"
+          >
+            <AccordionTrigger className="py-6 hover:no-underline">
+              <div className="flex items-center gap-4 text-left">
+                <div className="rounded-2xl bg-amber-100 p-4 text-amber-700">
+                  <Target className="h-6 w-6" />
+                </div>
+
+                <div>
+                  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                    Market Gap Analysis
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Analyze current alternatives and gaps
+                  </p>
+                </div>
               </div>
+            </AccordionTrigger>
 
-              <div>
-                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                  Market Gap Analysis
-                </h2>
+            <AccordionContent className="pb-8">
 
-                <p className="mt-1 text-sm text-slate-500">
-                  Analyze current alternatives and gaps
-                </p>
-              </div>
-            </div>
+              {/* EXISTING SOLUTIONS */}
+<div>
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Existing Solutions Customers Use
+  </label>
 
-            {/* EXISTING SOLUTIONS */}
-            <div>
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Existing Solutions Customers Use
-              </label>
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "currentAlternatives",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select Existing Solution
+    </option>
 
-              <div className="flex flex-wrap gap-3">
-                {existingSolutions.map((item) => {
-                  const active =
-                    formData.currentAlternatives.includes(
-                      item
-                    );
+    {existingSolutions.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
 
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "currentAlternatives",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-amber-500 bg-amber-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-amber-300 hover:bg-amber-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* MARKET GAP */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Market Gap Opportunity
-              </label>
-
-              <textarea
-                rows={4}
-                value={formData.marketGap}
-                onChange={(e) =>
-                  handleChange(
-                    "marketGap",
-                    e.target.value
-                  )
-                }
-                placeholder="What weaknesses exist in current solutions?"
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-              />
-            </div>
-
-            {/* CUSTOMER FRUSTRATIONS */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Customer Frustrations
-              </label>
-
-              <textarea
-                rows={4}
-                value={formData.customerFrustrations}
-                onChange={(e) =>
-                  handleChange(
-                    "customerFrustrations",
-                    e.target.value
-                  )
-                }
-                placeholder="What frustrates users most about existing workflows?"
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-              />
-            </div>
-          </section>
-
-          {/* AFFECTED USERS */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
-                <Users className="h-6 w-6" />
-              </div>
-
-              <div>
-                <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                  Affected Users
-                </h2>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Identify who experiences the problem
-                </p>
-              </div>
-            </div>
-
-            {/* USERS */}
-            <div>
-              <label className="mb-4 block text-sm font-semibold text-slate-700">
-                Target User Segments
-              </label>
-
-              <div className="flex flex-wrap gap-3">
-                {userGroups.map((item) => {
-                  const active =
-                    formData.affectedUsers.includes(
-                      item
-                    );
-
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() =>
-                        toggleArrayValue(
-                          "affectedUsers",
-                          item
-                        )
-                      }
-                      className={`rounded-2xl border px-5 py-3 text-sm font-semibold transition-all
-                      
-                      ${
-                        active
-                          ? "border-cyan-500 bg-cyan-500 text-white"
-                          : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:border-cyan-300 hover:bg-cyan-50"
-                      }
-                    `}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* FREQUENCY */}
-            <div className="mt-8 grid gap-6 md:grid-cols-2">
-              <div>
+              {/* MARKET GAP */}
+              <div className="mt-8">
                 <label className="mb-3 block text-sm font-semibold text-slate-700">
-                  Problem Frequency
+                  Market Gap Opportunity
                 </label>
 
-                <input
-                  type="text"
-                  value={formData.problemFrequency}
+                <textarea
+                  rows={4}
+                  value={formData.marketGap}
                   onChange={(e) =>
                     handleChange(
-                      "problemFrequency",
+                      "marketGap",
                       e.target.value
                     )
                   }
-                  placeholder="Daily / Weekly / Monthly"
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                  placeholder="What weaknesses exist in current solutions?"
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
                 />
               </div>
 
-              <div>
+              {/* FRUSTRATIONS */}
+              <div className="mt-8">
                 <label className="mb-3 block text-sm font-semibold text-slate-700">
-                  Problem Urgency
+                  Customer Frustrations
                 </label>
 
-                <input
-                  type="text"
-                  value={formData.problemUrgency}
+                <textarea
+                  rows={4}
+                  value={formData.customerFrustrations}
                   onChange={(e) =>
                     handleChange(
-                      "problemUrgency",
+                      "customerFrustrations",
                       e.target.value
                     )
                   }
-                  placeholder="Low / Medium / High"
-                  className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                  placeholder="What frustrates users most about existing workflows?"
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
                 />
               </div>
-            </div>
+            </AccordionContent>
+          </AccordionItem>
 
-            {/* OBSERVATIONS */}
-            <div className="mt-8">
-              <label className="mb-3 block text-sm font-semibold text-slate-700">
-                Founder Observations
-              </label>
+          {/* USERS */}
+          <AccordionItem
+            value="users"
+            className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 px-6 shadow-sm lg:px-8"
+          >
+            <AccordionTrigger className="py-6 hover:no-underline">
+              <div className="flex items-center gap-4 text-left">
+                <div className="rounded-2xl bg-cyan-100 p-4 text-cyan-700">
+                  <Users className="h-6 w-6" />
+                </div>
 
-              <textarea
-                rows={5}
-                value={formData.founderObservations}
-                onChange={(e) =>
-                  handleChange(
-                    "founderObservations",
-                    e.target.value
-                  )
-                }
-                placeholder="Describe insights gathered from customers, research or observations..."
-                className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
-              />
-            </div>
-          </section>
-        </div>
+                <div>
+                  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                    Affected Users
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Identify who experiences the problem
+                  </p>
+                </div>
+              </div>
+            </AccordionTrigger>
+
+            <AccordionContent className="pb-8">
+
+              {/* USER SEGMENTS */}
+<div>
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Target User Segments
+  </label>
+
+  <select
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+    onChange={(e) =>
+      toggleArrayValue(
+        "affectedUsers",
+        e.target.value
+      )
+    }
+  >
+    <option value="">
+      Select User Segment
+    </option>
+
+    {userGroups.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+</div>
+
+              {/* FREQUENCY */}
+              <div className="mt-8 grid gap-6 md:grid-cols-2">
+                <div>
+                  <label className="mb-3 block text-sm font-semibold text-slate-700">
+                    Problem Frequency
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.problemFrequency}
+                    onChange={(e) =>
+                      handleChange(
+                        "problemFrequency",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Daily / Weekly / Monthly"
+                    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-3 block text-sm font-semibold text-slate-700">
+                    Problem Urgency
+                  </label>
+
+                  <input
+                    type="text"
+                    value={formData.problemUrgency}
+                    onChange={(e) =>
+                      handleChange(
+                        "problemUrgency",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Low / Medium / High"
+                    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                  />
+                </div>
+              </div>
+
+              {/* OBSERVATIONS */}
+              <div className="mt-8">
+                <label className="mb-3 block text-sm font-semibold text-slate-700">
+                  Founder Observations
+                </label>
+
+                <textarea
+                  rows={5}
+                  value={formData.founderObservations}
+                  onChange={(e) =>
+                    handleChange(
+                      "founderObservations",
+                      e.target.value
+                    )
+                  }
+                  placeholder="Describe insights gathered from customers, research or observations..."
+                  className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
         {/* RIGHT */}
         <div className="space-y-6">
@@ -584,7 +585,7 @@ export default function ProblemDefinitionPage() {
             </div>
           </section>
 
-          {/* VALIDATION SCORE */}
+          {/* SCORE */}
           <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
             <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
               Validation Score

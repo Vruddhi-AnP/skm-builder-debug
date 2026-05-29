@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+import { LogOut } from "lucide-react";
+
+import { useRouter } from "next/navigation";
+
 import {
   Award,
   Edit3,
@@ -38,6 +42,8 @@ const stats = [
 export default function AdminProfilePage() {
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
+
+    const router = useRouter();
 
   return (
     <div className="min-h-screen bg-[#F5F7FB] flex">
@@ -142,6 +148,22 @@ export default function AdminProfilePage() {
                   <Edit3 className="w-4 h-4" />
                   Edit Profile
                 </button>
+
+              <button
+                onClick={() => {
+                  localStorage.clear();
+
+                  sessionStorage.clear();
+
+                  router.push("/login");
+                }}
+                className="h-12 px-6 rounded-full border border-red-100 bg-red-50 text-sm font-semibold text-red-600 hover:bg-red-100 transition-all duration-200 flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+
+                Logout
+              </button>
+
               </div>
             </div>
           </section>

@@ -176,6 +176,21 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="page-container py-24 md:py-32">
           <div className="mx-auto max-w-5xl text-center">
+            
+      {/* DISCLAIMER */}
+          <div className="mb-10 flex justify-center">
+              <div className="max-w-5xl rounded-2xl border border-[#E8D9B5] bg-[#FFF9ED] px-6 py-4 shadow-sm">
+                <p className="text-center text-sm leading-7 text-[#8B5E34]">
+                  Disclaimer: Startup Ka Mall does not guarantee
+                  fundraising, investment, business growth or
+                  startup success. Platform insights, readiness
+                  scores and recommendations are generated for
+                  educational, strategic and ecosystem support
+                  purposes only.
+                </p>
+              </div>
+            </div>
+
             {/* BADGE */}
             <div className="inline-flex items-center rounded-full border border-border/60 bg-[#F7F4EE]/95 px-5 py-3 shadow-sm">
               <span className="text-sm font-semibold text-slate-700">

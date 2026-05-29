@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 import {
   Award,
@@ -26,6 +27,7 @@ import {
 } from "lucide-react"
 
 import AdvisorStatCard from "@/components/advisor/AdvisorStatCard"
+import router from "next/dist/shared/lib/router/router"
 
 const navigation = [
   {
@@ -73,6 +75,8 @@ const expertise = [
 export default function AdvisorProfilePage() {
   const [sidebarOpen, setSidebarOpen] =
     useState(false)
+
+  const router = useRouter()
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -207,16 +211,49 @@ export default function AdvisorProfilePage() {
               </p>
             </div>
           </div>
+<div className="flex items-center gap-3">
+  {/* NOTIFICATION */}
+  <button className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
+    <Bell className="h-5 w-5 text-foreground" />
+  </button>
 
-          <div className="flex items-center gap-3">
-            <button className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
-              <Bell className="h-5 w-5 text-foreground" />
-            </button>
+  {/* UPGRADE */}
+  <button
+    onClick={() =>
+      router.push(
+        "/onboarding/advisor/pricing"
+      )
+    }
+    className="inline-flex h-12 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+  >
+    <Award className="h-4 w-4" />
 
-            <button className="inline-flex h-12 items-center rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
-              Save Profile
-            </button>
-          </div>
+    Upgrade Plan
+  </button>
+
+  {/* SETTINGS */}
+  <button className="inline-flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
+    <User className="h-4 w-4" />
+
+    Settings
+  </button>
+
+  {/* LOGOUT */}
+  <button
+    onClick={() => {
+      localStorage.clear()
+
+      sessionStorage.clear()
+
+      router.push("/login")
+    }}
+    className="inline-flex h-12 items-center gap-2 rounded-2xl border border-red-100 bg-red-50 px-5 text-sm font-semibold text-red-600 transition hover:bg-red-100"
+  >
+    <X className="h-4 w-4" />
+
+    Logout
+  </button>
+</div>
         </header>
 
         {/* CONTENT */}
