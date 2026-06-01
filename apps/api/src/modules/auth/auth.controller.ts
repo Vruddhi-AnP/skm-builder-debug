@@ -11,6 +11,8 @@ import { ResponseMessage } from '../../common/decorators/response-message.decora
 
 import { AuthSuccessResponseDto } from './dto/auth-success-response.dto';
 
+import { Throttle } from '@nestjs/throttler';
+
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -36,6 +38,12 @@ export class AuthController {
     description: 'Validation failed or user already exists',
   })
   @Post('signup')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @ResponseMessage('Signup successful')
   signup(@Body() dto: CreateUserDto) {
     return this.authService.signup(dto);
@@ -55,6 +63,12 @@ export class AuthController {
     description: 'Invalid email or password',
   })
   @Post('login')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @ResponseMessage('Login successful')
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);

@@ -1,15 +1,31 @@
 import { Module } from '@nestjs/common';
+
+import { APP_GUARD } from '@nestjs/core';
+
 import { ConfigModule } from '@nestjs/config';
+
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+
 import { AppController } from './app.controller';
+
 import { AppService } from './app.service';
+
 import { AuthModule } from './modules/auth/auth.module';
+
 import { FounderModule } from './modules/founder/founder.module';
+
 import { StartupModule } from './modules/startup/startup.module';
+
 import { BuilderModule } from './modules/builder/builder.module';
+
 import { AdvisorModule } from './modules/advisor/advisor.module';
+
 import { InvestorModule } from './modules/investor/investor.module';
+
 import { AdminModule } from './modules/admin/admin.module';
+
 import { PrismaModule } from './prisma/prisma.module';
+
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
 
 @Module({
@@ -17,16 +33,42 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
+
     AuthModule,
+
     FounderModule,
+
     StartupModule,
+
     BuilderModule,
+
     AdvisorModule,
+
     InvestorModule,
+
     AdminModule,
+
     PrismaModule,
   ],
+
   controllers: [AppController],
-  providers: [AppService, TransformResponseInterceptor],
+
+  providers: [
+    AppService,
+
+    TransformResponseInterceptor,
+
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

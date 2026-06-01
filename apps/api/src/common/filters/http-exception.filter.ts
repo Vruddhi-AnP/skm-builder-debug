@@ -35,6 +35,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       'message' in exceptionResponse
     ) {
       message = exceptionResponse.message as string | string[];
+    } else if (typeof exceptionResponse === 'string') {
+      message = exceptionResponse;
     } else {
       message = 'Internal server error';
     }
