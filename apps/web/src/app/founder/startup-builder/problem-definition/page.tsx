@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
+import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
+
 import {
   Accordion,
   AccordionContent,
@@ -39,18 +41,26 @@ export default function ProblemDefinitionPage() {
   const router = useRouter();
 
   const [formData, setFormData] =
-    useState<ProblemDefinitionForm>({
-      coreProblemStatement: "",
-      problemSeverity: "",
-      affectedUsers: [],
-      currentAlternatives: [],
-      marketGap: "",
-      customerFrustrations: "",
-      operationalImpact: "",
-      problemFrequency: "",
-      problemUrgency: "",
-      founderObservations: "",
-    });
+  useState<ProblemDefinitionForm>(() => {
+    const saved = getBuilderData();
+    const raw = (saved.problemDefinition ?? {}) as Record<string, string>;
+    return {
+      coreProblemStatement: raw.coreProblemStatement ?? "",
+      problemSeverity: raw.problemSeverity ?? "",
+      marketGap: raw.marketGap ?? "",
+      customerFrustrations: raw.customerFrustrations ?? "",
+      operationalImpact: raw.operationalImpact ?? "",
+      problemFrequency: raw.problemFrequency ?? "",
+      problemUrgency: raw.problemUrgency ?? "",
+      founderObservations: raw.founderObservations ?? "",
+      affectedUsers: raw.affectedUsers
+        ? raw.affectedUsers.split(",").filter(Boolean)
+        : [],
+      currentAlternatives: raw.currentAlternatives
+        ? raw.currentAlternatives.split(",").filter(Boolean)
+        : [],
+    };
+  });
 
   const problemAreas = [
     "Manual Operations",
@@ -636,25 +646,38 @@ export default function ProblemDefinitionPage() {
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        
         {/* SAVE */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
-          <Save className="h-4 w-4" />
+          <button
+            type="button"
+            onClick={() => {
+              saveBuilderStep("problemDefinition", {
+                ...formData,
+                affectedUsers: formData.affectedUsers.join(","),
+                currentAlternatives: formData.currentAlternatives.join(","),
+              } as Record<string, string>);
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+          >
+            <Save className="h-4 w-4" />
+            Save Draft
+          </button>
 
-          Save Draft
-        </button>
-
-        {/* NEXT */}
-        <button
-          onClick={() =>
-            router.push(
-              "/founder/startup-builder/market-research"
-            )
-          }
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-        >
-          Continue to Market Research
-
-        </button>
+          {/* NEXT */}
+          <button
+            type="button"
+            onClick={() => {
+              saveBuilderStep("problemDefinition", {
+                ...formData,
+                affectedUsers: formData.affectedUsers.join(","),
+                currentAlternatives: formData.currentAlternatives.join(","),
+              } as Record<string, string>);
+              router.push("/founder/startup-builder/market-research");
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+          >
+            Continue to Market Research
+          </button>
       </div>
     </div>
   );

@@ -20,6 +20,11 @@ import {
   Target,
 } from "lucide-react";
 
+import {
+  saveFounderOnboarding,
+  getFounderOnboarding,
+} from "@/lib/founder-onboarding";
+
 const startupStages = [
   "Idea Stage",
   "MVP Ready",
@@ -50,30 +55,35 @@ const businessModels = [
 export default function StartupProfilePage() {
   const router = useRouter();
 
-  const [selectedStage, setSelectedStage] =
-    useState("MVP Ready");
+  const [selectedStage, setSelectedStage] = useState(() => {
+  const saved = getFounderOnboarding();
+  return saved.startupStage ?? "MVP Ready";
+});
 
-  const [
-    selectedIndustries,
-    setSelectedIndustries,
-  ] = useState<string[]>([
-    "SaaS",
-    "AI",
-  ]);
+const [selectedIndustries, setSelectedIndustries] =
+  useState<string[]>(() => {
+    const saved = getFounderOnboarding();
+    return saved.startupIndustry
+      ? saved.startupIndustry.split(",").filter(Boolean)
+      : ["SaaS", "AI"];
+  });
 
-  const [
-    selectedBusinessModel,
-    setSelectedBusinessModel,
-  ] = useState("B2B");
+const [selectedBusinessModel, setSelectedBusinessModel] =
+  useState(() => {
+    const saved = getFounderOnboarding();
+    return saved.startupDescription ?? "B2B";
+  });
 
-  const [formData, setFormData] =
-    useState({
-      startupName: "",
-      website: "",
-      teamSize: "",
-      problemStatement: "",
-      solution: "",
-    });
+const [formData, setFormData] = useState(() => {
+  const saved = getFounderOnboarding();
+  return {
+    startupName: saved.startupName ?? "",
+    website: saved.startupWebsite ?? "",
+    teamSize: "",
+    problemStatement: "",
+    solution: "",
+  };
+});
 
   const toggleIndustry = (
     industry: string
@@ -96,11 +106,16 @@ export default function StartupProfilePage() {
     }
   };
 
-  const handleContinue = () => {
-    router.push(
-      "/onboarding/founder/package"
-    );
-  };
+ const handleContinue = () => {
+  saveFounderOnboarding({
+    startupName: formData.startupName,
+    startupWebsite: formData.website,
+    startupStage: selectedStage,
+    startupIndustry: selectedIndustries.join(","),
+    startupDescription: formData.problemStatement,
+  });
+  router.push("/onboarding/founder/package");
+};
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">
@@ -500,19 +515,15 @@ export default function StartupProfilePage() {
           {/* ACTIONS */}
           <div className="mt-10 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row">
             <button
-              onClick={() =>
-                router.push(
-                  "/onboarding/founder/profile"
-                )
-              }
+              type="button"
+              onClick={() => router.push("/onboarding/founder/profile")}
               className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-background px-6 text-sm font-semibold text-foreground transition hover:bg-muted"
             >
-              <ArrowLeft className="h-4 w-4" />
-
               Back
             </button>
 
             <button
+              type="button"
               onClick={handleContinue}
               className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
             >

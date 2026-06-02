@@ -20,6 +20,11 @@ import {
   User,
 } from "lucide-react";
 
+import {
+  saveInvestorOnboarding,
+  getInvestorOnboarding,
+} from "@/lib/investor-onboarding";
+
 const investorTypes = [
   "Angel Investor",
   "VC Firm",
@@ -31,24 +36,34 @@ const investorTypes = [
 export default function InvestorProfilePage() {
   const router = useRouter();
 
-  const [selectedType, setSelectedType] =
-    useState("Angel Investor");
+  const [selectedType, setSelectedType] = useState(() => {
+  const saved = getInvestorOnboarding();
+  return saved.role ?? "Angel Investor";
+});
 
-  const [formData, setFormData] =
-    useState({
-      fullName: "",
-      firmName: "",
-      location: "",
-      linkedin: "",
-      experience: "",
-      bio: "",
-    });
+const [formData, setFormData] = useState(() => {
+  const saved = getInvestorOnboarding();
+  return {
+    fullName: saved.fullName ?? "",
+    firmName: saved.firmName ?? "",
+    location: saved.location ?? "",
+    linkedin: saved.linkedinUrl ?? "",
+    experience: saved.bio ?? "",
+    bio: saved.bio ?? "",
+  };
+});
 
   const handleContinue = () => {
-    router.push(
-      "/onboarding/investor/investor-focus"
-    );
-  };
+  saveInvestorOnboarding({
+    fullName: formData.fullName,
+    firmName: formData.firmName,
+    location: formData.location,
+    linkedinUrl: formData.linkedin,
+    bio: formData.bio,
+    role: selectedType,
+  });
+  router.push("/onboarding/investor/investor-focus");
+};
 
   return (
     <div className="min-h-screen bg-[#f4f1ea] px-4 py-10">
@@ -449,21 +464,16 @@ export default function InvestorProfilePage() {
                   href="/signup/investor"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#d7d2c7] bg-[#f1efe9] px-6 text-sm font-semibold text-[#13235b] transition hover:bg-[#ebe7de]"
                 >
-
-                  <ArrowLeft className="h-4 w-4" />
-
                   Back
-
                 </Link>
 
                 {/* CONTINUE */}
                 <button
+                  type="button"
                   onClick={handleContinue}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#13235b] px-6 text-sm font-semibold text-white transition hover:opacity-90"
                 >
-
                   Continue
-
                 </button>
 
               </div>

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import {
   BarChart3,
@@ -72,6 +73,8 @@ export default function InvestorProfilePage() {
 
   const [profileSaved, setProfileSaved] =
     useState(false)
+
+  const user = useLocalUser();
 
   const [formData, setFormData] =
     useState({
@@ -178,7 +181,7 @@ export default function InvestorProfilePage() {
         <div className="flex h-24 items-center border-b border-border px-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground">
-              I
+              {getUserInitial(user?.name)}
             </div>
 
             <div>
@@ -339,7 +342,7 @@ export default function InvestorProfilePage() {
               <div className="flex items-center gap-5">
                 <div className="relative">
                   <div className="flex h-28 w-28 items-center justify-center rounded-[32px] bg-primary text-4xl font-black text-primary-foreground">
-                    K
+                    {getUserInitial(user?.name)}
                   </div>
 
                   <button className="absolute -bottom-2 -right-2 flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card shadow-sm">
@@ -357,7 +360,7 @@ export default function InvestorProfilePage() {
                   </div>
 
                   <h2 className="mt-5 text-4xl font-black text-foreground">
-                    Krishna Shah
+                    {getUserDisplayName(user?.name)}
                   </h2>
 
                   <p className="mt-2 text-base text-muted-foreground">

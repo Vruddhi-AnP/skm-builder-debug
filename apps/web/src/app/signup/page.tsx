@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import AuthCard from "@/components/layout/AuthCard";
 
@@ -45,7 +46,7 @@ export default function SignupPage() {
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(formData.email)) {
-      alert("Invalid email address");
+      toast.error("Invalid email address");
       return;
     }
 
@@ -54,7 +55,7 @@ export default function SignupPage() {
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!passwordRegex.test(formData.password)) {
-      alert(
+      toast.error(
         "Password must contain minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
       );
       return;
@@ -82,8 +83,6 @@ export default function SignupPage() {
   const role =
     authData.user.role;
 
-  console.log(role);
-
   if (
     role?.toLowerCase() ===
     "founder"
@@ -106,15 +105,15 @@ export default function SignupPage() {
       "/onboarding/investor/investor-profile"
     );
   } else {
-    alert("Invalid role");
+    toast.error("Invalid role");
   }
 } catch (error) {
-  console.log(error);
+  console.error("Signup error:", error);
 
   if (error instanceof Error) {
-    alert(error.message);
+    toast.error(error.message);
   } else {
-    alert("Signup failed");
+    toast.error("Signup failed");
   }
 }
     finally {
@@ -204,15 +203,13 @@ export default function SignupPage() {
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
               >
                 <option value="founder">
-                  Founder
+                  Founder 
                 </option>
-
                 <option value="advisor">
-                  Advisor
+                  Advisor 
                 </option>
-
                 <option value="investor">
-                  Investor
+                  Investor 
                 </option>
               </select>
             </div>

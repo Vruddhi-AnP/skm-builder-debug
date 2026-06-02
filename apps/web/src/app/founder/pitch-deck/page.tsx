@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
-  ArrowRight,
   FileText,
   Sparkles,
   CheckCircle2,
@@ -15,30 +14,53 @@ import {
   Rocket,
 } from "lucide-react";
 
+import { useEffect } from "react";
+
 export default function PitchDeckPage() {
   const router = useRouter();
 
-  const [formData, setFormData] =
-    useState({
-      startupName: "",
-      oneLiner: "",
-      problem: "",
-      solution: "",
-      marketSize: "",
-      businessModel: "",
-      traction: "",
-      fundingAsk: "",
-    });
+ const [formData, setFormData] =
+  useState(() => {
+    if (typeof window === "undefined") return {
+      startupName: "", oneLiner: "", problem: "",
+      solution: "", marketSize: "", businessModel: "",
+      traction: "", fundingAsk: "",
+    };
+    try {
+      const saved = localStorage.getItem("skmPitchDeck");
+      return saved ? JSON.parse(saved) : {
+        startupName: "", oneLiner: "", problem: "",
+        solution: "", marketSize: "", businessModel: "",
+        traction: "", fundingAsk: "",
+      };
+    } catch {
+      return {
+        startupName: "", oneLiner: "", problem: "",
+        solution: "", marketSize: "", businessModel: "",
+        traction: "", fundingAsk: "",
+      };
+    }
+  });
 
   const handleChange = (
     field: string,
     value: string
   ) => {
-    setFormData((prev) => ({
+    setFormData((prev: typeof formData) => ({
       ...prev,
       [field]: value,
     }));
   };
+
+const handleSave = () => {
+  localStorage.setItem("skmPitchDeck", JSON.stringify(formData));
+};
+
+const filledFields = Object.values(formData).filter(
+  (v) => (v as string).trim().length > 0
+).length;
+const totalFields = Object.keys(formData).length;
+const pitchProgress = Math.round((filledFields / totalFields) * 100);
 
   return (
   <div className="mx-auto max-w-[1600px] space-y-8 px-4 pb-24 xl:px-6">
@@ -86,7 +108,8 @@ export default function PitchDeckPage() {
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[72%] rounded-full bg-primary" />
+              <div  className="h-full rounded-full bg-primary transition-all duration-500"
+                    style={{ width: `${pitchProgress}%` }} />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -370,21 +393,24 @@ export default function PitchDeckPage() {
 
       {/* FOOTER */}
       <div className="sticky bottom-0 z-20 flex flex-col gap-4 border-t border-border/60 bg-[#F5F7FB]/95 py-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button
+          type="button"
+          onClick={handleSave}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+        >
           <Save className="h-4 w-4" />
           Save Draft
         </button>
 
         <button
-          onClick={() =>
-            router.push(
-              "/founder/pitch-deck/preview"
-            )
-          }
+          type="button"
+          onClick={() => {
+            handleSave();
+            router.push("/founder/pitch-deck/preview");
+          }}
           className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
         >
           Preview Pitch Deck
-
         </button>
       </div>
     </div>

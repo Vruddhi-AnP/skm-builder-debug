@@ -26,6 +26,9 @@ export default function FounderResourcesPage() {
   const [loading, setLoading] =
     useState(true);
 
+  const [error, setError] =
+    useState<string | null>(null);
+    
   useEffect(() => {
     async function loadResources() {
       try {
@@ -33,11 +36,9 @@ export default function FounderResourcesPage() {
           await getResources();
 
         setResources(data);
-      } catch (error) {
-        console.error(
-          "Failed to load resources",
-          error
-        );
+     } catch (error) {
+        console.error("Failed to load resources", error);
+        setError("Failed to load resources. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -146,8 +147,27 @@ export default function FounderResourcesPage() {
           </div>
         )}
 
+        {/* ERROR */}
+          {error && !loading && (
+            <div className="rounded-[32px] border border-red-100 bg-red-50 p-10 text-center">
+              <h3 className="text-2xl font-black text-red-600">
+                Something went wrong
+              </h3>
+              <p className="mt-3 text-sm text-red-500">
+                {error}
+              </p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-6 rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
         {/* EMPTY */}
-        {!loading &&
+        {!loading && !error &&
           filteredResources.length ===
             0 && (
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
@@ -180,7 +200,7 @@ export default function FounderResourcesPage() {
           )}
 
         {/* GRID */}
-        {!loading &&
+        {!loading && !error &&
           filteredResources.length >
             0 && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

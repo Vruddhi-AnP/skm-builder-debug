@@ -20,6 +20,10 @@ import {
   Briefcase,
 } from "lucide-react";
 
+import {
+  saveFounderOnboarding,
+} from "@/lib/founder-onboarding";
+
 const packages = [
   {
     badge: "Starter",
@@ -152,9 +156,10 @@ export default function PackageSelectionPage() {
   };
 
   const handleContinue = () => {
-    router.push(
-      "/onboarding/founder/success"
-    );
+    saveFounderOnboarding({
+      selectedPackage: selectedPackage,
+    });
+    router.push("/onboarding/founder/success");
   };
 
   return (
@@ -523,36 +528,35 @@ export default function PackageSelectionPage() {
             }
             className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-card px-6 text-sm font-semibold text-foreground transition hover:bg-muted"
           >
-
             Back
           </button>
 
           {selectedPackage ===
-"Builder Access" ? (
-  <Link
-    href="/founder/dashboard"
-    className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-  >
-    Continue Free
+            "Builder Access" ? (
+              <Link
+                href="/founder/dashboard"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+              >
+                Continue Free
 
-  </Link>
-) : (
-  <Link
-    href={`/payment?role=founder&plan=${
-      selectedPackage ===
-      "Growth Package"
-        ? "growth"
-        : selectedPackage ===
-          "Advisor Access"
-        ? "advisor"
-        : "investor"
-    }`}
-    className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-  >
-    Proceed to Payment
+              </Link>
+            ) : (
+              <Link
+                href={`/payment?role=founder&plan=${
+                  selectedPackage ===
+                  "Growth Package"
+                    ? "growth"
+                    : selectedPackage ===
+                      "Advisor Access"
+                    ? "advisor"
+                    : "investor"
+                }`}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+              >
+                Proceed to Payment
 
-  </Link>
-)}
+              </Link>
+            )}
         </div>
       </div>
     </div>

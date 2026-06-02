@@ -1,8 +1,10 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import {
   BarChart3,
@@ -33,7 +35,6 @@ const navigation = [
     name: "Dashboard",
     href: "/investor/dashboard",
     icon: BarChart3,
-    active: true,
   },
   {
     name: "Discover",
@@ -102,17 +103,32 @@ export default function InvestorDashboardPage() {
   const [sidebarOpen, setSidebarOpen] =
     useState(false)
 
-  const [savedStartups, setSavedStartups] =
-    useState<number[]>([])
+ const [savedStartups, setSavedStartups] =
+  useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem("skmSavedStartups");
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
 
-  const [interestedStartups, setInterestedStartups] =
-    useState<number[]>([])
+const [interestedStartups, setInterestedStartups] =
+  useState<number[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem("skmInterestedStartups");
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
 
   const featuredStartups = useMemo(() => {
     return startupData.filter(
       (item) => item.featured
     )
   }, [])
+
+  const user = useLocalUser();
+  const pathname = usePathname();
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -158,7 +174,7 @@ export default function InvestorDashboardPage() {
                       setSidebarOpen(false)
                     }
                     className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
-                      item.active
+                      pathname === item.href
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:bg-muted"
                     }`}
@@ -232,7 +248,7 @@ export default function InvestorDashboardPage() {
                 key={item.name}
                 href={item.href}
                 className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
-                  item.active
+                  pathname === item.href
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:bg-muted"
                 }`}
@@ -305,16 +321,16 @@ export default function InvestorDashboardPage() {
               className="flex h-12 items-center gap-3 rounded-2xl border border-border bg-card px-3"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
-                K
+                {getUserInitial(user?.name)}
               </div>
 
               <div className="hidden sm:block">
                 <p className="text-sm font-semibold text-foreground">
-                  Krishna Shah
+                  {getUserDisplayName(user?.name)}
                 </p>
 
                 <p className="text-xs text-muted-foreground">
-                  Angel Investor
+                  {user?.role ?? "Investor"}
                 </p>
               </div>
             </Link>
@@ -457,36 +473,21 @@ export default function InvestorDashboardPage() {
                     startup.id
                   )}
                   onSave={() => {
-                    if (
-                      savedStartups.includes(
-                        startup.id
-                      )
-                    ) {
-                      setSavedStartups((prev) =>
-                        prev.filter(
-                          (id) =>
-                            id !== startup.id
-                        )
-                      )
-                    } else {
-                      setSavedStartups((prev) => [
-                        ...prev,
-                        startup.id,
-                      ])
-                    }
+                    setSavedStartups((prev) => {
+                      const next = prev.includes(startup.id)
+                        ? prev.filter((id) => id !== startup.id)
+                        : [...prev, startup.id];
+                      localStorage.setItem("skmSavedStartups", JSON.stringify(next));
+                      return next;
+                    });
                   }}
                   onInterested={() => {
-                    if (
-                      interestedStartups.includes(
-                        startup.id
-                      )
-                    )
-                      return
-
-                    setInterestedStartups((prev) => [
-                      ...prev,
-                      startup.id,
-                    ])
+                    if (interestedStartups.includes(startup.id)) return;
+                    setInterestedStartups((prev) => {
+                      const next = [...prev, startup.id];
+                      localStorage.setItem("skmInterestedStartups", JSON.stringify(next));
+                      return next;
+                    });
                   }}
                 />
               ))}

@@ -26,6 +26,9 @@ export default function AdvisorsPage() {
   const [loading, setLoading] =
     useState(true);
 
+  const [error, setError] =
+    useState<string | null>(null);
+
   useEffect(() => {
     async function loadAdvisors() {
       try {
@@ -33,11 +36,9 @@ export default function AdvisorsPage() {
           await getAdvisors();
 
         setAdvisors(data);
-      } catch (error) {
-        console.error(
-          "Failed to load advisors",
-          error
-        );
+            } catch (error) {
+        console.error("Failed to load advisors", error);
+        setError("Failed to load advisors. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -143,10 +144,27 @@ export default function AdvisorsPage() {
           </div>
         )}
 
+        {/* ERROR */}
+          {error && !loading && (
+            <div className="rounded-[32px] border border-red-100 bg-red-50 p-10 text-center">
+              <h3 className="text-2xl font-black text-red-600">
+                Something went wrong
+              </h3>
+              <p className="mt-3 text-sm text-red-500">
+                {error}
+              </p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-6 rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
         {/* EMPTY */}
-        {!loading &&
-          filteredAdvisors.length ===
-            0 && (
+        {!loading && !error && filteredAdvisors.length === 0 && (
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
               <h3 className="text-3xl font-black text-[#16214A]">
                 No Advisors Found
@@ -175,9 +193,7 @@ export default function AdvisorsPage() {
           )}
 
         {/* GRID */}
-        {!loading &&
-          filteredAdvisors.length >
-            0 && (
+        {!loading && !error && filteredAdvisors.length > 0 && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               {filteredAdvisors.map(
                 (advisor) => (

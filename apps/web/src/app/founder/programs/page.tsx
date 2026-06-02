@@ -26,6 +26,9 @@ export default function ProgramsPage() {
   const [loading, setLoading] =
     useState(true);
 
+  const [error, setError] =
+     useState<string | null>(null);
+
   useEffect(() => {
     async function loadPrograms() {
       try {
@@ -38,6 +41,7 @@ export default function ProgramsPage() {
           "Failed to load programs",
           error
         );
+        setError("Failed to load programs");
       } finally {
         setLoading(false);
       }
@@ -130,73 +134,70 @@ export default function ProgramsPage() {
         </div>
 
         {/* LOADING */}
-        {loading && (
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-
-            {[1, 2, 3, 4].map(
-              (item) => (
+          {loading && (
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {[1, 2, 3, 4].map((item) => (
                 <div
                   key={item}
                   className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
                 />
-              )
-            )}
+              ))}
+            </div>
+          )}
 
-          </div>
-        )}
+          {/* ERROR */}
+          {error && !loading && (
+            <div className="rounded-[32px] border border-red-100 bg-red-50 p-10 text-center">
+              <h3 className="text-2xl font-black text-red-600">
+                Something went wrong
+              </h3>
+              <p className="mt-3 text-sm text-red-500">
+                {error}
+              </p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-6 rounded-2xl bg-red-600 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+              >
+                Retry
+              </button>
+            </div>
+          )}
 
-        {/* EMPTY */}
-        {!loading &&
-          filteredPrograms.length ===
-            0 && (
+          {/* EMPTY */}
+          {!loading && !error &&
+            filteredPrograms.length === 0 && (
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
-
               <h3 className="text-3xl font-black text-[#16214A]">
                 No Programs Found
               </h3>
-
               <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-slate-500">
-                Try adjusting your search
-                or category filters to
-                discover more startup
-                programs.
+                Try adjusting your search or category
+                filters to discover more startup programs.
               </p>
-
               <button
+                type="button"
                 onClick={() => {
                   setSearch("");
-
-                  setSelectedCategory(
-                    "All Categories"
-                  );
+                  setSelectedCategory("All Categories");
                 }}
                 className="mt-8 rounded-2xl bg-primary px-6 py-3 font-semibold text-white"
               >
                 Reset Filters
               </button>
-
             </div>
           )}
 
-        {/* GRID */}
-        {!loading &&
-          filteredPrograms.length >
-            0 && (
+          {/* GRID */}
+          {!loading && !error &&
+            filteredPrograms.length > 0 && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-
-              {filteredPrograms.map(
-                (program) => (
-                  <ProgramCard
-                    key={
-                      program.id
-                    }
-                    program={
-                      program
-                    }
-                  />
-                )
-              )}
-
+              {filteredPrograms.map((program) => (
+                <ProgramCard
+                  key={program.id}
+                  program={program}
+                />
+              ))}
             </div>
           )}
 

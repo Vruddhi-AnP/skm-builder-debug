@@ -5,6 +5,12 @@ import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import {
+  getBuilderProgress,
+  getStepStatus,
+  type BuilderStepKey,
+} from "@/hooks/useLocalBuilder";
+
+import {
   CheckCircle2,
   Rocket,
   ChevronRight,
@@ -12,45 +18,39 @@ import {
 
 const steps = [
   {
+    key: "ideaDefinition" as BuilderStepKey,
     name: "Idea Definition",
     href: "/founder/startup-builder/idea-definition",
-    progress: "Completed",
   },
-
   {
+    key: "problemDefinition" as BuilderStepKey,
     name: "Problem Definition",
     href: "/founder/startup-builder/problem-definition",
-    progress: "In Progress",
   },
-
   {
+    key: "marketResearch" as BuilderStepKey,
     name: "Market Research",
     href: "/founder/startup-builder/market-research",
-    progress: "Pending",
   },
-
   {
+    key: "solutionDesign" as BuilderStepKey,
     name: "Solution Design",
     href: "/founder/startup-builder/solution-design",
-    progress: "Pending",
   },
-
   {
+    key: "businessModel" as BuilderStepKey,
     name: "Business Model",
     href: "/founder/startup-builder/business-model",
-    progress: "Pending",
   },
-
   {
+    key: null,
     name: "Summary",
     href: "/founder/startup-builder/summary",
-    progress: "Pending",
   },
-
   {
+    key: null,
     name: "Readiness Score",
     href: "/founder/startup-builder/readiness-score",
-    progress: "Pending",
   },
 ];
 
@@ -60,6 +60,8 @@ export default function StartupBuilderLayout({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+
+  const progress = getBuilderProgress();
 
   return (
     <div className="min-h-screen bg-[#f8fbff]">
@@ -93,12 +95,12 @@ export default function StartupBuilderLayout({
               </p>
 
               <span className="text-sm font-black text-primary">
-                60%
+                {progress}%
               </span>
             </div>
 
             <div className="h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[60%] rounded-full bg-primary" />
+              <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
             </div>
 
             <p className="mt-4 text-xs leading-6 text-slate-500">
@@ -195,7 +197,7 @@ export default function StartupBuilderLayout({
                           <CheckCircle2 className="h-4 w-4 text-emerald-500" />
 
                           <p className="text-xs font-medium text-slate-500">
-                            {step.progress}
+                            {step.key ? getStepStatus(step.key) : "Pending"}
                           </p>
                         </div>
                       </div>

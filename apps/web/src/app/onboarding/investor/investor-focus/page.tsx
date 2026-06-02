@@ -20,6 +20,11 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import {
+  saveInvestorOnboarding,
+  getInvestorOnboarding,
+} from "@/lib/investor-onboarding";
+
 const focusAreas = [
   {
     id: "fintech",
@@ -67,11 +72,13 @@ const focusAreas = [
 export default function InvestorFocusPage() {
   const router = useRouter();
 
-  const [selectedFocus, setSelectedFocus] =
-    useState<string[]>([
-      "fintech",
-      "ai",
-    ]);
+ const [selectedFocus, setSelectedFocus] =
+  useState<string[]>(() => {
+    const saved = getInvestorOnboarding();
+    return saved.industries
+      ? saved.industries
+      : ["fintech", "ai"];
+  });
 
   const toggleFocus = (id: string) => {
     if (selectedFocus.includes(id)) {
@@ -89,10 +96,11 @@ export default function InvestorFocusPage() {
   };
 
   const handleContinue = () => {
-    router.push(
-      "/onboarding/investor/investor-preferences"
-    );
-  };
+  saveInvestorOnboarding({
+    industries: selectedFocus,
+  });
+  router.push("/onboarding/investor/investor-preferences");
+};
 
   return (
     <div className="min-h-screen bg-[#f4f1ea] px-4 py-10">

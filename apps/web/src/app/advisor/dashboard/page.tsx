@@ -1,7 +1,9 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import {
   ArrowRight,
@@ -26,7 +28,6 @@ const navigation = [
     name: "Dashboard",
     href: "/advisor/dashboard",
     icon: BarChart3,
-    active: true,
   },
   {
     name: "Discover",
@@ -103,6 +104,9 @@ export default function AdvisorDashboardPage() {
   const [selectedCategory, setSelectedCategory] =
     useState("All")
 
+  const user = useLocalUser();
+  const pathname = usePathname();
+
   const categories = [
     "All",
     "FinTech",
@@ -165,7 +169,7 @@ export default function AdvisorDashboardPage() {
                     href={item.href}
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 ${
-                      item.active
+                      pathname === item.href
                         ? "bg-[#eef2ff] text-violet-600"
                         : "text-gray-600 hover:bg-[#f8fafc]"
                     }`}
@@ -219,9 +223,9 @@ export default function AdvisorDashboardPage() {
                 key={item.name}
                 href={item.href}
                 className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-200 ${
-                  item.active
+                  pathname === item.href
                     ? "bg-[#eef2ff] text-violet-600"
-                    : "text-gray-600 hover:bg-[#F7F4EE]/95"
+                    : "text-gray-600 hover:bg-[#f8fafc]"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -293,17 +297,16 @@ export default function AdvisorDashboardPage() {
               href="/advisor/profile"
               className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center gap-3 hover:bg-[#fafafa] transition"
             >
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
-                K
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                {getUserInitial(user?.name)}
               </div>
 
               <div className="hidden sm:block text-left">
                 <p className="text-sm font-semibold text-[#0f172a]">
-                  Krishna Shah
+                  {getUserDisplayName(user?.name)}
                 </p>
-
-                <p className="text-xs text-gray-500">
-                  Platinum Advisor
+                <p className="text-xs text-gray-500 capitalize">
+                  {user?.role ?? "Advisor"}
                 </p>
               </div>
             </Link>
@@ -328,7 +331,9 @@ export default function AdvisorDashboardPage() {
                 <h1 className="mt-6 text-4xl lg:text-5xl font-bold tracking-tight text-[#0f172a] leading-[1.05]">
                   Welcome Back,
                   <br />
-                  Advisor
+                  <span className="text-violet-600">
+                    {user?.name?.split(" ")[0] ?? "Advisor"}
+                  </span>
                 </h1>
 
                 <p className="mt-5 max-w-2xl text-base leading-relaxed text-gray-500">
@@ -582,7 +587,7 @@ export default function AdvisorDashboardPage() {
             </div>
 
             {/* RIGHT */}
-            <div className="space-y-5">
+            <div className="space-y-5"></div>
               {/* SESSIONS */}
               <div className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
                 <div className="flex items-center justify-between">
@@ -635,31 +640,27 @@ export default function AdvisorDashboardPage() {
                   Quick Actions
                 </h3>
 
+                  <div className="mt-5 grid grid-cols-2 gap-3">
+                    <Link
+                      href="/advisor/earnings"
+                      className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
+                    >
+                      <Wallet className="w-5 h-5 text-fuchsia-500 mx-auto" />
+                      <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
+                        Earnings
+                      </p>
+                    </Link>
 
-                  <Link
-                    href="/advisor/earnings"
-                    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
-                  >
-                    <Wallet className="w-5 h-5 text-fuchsia-500 mx-auto" />
-
-                    <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
-                      Earnings
-                    </p>
-                  </Link>
-
-                
-
-                  <Link
-                    href="/advisor/profile"
-                    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
-                  >
-                    <Star className="w-5 h-5 text-orange-500 mx-auto" />
-
-                    <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
-                      Reviews
-                    </p>
-                  </Link>
-                </div>
+                    <Link
+                      href="/advisor/profile"
+                      className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
+                    >
+                      <Star className="w-5 h-5 text-orange-500 mx-auto" />
+                      <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
+                        Reviews
+                      </p>
+                    </Link>
+                  </div>
               </div>
           </section>
         </main>

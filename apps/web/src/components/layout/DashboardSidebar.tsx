@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import { usePathname } from "next/navigation";
 
@@ -15,6 +16,7 @@ import {
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const user = useLocalUser();
 
   const navItems = [
     {
@@ -121,17 +123,15 @@ export default function DashboardSidebar() {
 
         <div className="flex items-center gap-3">
 
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
-            K
+         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
+            {getUserInitial(user?.name)}
           </div>
-
           <div>
             <h3 className="font-semibold text-[#16214A]">
-              Krishna Shah
+              {getUserDisplayName(user?.name)}
             </h3>
-
-            <p className="text-sm text-slate-500">
-              Founder
+            <p className="text-sm text-slate-500 capitalize">
+              {user?.role ?? "Founder"}
             </p>
           </div>
 

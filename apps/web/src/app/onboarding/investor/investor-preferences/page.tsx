@@ -18,6 +18,11 @@ import {
   Target,
 } from "lucide-react";
 
+import {
+  saveInvestorOnboarding,
+  getInvestorOnboarding,
+} from "@/lib/investor-onboarding";
+
 const investmentStages = [
   "Idea Stage",
   "MVP Ready",
@@ -43,27 +48,37 @@ const geographies = [
 export default function InvestorPreferencesPage() {
   const router = useRouter();
 
-  const [selectedStages, setSelectedStages] =
-    useState<string[]>([
-      "Seed Stage",
-    ]);
+ const [selectedStages, setSelectedStages] =
+  useState<string[]>(() => {
+    const saved = getInvestorOnboarding();
+    return saved.investmentStages ?? ["Seed Stage"];
+  });
 
-  const [selectedTickets, setSelectedTickets] =
-    useState<string[]>([
-      "₹10L - ₹25L",
-    ]);
+const [selectedTickets, setSelectedTickets] =
+  useState<string[]>(() => {
+    const saved = getInvestorOnboarding();
+    return saved.ticketSize
+      ? [saved.ticketSize]
+      : ["₹10L - ₹25L"];
+  });
 
-  const [
-    selectedGeographies,
-    setSelectedGeographies,
-  ] = useState<string[]>([
-    "India",
-  ]);
+const [
+  selectedGeographies,
+  setSelectedGeographies,
+] = useState<string[]>(() => {
+  const saved = getInvestorOnboarding();
+  return saved.geography
+    ? [saved.geography]
+    : ["India"];
+});
 
-  const [
-    mentorshipInterest,
-    setMentorshipInterest,
-  ] = useState("Yes");
+const [
+  mentorshipInterest,
+  setMentorshipInterest,
+] = useState(() => {
+  const saved = getInvestorOnboarding();
+  return saved.founderPreference ?? "Yes";
+});
 
   const toggleSelection = (
     value: string,
@@ -86,11 +101,15 @@ export default function InvestorPreferencesPage() {
     }
   };
 
-  const handleContinue = () => {
-    router.push(
-      "/onboarding/investor/investor-success"
-    );
-  };
+ const handleContinue = () => {
+  saveInvestorOnboarding({
+    investmentStages: selectedStages,
+    ticketSize: selectedTickets.join(","),
+    geography: selectedGeographies.join(","),
+    founderPreference: mentorshipInterest,
+  });
+  router.push("/onboarding/investor/investor-success");
+};
 
   return (
     <div className="min-h-screen bg-[#f4f1ea] px-4 py-10">

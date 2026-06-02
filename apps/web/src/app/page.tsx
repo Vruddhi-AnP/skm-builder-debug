@@ -177,39 +177,21 @@ export default function HomePage() {
         <div className="page-container py-24 md:py-32">
           <div className="mx-auto max-w-5xl text-center">
             
-      {/* DISCLAIMER */}
-          <div className="mb-10 flex justify-center">
-              <div className="max-w-5xl rounded-2xl border border-[#E8D9B5] bg-[#FFF9ED] px-6 py-4 shadow-sm">
-                <p className="text-center text-sm leading-7 text-[#8B5E34]">
-                  Disclaimer: Startup Ka Mall does not guarantee
-                  fundraising, investment, business growth or
-                  startup success. Platform insights, readiness
-                  scores and recommendations are generated for
-                  educational, strategic and ecosystem support
-                  purposes only.
-                </p>
-              </div>
-            </div>
+     {/* BADGE */}
+      <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-5 py-3 shadow-sm">
+        <span className="text-sm font-semibold text-primary">
+          🇮🇳 Built for Indian Founders
+        </span>
+      </div>
 
-            {/* BADGE */}
-            <div className="inline-flex items-center rounded-full border border-border/60 bg-[#F7F4EE]/95 px-5 py-3 shadow-sm">
-              <span className="text-sm font-semibold text-slate-700">
-                Founder operating platform for startup execution
-              </span>
-            </div>
-
-            {/* TITLE */}
-            <h1 className="mt-8 text-5xl font-black leading-[1.05] tracking-tight text-[#16214A] md:text-6xl">
-              Build Startups
-              <br />
-              With Structured Execution
+           <h1 className="mt-8 text-5xl font-black leading-tight tracking-tight text-[#16214A] md:text-6xl lg:text-7xl">
+              Build Your Startup
+              <span className="block text-primary">The Right Way</span>
             </h1>
 
-            {/* SUBTITLE */}
-            <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-[#6B6B6B]">
-              A founder operating platform designed for
-              startup execution, ecosystem collaboration,
-              advisor access and investor readiness.
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#6B6B6B]">
+              Get structured guidance, connect with mentors, and attract investors — 
+              all in one place built for early-stage Indian founders.
             </p>
 
             {/* CTA */}
@@ -260,13 +242,12 @@ export default function HomePage() {
             </div>
 
             <h2 className="mt-6 text-4xl font-black tracking-tight text-[#16214A]">
-              Your Founder Journey
+              Everything You Need to Launch
             </h2>
-
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-[#6B6B6B]">
-              Structured startup workflows designed for
-              execution, collaboration and investor readiness.
+              From validating your idea to meeting investors — SKM guides you through every step.
             </p>
+            
           </div>
 
           <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -521,6 +502,14 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+
+             <div className="border-t border-border/60 px-4 py-4 text-center">
+    <p className="mx-auto max-w-4xl text-xs leading-6 text-slate-400">
+      Disclaimer: Startup Ka Mall does not guarantee fundraising, investment, business growth or startup success. 
+      Platform insights, readiness scores and recommendations are for educational and ecosystem support purposes only.
+    </p>
+  </div>
+
       </footer>
     </main>
   );

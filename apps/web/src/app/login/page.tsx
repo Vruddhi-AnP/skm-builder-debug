@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import AuthCard from "@/components/layout/AuthCard";
 import { loginUser } from "@/services/auth.service";
@@ -37,7 +38,7 @@ export default function LoginPage() {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailRegex.test(formData.email)) {
-    alert("Invalid email address");
+    toast.error("Invalid email address");
     return;
   }
 
@@ -92,15 +93,15 @@ export default function LoginPage() {
         "/admin/dashboard"
       );
     } else {
-      alert("Invalid user role");
+      toast.error("Unrecognized role. Please contact support.");
     }
   } catch (error) {
-    console.log(error);
+  console.error("Login error:", error);
 
     if (error instanceof Error) {
-      alert(error.message);
+      toast.error(error.message);
     } else {
-      alert("Login failed");
+      toast.error("Login failed");
     }
   } finally {
     setLoading(false);
@@ -148,12 +149,13 @@ export default function LoginPage() {
                   Password
                 </label>
 
-                <Link
-                  href="#"
+               <button
+                  type="button"
+                  onClick={() => toast.info("Password reset coming soon. Contact support for help.")}
                   className="text-sm text-slate-500 transition hover:text-[#16214A]"
                 >
                   Forgot password?
-                </Link>
+                </button>
               </div>
 
               <input

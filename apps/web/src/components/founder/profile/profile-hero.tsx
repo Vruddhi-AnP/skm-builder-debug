@@ -4,9 +4,9 @@ export default function ProfileHero() {
   return (
     <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8 lg:p-10">
 
-      <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-cyan-100 blur-3xl opacity-60" />
+      <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-[#F4C542]/10 blur-3xl opacity-70" />
 
-      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-sky-100 blur-3xl opacity-60" />
+      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-[#16214A]/5 blur-3xl opacity-70" />
 
       <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
 
@@ -14,14 +14,14 @@ export default function ProfileHero() {
         <div className="flex items-start gap-5">
 
           {/* AVATAR */}
-          <div className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-gradient-to-br from-sky-500 via-cyan-500 to-blue-500 text-3xl font-black text-white shadow-[0_20px_60px_rgba(14,165,233,0.25)]">
+          <div className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-gradient-to-br from-[#16214A] via-[#22346E] to-[#314A96] text-3xl font-black text-white shadow-[0_20px_60px_rgba(22,33,74,0.25)]">
             K
           </div>
 
           {/* INFO */}
           <div>
 
-            <div className="inline-flex items-center rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
+            <div className="inline-flex items-center rounded-full border border-[#F4C542]/40 bg-[#FFF8E7] px-4 py-2 text-xs font-semibold text-[#9A6A00]">
               Founder Account
             </div>
 
@@ -35,11 +35,11 @@ export default function ProfileHero() {
 
             <div className="mt-6 flex flex-wrap gap-3">
 
-              <div className="rounded-2xl border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700">
+              <div className="rounded-2xl border border-[#16214A]/10 bg-[#16214A]/5 px-4 py-2 text-sm font-medium text-[#16214A]">
                 Founder
               </div>
 
-              <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-2 text-sm font-medium text-cyan-700">
+              <div className="rounded-2xl border border-[#F4C542]/30 bg-[#FFF8E7] px-4 py-2 text-sm font-medium text-[#9A6A00]">
                 Early Stage Startup
               </div>
 
@@ -50,7 +50,7 @@ export default function ProfileHero() {
         {/* RIGHT */}
         <div className="grid grid-cols-2 gap-4 lg:w-[320px]">
 
-          <div className="rounded-3xl border border-border/60 bg-slate-50 p-5">
+          <div className="rounded-3xl border border-[#E7E0D3] bg-[#FFFDF9] p-5">
             <p className="text-sm text-slate-500">
               Readiness
             </p>
@@ -60,7 +60,7 @@ export default function ProfileHero() {
             </h3>
           </div>
 
-          <div className="rounded-3xl border border-border/60 bg-slate-50 p-5">
+          <div className="rounded-3xl border border-[#E7E0D3] bg-[#FFFDF9] p-5">
             <p className="text-sm text-slate-500">
               Programs
             </p>

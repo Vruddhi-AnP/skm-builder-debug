@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import {
   Award,
@@ -27,7 +28,6 @@ import {
 } from "lucide-react"
 
 import AdvisorStatCard from "@/components/advisor/AdvisorStatCard"
-import router from "next/dist/shared/lib/router/router"
 
 const navigation = [
   {
@@ -76,6 +76,7 @@ export default function AdvisorProfilePage() {
   const [sidebarOpen, setSidebarOpen] =
     useState(false)
 
+  const user = useLocalUser()
   const router = useRouter()
 
   return (
@@ -265,7 +266,7 @@ export default function AdvisorProfilePage() {
                 {/* AVATAR */}
                 <div className="relative">
                   <div className="flex h-32 w-32 items-center justify-center rounded-[32px] bg-primary text-5xl font-black text-primary-foreground shadow-lg">
-                    K
+                    {getUserInitial(user?.name)}
                   </div>
 
                   <button className="absolute -bottom-2 -right-2 flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-card">
@@ -276,13 +277,9 @@ export default function AdvisorProfilePage() {
                 {/* INFO */}
                 <div>
                   <div className="flex flex-wrap items-center gap-3">
-                    <h2 className="text-4xl font-black tracking-tight text-foreground">
-                      Krishna Shah
-                    </h2>
-
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                      Platinum Advisor
-                    </span>
+                    <p className="text-xs text-gray-500 capitalize">
+                      {user?.role ?? "Advisor"}
+                    </p>
                   </div>
 
                   <p className="mt-4 text-lg text-muted-foreground">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { useRouter } from "next/navigation";
+import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
 
 import {
   Accordion,
@@ -39,7 +40,10 @@ export default function IdeaDefinitionPage() {
   const router = useRouter();
 
   const [formData, setFormData] =
-    useState<IdeaDefinitionForm>({
+  useState<IdeaDefinitionForm>(() => {
+
+  const saved = getBuilderData();
+    return {
       startupName: "",
       startupVision: "",
       startupStage: "",
@@ -51,7 +55,9 @@ export default function IdeaDefinitionPage() {
       problemStatement: "",
       uniqueValueProposition: "",
       additionalNotes: "",
-    });
+      ...(saved.ideaDefinition ?? {}),
+    };
+  });
 
   const startupCategories = [
     "AI SaaS",
@@ -69,24 +75,6 @@ export default function IdeaDefinitionPage() {
     "MVP Stage",
     "Beta Launch",
     "Revenue Stage",
-  ];
-
-  const audiences = [
-    "Startups",
-    "SMBs",
-    "Enterprises",
-    "Creators",
-    "Students",
-    "Agencies",
-  ];
-
-  const solutionTypes = [
-    "AI Automation",
-    "Workflow Platform",
-    "Analytics Dashboard",
-    "Marketplace",
-    "SaaS Platform",
-    "Mobile Application",
   ];
 
   const founderGoals = [
@@ -503,23 +491,27 @@ export default function IdeaDefinitionPage() {
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* SAVE */}
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
+        <button
+          type="button"
+          onClick={() => {
+            saveBuilderStep("ideaDefinition", formData as unknown as Record<string, string>);
+          }}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+        >
           <Save className="h-4 w-4" />
-
           Save Draft
         </button>
 
         {/* NEXT */}
         <button
-          onClick={() =>
-            router.push(
-              "/founder/startup-builder/problem-definition"
-            )
-          }
+          type="button"
+          onClick={() => {
+            saveBuilderStep("ideaDefinition", formData as unknown as Record<string, string>);
+            router.push("/founder/startup-builder/problem-definition");
+          }}
           className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
         >
           Continue to Problem Definition
-
         </button>
       </div>
     </div>

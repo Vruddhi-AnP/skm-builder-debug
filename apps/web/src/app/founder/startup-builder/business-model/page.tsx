@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
 
 import {
-  ArrowRight,
   BriefcaseBusiness,
   Coins,
   CreditCard,
@@ -33,19 +33,29 @@ export default function BusinessModelPage() {
   const router = useRouter();
 
   const [formData, setFormData] =
-    useState<BusinessModelForm>({
-      revenueModel: "",
-      pricingStrategy: "",
-      acquisitionChannels: [],
-      costStructures: [],
-      scalingChallenges: [],
-      revenueTimeline: "",
-      targetRevenue: "",
-      monetizationStrategy: "",
-      customerAcquisitionStrategy: "",
-      growthStrategy: "",
-      founderBusinessNotes: "",
-    });
+  useState<BusinessModelForm>(() => {
+    const saved = getBuilderData();
+    const raw = (saved.businessModel ?? {}) as Record<string, string>;
+    return {
+      revenueModel: raw.revenueModel ?? "",
+      pricingStrategy: raw.pricingStrategy ?? "",
+      revenueTimeline: raw.revenueTimeline ?? "",
+      targetRevenue: raw.targetRevenue ?? "",
+      monetizationStrategy: raw.monetizationStrategy ?? "",
+      customerAcquisitionStrategy: raw.customerAcquisitionStrategy ?? "",
+      growthStrategy: raw.growthStrategy ?? "",
+      founderBusinessNotes: raw.founderBusinessNotes ?? "",
+      acquisitionChannels: raw.acquisitionChannels
+        ? raw.acquisitionChannels.split(",").filter(Boolean)
+        : [],
+      costStructures: raw.costStructures
+        ? raw.costStructures.split(",").filter(Boolean)
+        : [],
+      scalingChallenges: raw.scalingChallenges
+        ? raw.scalingChallenges.split(",").filter(Boolean)
+        : [],
+    };
+  });
 
   const revenueModels = [
     "Subscription",
@@ -125,6 +135,15 @@ export default function BusinessModelPage() {
       [field]: value,
     }));
   };
+
+  const handleSave = () => {
+  saveBuilderStep("businessModel", {
+    ...formData,
+    acquisitionChannels: formData.acquisitionChannels.join(","),
+    costStructures: formData.costStructures.join(","),
+    scalingChallenges: formData.scalingChallenges.join(","),
+  } as Record<string, string>);
+};
 
   return (
     <div className="space-y-8">
@@ -674,24 +693,25 @@ export default function BusinessModelPage() {
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
-          <Save className="h-4 w-4" />
+         <button
+            type="button"
+            onClick={handleSave}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+          >
+            <Save className="h-4 w-4" />
+            Save Draft
+          </button>
 
-          Save Draft
-        </button>
-
-        <button
-          onClick={() =>
-            router.push(
-              "/founder/startup-builder/summary"
-            )
-          }
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-        >
-          Continue to Summary
-
-          <ArrowRight className="h-4 w-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              handleSave();
+              router.push("/founder/startup-builder/summary");
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+          >
+            Continue to Summary
+          </button>
       </div>
     </div>
   );

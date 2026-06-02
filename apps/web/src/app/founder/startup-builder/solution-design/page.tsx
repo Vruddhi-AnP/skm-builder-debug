@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
 
 import {
   ArrowRight,
@@ -30,19 +31,28 @@ interface SolutionDesignForm {
 export default function SolutionDesignPage() {
   const router = useRouter();
 
-  const [formData, setFormData] =
-    useState<SolutionDesignForm>({
-      solutionType: "",
-      selectedFeatures: [],
-      platformType: "",
-      businessModel: "",
-      userJourney: [],
-      experienceGoals: [],
-      solutionNotes: "",
-      productVision: "",
-      scalabilityPlan: "",
-      automationStrategy: "",
-    });
+ const [formData, setFormData] = useState<SolutionDesignForm>(() => {
+  const saved = getBuilderData();
+  const raw = (saved.solutionDesign ?? {}) as Record<string, string>;
+  return {
+    solutionType: raw.solutionType ?? "",
+    platformType: raw.platformType ?? "",
+    businessModel: raw.businessModel ?? "",
+    solutionNotes: raw.solutionNotes ?? "",
+    productVision: raw.productVision ?? "",
+    scalabilityPlan: raw.scalabilityPlan ?? "",
+    automationStrategy: raw.automationStrategy ?? "",
+    selectedFeatures: raw.selectedFeatures
+      ? raw.selectedFeatures.split(",").filter(Boolean)
+      : [],
+    userJourney: raw.userJourney
+      ? raw.userJourney.split(",").filter(Boolean)
+      : [],
+    experienceGoals: raw.experienceGoals
+      ? raw.experienceGoals.split(",").filter(Boolean)
+      : [],
+  };
+});
 
   const solutionTypes = [
     "AI Automation",
@@ -125,6 +135,15 @@ export default function SolutionDesignPage() {
       [field]: value,
     }));
   };
+
+  const handleSave = () => {
+  saveBuilderStep("solutionDesign", {
+    ...formData,
+    selectedFeatures: formData.selectedFeatures.join(","),
+    userJourney: formData.userJourney.join(","),
+    experienceGoals: formData.experienceGoals.join(","),
+  } as Record<string, string>);
+};
 
   return (
     <div className="space-y-8">
@@ -606,24 +625,27 @@ export default function SolutionDesignPage() {
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <button className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted">
-          <Save className="h-4 w-4" />
+       {/* SAVE DRAFT */}
+<button
+  type="button"
+  onClick={handleSave}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+>
+  <Save className="h-4 w-4" />
+  Save Draft
+</button>
 
-          Save Draft
-        </button>
-
-        <button
-          onClick={() =>
-            router.push(
-              "/founder/startup-builder/business-model"
-            )
-          }
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-        >
-          Continue to Business Model
-
-          <ArrowRight className="h-4 w-4" />
-        </button>
+{/* CONTINUE */}
+<button
+  type="button"
+  onClick={() => {
+    handleSave();
+    router.push("/founder/startup-builder/business-model");
+  }}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+>
+  Continue to Business Model
+</button>
       </div>
     </div>
   );

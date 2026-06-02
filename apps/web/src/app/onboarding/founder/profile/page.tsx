@@ -21,6 +21,12 @@ import {
   User,
 } from "lucide-react";
 
+import { useLocalUser } from "@/hooks/useLocalUser";
+import {
+  saveFounderOnboarding,
+  getFounderOnboarding,
+} from "@/lib/founder-onboarding";
+
 const founderRoles = [
   "Solo Founder",
   "Technical Founder",
@@ -32,26 +38,34 @@ const founderRoles = [
 export default function FounderProfilePage() {
   const router = useRouter();
 
-  const [selectedRole, setSelectedRole] =
-    useState("Solo Founder");
+  const user = useLocalUser();
 
-  const [formData, setFormData] =
-    useState({
-      fullName: "",
-      email: "",
-      phone: "",
-      location: "",
-      linkedin: "",
-      experience: "",
-      bio: "",
-      founderGoal: "",
-    });
+const [selectedRole, setSelectedRole] = useState(() => {
+  const saved = getFounderOnboarding();
+  return saved.founderRole ?? "Solo Founder";
+});
+
+const [formData, setFormData] = useState(() => {
+  const saved = getFounderOnboarding();
+  return {
+    fullName: saved.fullName ?? "",
+    email: saved.email ?? user?.email ?? "",
+    phone: saved.phone ?? "",
+    location: saved.location ?? "",
+    linkedin: saved.linkedin ?? "",
+    experience: saved.experience ?? "",
+    bio: saved.bio ?? "",
+    founderGoal: saved.founderGoal ?? "",
+  };
+});
 
   const handleContinue = () => {
-    router.push(
-      "/onboarding/founder/startup"
-    );
-  };
+  saveFounderOnboarding({
+    ...formData,
+    founderRole: selectedRole,
+  });
+  router.push("/onboarding/founder/startup");
+};
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">
@@ -448,13 +462,15 @@ export default function FounderProfilePage() {
 
           {/* ACTIONS */}
           <div className="mt-10 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row">
-            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-background px-6 text-sm font-semibold text-foreground transition hover:bg-muted">
-              <ArrowLeft className="h-4 w-4" />
-
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-background px-6 text-sm font-semibold text-foreground transition hover:bg-muted"
+            >
               Back
             </button>
-
             <button
+              type="button"
               onClick={handleContinue}
               className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
             >

@@ -1,61 +1,78 @@
+"use client";
+
 import Link from "next/link";
-
+import { ArrowRight, Rocket, FileText, Users, Briefcase } from "lucide-react";
 import {
-  ArrowRight,
-  Rocket,
-  FileText,
-  Users,
-  Briefcase,
-} from "lucide-react";
-
-const actions = [
-  {
-    title: "Startup Builder",
-    description:
-      "Continue building your startup execution roadmap.",
-    icon: Rocket,
-    href: "/founder/startup-builder",
-  },
-
-  {
-    title: "Pitch Deck",
-    description:
-      "Prepare your investor-ready pitch materials.",
-    icon: FileText,
-    href: "/founder/pitch-deck",
-  },
-
-  {
-    title: "Advisor Network",
-    description:
-      "Connect with relevant startup advisors.",
-    icon: Users,
-    href: "/founder/advisors",
-  },
-
-  {
-    title: "Programs",
-    description:
-      "Explore startup ecosystem opportunities.",
-    icon: Briefcase,
-    href: "/founder/programs",
-  },
-];
+  getCompletedStepCount,
+  getBuilderProgress,
+} from "@/hooks/useLocalBuilder";
+import { useEffect, useState } from "react";
 
 export default function DashboardQuickActions() {
+  const [completedCount] = useState(() => getCompletedStepCount());
+  const [progress] = useState(() => getBuilderProgress());
+
+  const builderDone = completedCount >= 5;
+
+  const actions = [
+    {
+      title: "Startup Builder",
+      description: builderDone
+        ? "All modules complete. Review your readiness score."
+        : `${5 - completedCount} module${5 - completedCount === 1 ? "" : "s"} remaining. Continue building your startup roadmap.`,
+      icon: Rocket,
+      href: builderDone
+        ? "/founder/startup-builder/readiness-score"
+        : "/founder/startup-builder",
+      priority: !builderDone,
+      badge: builderDone ? "Complete ✓" : `${progress}% done`,
+      badgeColor: builderDone
+        ? "bg-emerald-100 text-emerald-700"
+        : "bg-amber-100 text-amber-700",
+    },
+    {
+      title: "Pitch Deck",
+      description: "Prepare your investor-ready pitch materials and deck.",
+      icon: FileText,
+      href: "/founder/pitch-deck",
+      priority: false,
+      badge: builderDone ? "Recommended" : "After Builder",
+      badgeColor: builderDone
+        ? "bg-primary/10 text-primary"
+        : "bg-slate-100 text-slate-500",
+    },
+    {
+      title: "Advisor Network",
+      description: "Connect with startup mentors and domain experts.",
+      icon: Users,
+      href: "/founder/advisors",
+      priority: false,
+      badge: null,
+      badgeColor: "",
+    },
+    {
+      title: "Programs",
+      description: "Explore startup execution programs and opportunities.",
+      icon: Briefcase,
+      href: "/founder/programs",
+      priority: false,
+      badge: null,
+      badgeColor: "",
+    },
+  ];
+
   return (
     <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 md:p-8">
       {/* HEADER */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-black tracking-tight text-[#16214A]">
-            Quick Actions
-          </h2>
-
-          <p className="mt-2 text-sm text-slate-500">
-            Continue your startup execution journey.
-          </p>
-        </div>
+      <div>
+        <h2 className="text-2xl font-black tracking-tight text-[#16214A]">
+          What to Do Next
+        </h2>
+        <p className="mt-2 text-sm text-slate-500">
+          {!builderDone
+            ? "Complete the Startup Builder first — it unlocks everything else."
+            : "Great work! Here's what to focus on next."}
+        </p>
       </div>
 
       {/* GRID */}
@@ -67,15 +84,37 @@ export default function DashboardQuickActions() {
             <Link
               key={item.title}
               href={item.href}
-              className="group rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 text-left transition hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg"
+              className={`group relative rounded-[28px] border p-6 text-left transition hover:-translate-y-1 hover:shadow-lg ${
+                item.priority
+                  ? "border-primary/30 bg-primary/5 hover:border-primary/50"
+                  : "border-border/60 bg-[#f8fbff] hover:border-primary/20"
+              }`}
             >
-              {/* ICON */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <Icon className="h-6 w-6" />
+              {/* PRIORITY LABEL */}
+              {item.priority && (
+                <div className="absolute -top-3 left-5 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-white">
+                  Start Here
+                </div>
+              )}
+
+              <div className="flex items-start justify-between gap-3">
+                {/* ICON */}
+                <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
+                  item.priority ? "bg-primary/20 text-primary" : "bg-primary/10 text-primary"
+                }`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+
+                {/* BADGE */}
+                {item.badge && (
+                  <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${item.badgeColor}`}>
+                    {item.badge}
+                  </span>
+                )}
               </div>
 
               {/* TITLE */}
-              <h3 className="mt-6 text-xl font-black tracking-tight text-[#16214A]">
+              <h3 className="mt-5 text-xl font-black tracking-tight text-[#16214A]">
                 {item.title}
               </h3>
 
@@ -85,9 +124,11 @@ export default function DashboardQuickActions() {
               </p>
 
               {/* CTA */}
-              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                Open Module
-
+              <div className={`mt-5 inline-flex items-center gap-2 text-sm font-semibold ${
+                item.priority ? "text-primary" : "text-slate-600"
+              }`}>
+                {item.priority ? "Continue Now" : "Open Module"}
+                <ArrowRight className="h-4 w-4" />
               </div>
             </Link>
           );

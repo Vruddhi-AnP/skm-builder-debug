@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import {
   Bell,
@@ -15,11 +16,14 @@ import DashboardStats from "@/components/dashboard/DashboardStats";
 import DashboardQuickActions from "@/components/dashboard/DashboardQuickActions";
 import DashboardResources from "@/components/dashboard/DashboardResources";
 import DashboardMobileSidebar from "@/components/dashboard/DashboardMobileSidebar";
+import DashboardJourney from "@/components/dashboard/DashboardJourney";
 
 export default function FounderDashboard() {
 
   const [mobileSidebar, setMobileSidebar] =
     useState(false);
+
+  const user = useLocalUser();
 
   return (
     <>
@@ -34,9 +38,12 @@ export default function FounderDashboard() {
         rightContent={
           <div className="flex items-center gap-4">
             {/* NOTIFICATIONS */}
-            <button className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary transition hover:bg-primary/15">
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary transition hover:bg-primary/15"
+            >
               <Bell className="h-5 w-5" />
-
               <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500" />
             </button>
 
@@ -44,8 +51,9 @@ export default function FounderDashboard() {
            <Link
               href="/founder/profile"
               className="flex h-11 w-11 items-center justify-center rounded-full bg-primary font-bold text-white shadow-sm transition hover:scale-105"
+              aria-label="My Profile"
             >
-              K
+              {getUserInitial(user?.name)}
             </Link>
           </div>
         }
@@ -56,6 +64,9 @@ export default function FounderDashboard() {
 
           {/* STATS */}
           <DashboardStats />
+
+            {/* JOURNEY */}
+          <DashboardJourney />
 
           {/* MAIN GRID */}
           <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
