@@ -24,6 +24,8 @@ import { InvestorModule } from './modules/investor/investor.module';
 
 import { AdminModule } from './modules/admin/admin.module';
 
+import { HealthModule } from './modules/health/health.module';
+
 import { PrismaModule } from './prisma/prisma.module';
 
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
@@ -54,6 +56,8 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
     InvestorModule,
 
     AdminModule,
+
+    HealthModule,
 
     PrismaModule,
   ],
