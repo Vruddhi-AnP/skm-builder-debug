@@ -6,10 +6,8 @@ import {
   ArrowUpRight,
   Building2,
   Eye,
-  Flame,
   Search,
   TrendingUp,
-  Users,
   Wallet,
 } from "lucide-react";
 

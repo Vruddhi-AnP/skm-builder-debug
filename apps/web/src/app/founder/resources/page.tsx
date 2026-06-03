@@ -139,7 +139,7 @@ export default function FounderResourcesPage() {
               (item) => (
                 <div
                   key={item}
-                  className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
+                  className="h-80 animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
                 />
               )
             )}

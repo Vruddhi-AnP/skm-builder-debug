@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -17,8 +16,7 @@ export default function LoginPage() {
     password: "",
   });
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -29,84 +27,68 @@ export default function LoginPage() {
     });
   };
 
- const handleLogin = async (
-  e: React.FormEvent<HTMLFormElement>
-) => {
-  e.preventDefault();
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
 
-  const emailRegex =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!emailRegex.test(formData.email)) {
-    toast.error("Invalid email address");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const response =
-      await loginUser(formData);
-
-    const authData =
-      response.data;
-
-    localStorage.setItem(
-      "accessToken",
-      authData.accessToken
-    );
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify(authData.user)
-    );
-
-    const role =
-      authData.user.role;
-
-    if (
-      role?.toLowerCase() ===
-      "founder"
-    ) {
-      router.push(
-        "/founder/dashboard"
-      );
-    } else if (
-      role?.toLowerCase() ===
-      "advisor"
-    ) {
-      router.push(
-        "/advisor/dashboard"
-      );
-    } else if (
-      role?.toLowerCase() ===
-      "investor"
-    ) {
-      router.push(
-        "/investor/dashboard"
-      );
-    } else if (
-      role?.toLowerCase() ===
-      "admin"
-    ) {
-      router.push(
-        "/admin/dashboard"
-      );
-    } else {
-      toast.error("Unrecognized role. Please contact support.");
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Invalid email address");
+      return;
     }
-  } catch (error) {
-  console.error("Login error:", error);
 
-    if (error instanceof Error) {
-      toast.error(error.message);
-    } else {
-      toast.error("Login failed");
+    try {
+      setLoading(true);
+
+      // loginUser returns the backend envelope: { success, statusCode, message, data: { accessToken, user } }
+      const envelope = await loginUser(formData);
+
+      // The actual auth payload is inside .data
+      const { accessToken, user } = envelope.data;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      const role = user.role?.toLowerCase();
+
+      if (role === "founder") {
+        router.push("/founder/dashboard");
+      } else if (role === "advisor") {
+        router.push("/advisor/dashboard");
+      } else if (role === "investor") {
+        router.push("/investor/dashboard");
+      } else if (role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        toast.error("Unrecognized role. Please contact support.");
+      }
+    } catch (error: unknown) {
+      console.error("Login error:", error);
+
+      // Axios wraps the backend error response — surface the backend message if present
+      const axiosError = error as {
+        response?: { data?: { message?: string | string[] } };
+        message?: string;
+      };
+
+      const backendMessage =
+        axiosError?.response?.data?.message;
+
+      if (Array.isArray(backendMessage)) {
+        toast.error(backendMessage[0]);
+      } else if (typeof backendMessage === "string") {
+        toast.error(backendMessage);
+      } else if (axiosError?.message) {
+        toast.error(axiosError.message);
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10 sm:px-6">
@@ -149,9 +131,13 @@ export default function LoginPage() {
                   Password
                 </label>
 
-               <button
+                <button
                   type="button"
-                  onClick={() => toast.info("Password reset coming soon. Contact support for help.")}
+                  onClick={() =>
+                    toast.info(
+                      "Password reset coming soon. Contact support for help."
+                    )
+                  }
                   className="text-sm text-slate-500 transition hover:text-[#16214A]"
                 >
                   Forgot password?
@@ -176,21 +162,20 @@ export default function LoginPage() {
               disabled={loading}
               className="hover-transition mt-2 flex h-14 w-full items-center justify-center rounded-2xl bg-primary font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {loading
-                ? "Logging In..."
-                : "Login"}
+              {loading ? "Logging In..." : "Login"}
             </button>
-            
-                <div className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
-  <div className="flex items-start gap-3">
-    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
 
-    <p className="text-xs leading-6 text-emerald-800">
-      Your account credentials and founder activity are securely protected through encrypted authentication and privacy-first platform systems.
-    </p>
-  </div>
-</div>
+            <div className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3">
+              <div className="flex items-start gap-3">
+                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
 
+                <p className="text-xs leading-6 text-emerald-800">
+                  Your account credentials and founder activity are securely
+                  protected through encrypted authentication and privacy-first
+                  platform systems.
+                </p>
+              </div>
+            </div>
           </form>
         </AuthCard>
       </div>

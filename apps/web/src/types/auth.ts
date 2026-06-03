@@ -8,14 +8,25 @@ export type UserRole =
 export interface AuthUser {
   id: string;
   email: string;
-  name: string;
+  name: string | null;
   role: UserRole;
 }
 
-export interface AuthResponse {
-  message: string;
+// The actual payload inside response.data
+export interface AuthResponseData {
   accessToken: string;
   user: AuthUser;
+}
+
+// Full backend envelope shape (TransformResponseInterceptor wraps every response)
+// { success, statusCode, message, path, timestamp, data: { accessToken, user } }
+export interface AuthApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  path: string;
+  timestamp: string;
+  data: AuthResponseData;
 }
 
 export interface SignupPayload {

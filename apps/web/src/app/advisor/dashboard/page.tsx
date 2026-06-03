@@ -20,7 +20,6 @@ import {
   Users,
   Wallet,
   X,
-  Check,
 } from "lucide-react"
 
 const navigation = [
@@ -137,7 +136,7 @@ export default function AdvisorDashboardPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[270px] bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
+          <div className="w-67.5 bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
             {/* TOP */}
             <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
               <div>
@@ -193,11 +192,11 @@ export default function AdvisorDashboardPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[270px] bg-[#fcfcfd] border-r border-[#e9eef5] flex-col">
+      <aside className="hidden lg:flex w-67.5 bg-[#fcfcfd] border-r border-[#e9eef5] flex-col">
         {/* Logo */}
         <div className="h-24 border-b border-[#edf1f7] flex items-center px-6">
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
+            <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
               A
             </div>
 
@@ -254,7 +253,7 @@ export default function AdvisorDashboardPage() {
             </p>
 
             <div className="mt-5 h-2 w-full rounded-full bg-gray-100 overflow-hidden">
-              <div className="h-full w-[91%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+              <div className="h-full w-[91%] rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500" />
             </div>
           </div>
         </div>
@@ -297,7 +296,7 @@ export default function AdvisorDashboardPage() {
               href="/advisor/profile"
               className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center gap-3 hover:bg-[#fafafa] transition"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
                 {getUserInitial(user?.name)}
               </div>
 
@@ -345,7 +344,7 @@ export default function AdvisorDashboardPage() {
                 <div className="mt-7 flex flex-wrap gap-3">
                   <Link
                     href="/advisor/discover"
-                    className="h-11 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-sm font-semibold text-white flex items-center justify-center"
+                    className="h-11 px-5 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 text-sm font-semibold text-white flex items-center justify-center"
                   >
                     Discover Startups
                   </Link>
@@ -374,7 +373,7 @@ export default function AdvisorDashboardPage() {
                 </p>
 
                 <div className="mt-7 h-3 w-full rounded-full bg-gray-100 overflow-hidden">
-                  <div className="h-full w-[91%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+                  <div className="h-full w-[91%] rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500" />
                 </div>
               </div>
             </div>
@@ -564,7 +563,7 @@ export default function AdvisorDashboardPage() {
                           className={`h-11 px-5 rounded-2xl text-sm font-semibold transition ${
                             acceptedRequests.includes(item.id)
                               ? "bg-emerald-500 text-white"
-                              : "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:opacity-90"
+                              : "bg-linear-to-r from-violet-500 to-fuchsia-500 text-white hover:opacity-90"
                           }`}
                         >
                           {acceptedRequests.includes(item.id)

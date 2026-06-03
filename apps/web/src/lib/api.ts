@@ -26,7 +26,7 @@ export async function getAdvisors() {
     Later replace with:
 
     const response = await api.get("/advisors");
-    return response.data;
+    return response.data.data;
   */
 
   return [
@@ -149,7 +149,7 @@ export async function getInvestors() {
     Later replace with:
 
     const response = await api.get("/investors");
-    return response.data;
+    return response.data.data;
   */
 
   return [
@@ -264,7 +264,7 @@ export async function getPrograms() {
     const response =
       await api.get("/programs");
 
-    return response.data;
+    return response.data.data;
   */
 
   return [
@@ -379,7 +379,7 @@ export async function getResources() {
     const response =
       await api.get("/resources");
 
-    return response.data;
+    return response.data.data;
   */
 
   return [

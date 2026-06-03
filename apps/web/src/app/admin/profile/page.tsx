@@ -88,7 +88,7 @@ export default function AdminProfilePage() {
               {/* LEFT */}
               <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                 {/* AVATAR */}
-                <div className="h-28 w-28 rounded-[32px] bg-gradient-to-r from-sky-500 to-blue-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl shadow-sky-500/20 shrink-0">
+                <div className="h-28 w-28 rounded-[32px] bg-linear-to-r from-sky-500 to-blue-500 flex items-center justify-center text-white text-4xl font-bold shadow-xl shadow-sky-500/20 shrink-0">
                   A
                 </div>
 

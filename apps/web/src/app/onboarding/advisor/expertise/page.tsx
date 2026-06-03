@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 
 import {
   ArrowLeft,
-  ArrowRight,
   BadgeCheck,
   BriefcaseBusiness,
   ShieldCheck,
@@ -77,7 +76,7 @@ export default function AdvisorExpertisePage() {
               width={190}
               height={60}
               priority
-              className="h-auto w-[170px] object-contain sm:w-[190px]"
+              className="h-auto w-42.5 object-contain sm:w-47.5"
             />
 
             <div>
@@ -328,7 +327,7 @@ export default function AdvisorExpertisePage() {
                 Key Skills & Strengths
               </label>
 
-              <div className="flex min-h-[120px] rounded-[1.8rem] border border-border bg-background px-5 py-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+              <div className="flex min-h-30 rounded-[1.8rem] border border-border bg-background px-5 py-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
 
                 <BadgeCheck className="mt-1 h-5 w-5 text-muted-foreground" />
 
@@ -341,7 +340,7 @@ export default function AdvisorExpertisePage() {
                     handleChange
                   }
                   placeholder="Mention your advisory strengths, startup execution skills, founder support areas and operational expertise..."
-                  className="min-h-[90px] w-full resize-none bg-transparent px-3 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
+                  className="min-h-22.5 w-full resize-none bg-transparent px-3 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
                 />
 
               </div>
@@ -354,7 +353,7 @@ export default function AdvisorExpertisePage() {
                 Advisory Goal
               </label>
 
-              <div className="flex min-h-[120px] rounded-[1.8rem] border border-border bg-background px-5 py-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+              <div className="flex min-h-30 rounded-[1.8rem] border border-border bg-background px-5 py-4 transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
 
                 <Target className="mt-1 h-5 w-5 text-muted-foreground" />
 
@@ -368,7 +367,7 @@ export default function AdvisorExpertisePage() {
                     handleChange
                   }
                   placeholder="Describe how you want to support founders and what kind of startup impact you want to create..."
-                  className="min-h-[90px] w-full resize-none bg-transparent px-3 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
+                  className="min-h-22.5 w-full resize-none bg-transparent px-3 text-sm leading-7 text-foreground outline-none placeholder:text-muted-foreground"
                 />
 
               </div>

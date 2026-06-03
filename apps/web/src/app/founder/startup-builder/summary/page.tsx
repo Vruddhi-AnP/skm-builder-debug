@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 
 import {
-  ArrowRight,
   BarChart3,
   BriefcaseBusiness,
   CheckCircle2,
@@ -142,7 +141,7 @@ export default function SummaryPage() {
       </section>
 
       {/* EXECUTIVE SUMMARY */}
-      <section className="rounded-[32px] border border-primary/10 bg-gradient-to-br from-primary/5 to-cyan-50 p-8 lg:p-10">
+      <section className="rounded-[32px] border border-primary/10 bg-linear-to-br from-primary/5 to-cyan-50 p-8 lg:p-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           {/* LEFT */}
           <div>

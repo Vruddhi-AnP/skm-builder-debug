@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import {
-  ArrowLeft,
-  ArrowRight,
   Briefcase,
   LinkIcon,
   Mail,
@@ -82,7 +80,7 @@ const [formData, setFormData] = useState(() => {
     width={190}
     height={60}
     priority
-    className="h-auto w-[170px] object-contain sm:w-[190px]"
+    className="h-auto w-42.5 object-contain sm:w-47.5"
   />
 
   <div>

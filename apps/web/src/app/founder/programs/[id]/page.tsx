@@ -61,7 +61,7 @@ export default function ProgramDetailsPage() {
       <main className="min-h-screen bg-[#f8fbff]">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
-          <div className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+          <div className="h-80 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 
@@ -69,14 +69,14 @@ export default function ProgramDetailsPage() {
               (item) => (
                 <div
                   key={item}
-                  className="h-[180px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
+                  className="h-45 animate-pulse rounded-[32px] bg-[#F7F4EE]/95"
                 />
               )
             )}
 
           </div>
 
-          <div className="h-[240px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+          <div className="h-60 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
         </div>
       </main>
@@ -230,7 +230,7 @@ export default function ProgramDetailsPage() {
         </section>
 
         {/* CTA */}
-        <section className="relative overflow-hidden rounded-[36px] border border-sky-100 bg-gradient-to-br from-sky-50 via-cyan-50 to-blue-50 p-8 shadow-sm md:p-10">
+        <section className="relative overflow-hidden rounded-[36px] border border-sky-100 bg-linear-to-br from-sky-50 via-cyan-50 to-blue-50 p-8 shadow-sm md:p-10">
 
           <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-40" />
 

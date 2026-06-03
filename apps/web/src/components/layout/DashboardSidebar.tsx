@@ -14,6 +14,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { getBuilderProgress } from "@/hooks/useLocalBuilder";
+
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const user = useLocalUser();
@@ -105,15 +107,22 @@ export default function DashboardSidebar() {
         </p>
 
         <h2 className="mt-4 text-5xl font-black text-[#16214A]">
-          72%
+          {getBuilderProgress()}%
         </h2>
 
         <p className="mt-2 text-sm text-slate-500">
-          Investor Ready Stage
+          {getBuilderProgress() === 0
+            ? "Start your startup builder"
+            : getBuilderProgress() === 100
+            ? "Investor ready ✓"
+            : "Builder in progress"}
         </p>
 
         <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
-          <div className="h-full w-[72%] rounded-full bg-primary" />
+          <div
+              className="h-full rounded-full bg-primary transition-all duration-500"
+              style={{ width: `${getBuilderProgress()}%` }}
+            />
         </div>
 
       </div>

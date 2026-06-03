@@ -61,20 +61,20 @@ export default function InvestorProfilePage() {
       <main className="min-h-screen bg-[#f8fbff]">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
-          <div className="h-[320px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+          <div className="h-80 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
 
             <div className="xl:col-span-2 space-y-6">
-              <div className="h-[240px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+              <div className="h-60 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
-              <div className="h-[220px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+              <div className="h-55 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
             </div>
 
             <div className="space-y-6">
-              <div className="h-[220px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+              <div className="h-55 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
 
-              <div className="h-[200px] animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
+              <div className="h-50 animate-pulse rounded-[32px] bg-[#F7F4EE]/95" />
             </div>
 
           </div>
@@ -146,7 +146,7 @@ export default function InvestorProfilePage() {
             <div className="flex flex-col gap-6 md:flex-row">
 
               {/* AVATAR */}
-              <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-[28px] bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-500 text-4xl font-black text-white shadow-[0_20px_60px_rgba(14,165,233,0.25)]">
+              <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-[28px] bg-linear-to-br from-cyan-500 via-sky-500 to-blue-500 text-4xl font-black text-white shadow-[0_20px_60px_rgba(14,165,233,0.25)]">
                 {investor.fullName
                   ?.charAt(0)
                   ?.toUpperCase()}

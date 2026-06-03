@@ -6,7 +6,6 @@ import Image from "next/image";
 
 import {
   ArrowLeft,
-  ArrowRight,
   CheckCircle2,
   Rocket,
   ShieldCheck,
@@ -38,7 +37,7 @@ export default function InvestorSuccessPage() {
                 width={220}
                 height={70}
                 priority
-                className="h-auto w-[180px] object-contain sm:w-[220px]"
+                className="h-auto w-45 object-contain sm:w-55"
               />
 
             </Link>
@@ -100,7 +99,7 @@ export default function InvestorSuccessPage() {
               </div>
 
               {/* RIGHT PANEL */}
-              <div className="w-full max-w-[340px] space-y-5">
+              <div className="w-full max-w-85 space-y-5">
 
                 {/* SECURITY */}
                 <div className="rounded-[28px] border border-[#cbe7d7] bg-[#ddf3e5] p-5">

@@ -87,8 +87,8 @@ export default function AdminSidebar({
     <aside
       className={`${
         mobile
-          ? "w-[280px]"
-          : "hidden lg:flex w-[270px]"
+          ? "w-70"
+          : "hidden lg:flex w-67.5"
       } bg-white border-r border-[#E8EDF5] flex-col h-full`}
     >
       {/* TOP */}
@@ -96,7 +96,7 @@ export default function AdminSidebar({
         <div className="min-w-0">
           <AppLogo width={145} />
 
-          <p className="text-[11px] text-[#94A3B8] mt-1 pl-[2px] tracking-wide">
+          <p className="text-[11px] text-[#94A3B8] mt-1 pl-0.5 tracking-wide">
             Admin Workspace
           </p>
         </div>
@@ -132,7 +132,7 @@ export default function AdminSidebar({
                 }`}
               >
                 <Icon
-                  className={`w-[18px] h-[18px] transition ${
+                  className={`w-4.5 h-4.5 transition ${
                     isActive
                       ? "text-white"
                       : "text-[#64748B] group-hover:text-[#0F172A]"

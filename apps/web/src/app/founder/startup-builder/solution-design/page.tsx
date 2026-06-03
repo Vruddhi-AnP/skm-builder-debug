@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
 
 import {
-  ArrowRight,
   LayoutDashboard,
   Sparkles,
   Workflow,

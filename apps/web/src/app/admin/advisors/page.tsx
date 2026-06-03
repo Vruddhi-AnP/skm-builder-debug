@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import {
   ArrowUpRight,
   Briefcase,
-  CheckCircle2,
   Search,
   ShieldCheck,
   Star,

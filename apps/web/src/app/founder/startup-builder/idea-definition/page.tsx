@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/accordion";
 
 import {
-  ArrowRight,
   Lightbulb,
   Sparkles,
   Target,

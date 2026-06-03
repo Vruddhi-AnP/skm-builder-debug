@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
+import { useLocalUser, getUserInitial } from "@/hooks/useLocalUser";
 
 import {
   Bell,

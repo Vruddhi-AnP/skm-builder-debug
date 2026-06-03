@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import {
   ArrowRight,
@@ -68,14 +67,9 @@ const builderModules = [
 ];
 
 export default function StartupBuilderPage() {
-  const [progress, setProgress] = useState(0);
-  const [completedCount, setCompletedCount] = useState(0);
-
-  useEffect(() => {
-    setProgress(getBuilderProgress());
-    setCompletedCount(getCompletedStepCount());
-  }, []);
-
+  // Initialize directly — no useEffect needed since localStorage is read once on mount
+  const progress = getBuilderProgress();
+  const completedCount = getCompletedStepCount();
   const totalModules = 5;
   const pendingCount = totalModules - completedCount;
 
@@ -180,7 +174,7 @@ export default function StartupBuilderPage() {
         ].map((item) => (
           <div
             key={item.title}
-            className="flex min-h-[180px] flex-col justify-between rounded-[28px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="flex min-h-45 flex-col justify-between rounded-[28px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div>
               <p className="text-sm font-medium text-slate-500">{item.title}</p>
@@ -254,14 +248,13 @@ export default function StartupBuilderPage() {
 
                   {/* STATUS BADGE */}
                   <div
-                    className={`w-fit shrink-0 rounded-full px-4 py-2 text-xs font-bold
-                      ${
-                        status === "Completed"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : status === "In Progress"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-slate-200 text-slate-700"
-                      }`}
+                    className={`w-fit shrink-0 rounded-full px-4 py-2 text-xs font-bold ${
+                      status === "Completed"
+                        ? "bg-emerald-100 text-emerald-700"
+                        : status === "In Progress"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-slate-200 text-slate-700"
+                    }`}
                   >
                     {status}
                   </div>

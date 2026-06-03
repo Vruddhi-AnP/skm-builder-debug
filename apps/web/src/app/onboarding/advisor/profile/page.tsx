@@ -9,7 +9,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 import {
-  ArrowRight,
   BriefcaseBusiness,
   Building2,
   LinkIcon,
@@ -80,7 +79,7 @@ export default function AdvisorProfilePage() {
       width={190}
       height={60}
       priority
-      className="h-auto w-[170px] object-contain sm:w-[190px]"
+      className="h-auto w-42.5 object-contain sm:w-47.5"
     />
 
     <div>

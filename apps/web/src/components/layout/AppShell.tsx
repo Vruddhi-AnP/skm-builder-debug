@@ -23,7 +23,7 @@ export default function AppShell({
   return (
     <main className="flex min-h-screen bg-background">
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden border-r border-border/60 bg-[#F7F4EE]/95 lg:flex lg:w-[280px] lg:flex-col">
+      <aside className="hidden border-r border-border/60 bg-[#F7F4EE]/95 lg:flex lg:w-70 lg:flex-col">
         {sidebar}
       </aside>
 

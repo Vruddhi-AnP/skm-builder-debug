@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   getBuilderProgress,
   getCompletedStepCount,
 } from "@/hooks/useLocalBuilder";
 
 export default function DashboardStats() {
- const [progress] = useState(() => getBuilderProgress());
-const [completedCount] = useState(() => getCompletedStepCount());
+  const progress = getBuilderProgress();
+  const completedCount = getCompletedStepCount();
 
   const stats = [
     {

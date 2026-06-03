@@ -67,7 +67,7 @@ export default function StartupBuilderLayout({
     <div className="min-h-screen bg-[#f8fbff]">
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-[#F7F4EE]/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-400 items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
           {/* LEFT */}
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-primary">
@@ -88,7 +88,7 @@ export default function StartupBuilderLayout({
           </div>
 
           {/* RIGHT */}
-          <div className="hidden min-w-[300px] rounded-[28px] border border-primary/10 bg-primary/5 p-5 xl:block">
+          <div className="hidden min-w-75 rounded-[28px] border border-primary/10 bg-primary/5 p-5 xl:block">
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-700">
                 Builder Progress
@@ -112,7 +112,7 @@ export default function StartupBuilderLayout({
       </header>
 
       {/* MAIN */}
-      <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-400 px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid gap-6 xl:grid-cols-[340px_1fr]">
           {/* SIDEBAR */}
           <aside className="h-fit xl:sticky xl:top-28">

@@ -11,10 +11,7 @@ import {
   Bell,
   Bookmark,
   Briefcase,
-  ChevronRight,
   Flame,
-  Globe,
-  MapPin,
   Menu,
   Rocket,
   Search,
@@ -24,7 +21,6 @@ import {
   User,
   Users,
   X,
-  Check,
 } from "lucide-react"
 
 import InvestorStatCard from "@/components/investor/InvestorStatCard"
@@ -135,7 +131,7 @@ const [interestedStartups, setInterestedStartups] =
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
             {/* LOGO */}
             <div className="flex h-20 items-center justify-between border-b border-border px-5">
               <Link
@@ -147,7 +143,7 @@ const [interestedStartups, setInterestedStartups] =
                   alt="Startup Ka Mall"
                   width={180}
                   height={50}
-                  className="h-auto w-[165px] object-contain"
+                  className="h-auto w-41.25 object-contain"
                 />
               </Link>
 
@@ -221,7 +217,7 @@ const [interestedStartups, setInterestedStartups] =
       )}
 
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
         {/* LOGO */}
         <div className="flex h-24 items-center border-b border-border px-6">
           <Link
@@ -233,7 +229,7 @@ const [interestedStartups, setInterestedStartups] =
               alt="Startup Ka Mall"
               width={210}
               height={60}
-              className="h-auto w-[185px] object-contain"
+              className="h-auto w-46.25 object-contain"
             />
           </Link>
         </div>
@@ -380,7 +376,7 @@ const [interestedStartups, setInterestedStartups] =
               </div>
 
               {/* RIGHT CARD */}
-              <div className="w-full rounded-[32px] border border-primary/10 bg-primary/5 p-6 xl:w-[340px]">
+              <div className="w-full rounded-[32px] border border-primary/10 bg-primary/5 p-6 xl:w-85">
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
                   Investment Readiness
                 </p>

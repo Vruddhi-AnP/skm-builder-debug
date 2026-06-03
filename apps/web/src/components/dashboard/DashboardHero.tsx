@@ -7,24 +7,22 @@ import {
   getBuilderProgress,
   getCompletedStepCount,
 } from "@/hooks/useLocalBuilder";
-import { useEffect, useState } from "react";
 
 const NEXT_STEP_MAP: Record<number, { label: string; href: string }> = {
-  0: { label: "Define Your Idea",       href: "/founder/startup-builder/idea-definition" },
-  1: { label: "Define the Problem",     href: "/founder/startup-builder/problem-definition" },
-  2: { label: "Research Your Market",   href: "/founder/startup-builder/market-research" },
-  3: { label: "Design Your Solution",   href: "/founder/startup-builder/solution-design" },
+  0: { label: "Define Your Idea",          href: "/founder/startup-builder/idea-definition" },
+  1: { label: "Define the Problem",        href: "/founder/startup-builder/problem-definition" },
+  2: { label: "Research Your Market",      href: "/founder/startup-builder/market-research" },
+  3: { label: "Design Your Solution",      href: "/founder/startup-builder/solution-design" },
   4: { label: "Build Your Business Model", href: "/founder/startup-builder/business-model" },
   5: { label: "View Your Readiness Score", href: "/founder/startup-builder/readiness-score" },
 };
 
 export default function DashboardHero() {
   const user = useLocalUser();
-  const [progress] = useState(() => getBuilderProgress());
-  const [completedCount] = useState(() => getCompletedStepCount()); 
-  const [mounted, setMounted] = useState(false);
+  const progress = getBuilderProgress();
+  const completedCount = getCompletedStepCount();
 
-  const isNewUser = mounted && completedCount === 0;
+  const isNewUser = completedCount === 0;
   const nextStep = NEXT_STEP_MAP[completedCount] ?? NEXT_STEP_MAP[5];
   const firstName = user?.name?.split(" ")[0] ?? "Founder";
 
@@ -89,20 +87,19 @@ export default function DashboardHero() {
         </div>
 
         {/* RIGHT */}
-        <div className="w-full rounded-[32px] border border-primary/20 bg-primary/10 p-6 xl:w-[340px]">
+        <div className="w-full rounded-[32px] border border-primary/20 bg-primary/10 p-6 xl:w-85">
           {isNewUser ? (
-            /* NEW USER — show checklist */
             <div>
               <p className="text-sm font-bold text-primary">
                 🚀 Your Getting Started Checklist
               </p>
               <div className="mt-5 space-y-3">
                 {[
-                  { label: "Create your account",        done: true },
-                  { label: "Complete Startup Builder",   done: false },
-                  { label: "Get your Readiness Score",   done: false },
-                  { label: "Browse Advisors",            done: false },
-                  { label: "Attract Investor Interest",  done: false },
+                  { label: "Create your account",       done: true },
+                  { label: "Complete Startup Builder",  done: false },
+                  { label: "Get your Readiness Score",  done: false },
+                  { label: "Browse Advisors",           done: false },
+                  { label: "Attract Investor Interest", done: false },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-3">
                     <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
@@ -120,7 +117,6 @@ export default function DashboardHero() {
               </div>
             </div>
           ) : (
-            /* RETURNING USER — show real progress */
             <div>
               <p className="text-sm font-semibold text-[#6B6B6B]">
                 Builder Progress

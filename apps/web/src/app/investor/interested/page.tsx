@@ -23,8 +23,6 @@ import {
   X,
 } from "lucide-react"
 
-import InvestorSelectionCard from "@/components/investor/InvestorSelectionCard"
-
 const navigation = [
   {
     name: "Dashboard",
@@ -114,7 +112,7 @@ export default function InvestorInterestedPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
             <div className="flex h-20 items-center justify-between border-b border-border px-5">
               <div>
                 <h2 className="text-xl font-black text-foreground">
@@ -174,7 +172,7 @@ export default function InvestorInterestedPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
         <div className="flex h-24 items-center border-b border-border px-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground">

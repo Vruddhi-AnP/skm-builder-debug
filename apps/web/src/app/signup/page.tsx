@@ -32,8 +32,7 @@ export default function SignupPage() {
   ) => {
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -50,7 +49,6 @@ export default function SignupPage() {
       return;
     }
 
-
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -61,62 +59,51 @@ export default function SignupPage() {
       return;
     }
 
-   try {
-  setLoading(true);
+    try {
+      setLoading(true);
 
-  const response =
-    await signupUser(formData);
+      // signupUser returns the backend envelope: { success, statusCode, message, data: { accessToken, user } }
+      const envelope = await signupUser(formData);
 
-  const authData =
-    response.data;
+      // The actual auth payload is inside .data
+      const { accessToken, user } = envelope.data;
 
-  localStorage.setItem(
-    "accessToken",
-    authData.accessToken
-  );
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("user", JSON.stringify(user));
 
-  localStorage.setItem(
-    "user",
-    JSON.stringify(authData.user)
-  );
+      const role = user.role?.toLowerCase();
 
-  const role =
-    authData.user.role;
+      if (role === "founder") {
+        router.push("/onboarding/founder/profile");
+      } else if (role === "advisor") {
+        router.push("/onboarding/advisor/profile");
+      } else if (role === "investor") {
+        router.push("/onboarding/investor/investor-profile");
+      } else {
+        toast.error("Invalid role");
+      }
+    } catch (error: unknown) {
+      console.error("Signup error:", error);
 
-  if (
-    role?.toLowerCase() ===
-    "founder"
-  ) {
-    router.push(
-      "/onboarding/founder/profile"
-    );
-  } else if (
-    role?.toLowerCase() ===
-    "advisor"
-  ) {
-    router.push(
-      "/onboarding/advisor/profile"
-    );
-  } else if (
-    role?.toLowerCase() ===
-    "investor"
-  ) {
-    router.push(
-      "/onboarding/investor/investor-profile"
-    );
-  } else {
-    toast.error("Invalid role");
-  }
-} catch (error) {
-  console.error("Signup error:", error);
+      // Axios wraps the backend error response — surface the backend message if present
+      const axiosError = error as {
+        response?: { data?: { message?: string | string[] } };
+        message?: string;
+      };
 
-  if (error instanceof Error) {
-    toast.error(error.message);
-  } else {
-    toast.error("Signup failed");
-  }
-}
-    finally {
+      const backendMessage =
+        axiosError?.response?.data?.message;
+
+      if (Array.isArray(backendMessage)) {
+        toast.error(backendMessage[0]);
+      } else if (typeof backendMessage === "string") {
+        toast.error(backendMessage);
+      } else if (axiosError?.message) {
+        toast.error(axiosError.message);
+      } else {
+        toast.error("Signup failed. Please try again.");
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -202,15 +189,9 @@ export default function SignupPage() {
                 onChange={handleChange}
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
               >
-                <option value="founder">
-                  Founder 
-                </option>
-                <option value="advisor">
-                  Advisor 
-                </option>
-                <option value="investor">
-                  Investor 
-                </option>
+                <option value="founder">Founder</option>
+                <option value="advisor">Advisor</option>
+                <option value="investor">Investor</option>
               </select>
             </div>
 
@@ -220,21 +201,20 @@ export default function SignupPage() {
               disabled={loading}
               className="hover-transition mt-2 flex h-14 w-full items-center justify-center rounded-2xl bg-primary font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {loading
-                ? "Creating Account..."
-                : "Create Account"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
 
-                <div className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3">
-  <div className="flex items-start gap-3">
-    <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-700" />
+            <div className="mt-4 rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3">
+              <div className="flex items-start gap-3">
+                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-cyan-700" />
 
-    <p className="text-xs leading-6 text-cyan-900">
-      Startup Ka Mall securely protects founder information, startup workflows and platform activity through encrypted systems and controlled access infrastructure.
-    </p>
-  </div>
-</div>
-
+                <p className="text-xs leading-6 text-cyan-900">
+                  Startup Ka Mall securely protects founder information, startup
+                  workflows and platform activity through encrypted systems and
+                  controlled access infrastructure.
+                </p>
+              </div>
+            </div>
           </form>
         </AuthCard>
       </div>

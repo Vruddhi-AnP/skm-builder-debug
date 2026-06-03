@@ -5,7 +5,6 @@ import Link from "next/link"
 import Image from "next/image"
 
 import {
-  BarChart3,
   Bell,
   Briefcase,
   CalendarDays,
@@ -145,7 +144,7 @@ export default function AdvisorSessionsPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
             {/* LOGO */}
             <div className="flex h-24 items-center justify-between border-b border-border px-5">
               <Link
@@ -157,7 +156,7 @@ export default function AdvisorSessionsPage() {
                   alt="Startup Ka Mall"
                   width={190}
                   height={50}
-                  className="h-auto w-[170px] object-contain"
+                  className="h-auto w-42.5 object-contain"
                 />
               </Link>
 
@@ -230,7 +229,7 @@ export default function AdvisorSessionsPage() {
       )}
 
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
         {/* LOGO */}
         <div className="flex h-24 items-center border-b border-border px-6">
           <Link
@@ -242,7 +241,7 @@ export default function AdvisorSessionsPage() {
               alt="Startup Ka Mall"
               width={220}
               height={60}
-              className="h-auto w-[190px] object-contain"
+              className="h-auto w-47.5 object-contain"
             />
           </Link>
         </div>
@@ -372,7 +371,7 @@ export default function AdvisorSessionsPage() {
               </div>
 
               {/* SEARCH */}
-              <div className="w-full xl:w-[380px]">
+              <div className="w-full xl:w-95">
                 <div className="rounded-[28px] border border-border bg-muted/30 p-5">
                   <div className="flex h-14 items-center gap-3 rounded-2xl border border-border bg-card px-4">
                     <Search className="h-5 w-5 text-muted-foreground" />

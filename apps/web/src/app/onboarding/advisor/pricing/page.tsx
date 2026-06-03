@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 
 import {
   ArrowLeft,
-  ArrowRight,
   BadgeIndianRupee,
   BriefcaseBusiness,
   CreditCard,
@@ -112,7 +111,7 @@ export default function AdvisorPricingPage() {
               width={190}
               height={60}
               priority
-              className="h-auto w-[170px] object-contain sm:w-[190px]"
+              className="h-auto w-42.5 object-contain sm:w-47.5"
             />
 
             <div>
@@ -396,7 +395,7 @@ export default function AdvisorPricingPage() {
                   handleChange
                 }
                 placeholder="Describe your pricing expectations, collaboration style, founder engagement model and any additional mentorship guidelines..."
-                className="min-h-[140px] w-full rounded-[1.8rem] border border-border bg-background px-5 py-4 text-sm leading-7 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10"
+                className="min-h-35 w-full rounded-[1.8rem] border border-border bg-background px-5 py-4 text-sm leading-7 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
 
             </div>

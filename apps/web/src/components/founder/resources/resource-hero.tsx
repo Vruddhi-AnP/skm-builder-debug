@@ -24,7 +24,7 @@ export default function ResourceHero() {
           <h1 className="mt-6 text-4xl font-black tracking-tight text-[#16214A] md:text-5xl lg:text-6xl">
             Startup Resources &
 
-            <span className="mt-2 block bg-gradient-to-r from-sky-500 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
+            <span className="mt-2 block bg-linear-to-r from-sky-500 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
               Founder Playbooks
             </span>
           </h1>

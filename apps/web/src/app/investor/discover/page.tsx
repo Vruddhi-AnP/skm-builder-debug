@@ -152,7 +152,7 @@ export default function InvestorDiscoverPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
             {/* TOP */}
             <div className="flex h-20 items-center justify-between border-b border-border px-5">
               <div>
@@ -214,7 +214,7 @@ export default function InvestorDiscoverPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
         {/* LOGO */}
         <div className="flex h-24 items-center border-b border-border px-6">
           <div className="flex items-center gap-4">
@@ -360,7 +360,7 @@ export default function InvestorDiscoverPage() {
               </div>
 
               {/* SEARCH */}
-              <div className="w-full xl:w-[380px]">
+              <div className="w-full xl:w-95">
                 <div className="rounded-[30px] border border-border bg-muted/30 p-5">
                   <div className="flex h-14 items-center gap-3 rounded-2xl border border-border bg-card px-4">
                     <Search className="h-5 w-5 text-muted-foreground" />

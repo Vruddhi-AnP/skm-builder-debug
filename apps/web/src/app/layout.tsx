@@ -16,15 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <body>
-          {children}
-          <Toaster position="top-right" richColors />
-        </body>
         <Providers>
           <div className="relative flex min-h-screen flex-col">
             {children}
           </div>
         </Providers>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

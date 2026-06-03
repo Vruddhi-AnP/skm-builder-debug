@@ -326,7 +326,7 @@ export default function AdminDashboardPage() {
               </div>
 
               {/* INSIGHT CARD */}
-              <div className="mt-7 rounded-3xl bg-gradient-to-r from-[#071133] to-[#0B173F] p-5 text-white">
+              <div className="mt-7 rounded-3xl bg-linear-to-r from-[#071133] to-[#0B173F] p-5 text-white">
                 <div className="flex items-center gap-3">
                   <div className="h-11 w-11 rounded-2xl bg-white/10 flex items-center justify-center">
                     <BarChart3 className="w-5 h-5" />

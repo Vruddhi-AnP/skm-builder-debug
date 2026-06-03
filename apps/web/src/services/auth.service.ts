@@ -1,24 +1,21 @@
-import { api } from "@/lib/api";
+import api from "@/lib/axios";
 
 import {
-  AuthResponse,
+  AuthApiResponse,
   LoginPayload,
   SignupPayload,
 } from "@/types/auth";
 
 export const signupUser = async (
   data: SignupPayload
-): Promise<AuthResponse> => {
-  const response = await api.post("/auth/signup", data);
-  console.log(response);
-
+): Promise<AuthApiResponse> => {
+  const response = await api.post<AuthApiResponse>("/auth/signup", data);
   return response.data;
 };
 
 export const loginUser = async (
   data: LoginPayload
-): Promise<AuthResponse> => {
-  const response = await api.post("/auth/login", data);
-
+): Promise<AuthApiResponse> => {
+  const response = await api.post<AuthApiResponse>("/auth/login", data);
   return response.data;
 };

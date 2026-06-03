@@ -12,7 +12,6 @@ import {
   Briefcase,
   Building2,
   CalendarDays,
-  ChevronRight,
   CircleDollarSign,
   Flame,
   Globe,
@@ -134,7 +133,7 @@ export default function InvestorStartupDetailsPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
             <div className="flex h-20 items-center justify-between border-b border-border px-5">
               <div>
                 <h2 className="text-xl font-black text-foreground">
@@ -190,7 +189,7 @@ export default function InvestorStartupDetailsPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
         <div className="flex h-24 items-center border-b border-border px-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground">
@@ -389,7 +388,7 @@ export default function InvestorStartupDetailsPage() {
                 </div>
               </div>
 
-              <div className="w-full xl:w-[340px]">
+              <div className="w-full xl:w-85">
                 <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
                     Startup Metrics

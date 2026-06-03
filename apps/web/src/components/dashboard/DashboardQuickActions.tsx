@@ -6,11 +6,10 @@ import {
   getCompletedStepCount,
   getBuilderProgress,
 } from "@/hooks/useLocalBuilder";
-import { useEffect, useState } from "react";
 
 export default function DashboardQuickActions() {
-  const [completedCount] = useState(() => getCompletedStepCount());
-  const [progress] = useState(() => getBuilderProgress());
+  const completedCount = getCompletedStepCount();
+  const progress = getBuilderProgress();
 
   const builderDone = completedCount >= 5;
 
@@ -79,7 +78,6 @@ export default function DashboardQuickActions() {
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {actions.map((item) => {
           const Icon = item.icon;
-
           return (
             <Link
               key={item.title}
@@ -90,7 +88,6 @@ export default function DashboardQuickActions() {
                   : "border-border/60 bg-[#f8fbff] hover:border-primary/20"
               }`}
             >
-              {/* PRIORITY LABEL */}
               {item.priority && (
                 <div className="absolute -top-3 left-5 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-white">
                   Start Here
@@ -98,14 +95,12 @@ export default function DashboardQuickActions() {
               )}
 
               <div className="flex items-start justify-between gap-3">
-                {/* ICON */}
                 <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
                   item.priority ? "bg-primary/20 text-primary" : "bg-primary/10 text-primary"
                 }`}>
                   <Icon className="h-6 w-6" />
                 </div>
 
-                {/* BADGE */}
                 {item.badge && (
                   <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${item.badgeColor}`}>
                     {item.badge}
@@ -113,17 +108,14 @@ export default function DashboardQuickActions() {
                 )}
               </div>
 
-              {/* TITLE */}
               <h3 className="mt-5 text-xl font-black tracking-tight text-[#16214A]">
                 {item.title}
               </h3>
 
-              {/* DESC */}
               <p className="mt-3 text-sm leading-7 text-slate-500">
                 {item.description}
               </p>
 
-              {/* CTA */}
               <div className={`mt-5 inline-flex items-center gap-2 text-sm font-semibold ${
                 item.priority ? "text-primary" : "text-slate-600"
               }`}>

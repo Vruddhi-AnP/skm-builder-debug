@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 import {
   ArrowLeft,
-  ArrowRight,
   Check,
   Coins,
   Handshake,

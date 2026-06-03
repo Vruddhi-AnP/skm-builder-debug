@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 
 import {
   ArrowLeft,
-  ArrowRight,
   CalendarDays,
   Clock3,
   Globe2,
@@ -77,7 +76,7 @@ export default function AdvisorAvailabilityPage() {
               width={190}
               height={60}
               priority
-              className="h-auto w-[170px] object-contain sm:w-[190px]"
+              className="h-auto w-42.5 object-contain sm:w-47.5"
             />
 
             <div>
@@ -407,7 +406,7 @@ export default function AdvisorAvailabilityPage() {
                   handleChange
                 }
                 placeholder="Describe how you prefer to mentor founders, session expectations, communication style and collaboration approach..."
-                className="min-h-[140px] w-full rounded-[1.8rem] border border-border bg-background px-5 py-4 text-sm leading-7 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10"
+                className="min-h-35 w-full rounded-[1.8rem] border border-border bg-background px-5 py-4 text-sm leading-7 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
 
             </div>

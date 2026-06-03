@@ -132,7 +132,7 @@ export default function InvestorSavedPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-[280px] bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
+          <div className="w-70 bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
             <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
               <div>
                 <h2 className="text-xl font-bold text-[#0f172a]">
@@ -192,10 +192,10 @@ export default function InvestorSavedPage() {
       )}
 
       {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-[280px] bg-[#F7F4EE]/95 border-r border-[#edf1f7] flex-col">
+      <aside className="hidden lg:flex w-70 bg-[#F7F4EE]/95 border-r border-[#edf1f7] flex-col">
         <div className="h-24 border-b border-[#edf1f7] flex items-center px-6">
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
+            <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
               I
             </div>
 
@@ -250,7 +250,7 @@ export default function InvestorSavedPage() {
             </p>
 
             <div className="mt-5 h-2 rounded-full bg-gray-100 overflow-hidden">
-              <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+              <div className="h-full w-[82%] rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500" />
             </div>
           </div>
         </div>
@@ -290,7 +290,7 @@ export default function InvestorSavedPage() {
               href="/investor/profile"
               className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center gap-3"
             >
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
+              <div className="h-9 w-9 rounded-xl bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
                 K
               </div>
 
@@ -332,7 +332,7 @@ export default function InvestorSavedPage() {
 
               <Link
                 href="/investor/discover"
-                className="h-12 px-5 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition"
+                className="h-12 px-5 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition"
               >
                 <Rocket className="w-4 h-4" />
                 Discover Startups
@@ -495,7 +495,7 @@ export default function InvestorSavedPage() {
 
                 <Link
                   href="/investor/discover"
-                  className="mt-6 inline-flex h-12 px-6 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold items-center justify-center"
+                  className="mt-6 inline-flex h-12 px-6 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-semibold items-center justify-center"
                 >
                   Explore Startups
                 </Link>

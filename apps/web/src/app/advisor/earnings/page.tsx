@@ -148,7 +148,7 @@ export default function AdvisorEarningsPage() {
       {/* MOBILE SIDEBAR */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-[280px] flex-col border-r border-border bg-card">
+          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
             {/* LOGO */}
             <div className="flex h-24 items-center justify-between border-b border-border px-5">
               <Link
@@ -160,7 +160,7 @@ export default function AdvisorEarningsPage() {
                   alt="Startup Ka Mall"
                   width={190}
                   height={50}
-                  className="h-auto w-[170px] object-contain"
+                  className="h-auto w-42.5 object-contain"
                 />
               </Link>
 
@@ -232,7 +232,7 @@ export default function AdvisorEarningsPage() {
       )}
 
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
         {/* LOGO */}
         <div className="flex h-24 items-center border-b border-border px-6">
           <Link
@@ -244,7 +244,7 @@ export default function AdvisorEarningsPage() {
               alt="Startup Ka Mall"
               width={220}
               height={60}
-              className="h-auto w-[190px] object-contain"
+              className="h-auto w-47.5 object-contain"
             />
           </Link>
         </div>

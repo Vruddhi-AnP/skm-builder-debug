@@ -10,11 +10,8 @@ import {
   CheckCircle2,
   Presentation,
   Save,
-  BarChart3,
   Rocket,
 } from "lucide-react";
-
-import { useEffect } from "react";
 
 export default function PitchDeckPage() {
   const router = useRouter();
@@ -63,7 +60,7 @@ const totalFields = Object.keys(formData).length;
 const pitchProgress = Math.round((filledFields / totalFields) * 100);
 
   return (
-  <div className="mx-auto max-w-[1600px] space-y-8 px-4 pb-24 xl:px-6">
+  <div className="mx-auto max-w-400 space-y-8 px-4 pb-24 xl:px-6">
       {/* HERO */}
       <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">

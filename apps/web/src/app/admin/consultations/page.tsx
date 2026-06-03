@@ -10,7 +10,6 @@ import {
   Clock3,
   MessageSquare,
   Search,
-  Users,
 } from "lucide-react";
 
 import AdminSidebar from "@/components/admin/AdminSidebar";

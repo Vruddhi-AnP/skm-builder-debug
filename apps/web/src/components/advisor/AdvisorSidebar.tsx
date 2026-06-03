@@ -54,7 +54,7 @@ export default function AdvisorSidebar({
   activePage,
 }: AdvisorSidebarProps) {
   return (
-    <aside className="hidden w-[280px] flex-col border-r border-border bg-card lg:flex">
+    <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
       {/* LOGO */}
       <div className="flex h-24 items-center border-b border-border px-6">
         <AppLogo

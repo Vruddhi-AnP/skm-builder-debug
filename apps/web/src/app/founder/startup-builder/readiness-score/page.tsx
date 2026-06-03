@@ -8,7 +8,6 @@ import {
 
 import {
   AlertTriangle,
-  ArrowRight,
   BarChart3,
   BriefcaseBusiness,
   CheckCircle2,
@@ -20,7 +19,6 @@ import {
   Target,
   Users,
   GraduationCap,
-  ArrowUpRight,
 } from "lucide-react";
 
 const readinessMetrics = [
@@ -318,7 +316,7 @@ export default function ReadinessScorePage() {
       </div>
 
       {/* INVESTOR ANALYSIS */}
-      <section className="print-page print-card rounded-[32px] border border-primary/10 bg-gradient-to-r from-primary/5 to-cyan-50 p-8">
+      <section className="print-page print-card rounded-[32px] border border-primary/10 bg-linear-to-r from-primary/5 to-cyan-50 p-8">
         <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
           {/* LEFT */}
           <div>
