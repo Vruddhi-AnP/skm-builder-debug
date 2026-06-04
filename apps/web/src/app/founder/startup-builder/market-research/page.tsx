@@ -32,6 +32,8 @@ interface MarketResearchForm {
 export default function MarketResearchPage() {
   const router = useRouter();
 
+  const [saved, setSaved] = useState(false);
+
  const [formData, setFormData] = useState<MarketResearchForm>(() => {
   const saved = getBuilderData();
   const raw = (saved.marketResearch ?? {}) as Record<string, string>;
@@ -108,16 +110,18 @@ export default function MarketResearchPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = () => {
-    saveBuilderStep("marketResearch", {
-      ...formData,
-      marketTrends: formData.marketTrends.join(","),
-      targetCustomers: formData.targetCustomers.join(","),
-      customerPainPoints: formData.customerPainPoints.join(","),
-      competitors: formData.competitors.join(","),
-      competitiveAdvantages: formData.competitiveAdvantages.join(","),
-    } as Record<string, string>);
-  };
+ const handleSave = () => {
+  saveBuilderStep("marketResearch", {
+    ...formData,
+    marketTrends: formData.marketTrends.join(","),
+    targetCustomers: formData.targetCustomers.join(","),
+    customerPainPoints: formData.customerPainPoints.join(","),
+    competitors: formData.competitors.join(","),
+    competitiveAdvantages: formData.competitiveAdvantages.join(","),
+  } as Record<string, string>);
+  setSaved(true);
+  setTimeout(() => setSaved(false), 2000);
+};
 
   return (
     <div className="space-y-8">
@@ -497,10 +501,17 @@ export default function MarketResearchPage() {
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+          className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
+            saved
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+          }`}
         >
-          <Save className="h-4 w-4" />
-          Save Draft
+          {saved ? (
+            <><CheckCircle2 className="h-4 w-4" />Saved!</>
+          ) : (
+            <><Save className="h-4 w-4" />Save Draft</>
+          )}
         </button>
 
         <button

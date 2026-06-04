@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { useRouter } from "next/navigation";
-import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
+import { saveBuilderStep, getBuilderData, getBuilderProgress } from "@/hooks/useLocalBuilder";
 
 import {
   Accordion,
@@ -38,25 +38,25 @@ interface IdeaDefinitionForm {
 export default function IdeaDefinitionPage() {
   const router = useRouter();
 
-  const [formData, setFormData] =
-  useState<IdeaDefinitionForm>(() => {
+  const [saved, setSaved] = useState(false);
 
+const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
   const saved = getBuilderData();
-    return {
-      startupName: "",
-      startupVision: "",
-      startupStage: "",
-      startupCategory: "",
-      targetAudience: "",
-      solutionType: "",
-      founderGoal: "",
-      founderMotivation: "",
-      problemStatement: "",
-      uniqueValueProposition: "",
-      additionalNotes: "",
-      ...(saved.ideaDefinition ?? {}),
-    };
-  });
+  return {
+    startupName: "",
+    startupVision: "",
+    startupStage: "",
+    startupCategory: "",
+    targetAudience: "",
+    solutionType: "",
+    founderGoal: "",
+    founderMotivation: "",
+    problemStatement: "",
+    uniqueValueProposition: "",
+    additionalNotes: "",
+    ...(saved.ideaDefinition ?? {}),
+  };
+});
 
   const startupCategories = [
     "AI SaaS",
@@ -131,7 +131,7 @@ export default function IdeaDefinitionPage() {
                 </p>
 
                 <h3 className="mt-2 text-5xl font-black text-[#16214A]">
-                  80%
+                  {getBuilderProgress()}%
                 </h3>
               </div>
 
@@ -141,7 +141,8 @@ export default function IdeaDefinitionPage() {
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[80%] rounded-full bg-primary" />
+              <div className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{ width: `${getBuilderProgress()}%` }} />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -414,92 +415,76 @@ export default function IdeaDefinitionPage() {
 </Accordion>
 
         {/* RIGHT SIDEBAR */}
-        <div className="space-y-6">
-          {/* INSIGHTS */}
-          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
-            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-              Startup Insights
-            </h3>
-
-            <div className="mt-6 space-y-4">
-              {[
-                "Strong SaaS execution potential",
-                "Recurring revenue model recommended",
-                "AI automation market growing rapidly",
-                "Target audience appears scalable",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* READINESS */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-              Startup Readiness
-            </h3>
-
-            <div className="mt-8 space-y-5">
-              {[
-                {
-                  label: "Idea Clarity",
-                  value: "78%",
-                },
-
-                {
-                  label: "Market Potential",
-                  value: "64%",
-                },
-
-                {
-                  label: "Execution Direction",
-                  value: "82%",
-                },
-              ].map((item) => (
-                <div key={item.label}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-700">
+          <div className="space-y-6">
+        {/* PROGRESS GUIDE */}
+            <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
+              <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+                Module Guide
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-500">
+                Fill in each section below. Your answers shape your startup&apos;s
+                readiness score and personalize advisor & investor matching.
+              </p>
+              <div className="mt-6 space-y-3">
+                {[
+                  { step: "1", label: "Startup Foundation", done: !!(formData.startupName && formData.startupVision) },
+                  { step: "2", label: "Execution Engine", done: !!formData.problemStatement },
+                  { step: "3", label: "Founder Goals", done: !!formData.founderGoal },
+                ].map((item) => (
+                  <div key={item.step} className="flex items-center gap-3 rounded-2xl bg-background p-3">
+                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+                      item.done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-600"
+                    }`}>
+                      {item.done ? "✓" : item.step}
+                    </div>
+                    <p className={`text-sm font-semibold ${item.done ? "text-emerald-700" : "text-slate-600"}`}>
                       {item.label}
                     </p>
-
-                    <span className="text-sm font-bold text-primary">
-                      {item.value}
-                    </span>
                   </div>
+                ))}
+              </div>
+            </section>
 
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{
-                        width: item.value,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      </div>
+            {/* TIP */}
+            <section className="rounded-[32px] border border-amber-100 bg-amber-50 p-6">
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                Founder Tip
+              </p>
+              <p className="mt-3 text-sm leading-7 text-amber-900">
+                Be specific in your problem statement. Investors and advisors
+                respond better to focused problems than broad ones.
+              </p>
+            </section>
+          </div>
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         {/* SAVE */}
         <button
-          type="button"
-          onClick={() => {
-            saveBuilderStep("ideaDefinition", formData as unknown as Record<string, string>);
-          }}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
-        >
-          <Save className="h-4 w-4" />
-          Save Draft
-        </button>
+  type="button"
+  onClick={() => {
+    saveBuilderStep("ideaDefinition", formData as unknown as Record<string, string>);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }}
+  className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
+    saved
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+  }`}
+>
+  {saved ? (
+    <>
+      <CheckCircle2 className="h-4 w-4" />
+      Saved!
+    </>
+  ) : (
+    <>
+      <Save className="h-4 w-4" />
+      Save Draft
+    </>
+  )}
+</button>
 
         {/* NEXT */}
         <button
@@ -513,6 +498,7 @@ export default function IdeaDefinitionPage() {
           Continue to Problem Definition
         </button>
       </div>
+    </div>
     </div>
   );
 }

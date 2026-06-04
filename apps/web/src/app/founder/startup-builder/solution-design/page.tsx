@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   Sparkles,
   Workflow,
-  Wand2,
   Save,
   CheckCircle2,
   Rocket,
@@ -29,6 +28,8 @@ interface SolutionDesignForm {
 
 export default function SolutionDesignPage() {
   const router = useRouter();
+
+  const [saved, setSaved] = useState(false);
 
  const [formData, setFormData] = useState<SolutionDesignForm>(() => {
   const saved = getBuilderData();
@@ -142,6 +143,8 @@ export default function SolutionDesignPage() {
     userJourney: formData.userJourney.join(","),
     experienceGoals: formData.experienceGoals.join(","),
   } as Record<string, string>);
+  setSaved(true);
+  setTimeout(() => setSaved(false), 2000);
 };
 
   return (
@@ -544,95 +547,95 @@ export default function SolutionDesignPage() {
           </section>
         </div>
 
-        {/* RIGHT */}
-        <div className="space-y-6">
-          {/* PRODUCT INSIGHTS */}
-          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
-            <div className="flex items-center gap-3">
-              <Wand2 className="h-6 w-6 text-primary" />
-
-              <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-                Product Insights
-              </h3>
-            </div>
-
-            <div className="mt-6 space-y-4">
-              {[
-                "AI automation increases retention",
-                "Simple UX improves adoption",
-                "Scalable SaaS workflows recommended",
-                "Focus on MVP-first execution",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SCORE */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-              Product Readiness
-            </h3>
-
-            <div className="mt-8 space-y-5">
-              {[
-                {
-                  label: "Feature Clarity",
-                  value: "82%",
-                },
-
-                {
-                  label: "Scalability",
-                  value: "71%",
-                },
-
-                {
-                  label: "User Experience",
-                  value: "77%",
-                },
-              ].map((item) => (
-                <div key={item.label}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-700">
-                      {item.label}
-                    </p>
-
-                    <span className="text-sm font-bold text-primary">
-                      {item.value}
-                    </span>
-                  </div>
-
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{
-                        width: item.value,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+       {/* RIGHT */}
+<div className="space-y-6">
+  {/* MODULE GUIDE */}
+  <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
+    <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+      Module Guide
+    </h3>
+    <p className="mt-3 text-sm leading-7 text-slate-500">
+      Define your product structure clearly. Investors evaluate
+      solution design as a key indicator of execution capability.
+    </p>
+    <div className="mt-6 space-y-3">
+      {[
+        { step: "1", label: "Solution Architecture", done: !!(formData.solutionType && formData.productVision) },
+        { step: "2", label: "Product Features", done: !!(formData.selectedFeatures.length > 0 && formData.platformType) },
+        { step: "3", label: "User Experience Flow", done: !!(formData.userJourney.length > 0 && formData.automationStrategy) },
+      ].map((item) => (
+        <div key={item.step} className="flex items-center gap-3 rounded-2xl bg-background p-3">
+          <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+            item.done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-600"
+          }`}>
+            {item.done ? "✓" : item.step}
+          </div>
+          <p className={`text-sm font-semibold ${item.done ? "text-emerald-700" : "text-slate-600"}`}>
+            {item.label}
+          </p>
         </div>
+      ))}
+    </div>
+  </section>
+
+  {/* TIP */}
+  <section className="rounded-[32px] border border-amber-100 bg-amber-50 p-6">
+    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+      Founder Tip
+    </p>
+    <p className="mt-3 text-sm leading-7 text-amber-900">
+      Start with 3–5 core features only. Focused MVPs ship faster,
+      get user feedback sooner, and are easier to pitch to investors.
+    </p>
+  </section>
+
+  {/* SELECTED SUMMARY */}
+  <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+    <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+      Your Selections
+    </h3>
+    <div className="mt-4 space-y-3">
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Solution Type</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.solutionType || "Not Selected"}
+        </h4>
       </div>
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Platform</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.platformType || "Not Selected"}
+        </h4>
+      </div>
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Features Selected</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.selectedFeatures.length > 0 ? `${formData.selectedFeatures.length} features` : "None selected"}
+        </h4>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
        {/* SAVE DRAFT */}
-<button
-  type="button"
-  onClick={handleSave}
-  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
->
-  <Save className="h-4 w-4" />
-  Save Draft
-</button>
+        <button
+          type="button"
+          onClick={handleSave}
+          className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
+            saved
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+          }`}
+        >
+          {saved ? (
+            <><CheckCircle2 className="h-4 w-4" />Saved!</>
+          ) : (
+            <><Save className="h-4 w-4" />Save Draft</>
+          )}
+        </button>
 
 {/* CONTINUE */}
 <button

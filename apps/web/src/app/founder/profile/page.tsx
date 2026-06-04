@@ -31,37 +31,21 @@ export default function FounderProfilePage() {
         <ProfileHero />
 
         {/* PROFILE COMPLETION */}
-        <section className="rounded-[32px] border border-[#F4C542] bg-[#FFF8E7] p-6 shadow-sm">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold text-[#9A6A00]">
-                Profile Completion
-              </p>
-
-              <h2 className="mt-2 text-4xl font-black text-[#16214A]">
-                78%
-              </h2>
-
-              <p className="mt-3 max-w-lg text-sm leading-7 text-[#6B7280]">
-                Complete your founder profile to improve advisor
-                recommendations, startup visibility and investor
-                readiness.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-[#F4C542]/40 bg-white/70 p-5">
-              <p className="text-sm font-semibold text-[#16214A]">
-                Remaining Tasks
-              </p>
-
-              <ul className="mt-3 space-y-2 text-sm text-[#475569]">
-                <li>• Founder Bio</li>
-                <li>• Startup Website</li>
-                <li>• Pitch Deck Upload</li>
-              </ul>
-            </div>
-          </div>
-        </section>
+<section className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 className="text-xl font-black text-[#16214A]">
+        Your Founder Profile
+      </h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Keep your profile updated to improve advisor matching and investor visibility.
+      </p>
+    </div>
+    <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Profile Active
+    </div>
+  </div>
+</section>
 
         {/* PROFILE + STARTUP PREVIEW */}
         <section className="grid gap-6 xl:grid-cols-3">

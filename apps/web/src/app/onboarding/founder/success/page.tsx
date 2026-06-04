@@ -67,13 +67,15 @@ export default function FounderSuccessPage() {
           return;
         }
 
-        await createStartup({
+        const startup = await createStartup({
           name: onboarding.startupName,
           industry: onboarding.startupIndustry ?? "General",
           description: onboarding.startupDescription,
         });
 
-        // Clear localStorage after successful save
+        // Store startupId for builder sync later
+        localStorage.setItem("startupId", startup.id);
+
         clearFounderOnboarding();
         setSaved(true);
       } catch (error: unknown) {

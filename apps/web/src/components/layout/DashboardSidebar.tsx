@@ -11,6 +11,7 @@ import {
   BookOpen,
   Briefcase,
   LayoutDashboard,
+  Rocket,
   Users,
 } from "lucide-react";
 
@@ -26,25 +27,26 @@ export default function DashboardSidebar() {
       href: "/founder/dashboard",
       icon: LayoutDashboard,
     },
-
+    {
+      label: "Startup Builder",
+      href: "/founder/startup-builder",
+      icon: Rocket,
+    },
     {
       label: "Advisors",
       href: "/founder/advisors",
       icon: Users,
     },
-
     {
       label: "Investors",
       href: "/founder/investors",
       icon: BadgeDollarSign,
     },
-
     {
       label: "Programs",
       href: "/founder/programs",
       icon: Briefcase,
     },
-
     {
       label: "Resources",
       href: "/founder/resources",
@@ -57,28 +59,24 @@ export default function DashboardSidebar() {
 
       {/* LOGO */}
       <div className="flex items-center gap-3">
-
-      <Image
-        src="/logo.png"
-        alt="Startup Ka Mall"
-        width={220}
-        height={70}
-        priority
-        className="h-auto w-auto object-contain"
-      />
+        <Image
+          src="/logo.png"
+          alt="Startup Ka Mall"
+          width={220}
+          height={70}
+          priority
+          className="h-auto w-auto object-contain"
+        />
       </div>
-      
+
       {/* NAVIGATION */}
       <div className="mt-10 space-y-2">
-
         {navItems.map((item) => {
           const Icon = item.icon;
 
           const isActive =
             pathname === item.href ||
-            pathname.startsWith(
-              `${item.href}/`
-            );
+            pathname.startsWith(`${item.href}/`);
 
           return (
             <Link
@@ -91,61 +89,57 @@ export default function DashboardSidebar() {
               }`}
             >
               <Icon className="h-5 w-5 transition-transform group-hover:scale-105" />
-
               {item.label}
             </Link>
           );
         })}
-
       </div>
 
       {/* READINESS */}
       <div className="mt-10 rounded-[28px] border border-primary/20 bg-primary/10 p-5">
-
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           Startup Readiness
         </p>
 
         <h2 className="mt-4 text-5xl font-black text-[#16214A]">
-          {getBuilderProgress()}%
+          {typeof window !== "undefined" ? `${getBuilderProgress()}%` : "0%"}
         </h2>
 
         <p className="mt-2 text-sm text-slate-500">
-          {getBuilderProgress() === 0
-            ? "Start your startup builder"
-            : getBuilderProgress() === 100
-            ? "Investor ready ✓"
-            : "Builder in progress"}
+          {typeof window !== "undefined"
+            ? getBuilderProgress() === 0
+              ? "Start your startup builder"
+              : getBuilderProgress() === 100
+              ? "Investor ready ✓"
+              : "Builder in progress"
+            : "Start your startup builder"}
         </p>
 
         <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
           <div
-              className="h-full rounded-full bg-primary transition-all duration-500"
-              style={{ width: `${getBuilderProgress()}%` }}
-            />
+            className="h-full rounded-full bg-primary transition-all duration-500"
+            style={{ width: typeof window !== "undefined" ? `${getBuilderProgress()}%` : "0%" }}
+          />
         </div>
-
       </div>
 
       {/* PROFILE */}
       <div className="mt-auto rounded-[28px] border border-primary/20 bg-primary/10 p-5">
-
         <div className="flex items-center gap-3">
-
-         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
-            {getUserInitial(user?.name)}
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
+            {typeof window !== "undefined" ? getUserInitial(user?.name) : "U"}
           </div>
           <div>
             <h3 className="font-semibold text-[#16214A]">
-              {getUserDisplayName(user?.name)}
+              {typeof window !== "undefined" ? getUserDisplayName(user?.name) : "Loading..."}
             </h3>
             <p className="text-sm text-slate-500 capitalize">
-              {user?.role ?? "Founder"}
+              {typeof window !== "undefined" ? (user?.role ?? "Founder") : "Founder"}
             </p>
           </div>
-
         </div>
       </div>
+
     </div>
   );
 }

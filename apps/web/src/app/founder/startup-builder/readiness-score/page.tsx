@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 
+import { getBuilderProgress, getCompletedStepCount } from "@/hooks/useLocalBuilder";
+
 import {
   exportReadinessReport,
 } from "@/services/export.service";
@@ -65,8 +67,31 @@ const improvements = [
 
 export default function ReadinessScorePage() {
   const router = useRouter();
+  const completedCount = getCompletedStepCount();
 
+  if (completedCount === 0) {
   return (
+    <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
+      <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary">
+        <ShieldCheck className="h-10 w-10" />
+      </div>
+      <h2 className="mt-6 text-3xl font-black text-[#16214A]">
+        Complete the Startup Builder First
+      </h2>
+      <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-slate-500">
+        Your readiness score is calculated from your Startup Builder responses.
+        Complete at least one module to see your score.
+      </p>
+      <button
+        onClick={() => router.push("/founder/startup-builder")}
+        className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+      >
+        Open Startup Builder
+      </button>
+    </div>
+  );
+}
+
     <div className="print-report space-y-8">
       {/* HERO */}
       <section className="print-page print-card overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
@@ -101,13 +126,24 @@ export default function ReadinessScorePage() {
                   Overall Readiness
                 </p>
 
-                <h2 className="mt-3 text-6xl font-black tracking-tight text-[#16214A]">
-                  72
-                </h2>
-
-                <p className="mt-2 text-sm font-bold text-emerald-600">
-                  Strong Early-Stage Potential
-                </p>
+                {/* NEW */}
+                {(() => {
+                  const progress = getBuilderProgress();
+                  const label = progress === 100 ? "Investor Ready" 
+                    : progress >= 60 ? "Strong Early-Stage Potential"
+                    : progress >= 40 ? "Good Foundation Building"
+                    : "Getting Started";
+                  return (
+                    <>
+                      <h2 className="mt-3 text-6xl font-black tracking-tight text-[#16214A]">
+                        {progress}
+                      </h2>
+                      <p className={`mt-2 text-sm font-bold ${progress >= 60 ? "text-emerald-600" : "text-amber-600"}`}>
+                        {label}
+                      </p>
+                    </>
+                  );
+                })()}
               </div>
 
               <div className="rounded-3xl bg-[#F7F4EE]/95 p-5 text-primary shadow-sm">
@@ -116,7 +152,10 @@ export default function ReadinessScorePage() {
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[72%] rounded-full bg-primary" />
+              <div 
+                className="h-full rounded-full bg-primary transition-all duration-500" 
+                style={{ width: `${getBuilderProgress()}%` }} 
+              />
             </div>
 
             <p className="mt-5 text-sm leading-7 text-slate-500">
@@ -672,5 +711,4 @@ export default function ReadinessScorePage() {
         </button>
       </div>
     </div>
-  );
-}
+};

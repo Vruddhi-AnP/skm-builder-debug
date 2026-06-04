@@ -1,6 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { saveBuilderData } from "@/services/builder.service";
+import { getBuilderData } from "@/hooks/useLocalBuilder";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import {
   BarChart3,
@@ -67,6 +71,28 @@ const summarySections = [
 
 export default function SummaryPage() {
   const router = useRouter();
+
+  const [syncing, setSyncing] = useState(false);
+
+const handleSyncToBackend = async () => {
+  const startupId = localStorage.getItem("startupId");
+  if (!startupId) {
+    toast.error("No startup found. Please complete onboarding first.");
+    return;
+  }
+  
+  const data = getBuilderData() as unknown as Record<string, unknown>;
+  
+  try {
+    setSyncing(true);
+    await saveBuilderData({ startupId, data });
+    toast.success("Builder data saved to your startup profile!");
+  } catch {
+    toast.error("Failed to sync. Your local progress is still saved.");
+  } finally {
+    setSyncing(false);
+  }
+};
 
   return (
     <div className="space-y-8">
@@ -550,15 +576,14 @@ export default function SummaryPage() {
 
         {/* NEXT */}
         <button
-          onClick={() =>
-            router.push(
-              "/founder/startup-builder/readiness-score"
-            )
-          }
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+          onClick={async () => {
+            await handleSyncToBackend();
+            router.push("/founder/startup-builder/readiness-score");
+          }}
+          disabled={syncing}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-60"
         >
-          Continue to Readiness Score
-
+          {syncing ? "Saving..." : "Continue to Readiness Score"}
         </button>
       </div>
     </div>

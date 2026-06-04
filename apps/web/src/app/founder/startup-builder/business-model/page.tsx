@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
 
 import {
-  BriefcaseBusiness,
   Coins,
   CreditCard,
   TrendingUp,
@@ -31,6 +30,8 @@ interface BusinessModelForm {
 
 export default function BusinessModelPage() {
   const router = useRouter();
+
+  const [saved, setSaved] = useState(false);
 
   const [formData, setFormData] =
   useState<BusinessModelForm>(() => {
@@ -143,6 +144,8 @@ export default function BusinessModelPage() {
     costStructures: formData.costStructures.join(","),
     scalingChallenges: formData.scalingChallenges.join(","),
   } as Record<string, string>);
+  setSaved(true);
+  setTimeout(() => setSaved(false), 2000);
 };
 
   return (
@@ -564,142 +567,97 @@ export default function BusinessModelPage() {
           </section>
         </div>
 
-        {/* RIGHT */}
-        <div className="space-y-6">
-          {/* INSIGHTS */}
-          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
-            <div className="flex items-center gap-3">
-              <BriefcaseBusiness className="h-6 w-6 text-primary" />
-
-              <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-                Business Insights
-              </h3>
-            </div>
-
-            <div className="mt-6 space-y-4">
-              {[
-                "Recurring revenue model recommended",
-                "Strong SaaS monetization detected",
-                "LinkedIn acquisition appears scalable",
-                "Operational costs look manageable",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SCORE */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-              Business Readiness
-            </h3>
-
-            <div className="mt-8 space-y-5">
-              {[
-                {
-                  label: "Revenue Scalability",
-                  value: "84%",
-                },
-
-                {
-                  label: "Growth Potential",
-                  value: "72%",
-                },
-
-                {
-                  label: "Cost Efficiency",
-                  value: "67%",
-                },
-              ].map((item) => (
-                <div key={item.label}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-700">
-                      {item.label}
-                    </p>
-
-                    <span className="text-sm font-bold text-primary">
-                      {item.value}
-                    </span>
-                  </div>
-
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{
-                        width: item.value,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SUMMARY */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-            <div className="flex items-center gap-3">
-              <Target className="h-6 w-6 text-primary" />
-
-              <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-                Strategy Summary
-              </h3>
-            </div>
-
-            <div className="mt-6 space-y-4">
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-sm font-medium text-slate-500">
-                  Revenue Model
-                </p>
-
-                <h4 className="mt-2 text-lg font-black text-[#16214A]">
-                  {formData.revenueModel ||
-                    "Not Selected"}
-                </h4>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-sm font-medium text-slate-500">
-                  Pricing Position
-                </p>
-
-                <h4 className="mt-2 text-lg font-black text-[#16214A]">
-                  {formData.pricingStrategy ||
-                    "Not Selected"}
-                </h4>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-sm font-medium text-slate-500">
-                  Growth Channels
-                </p>
-
-                <h4 className="mt-2 text-lg font-black text-[#16214A]">
-                  {
-                    formData.acquisitionChannels
-                      .length
-                  }{" "}
-                  Selected
-                </h4>
-              </div>
-            </div>
-          </section>
+       {/* RIGHT */}
+<div className="space-y-6">
+  {/* MODULE GUIDE */}
+  <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
+    <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+      Module Guide
+    </h3>
+    <p className="mt-3 text-sm leading-7 text-slate-500">
+      A clear business model is the final piece before your readiness
+      score. Complete all three sections for the best result.
+    </p>
+    <div className="mt-6 space-y-3">
+      {[
+        { step: "1", label: "Revenue Engine", done: !!(formData.revenueModel && formData.pricingStrategy && formData.monetizationStrategy) },
+        { step: "2", label: "Growth Strategy", done: !!(formData.acquisitionChannels.length > 0 && formData.growthStrategy) },
+        { step: "3", label: "Cost Structure", done: !!(formData.costStructures.length > 0) },
+      ].map((item) => (
+        <div key={item.step} className="flex items-center gap-3 rounded-2xl bg-background p-3">
+          <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+            item.done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-600"
+          }`}>
+            {item.done ? "✓" : item.step}
+          </div>
+          <p className={`text-sm font-semibold ${item.done ? "text-emerald-700" : "text-slate-600"}`}>
+            {item.label}
+          </p>
         </div>
+      ))}
+    </div>
+  </section>
+
+  {/* TIP */}
+  <section className="rounded-[32px] border border-amber-100 bg-amber-50 p-6">
+    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+      Founder Tip
+    </p>
+    <p className="mt-3 text-sm leading-7 text-amber-900">
+      Subscription and usage-based models have the highest investor
+      appeal for early-stage SaaS startups. Pick a model you can
+      defend with real numbers.
+    </p>
+  </section>
+
+  {/* LIVE STRATEGY SUMMARY */}
+  <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+    <div className="flex items-center gap-3">
+      <Target className="h-5 w-5 text-primary" />
+      <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+        Strategy Summary
+      </h3>
+    </div>
+    <div className="mt-4 space-y-3">
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Revenue Model</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.revenueModel || "Not Selected"}
+        </h4>
       </div>
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Pricing Position</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.pricingStrategy || "Not Selected"}
+        </h4>
+      </div>
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Growth Channels</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.acquisitionChannels.length > 0 ? formData.acquisitionChannels.join(", ") : "None selected"}
+        </h4>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
 
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
          <button
             type="button"
             onClick={handleSave}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+            className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
+              saved
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+            }`}
           >
-            <Save className="h-4 w-4" />
-            Save Draft
+            {saved ? (
+              <><CheckCircle2 className="h-4 w-4" />Saved!</>
+            ) : (
+              <><Save className="h-4 w-4" />Save Draft</>
+            )}
           </button>
 
           <button

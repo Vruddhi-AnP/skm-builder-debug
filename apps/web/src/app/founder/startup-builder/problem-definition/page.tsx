@@ -39,9 +39,13 @@ interface ProblemDefinitionForm {
 export default function ProblemDefinitionPage() {
   const router = useRouter();
 
+  const [saved, setSaved] = useState(false);
+
   const [formData, setFormData] =
   useState<ProblemDefinitionForm>(() => {
+
     const saved = getBuilderData();
+
     const raw = (saved.problemDefinition ?? {}) as Record<string, string>;
     return {
       coreProblemStatement: raw.coreProblemStatement ?? "",
@@ -569,78 +573,76 @@ export default function ProblemDefinitionPage() {
           </AccordionItem>
         </Accordion>
 
-        {/* RIGHT */}
-        <div className="space-y-6">
-          {/* INSIGHTS */}
-          <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
-            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-              Problem Insights
-            </h3>
-
-            <div className="mt-6 space-y-4">
-              {[
-                "Strong operational inefficiencies detected",
-                "Recurring pain patterns identified",
-                "Automation opportunity appears scalable",
-                "Existing solutions show major gaps",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/60 bg-[#F7F4EE]/95 p-4 text-sm font-medium text-slate-700"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SCORE */}
-          <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight text-[#16214A]">
-              Validation Score
-            </h3>
-
-            <div className="mt-8 space-y-5">
-              {[
-                {
-                  label: "Pain Severity",
-                  value: "82%",
-                },
-
-                {
-                  label: "Market Gap",
-                  value: "74%",
-                },
-
-                {
-                  label: "Customer Demand",
-                  value: "68%",
-                },
-              ].map((item) => (
-                <div key={item.label}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <p className="text-sm font-semibold text-slate-700">
-                      {item.label}
-                    </p>
-
-                    <span className="text-sm font-bold text-primary">
-                      {item.value}
-                    </span>
-                  </div>
-
-                  <div className="h-2 overflow-hidden rounded-full bg-slate-200">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{
-                        width: item.value,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+       {/* RIGHT SIDEBAR */}
+<div className="space-y-6">
+  {/* MODULE GUIDE */}
+  <section className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
+    <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+      Module Guide
+    </h3>
+    <p className="mt-3 text-sm leading-7 text-slate-500">
+      Fill in each section to validate your problem. Clear problem definition
+      improves advisor matching and investor readiness scoring.
+    </p>
+    <div className="mt-6 space-y-3">
+      {[
+        { step: "1", label: "Problem Discovery", done: !!(formData.coreProblemStatement && formData.problemSeverity) },
+        { step: "2", label: "Market Gap Analysis", done: !!(formData.marketGap && formData.customerFrustrations) },
+        { step: "3", label: "Affected Users", done: !!(formData.affectedUsers.length > 0 && formData.problemFrequency) },
+      ].map((item) => (
+        <div key={item.step} className="flex items-center gap-3 rounded-2xl bg-background p-3">
+          <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+            item.done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-600"
+          }`}>
+            {item.done ? "✓" : item.step}
+          </div>
+          <p className={`text-sm font-semibold ${item.done ? "text-emerald-700" : "text-slate-600"}`}>
+            {item.label}
+          </p>
         </div>
+      ))}
+    </div>
+  </section>
+
+  {/* TIP */}
+  <section className="rounded-[32px] border border-amber-100 bg-amber-50 p-6">
+    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+      Founder Tip
+    </p>
+    <p className="mt-3 text-sm leading-7 text-amber-900">
+      The more specific your problem statement, the stronger your
+      startup validation score. Avoid broad problems — focus on
+      one painful, frequent, and urgent issue.
+    </p>
+  </section>
+
+  {/* SELECTED SUMMARY */}
+  <section className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+    <h3 className="text-xl font-black tracking-tight text-[#16214A]">
+      Your Selections
+    </h3>
+    <div className="mt-4 space-y-3">
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Severity</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.problemSeverity || "Not Selected"}
+        </h4>
+      </div>
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Affected Users</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.affectedUsers.length > 0 ? formData.affectedUsers.join(", ") : "None selected"}
+        </h4>
+      </div>
+      <div className="rounded-2xl bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Frequency</p>
+        <h4 className="mt-1 text-base font-black text-[#16214A]">
+          {formData.problemFrequency || "Not entered"}
+        </h4>
+      </div>
+    </div>
+  </section>
+</div>
       </div>
 
       {/* FOOTER */}
@@ -655,11 +657,20 @@ export default function ProblemDefinitionPage() {
                 affectedUsers: formData.affectedUsers.join(","),
                 currentAlternatives: formData.currentAlternatives.join(","),
               } as Record<string, string>);
+              setSaved(true);
+              setTimeout(() => setSaved(false), 2000);
             }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+            className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
+              saved
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+            }`}
           >
-            <Save className="h-4 w-4" />
-            Save Draft
+            {saved ? (
+              <><CheckCircle2 className="h-4 w-4" />Saved!</>
+            ) : (
+              <><Save className="h-4 w-4" />Save Draft</>
+            )}
           </button>
 
           {/* NEXT */}
