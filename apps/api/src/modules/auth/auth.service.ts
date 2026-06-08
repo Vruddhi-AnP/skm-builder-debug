@@ -24,6 +24,18 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private async generateAccessToken(
+    userId: string,
+    email: string,
+    role: string,
+  ): Promise<string> {
+    return this.jwtService.signAsync({
+      sub: userId,
+      email,
+      role,
+    });
+  }
+
   async signup(dto: CreateUserDto): Promise<AuthResponseDataDto> {
     const existingUser = await this.prisma.user.findUnique({
       where: {
@@ -46,11 +58,11 @@ export class AuthService {
       },
     });
 
-    const token = await this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
+    const token = await this.generateAccessToken(
+      user.id,
+      user.email,
+      user.role,
+    );
 
     return {
       accessToken: token,
@@ -81,11 +93,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = await this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
+    const token = await this.generateAccessToken(
+      user.id,
+      user.email,
+      user.role,
+    );
 
     return {
       accessToken: token,

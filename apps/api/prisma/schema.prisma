@@ -31,16 +31,23 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      Role
+  id           String   @id @default(uuid())
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  email        String   @unique
 
-  startups  Startup[] @relation("FounderStartups")
+  password     String
+
+  refreshToken String?
+
+  name         String?
+
+  role         Role
+
+  createdAt    DateTime @default(now())
+
+  updatedAt    DateTime @updatedAt
+
+  startups     Startup[] @relation("FounderStartups")
 }
 
 model Startup {
