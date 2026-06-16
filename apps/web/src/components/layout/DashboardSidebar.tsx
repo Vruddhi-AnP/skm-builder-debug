@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
 
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   BadgeDollarSign,
@@ -21,124 +22,171 @@ export default function DashboardSidebar() {
   const pathname = usePathname();
   const user = useLocalUser();
 
-  const navItems = [
-    {
-      label: "Dashboard",
-      href: "/founder/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      label: "Startup Builder",
-      href: "/founder/startup-builder",
-      icon: Rocket,
-    },
-    {
-      label: "Advisors",
-      href: "/founder/advisors",
-      icon: Users,
-    },
-    {
-      label: "Investors",
-      href: "/founder/investors",
-      icon: BadgeDollarSign,
-    },
-    {
-      label: "Programs",
-      href: "/founder/programs",
-      icon: Briefcase,
-    },
-    {
-      label: "Resources",
-      href: "/founder/resources",
-      icon: BookOpen,
-    },
-  ];
+ const builderProgress =
+  typeof window !== "undefined"
+    ? getBuilderProgress()
+    : 0;
+
+const builderDone =
+  builderProgress === 100;
+
+const navItems = [
+  {
+    section: "STARTUP",
+
+    items: [
+      {
+        label: "Workspace",
+        href: "/founder/dashboard",
+        icon: LayoutDashboard,
+      },
+
+      {
+        label: "Startup Builder",
+        href: "/founder/startup-builder",
+        icon: Rocket,
+      },
+
+      {
+        label: "Readiness",
+        href: "/founder/startup-builder/readiness-score",
+        icon: BadgeDollarSign,
+        locked: !builderDone,
+      },
+
+      {
+        label: "Blueprints",
+        href: "/founder/pitch-deck",
+        icon: BookOpen,
+        locked: !builderDone,
+      },
+    ],
+  },
+
+  {
+    section: "ECOSYSTEM",
+
+    items: [
+      {
+        label: "Advisors",
+        href: "/founder/advisors",
+        icon: Users,
+        locked: !builderDone,
+      },
+
+      {
+        label: "Programs",
+        href: "/founder/programs",
+        icon: Briefcase,
+        locked: !builderDone,
+      },
+
+      {
+        label: "Resources",
+        href: "/founder/resources",
+        icon: BookOpen,
+      },
+
+      {
+        label: "Investor Visibility",
+        href: "/founder/investors",
+        icon: BadgeDollarSign,
+        locked: !builderDone,
+      },
+    ],
+  },
+];
 
   return (
     <div className="flex h-full flex-col p-6">
 
       {/* LOGO */}
-      <div className="flex items-center gap-3">
+      <div className="flex w-full items-center gap-3">    
         <Image
           src="/logo.png"
           alt="Startup Ka Mall"
-          width={220}
-          height={70}
+          width={160}
+          height={50}
           priority
           className="h-auto w-auto object-contain"
         />
       </div>
 
       {/* NAVIGATION */}
-      <div className="mt-10 space-y-2">
-        {navItems.map((item) => {
+      <div className="mt-8 space-y-5">
+
+  {navItems.map((section) => (
+
+    <div key={section.section}>
+
+      {/* SECTION TITLE */}
+      <p className="mb-2 px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        {section.section}
+      </p>
+
+      <div className="space-y-2">
+
+        {section.items.map((item) => {
+
           const Icon = item.icon;
 
           const isActive =
             pathname === item.href ||
             pathname.startsWith(`${item.href}/`);
 
+          const isLocked = item.locked;
+          
           return (
+
             <Link
               key={item.href}
-              href={item.href}
-              className={`group flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
+              href={isLocked ? "#" : item.href}
+              onClick={(e) => {
+                if (isLocked) {
+                  e.preventDefault();
+
+                  toast.info(
+                    "Finish your Startup Builder journey to unlock this section."
+                  );
+                }
+              }}
+              className={`group flex w-full items-center rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-[#6B6B6B] hover:bg-accent hover:text-slate-900"
+                  ? "bg-primary/10 text-primary"
+                  : isLocked
+                  ? "text-slate-400 hover:bg-slate-50"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
-              <Icon className="h-5 w-5 transition-transform group-hover:scale-105" />
-              {item.label}
+
+              <div className="flex w-full items-center gap-3">
+
+                <Icon className="h-5 w-5 shrink-0" />
+
+                <span className="flex-1 truncate">
+                  {item.label}
+                </span>
+
+              {isLocked && (
+                <span className="ml-auto text-slate-400">
+                  🔒
+                </span>
+              )}
+
+              </div>
+
             </Link>
+
           );
         })}
+
       </div>
 
-      {/* READINESS */}
-      <div className="mt-10 rounded-[28px] border border-primary/20 bg-primary/10 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-          Startup Readiness
-        </p>
+    </div>
 
-        <h2 className="mt-4 text-5xl font-black text-[#16214A]">
-          {typeof window !== "undefined" ? `${getBuilderProgress()}%` : "0%"}
-        </h2>
+  ))}
 
-        <p className="mt-2 text-sm text-slate-500">
-          {typeof window !== "undefined"
-            ? getBuilderProgress() === 0
-              ? "Start your startup builder"
-              : getBuilderProgress() === 100
-              ? "Investor ready ✓"
-              : "Builder in progress"
-            : "Start your startup builder"}
-        </p>
-
-        <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
-          <div
-            className="h-full rounded-full bg-primary transition-all duration-500"
-            style={{ width: typeof window !== "undefined" ? `${getBuilderProgress()}%` : "0%" }}
-          />
-        </div>
-      </div>
-
-      {/* PROFILE */}
-      <div className="mt-auto rounded-[28px] border border-primary/20 bg-primary/10 p-5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground">
-            {typeof window !== "undefined" ? getUserInitial(user?.name) : "U"}
-          </div>
-          <div>
-            <h3 className="font-semibold text-[#16214A]">
-              {typeof window !== "undefined" ? getUserDisplayName(user?.name) : "Loading..."}
-            </h3>
-            <p className="text-sm text-slate-500 capitalize">
-              {typeof window !== "undefined" ? (user?.role ?? "Founder") : "Founder"}
-            </p>
-          </div>
-        </div>
-      </div>
+</div>
 
     </div>
   );

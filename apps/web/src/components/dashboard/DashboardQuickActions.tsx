@@ -30,33 +30,66 @@ export default function DashboardQuickActions() {
         : "bg-amber-100 text-amber-700",
     },
     {
-      title: "Pitch Deck",
-      description: "Prepare your investor-ready pitch materials and deck.",
+      title: "Blueprints",
+      description:
+        "Preview and download your Startup Blueprint and Business Model Canvas.",
       icon: FileText,
       href: "/founder/pitch-deck",
       priority: false,
-      badge: builderDone ? "Recommended" : "After Builder",
+
+      badge: builderDone
+        ? "Ready"
+        : "Locked",
+
       badgeColor: builderDone
         ? "bg-primary/10 text-primary"
         : "bg-slate-100 text-slate-500",
+
+      locked: !builderDone,
     },
     {
-      title: "Advisor Network",
-      description: "Connect with startup mentors and domain experts.",
+      title: "Advisors",
+
+      description:
+        "Connect with startup mentors and domain experts.",
+
       icon: Users,
+
       href: "/founder/advisors",
+
       priority: false,
-      badge: null,
-      badgeColor: "",
+
+      badge: builderDone
+        ? "Available"
+        : "Locked",
+
+      badgeColor: builderDone
+        ? "bg-primary/10 text-primary"
+        : "bg-slate-100 text-slate-500",
+
+      locked: !builderDone,
     },
     {
       title: "Programs",
-      description: "Explore startup execution programs and opportunities.",
+
+      description:
+        "Explore startup execution programs and opportunities.",
+
       icon: Briefcase,
+
       href: "/founder/programs",
+
       priority: false,
-      badge: null,
-      badgeColor: "",
+
+      badge: builderDone
+        ? "Available"
+        : "Locked",
+
+      badgeColor: builderDone
+        ? "bg-primary/10 text-primary"
+        : "bg-slate-100 text-slate-500",
+
+      locked: !builderDone,
     },
   ];
 
@@ -77,27 +110,38 @@ export default function DashboardQuickActions() {
       {/* GRID */}
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {actions.map((item) => {
+
           const Icon = item.icon;
+          const isLocked = item.locked;
+
           return (
             <Link
               key={item.title}
               href={item.href}
               className={`group relative rounded-[28px] border p-6 text-left transition hover:-translate-y-1 hover:shadow-lg ${
-                item.priority
+                isLocked
+                  ? "border-slate-200 bg-slate-50 opacity-70"
+                  : item.priority
                   ? "border-primary/30 bg-primary/5 hover:border-primary/50"
                   : "border-border/60 bg-[#f8fbff] hover:border-primary/20"
               }`}
             >
-              {item.priority && (
+              {item.priority && !isLocked && (
                 <div className="absolute -top-3 left-5 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-white">
                   Start Here
                 </div>
               )}
 
               <div className="flex items-start justify-between gap-3">
-                <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
-                  item.priority ? "bg-primary/20 text-primary" : "bg-primary/10 text-primary"
-                }`}>
+                <div
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
+                    isLocked
+                      ? "bg-slate-200 text-slate-400"
+                      : item.priority
+                      ? "bg-primary/20 text-primary"
+                      : "bg-primary/10 text-primary"
+                  }`}
+                >
                   <Icon className="h-6 w-6" />
                 </div>
 
@@ -116,11 +160,20 @@ export default function DashboardQuickActions() {
                 {item.description}
               </p>
 
-              <div className={`mt-5 inline-flex items-center gap-2 text-sm font-semibold ${
-                item.priority ? "text-primary" : "text-slate-600"
-              }`}>
-                {item.priority ? "Continue Now" : "Open Module"}
-                <ArrowRight className="h-4 w-4" />
+              <div
+                className={`mt-5 inline-flex items-center gap-2 text-sm font-semibold ${
+                  isLocked
+                    ? "text-slate-400"
+                    : item.priority
+                    ? "text-primary"
+                    : "text-slate-600"
+                }`}
+              >
+                {isLocked
+                  ? "Complete Builder First"
+                  : item.priority
+                  ? "Continue Now"
+                  : "Open Module"}
               </div>
             </Link>
           );

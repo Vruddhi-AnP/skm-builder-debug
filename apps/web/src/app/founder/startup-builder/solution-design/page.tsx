@@ -106,25 +106,25 @@ export default function SolutionDesignPage() {
   ];
 
   const toggleArrayValue = (
-    field:
-      | "selectedFeatures"
-      | "userJourney"
-      | "experienceGoals",
-    value: string
-  ) => {
-    if (!value) return;
+  field:
+    | "selectedFeatures"
+    | "userJourney"
+    | "experienceGoals",
+  value: string
+) => {
+  if (!value) return;
 
-    const existingValues = formData[field];
+  const existingValues = formData[field];
 
-    if (existingValues.includes(value)) {
-      return;
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [field]: [...existingValues, value],
-    }));
-  };
+  setFormData((prev) => ({
+    ...prev,
+    [field]: existingValues.includes(value)
+      ? existingValues.filter(
+          (item) => item !== value
+        )
+      : [...existingValues, value],
+  }));
+};
 
   const handleChange = (
     field: keyof SolutionDesignForm,
@@ -137,14 +137,32 @@ export default function SolutionDesignPage() {
   };
 
   const handleSave = () => {
-  saveBuilderStep("solutionDesign", {
-    ...formData,
-    selectedFeatures: formData.selectedFeatures.join(","),
-    userJourney: formData.userJourney.join(","),
-    experienceGoals: formData.experienceGoals.join(","),
-  } as Record<string, string>);
+  const payload: Record<string, string> = {
+    solutionType: formData.solutionType,
+    platformType: formData.platformType,
+    businessModel: formData.businessModel,
+    solutionNotes: formData.solutionNotes,
+    productVision: formData.productVision,
+    scalabilityPlan: formData.scalabilityPlan,
+    automationStrategy: formData.automationStrategy,
+
+    selectedFeatures:
+      formData.selectedFeatures.join(","),
+
+    userJourney:
+      formData.userJourney.join(","),
+
+    experienceGoals:
+      formData.experienceGoals.join(","),
+  };
+
+  saveBuilderStep("solutionDesign", payload);
+
   setSaved(true);
-  setTimeout(() => setSaved(false), 2000);
+
+  setTimeout(() => {
+    setSaved(false);
+  }, 2000);
 };
 
   return (
@@ -183,7 +201,7 @@ export default function SolutionDesignPage() {
                 </p>
 
                 <h3 className="mt-2 text-5xl font-black text-[#16214A]">
-                  20%
+                  60%
                 </h3>
               </div>
 
@@ -193,7 +211,7 @@ export default function SolutionDesignPage() {
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[20%] rounded-full bg-primary" />
+              <div className="h-full w-[60%] rounded-full bg-primary" />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -339,12 +357,14 @@ export default function SolutionDesignPage() {
 
               <select
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-                onChange={(e) =>
+                onChange={(e) => {
                   toggleArrayValue(
                     "selectedFeatures",
                     e.target.value
-                  )
-                }
+                  );
+
+                  e.target.value = "";
+                }}
               >
                 <option value="">
                   Select Core Feature
@@ -473,12 +493,14 @@ export default function SolutionDesignPage() {
 
               <select
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-                onChange={(e) =>
+                onChange={(e) => {
                   toggleArrayValue(
                     "userJourney",
                     e.target.value
-                  )
-                }
+                  );
+
+                  e.target.value = "";
+                }}
               >
                 <option value="">
                   Select User Journey Step
@@ -503,12 +525,14 @@ export default function SolutionDesignPage() {
 
               <select
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-                onChange={(e) =>
+                onChange={(e) => {
                   toggleArrayValue(
                     "experienceGoals",
                     e.target.value
-                  )
-                }
+                  );
+
+                  e.target.value = "";
+                }}
               >
                 <option value="">
                   Select Experience Goal
@@ -610,7 +634,7 @@ export default function SolutionDesignPage() {
       <div className="rounded-2xl bg-slate-50 p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Features Selected</p>
         <h4 className="mt-1 text-base font-black text-[#16214A]">
-          {formData.selectedFeatures.length > 0 ? `${formData.selectedFeatures.length} features` : "None selected"}
+          {formData.selectedFeatures.length > 0 ? formData.selectedFeatures.join(", ") : "None selected"}
         </h4>
       </div>
     </div>

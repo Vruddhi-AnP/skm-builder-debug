@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 
 import { getBuilderProgress, getCompletedStepCount } from "@/hooks/useLocalBuilder";
 
+import ReadinessReport from "@/components/reports/ReadinessReport";
+import { getReadinessReport } from "@/services/report.service";
+
 import {
   exportReadinessReport,
 } from "@/services/export.service";
@@ -68,6 +71,17 @@ const improvements = [
 export default function ReadinessScorePage() {
   const router = useRouter();
   const completedCount = getCompletedStepCount();
+  const progress = getBuilderProgress();
+  const report = getReadinessReport();report
+
+  const readinessLabel =
+    progress === 100
+      ? "Investor Ready"
+      : progress >= 60
+      ? "Strong Early-Stage Potential"
+      : progress >= 40
+      ? "Good Foundation Building"
+      : "Getting Started";
 
   if (completedCount === 0) {
   return (
@@ -92,7 +106,8 @@ export default function ReadinessScorePage() {
   );
 }
 
-    <div className="print-report space-y-8">
+    return (
+  <div className="space-y-8">
       {/* HERO */}
       <section className="print-page print-card overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
@@ -127,25 +142,22 @@ export default function ReadinessScorePage() {
                 </p>
 
                 {/* NEW */}
-                {(() => {
-                  const progress = getBuilderProgress();
-                  const label = progress === 100 ? "Investor Ready" 
-                    : progress >= 60 ? "Strong Early-Stage Potential"
-                    : progress >= 40 ? "Good Foundation Building"
-                    : "Getting Started";
-                  return (
-                    <>
-                      <h2 className="mt-3 text-6xl font-black tracking-tight text-[#16214A]">
-                        {progress}
-                      </h2>
-                      <p className={`mt-2 text-sm font-bold ${progress >= 60 ? "text-emerald-600" : "text-amber-600"}`}>
-                        {label}
-                      </p>
-                    </>
-                  );
-                })()}
-              </div>
+                <>
+                  <h2 className="mt-3 text-6xl font-black tracking-tight text-[#16214A]">
+                    {progress}%
+                  </h2>
 
+                  <p
+                    className={`mt-2 text-sm font-bold ${
+                      progress >= 60
+                        ? "text-emerald-600"
+                        : "text-amber-600"
+                    }`}
+                  >
+                    {readinessLabel}
+                  </p>
+                </>
+                </div>
               <div className="rounded-3xl bg-[#F7F4EE]/95 p-5 text-primary shadow-sm">
                 <ShieldCheck className="h-10 w-10" />
               </div>
@@ -154,7 +166,7 @@ export default function ReadinessScorePage() {
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
               <div 
                 className="h-full rounded-full bg-primary transition-all duration-500" 
-                style={{ width: `${getBuilderProgress()}%` }} 
+                style={{ width: `${progress}%` }}
               />
             </div>
 
@@ -167,7 +179,6 @@ export default function ReadinessScorePage() {
           </div>
         </div>
 
-      <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -175,7 +186,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
       </section>
 
@@ -249,7 +259,6 @@ export default function ReadinessScorePage() {
           ))}
         </div>
 
-      <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -257,7 +266,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
       </section>
 
@@ -296,7 +304,6 @@ export default function ReadinessScorePage() {
             ))}
           </div>
 
-            <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -304,8 +311,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
-
         </section>
 
         {/* IMPROVEMENTS */}
@@ -341,7 +346,6 @@ export default function ReadinessScorePage() {
             ))}
           </div>
 
-                       <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -349,7 +353,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
         </section>
       </div>
@@ -417,7 +420,6 @@ export default function ReadinessScorePage() {
           </div>
         </div>
 
-            <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -425,7 +427,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
       </section>
 
@@ -487,7 +488,6 @@ export default function ReadinessScorePage() {
           </div>
         ))}
 
-                          <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -495,7 +495,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
       </section>
 
@@ -645,7 +644,6 @@ export default function ReadinessScorePage() {
     </div>
   </div>
 
-                  <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -653,7 +651,6 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
 </section>
 
@@ -675,7 +672,6 @@ export default function ReadinessScorePage() {
           </p>
         </div>
 
-  <div className="report-footer">
   <span>
     Startup Ka Mall • Founder Report
   </span>
@@ -683,9 +679,13 @@ export default function ReadinessScorePage() {
   <span>
     Confidential Document
   </span>
-</div>
 
       </section>
+
+      {/* Hidden Export Version */}
+<div className="hidden">
+  <ReadinessReport report={report} />
+</div>
 
       {/* FOOTER */}
       <div className="print:hidden flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -711,4 +711,5 @@ export default function ReadinessScorePage() {
         </button>
       </div>
     </div>
-};
+    );
+}

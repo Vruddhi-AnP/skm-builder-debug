@@ -40,8 +40,9 @@ export default function IdeaDefinitionPage() {
 
   const [saved, setSaved] = useState(false);
 
-const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
+  const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
   const saved = getBuilderData();
+
   return {
     startupName: "",
     startupVision: "",
@@ -57,6 +58,8 @@ const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
     ...(saved.ideaDefinition ?? {}),
   };
 });
+
+  const progress = getBuilderProgress();
 
   const startupCategories = [
     "AI SaaS",
@@ -131,7 +134,7 @@ const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
                 </p>
 
                 <h3 className="mt-2 text-5xl font-black text-[#16214A]">
-                  {getBuilderProgress()}%
+                  {progress}%
                 </h3>
               </div>
 
@@ -142,7 +145,8 @@ const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
               <div className="h-full rounded-full bg-primary transition-all duration-500"
-                style={{ width: `${getBuilderProgress()}%` }} />
+                style={{ width: `${progress}%` }}
+              />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -349,6 +353,86 @@ const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
                   className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
                 />
               </div>
+
+                  <div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Target Audience
+  </label>
+
+  <input
+    type="text"
+    value={formData.targetAudience}
+    onChange={(e) =>
+      handleChange(
+        "targetAudience",
+        e.target.value
+      )
+    }
+    placeholder="Who are your primary customers?"
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+  />
+</div>
+
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Solution Type
+  </label>
+
+  <select
+    value={formData.solutionType}
+    onChange={(e) =>
+      handleChange(
+        "solutionType",
+        e.target.value
+      )
+    }
+    className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+  >
+    <option value="">
+      Select Solution Type
+    </option>
+
+    <option value="SaaS">
+      SaaS
+    </option>
+
+    <option value="Marketplace">
+      Marketplace
+    </option>
+
+    <option value="Mobile App">
+      Mobile App
+    </option>
+
+    <option value="AI Tool">
+      AI Tool
+    </option>
+
+    <option value="Service Platform">
+      Service Platform
+    </option>
+  </select>
+</div>
+
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Unique Value Proposition
+  </label>
+
+  <textarea
+    rows={4}
+    value={formData.uniqueValueProposition}
+    onChange={(e) =>
+      handleChange(
+        "uniqueValueProposition",
+        e.target.value
+      )
+    }
+    placeholder="Why would customers choose you over alternatives?"
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+  />
+</div>
+
             </AccordionContent>
           </AccordionItem>
 
@@ -410,6 +494,44 @@ const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
   </select>
 </div>
 
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Founder Motivation
+  </label>
+
+  <textarea
+    rows={4}
+    value={formData.founderMotivation}
+    onChange={(e) =>
+      handleChange(
+        "founderMotivation",
+        e.target.value
+      )
+    }
+    placeholder="Why are you building this startup?"
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+  />
+</div>
+
+<div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Additional Notes
+  </label>
+
+  <textarea
+    rows={4}
+    value={formData.additionalNotes}
+    onChange={(e) =>
+      handleChange(
+        "additionalNotes",
+        e.target.value
+      )
+    }
+    placeholder="Anything else you'd like us to know?"
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+  />
+</div>
+
 </AccordionContent>
 </AccordionItem>
 </Accordion>
@@ -427,10 +549,38 @@ const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
               </p>
               <div className="mt-6 space-y-3">
                 {[
-                  { step: "1", label: "Startup Foundation", done: !!(formData.startupName && formData.startupVision) },
-                  { step: "2", label: "Execution Engine", done: !!formData.problemStatement },
-                  { step: "3", label: "Founder Goals", done: !!formData.founderGoal },
-                ].map((item) => (
+  {
+    step: "1",
+    label: "Startup Foundation",
+    done: !!(
+  formData.startupName &&
+  formData.startupStage &&
+  formData.startupCategory &&
+  formData.startupVision
+),
+  },
+
+  {
+    step: "2",
+    label: "Execution Engine",
+    done: !!(
+      formData.problemStatement &&
+      formData.targetAudience &&
+      formData.solutionType &&
+      formData.uniqueValueProposition
+    ),
+  },
+
+  {
+    step: "3",
+    label: "Founder Goals",
+    done: !!(
+  formData.founderGoal &&
+  formData.founderMotivation &&
+  formData.additionalNotes
+),
+  },
+].map((item) => (
                   <div key={item.step} className="flex items-center gap-3 rounded-2xl bg-background p-3">
                     <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black ${
                       item.done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-600"

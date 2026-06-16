@@ -97,7 +97,7 @@ export default function DashboardSidebar({
           Startup Readiness
         </p>
 
-        <h2 className="mt-4 text-5xl font-black text-[#16214A]">
+        <h2 className="mt-2 text-3xl font-black text-[#16214A]">
           72%
         </h2>
 
@@ -105,7 +105,7 @@ export default function DashboardSidebar({
           Investor Ready Stage
         </p>
 
-        <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
           <div className="h-full w-[72%] rounded-full bg-primary" />
         </div>
       </div>
@@ -113,12 +113,12 @@ export default function DashboardSidebar({
       {/* PROFILE */}
       <div className="mt-auto rounded-[28px] border border-border/60 bg-primary/10 text-primary border-primary/20 p-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary font-bold text-white">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bold text-white">
             K
           </div>
 
           <div>
-            <h3 className="font-semibold text-[#16214A]">
+            <h3 className="text-sm font-bold text-[#16214A]">
               Krishna Shah
             </h3>
 

@@ -12,8 +12,8 @@ import AppShell from "@/components/layout/AppShell";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 
 import DashboardHero from "@/components/dashboard/DashboardHero";
-import DashboardStats from "@/components/dashboard/DashboardStats";
 import DashboardQuickActions from "@/components/dashboard/DashboardQuickActions";
+import DashboardNextAction from "@/components/dashboard/DashboardNextAction";
 import DashboardResources from "@/components/dashboard/DashboardResources";
 import DashboardMobileSidebar from "@/components/dashboard/DashboardMobileSidebar";
 import DashboardJourney from "@/components/dashboard/DashboardJourney";
@@ -63,10 +63,10 @@ export default function FounderDashboard() {
           <DashboardHero />
 
           {/* STATS */}
-          <DashboardStats />
+          <DashboardJourney />
 
             {/* JOURNEY */}
-          <DashboardJourney />
+          <DashboardNextAction />
 
           {/* MAIN GRID */}
           <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">

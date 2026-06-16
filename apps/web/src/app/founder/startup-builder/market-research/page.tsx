@@ -111,16 +111,29 @@ export default function MarketResearchPage() {
   };
 
  const handleSave = () => {
-  saveBuilderStep("marketResearch", {
-    ...formData,
+  const payload: Record<string, string> = {
+    marketCategory: formData.marketCategory,
+    marketSize: formData.marketSize,
+    marketDemand: formData.marketDemand,
+    customerBehavior: formData.customerBehavior,
+    growthOpportunity: formData.growthOpportunity,
+    founderInsights: formData.founderInsights,
+
     marketTrends: formData.marketTrends.join(","),
     targetCustomers: formData.targetCustomers.join(","),
     customerPainPoints: formData.customerPainPoints.join(","),
     competitors: formData.competitors.join(","),
-    competitiveAdvantages: formData.competitiveAdvantages.join(","),
-  } as Record<string, string>);
+    competitiveAdvantages:
+      formData.competitiveAdvantages.join(","),
+  };
+
+  saveBuilderStep("marketResearch", payload);
+
   setSaved(true);
-  setTimeout(() => setSaved(false), 2000);
+
+  setTimeout(() => {
+    setSaved(false);
+  }, 2000);
 };
 
   return (
@@ -235,6 +248,25 @@ export default function MarketResearchPage() {
                 </div>
               ))}
             </div>
+            
+            <div className="mt-8">
+  <label className="mb-3 block text-sm font-semibold text-slate-700">
+    Market Size Estimates (TAM / SAM / SOM)
+  </label>
+
+  <textarea
+    rows={4}
+    value={formData.marketSize}
+    onChange={(e) =>
+      handleChange("marketSize", e.target.value)
+    }
+    placeholder="Example:
+TAM: Global CRM market worth $XXB
+SAM: Indian startup segment worth $XXM
+SOM: 2% market capture over 3 years..."
+    className="w-full rounded-3xl border border-border/60 bg-[#F7F4EE]/95 px-5 py-4 text-sm outline-none transition focus:border-cyan-400 focus:ring-4 focus:ring-cyan-100"
+  />
+</div>
 
             {/* MARKET DEMAND */}
             <div className="mt-8">

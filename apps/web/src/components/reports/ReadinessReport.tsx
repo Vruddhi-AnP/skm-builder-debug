@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { mockReadinessReport } from "@/data/mockReadinessReport";
+import type { ReadinessReportData } from "@/types/report";
 
 import {
   AlertTriangle,
   BarChart3,
-  BriefcaseBusiness,
   CheckCircle2,
   ShieldCheck,
   Sparkles,
@@ -16,7 +15,13 @@ import {
   CircleDollarSign,
 } from "lucide-react";
 
-export default function ReadinessReport() {
+interface ReadinessReportProps {
+  report: ReadinessReportData;
+}
+
+export default function ReadinessReport({
+  report,
+}: ReadinessReportProps) {
   return (
     <div className="print-report mx-auto w-full bg-white text-[#0F172A]">
       {/* PAGE 1 */}
@@ -44,7 +49,7 @@ export default function ReadinessReport() {
               </p>
 
               <p className="mt-2 text-sm font-medium text-slate-600">
-                {mockReadinessReport.generatedDate}
+                {report.generatedDate}
               </p>
             </div>
           </div>
@@ -57,25 +62,25 @@ export default function ReadinessReport() {
             </div>
 
             <h1 className="mt-6 text-6xl font-black leading-tight tracking-tight text-[#16214A]">
-              {mockReadinessReport.startupName}
+              {report.startup.name}
             </h1>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <div className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700">
-                Founder: {mockReadinessReport.founderName}
+                Founder: {report.founder.name}
               </div>
 
               <div className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700">
-                Industry: {mockReadinessReport.industry}
+                Industry: {report.startup.sector}
               </div>
 
               <div className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700">
-                Stage: {mockReadinessReport.stage}
+                Stage: {report.startup.stage}
               </div>
             </div>
 
             <p className="mt-8 max-w-4xl text-lg leading-9 text-slate-600">
-              {mockReadinessReport.executiveSummary}
+              {report.executiveSummary}
             </p>
           </div>
         </div>
@@ -86,11 +91,11 @@ export default function ReadinessReport() {
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-xs font-bold uppercase tracking-wide text-emerald-700">
                 <ShieldCheck className="h-4 w-4" />
-                Investor Ready
+                {report.readiness.label}
               </div>
 
               <h2 className="mt-6 text-7xl font-black tracking-tight text-[#16214A]">
-                {mockReadinessReport.overallScore}
+                {report.readiness.overallScore}%
               </h2>
 
               <p className="mt-3 text-xl font-bold text-emerald-600">
@@ -107,7 +112,7 @@ export default function ReadinessReport() {
             <div className="flex h-56 w-56 items-center justify-center rounded-full border-[18px] border-sky-600 bg-white shadow-sm">
               <div className="text-center">
                 <p className="text-6xl font-black text-sky-600">
-                  {mockReadinessReport.overallScore}%
+                  {report.readiness.overallScore}%
                 </p>
 
                 <p className="mt-2 text-sm font-semibold text-slate-500">
@@ -121,26 +126,26 @@ export default function ReadinessReport() {
         {/* QUICK METRICS */}
         <div className="mt-12 grid grid-cols-2 gap-5">
           {[
-            {
-              title: "Founder Clarity",
-              value: "88%",
-            },
+  {
+    title: "Market Validation",
+    value: report.readiness.marketScore,
+  },
 
-            {
-              title: "Market Fit",
-              value: "73%",
-            },
+  {
+    title: "Product Readiness",
+    value: report.readiness.productScore,
+  },
 
-            {
-              title: "Scalability",
-              value: "81%",
-            },
+  {
+    title: "Business Model",
+    value: report.readiness.businessScore,
+  },
 
-            {
-              title: "Investor Potential",
-              value: "69%",
-            },
-          ].map((item) => (
+  {
+    title: "Execution",
+    value: report.readiness.executionScore,
+  },
+].map((item) => (
             <div
               key={item.title}
               className="rounded-[28px] border border-slate-200 p-6"
@@ -154,14 +159,14 @@ export default function ReadinessReport() {
               </div>
 
               <h3 className="mt-5 text-5xl font-black text-[#16214A]">
-                {item.value}
+                {item.value}%
               </h3>
 
               <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
                 <div
                   className="h-full rounded-full bg-sky-600"
                   style={{
-                    width: item.value,
+                    width: `${item.value}%`,
                   }}
                 />
               </div>
@@ -181,7 +186,7 @@ export default function ReadinessReport() {
         </div>
 
         <div className="mt-10 grid gap-6">
-          {mockReadinessReport.metrics.map((metric) => (
+          {report.metrics.map((metric) => (
             <div
               key={metric.title}
               className="rounded-[32px] border border-slate-200 p-8"
@@ -249,7 +254,7 @@ export default function ReadinessReport() {
             </div>
 
             <div className="mt-8 space-y-5">
-              {mockReadinessReport.strengths.map((item) => (
+              {report.strengths.map((item) => (
                 <div
                   key={item}
                   className="flex items-start gap-4 rounded-2xl bg-slate-50 p-5"
@@ -277,7 +282,7 @@ export default function ReadinessReport() {
             </div>
 
             <div className="mt-8 space-y-5">
-              {mockReadinessReport.improvements.map((item) => (
+              {report.improvements.map((item) => (
                 <div
                   key={item}
                   className="flex items-start gap-4 rounded-2xl bg-slate-50 p-5"
@@ -306,38 +311,53 @@ export default function ReadinessReport() {
           </div>
 
           <p className="mt-6 text-lg leading-9 text-slate-600">
-            {mockReadinessReport.executiveSummary}
+            {report.executiveSummary}
           </p>
 
-          <div className="mt-10 grid gap-6">
-            {Object.entries(
-              mockReadinessReport.investorReadiness
-            ).map(([key, value]) => (
-              <div
-                key={key}
-                className="rounded-[32px] bg-white p-8 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-black capitalize text-[#16214A]">
-                    {key}
-                  </h3>
+<div className="mt-10 grid gap-6">
+  {[
+    {
+      title: "Market",
+      value: report.readiness.marketScore,
+    },
+    {
+      title: "Product",
+      value: report.readiness.productScore,
+    },
+    {
+      title: "Business",
+      value: report.readiness.businessScore,
+    },
+    {
+      title: "Execution",
+      value: report.readiness.executionScore,
+    },
+  ].map((item) => (
+    <div
+      key={item.title}
+      className="rounded-[32px] bg-white p-8 shadow-sm"
+    >
+      <div className="flex items-center justify-between">
+        <h3 className="text-2xl font-black capitalize text-[#16214A]">
+          {item.title}
+        </h3>
 
-                  <p className="text-3xl font-black text-sky-600">
-                    {value}%
-                  </p>
-                </div>
+        <p className="text-3xl font-black text-sky-600">
+          {item.value}%
+        </p>
+      </div>
 
-                <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-200">
-                  <div
-                    className="h-full rounded-full bg-sky-600"
-                    style={{
-                      width: `${value}%`,
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-200">
+        <div
+          className="h-full rounded-full bg-sky-600"
+          style={{
+            width: `${item.value}%`,
+          }}
+        />
+      </div>
+    </div>
+  ))}
+</div>
         </div>
 
         {/* RECOMMENDATIONS */}
@@ -352,7 +372,7 @@ export default function ReadinessReport() {
             </div>
 
             <div className="mt-8 space-y-4">
-              {mockReadinessReport.recommendations.immediate.map(
+              {report.recommendations.immediate.map(
                 (item) => (
                   <div
                     key={item}
@@ -379,7 +399,7 @@ export default function ReadinessReport() {
             </div>
 
             <div className="mt-8 space-y-4">
-              {mockReadinessReport.recommendations.longTerm.map(
+              {report.recommendations.longTerm.map(
                 (item) => (
                   <div
                     key={item}
@@ -393,6 +413,7 @@ export default function ReadinessReport() {
                   </div>
                 )
               )}
+
             </div>
           </div>
         </div>

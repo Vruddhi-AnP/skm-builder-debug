@@ -20,7 +20,7 @@ export default function DashboardMobileSidebar({
     <>
       {/* OVERLAY */}
       <div
-        className={`fixed inset-0 z-[90] bg-black/20 backdrop-blur-sm transition-all duration-300 lg:hidden
+        className={`fixed inset-0 z-90 bg-black/20 backdrop-blur-sm transition-all duration-300 lg:hidden
         
         ${
           mobileSidebar
@@ -35,7 +35,7 @@ export default function DashboardMobileSidebar({
 
       {/* SIDEBAR */}
       <div
-        className={`fixed left-0 top-0 z-[100] h-screen w-[290px] border-r border-border/60 bg-[#F7F4EE]/95 shadow-2xl transition-transform duration-300 lg:hidden
+        className={`fixed left-0 top-0 z-100 h-screen w-72.5 border-r border-border/60 bg-[#F7F4EE]/95 shadow-2xl transition-transform duration-300 lg:hidden
         
         ${
           mobileSidebar

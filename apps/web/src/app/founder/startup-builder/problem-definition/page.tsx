@@ -31,6 +31,7 @@ interface ProblemDefinitionForm {
   marketGap: string;
   customerFrustrations: string;
   operationalImpact: string;
+  problemAreas: string[];
   problemFrequency: string;
   problemUrgency: string;
   founderObservations: string;
@@ -61,6 +62,9 @@ export default function ProblemDefinitionPage() {
         : [],
       currentAlternatives: raw.currentAlternatives
         ? raw.currentAlternatives.split(",").filter(Boolean)
+        : [],
+      problemAreas: raw.problemAreas
+        ? raw.problemAreas.split(",").filter(Boolean)
         : [],
     };
   });
@@ -118,9 +122,10 @@ export default function ProblemDefinitionPage() {
 
   const toggleArrayValue = (
     field:
-      | "affectedUsers"
-      | "currentAlternatives",
-    value: string
+  | "affectedUsers"
+  | "currentAlternatives"
+  | "problemAreas",
+     value: string
   ) => {
     const existingValues = formData[field];
 
@@ -284,7 +289,7 @@ export default function ProblemDefinitionPage() {
     className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
     onChange={(e) =>
       toggleArrayValue(
-        "currentAlternatives",
+        "problemAreas",
         e.target.value
       )
     }
@@ -586,9 +591,10 @@ export default function ProblemDefinitionPage() {
     </p>
     <div className="mt-6 space-y-3">
       {[
-        { step: "1", label: "Problem Discovery", done: !!(formData.coreProblemStatement && formData.problemSeverity) },
+        { step: "1", label: "Problem Discovery", done: !!( formData.coreProblemStatement && formData.problemSeverity && formData.problemAreas.length > 0 && formData.operationalImpact) },
         { step: "2", label: "Market Gap Analysis", done: !!(formData.marketGap && formData.customerFrustrations) },
-        { step: "3", label: "Affected Users", done: !!(formData.affectedUsers.length > 0 && formData.problemFrequency) },
+        { step: "3", label: "Affected Users", done: !!( formData.affectedUsers.length > 0 && formData.problemFrequency && formData.problemUrgency && formData.founderObservations) 
+},
       ].map((item) => (
         <div key={item.step} className="flex items-center gap-3 rounded-2xl bg-background p-3">
           <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-black ${
@@ -640,9 +646,22 @@ export default function ProblemDefinitionPage() {
           {formData.problemFrequency || "Not entered"}
         </h4>
       </div>
+<div className="rounded-2xl bg-slate-50 p-4">
+  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+    Problem Areas
+  </p>
+
+  <h4 className="mt-1 text-base font-black text-[#16214A]">
+    {formData.problemAreas.length > 0
+      ? formData.problemAreas.join(", ")
+      : "None selected"}
+  </h4>
+</div>
+
     </div>
   </section>
 </div>
+
       </div>
 
       {/* FOOTER */}
@@ -655,7 +674,12 @@ export default function ProblemDefinitionPage() {
               saveBuilderStep("problemDefinition", {
                 ...formData,
                 affectedUsers: formData.affectedUsers.join(","),
-                currentAlternatives: formData.currentAlternatives.join(","),
+
+                currentAlternatives:
+                  formData.currentAlternatives.join(","),
+
+                problemAreas:
+                  formData.problemAreas.join(","),
               } as Record<string, string>);
               setSaved(true);
               setTimeout(() => setSaved(false), 2000);
@@ -678,10 +702,15 @@ export default function ProblemDefinitionPage() {
             type="button"
             onClick={() => {
               saveBuilderStep("problemDefinition", {
-                ...formData,
-                affectedUsers: formData.affectedUsers.join(","),
-                currentAlternatives: formData.currentAlternatives.join(","),
-              } as Record<string, string>);
+              ...formData,
+              affectedUsers: formData.affectedUsers.join(","),
+
+              currentAlternatives:
+                formData.currentAlternatives.join(","),
+
+              problemAreas:
+                formData.problemAreas.join(","),
+            } as Record<string, string>);
               router.push("/founder/startup-builder/market-research");
             }}
             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"

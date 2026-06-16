@@ -107,25 +107,25 @@ export default function BusinessModelPage() {
   ];
 
   const toggleArrayValue = (
-    field:
-      | "acquisitionChannels"
-      | "costStructures"
-      | "scalingChallenges",
-    value: string
-  ) => {
-    if (!value) return;
+  field:
+    | "acquisitionChannels"
+    | "costStructures"
+    | "scalingChallenges",
+  value: string
+) => {
+  if (!value) return;
 
-    const existingValues = formData[field];
+  const existingValues = formData[field];
 
-    if (existingValues.includes(value)) {
-      return;
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [field]: [...existingValues, value],
-    }));
-  };
+  setFormData((prev) => ({
+    ...prev,
+    [field]: existingValues.includes(value)
+      ? existingValues.filter(
+          (item) => item !== value
+        )
+      : [...existingValues, value],
+  }));
+};
 
   const handleChange = (
     field: keyof BusinessModelForm,
@@ -184,7 +184,7 @@ export default function BusinessModelPage() {
                 </p>
 
                 <h3 className="mt-2 text-5xl font-black text-[#16214A]">
-                  15%
+                  80%
                 </h3>
               </div>
 
@@ -194,7 +194,7 @@ export default function BusinessModelPage() {
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[15%] rounded-full bg-primary" />
+              <div className="h-full w-[80%] rounded-full bg-primary" />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -402,12 +402,14 @@ export default function BusinessModelPage() {
 
               <select
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
-                onChange={(e) =>
+                onChange={(e) => {
                   toggleArrayValue(
                     "acquisitionChannels",
                     e.target.value
-                  )
-                }
+                  );
+
+                  e.target.value = "";
+                }}
               >
                 <option value="">
                   Select Acquisition Channel
@@ -493,12 +495,14 @@ export default function BusinessModelPage() {
 
               <select
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-                onChange={(e) =>
+                onChange={(e) => {
                   toggleArrayValue(
                     "costStructures",
                     e.target.value
-                  )
-                }
+                  );
+
+                  e.target.value = "";
+                }}
               >
                 <option value="">
                   Select Cost Structure
@@ -523,12 +527,14 @@ export default function BusinessModelPage() {
 
               <select
                 className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 text-sm outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-                onChange={(e) =>
+                onChange={(e) => {
                   toggleArrayValue(
                     "scalingChallenges",
                     e.target.value
-                  )
-                }
+                  );
+
+                  e.target.value = "";
+                }}
               >
                 <option value="">
                   Select Scaling Challenge
@@ -637,6 +643,29 @@ export default function BusinessModelPage() {
           {formData.acquisitionChannels.length > 0 ? formData.acquisitionChannels.join(", ") : "None selected"}
         </h4>
       </div>
+
+      <div className="rounded-2xl bg-slate-50 p-4">
+  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+    Growth Strategy
+  </p>
+
+  <h4 className="mt-1 text-base font-black text-[#16214A]">
+    {formData.growthStrategy || "Not Defined"}
+  </h4>
+</div>
+
+<div className="rounded-2xl bg-slate-50 p-4">
+  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+    Major Costs
+  </p>
+
+  <h4 className="mt-1 text-base font-black text-[#16214A]">
+    {formData.costStructures.length > 0
+      ? formData.costStructures.join(", ")
+      : "Not Selected"}
+  </h4>
+</div>
+
     </div>
   </section>
 </div>

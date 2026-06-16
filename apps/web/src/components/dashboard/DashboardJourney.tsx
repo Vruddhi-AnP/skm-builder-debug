@@ -4,11 +4,51 @@ import { CheckCircle2, Circle } from "lucide-react";
 import { getStepStatus } from "@/hooks/useLocalBuilder";
 
 const steps = [
-  { title: "Idea Validation",    key: "ideaDefinition"    as const },
-  { title: "Problem Definition", key: "problemDefinition" as const },
-  { title: "Market Research",    key: "marketResearch"    as const },
-  { title: "Business Model",     key: "businessModel"     as const },
-  { title: "Solution Design",    key: "solutionDesign"    as const },
+  {
+    title: "Startup Profile",
+    status: "Completed",
+  },
+
+  {
+    title: "Idea",
+    status: getStepStatus("ideaDefinition"),
+  },
+
+  {
+    title: "Problem",
+    status: getStepStatus("problemDefinition"),
+  },
+
+  {
+    title: "Customer / Market",
+    status: getStepStatus("marketResearch"),
+  },
+
+  {
+    title: "Solution",
+    status: getStepStatus("solutionDesign"),
+  },
+
+  {
+    title: "Business Model",
+    status: getStepStatus("businessModel"),
+  },
+
+  {
+    title: "Readiness",
+    status:
+      getStepStatus("businessModel") === "Completed"
+        ? "Unlocked"
+        : "Locked",
+  },
+
+  {
+    title: "Blueprint",
+    status:
+      getStepStatus("businessModel") === "Completed"
+        ? "Unlocked"
+        : "Locked",
+  },
 ];
 
 export default function DashboardJourney() {
@@ -23,33 +63,48 @@ export default function DashboardJourney() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-5">
-        {steps.map((step) => {
-          const status = getStepStatus(step.key);
-          const completed = status === "Completed";
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-          return (
-            <div
-              key={step.title}
-              className={`flex items-center gap-3 rounded-2xl border p-4 transition ${
-                completed
-                  ? "border-emerald-200 bg-emerald-50"
-                  : "border-border/50 bg-white/60"
-              }`}
-            >
-              {completed ? (
-                <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" />
-              ) : (
-                <Circle className="h-6 w-6 shrink-0 text-slate-400" />
-              )}
-              <span className={`text-sm font-medium ${
-                completed ? "text-emerald-700" : "text-[#16214A]"
-              }`}>
-                {step.title}
-              </span>
-            </div>
-          );
-        })}
+          {steps.map((step) => {
+            const completed =
+              step.status === "Completed";
+
+            const locked =
+              step.status === "Locked";
+
+            return (
+              <div
+                key={step.title}
+                className={`flex items-center gap-3 rounded-2xl border p-4 transition ${
+                  completed
+                    ? "border-emerald-200 bg-emerald-50"
+                    : locked
+                    ? "border-slate-200 bg-slate-50 opacity-70"
+                    : "border-primary/20 bg-primary/5"
+                }`}
+              >
+                {completed ? (
+                  <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" />
+                ) : locked ? (
+                  <Circle className="h-6 w-6 shrink-0 text-slate-300" />
+                ) : (
+                  <Circle className="h-6 w-6 shrink-0 text-primary" />
+                )}
+
+                <span
+                  className={`text-sm font-medium ${
+                    completed
+                      ? "text-emerald-700"
+                      : locked
+                      ? "text-slate-400"
+                      : "text-[#16214A]"
+                  }`}
+                >
+                  {step.title}
+                </span>
+              </div>
+            );
+          })}
       </div>
     </section>
   );

@@ -23,7 +23,7 @@ export default function AppShell({
   return (
     <main className="flex min-h-screen bg-background">
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden border-r border-border/60 bg-[#F7F4EE]/95 lg:flex lg:w-70 lg:flex-col">
+      <aside className="hidden border-r border-border/60 bg-[#F7F4EE]/95 lg:flex lg:w-72 lg:flex-col">
         {sidebar}
       </aside>
 
@@ -34,7 +34,7 @@ export default function AppShell({
           <div className="flex items-center gap-3">
             <button
               onClick={onMenuClick}
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 bg-[#F7F4EE]/95 transition hover:bg-primary/10 text-primary border-primary/20 lg:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/20 bg-[#F7F4EE]/95 transition hover:bg-primary/10 text-primary border-primary/20 lg:hidden"
             >
               <Menu className="h-5 w-5 text-slate-700" />
             </button>

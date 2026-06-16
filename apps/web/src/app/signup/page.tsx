@@ -26,38 +26,31 @@ export default function SignupPage() {
     useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement
+      >
+    ) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    };
 
-  const handleSignup = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+    const handleSignup = async (
+      e: React.FormEvent<HTMLFormElement>
+    ) => {
+      e.preventDefault();
 
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Invalid email address");
-      return;
-    }
+      if (!emailRegex.test(formData.email)) {
+        toast.error("Invalid email address");
+        return;
+      }
 
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    if (!passwordRegex.test(formData.password)) {
-      toast.error(
-        "Password must contain minimum 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
-      );
-      return;
-    }
+      if (formData.password.length < 6) {
+        return;
+      }
 
     try {
       setLoading(true);
@@ -173,8 +166,18 @@ export default function SignupPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Create a secure password"
-                className="h-14 w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-5 outline-none transition focus:border-slate-400 focus:ring-4 focus:ring-slate-100"
+                className={`h-14 w-full rounded-2xl border bg-[#F7F4EE]/95 px-5 outline-none transition focus:ring-4 focus:ring-slate-100 ${
+                  formData.password.length > 0 && formData.password.length < 6
+                    ? "border-red-400 focus:border-red-400"
+                    : "border-border/60 focus:border-slate-400"
+                }`}
               />
+
+              {formData.password.length > 0 && formData.password.length < 6 && (
+                <p className="mt-2 text-xs font-medium text-red-500">
+                  Password must be at least 6 characters
+                </p>
+              )}
             </div>
 
             {/* ROLE */}

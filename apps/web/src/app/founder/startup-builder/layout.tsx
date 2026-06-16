@@ -42,16 +42,16 @@ const steps = [
     name: "Business Model",
     href: "/founder/startup-builder/business-model",
   },
-  {
-    key: null,
-    name: "Summary",
-    href: "/founder/startup-builder/summary",
-  },
-  {
-    key: null,
-    name: "Readiness Score",
-    href: "/founder/startup-builder/readiness-score",
-  },
+{
+  key: null,
+  name: "Readiness Score",
+  href: "/founder/startup-builder/readiness-score",
+},
+{
+  key: null,
+  name: "Startup Blueprint",
+  href: "/founder/startup-builder/summary",
+},
 ];
 
 export default function StartupBuilderLayout({

@@ -74,6 +74,30 @@ export default function SummaryPage() {
 
   const [syncing, setSyncing] = useState(false);
 
+  const builderData = getBuilderData();
+
+  const ideaDefinition = builderData.ideaDefinition ?? {};
+  const problemDefinition = builderData.problemDefinition ?? {};
+  const marketResearch = builderData.marketResearch ?? {};
+  const solutionDesign = builderData.solutionDesign ?? {};
+  const businessModel = builderData.businessModel ?? {};
+
+ const sections = [
+  ideaDefinition,
+  problemDefinition,
+  marketResearch,
+  solutionDesign,
+  businessModel,
+];
+
+const completedSections = sections.filter(
+  (section) => Object.keys(section).length > 0
+).length;
+
+const readinessScore = Math.round(
+  (completedSections / sections.length) * 100
+);
+
 const handleSyncToBackend = async () => {
   const startupId = localStorage.getItem("startupId");
   if (!startupId) {
@@ -130,7 +154,7 @@ const handleSyncToBackend = async () => {
                 </p>
 
                 <h3 className="mt-2 text-5xl font-black text-[#16214A]">
-                  72%
+                  {readinessScore}%
                 </h3>
               </div>
 
@@ -140,7 +164,10 @@ const handleSyncToBackend = async () => {
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[72%] rounded-full bg-primary" />
+              <div
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${readinessScore}%` }}
+              />
             </div>
 
             <div className="mt-8 space-y-4">
@@ -177,7 +204,7 @@ const handleSyncToBackend = async () => {
             </div>
 
             <h2 className="mt-6 text-4xl font-black tracking-tight text-[#16214A]">
-              Startup Ka Mall
+              {ideaDefinition.startupName || "Your Startup"}
             </h2>
 
             <p className="mt-5 max-w-4xl text-base leading-8 text-[#6B6B6B]">
@@ -197,7 +224,7 @@ const handleSyncToBackend = async () => {
             </p>
 
             <h3 className="mt-3 text-6xl font-black text-[#16214A]">
-              72
+              {readinessScore}
             </h3>
 
             <p className="mt-2 text-sm font-bold text-emerald-600">
@@ -205,7 +232,10 @@ const handleSyncToBackend = async () => {
             </p>
 
             <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-[72%] rounded-full bg-primary" />
+              <div
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${readinessScore}%` }}
+              />
             </div>
           </div>
         </div>
