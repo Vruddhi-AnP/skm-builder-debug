@@ -13,11 +13,28 @@ export class BuilderResponseDataDto {
 
   @ApiProperty({
     example: {
-      skills: ['React', 'NestJS', 'PostgreSQL'],
+      idea: {
+        startupIdea: 'AI-powered financial assistant',
+        vision: 'Simplify personal finance management',
+      },
 
-      experience: '3 years',
+      problem: {
+        problemStatement: 'Young professionals struggle to track expenses',
+      },
 
-      availability: 'Full-time',
+      customer: {
+        targetCustomer: 'Young professionals',
+        marketSegment: 'Personal Finance',
+      },
+
+      solution: {
+        solutionDescription:
+          'AI assistant that tracks spending and provides recommendations',
+      },
+
+      businessModel: {
+        revenueModel: 'Monthly Subscription',
+      },
     },
   })
   data: Record<string, unknown>;
@@ -26,4 +43,9 @@ export class BuilderResponseDataDto {
     example: '2026-05-21T10:22:57.187Z',
   })
   createdAt: Date;
+
+  @ApiProperty({
+    example: '2026-05-21T10:22:57.187Z',
+  })
+  updatedAt: Date;
 }

@@ -24,7 +24,6 @@ datasource db {
 
 enum Role {
   founder
-  builder
   investor
   advisor
   admin
@@ -60,7 +59,7 @@ model Startup {
 
  founder User @relation("FounderStartups", fields: [founderId], references: [id])
 
-  builders Builder[]
+  builder Builder?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -71,7 +70,7 @@ model Startup {
 model Builder {
   id        String @id @default(uuid())
 
-  startupId String
+  startupId String @unique
 
   startup Startup @relation(fields: [startupId], references: [id])
 
@@ -79,6 +78,4 @@ model Builder {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([startupId])
 }

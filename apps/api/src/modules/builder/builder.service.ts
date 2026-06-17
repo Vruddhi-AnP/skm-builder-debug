@@ -11,10 +11,18 @@ export class BuilderService {
   constructor(private prisma: PrismaService) {}
 
   async saveBuilder(dto: CreateBuilderDto) {
-    return this.prisma.builder.create({
-      data: {
+    return this.prisma.builder.upsert({
+      where: {
+        startupId: dto.startupId,
+      },
+
+      create: {
         startupId: dto.startupId,
 
+        data: dto.data as Prisma.InputJsonValue,
+      },
+
+      update: {
         data: dto.data as Prisma.InputJsonValue,
       },
     });

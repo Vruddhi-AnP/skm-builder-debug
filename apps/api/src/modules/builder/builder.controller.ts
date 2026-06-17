@@ -61,11 +61,11 @@ export class BuilderController {
     summary: 'Create builder profile',
 
     description:
-      'Allows authenticated builders to create builder profiles associated with startups.',
+      'Allows authenticated founders to save startup builder data associated with their startup.',
   })
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
-    description: 'Builder profile created successfully',
+    description: 'Startup builder data saved successfully',
 
     type: BuilderSuccessResponseDto,
   })
@@ -76,9 +76,9 @@ export class BuilderController {
     description: 'Authentication token missing or invalid',
   })
   @ApiForbiddenResponse({
-    description: 'Only builders can access this endpoint',
+    description: 'Only founders can access this endpoint',
   })
-  @Auth(Role.BUILDER)
+  @Auth(Role.FOUNDER)
   @Post()
   save(@Body() dto: CreateBuilderDto) {
     return this.builderService.saveBuilder(dto);
