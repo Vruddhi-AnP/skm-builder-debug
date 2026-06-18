@@ -1,15 +1,12 @@
-// import { Injectable } from '@nestjs/common';
-
-// @Injectable()
-// export class StartupService {}
-
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma/prisma.service';
 
 import { CreateStartupDto } from './dto/create-startup.dto';
 
 import { StartupResponseDataDto } from './types/startup-response.type';
+
+import { UpdateStartupDto } from './dto/update-startup.dto';
 
 @Injectable()
 export class StartupService {
@@ -25,6 +22,69 @@ export class StartupService {
         industry: dto.industry,
         description: dto.description,
         founderId,
+      },
+    });
+  }
+
+  async findAllByFounder(founderId: string): Promise<StartupResponseDataDto[]> {
+    return this.prisma.startup.findMany({
+      where: {
+        founderId,
+      },
+
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
+  async findOneByFounder(
+    startupId: string,
+    founderId: string,
+  ): Promise<StartupResponseDataDto> {
+    const startup = await this.prisma.startup.findFirst({
+      where: {
+        id: startupId,
+        founderId,
+      },
+    });
+
+    if (!startup) {
+      throw new NotFoundException('Startup not found');
+    }
+
+    return startup;
+  }
+
+  async updateByFounder(
+    startupId: string,
+    founderId: string,
+    dto: UpdateStartupDto,
+  ): Promise<StartupResponseDataDto> {
+    await this.findOneByFounder(startupId, founderId);
+
+    return this.prisma.startup.update({
+      where: {
+        id: startupId,
+      },
+
+      data: {
+        name: dto.name,
+        industry: dto.industry,
+        description: dto.description,
+      },
+    });
+  }
+
+  async deleteByFounder(
+    startupId: string,
+    founderId: string,
+  ): Promise<StartupResponseDataDto> {
+    await this.findOneByFounder(startupId, founderId);
+
+    return this.prisma.startup.delete({
+      where: {
+        id: startupId,
       },
     });
   }

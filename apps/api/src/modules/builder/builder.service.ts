@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { Prisma } from '@prisma/client';
 
@@ -10,7 +10,18 @@ import { CreateBuilderDto } from './dto/create-builder.dto';
 export class BuilderService {
   constructor(private prisma: PrismaService) {}
 
-  async saveBuilder(dto: CreateBuilderDto) {
+  async saveBuilder(dto: CreateBuilderDto, founderId: string) {
+    const startup = await this.prisma.startup.findFirst({
+      where: {
+        id: dto.startupId,
+        founderId,
+      },
+    });
+
+    if (!startup) {
+      throw new NotFoundException('Startup not found');
+    }
+
     return this.prisma.builder.upsert({
       where: {
         startupId: dto.startupId,
