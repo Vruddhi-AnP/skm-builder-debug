@@ -1,18 +1,3 @@
-// // This is your Prisma schema file,
-// // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// // Get a free hosted Postgres database in seconds: `npx create-db`
-
-// generator client {
-//   provider = "prisma-client"
-//   output   = "../generated/prisma"
-// }
-
-// datasource db {
-//   provider = "postgresql"
-// }
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -45,8 +30,36 @@ model User {
   createdAt    DateTime @default(now())
 
   updatedAt    DateTime @updatedAt
+  
+  founderProfile FounderProfile?
 
   startups     Startup[] @relation("FounderStartups")
+}
+
+model FounderProfile {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  phoneNumber String?
+
+  location String?
+
+  founderRole String?
+
+  startupExperience String?
+
+  linkedinUrl String?
+
+  founderGoal String?
+
+  bio String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Startup {
