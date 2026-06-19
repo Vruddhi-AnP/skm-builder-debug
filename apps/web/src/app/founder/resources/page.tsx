@@ -184,6 +184,7 @@ export default function FounderResourcesPage() {
               </p>
 
               <button
+                type="button"
                 onClick={() => {
                   setSearch("");
 

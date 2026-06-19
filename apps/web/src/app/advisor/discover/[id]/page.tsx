@@ -191,15 +191,35 @@ export default function StartupDetailsPage() {
             </div>
 
             {/* ACTIONS */}
-            <div className="flex flex-wrap gap-3">
-              <button className="h-12 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground">
-                Accept Request
-              </button>
+            <div className="rounded-[30px] border border-primary/20 bg-primary/5 p-6 xl:w-[340px]">
+  <p className="text-sm font-semibold text-primary">
+    Advisor Match
+  </p>
 
-              <button className="h-12 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground">
-                Schedule Session
-              </button>
-            </div>
+  <h2 className="mt-3 text-6xl font-black text-foreground">
+    92%
+  </h2>
+
+  <p className="mt-3 text-sm text-muted-foreground">
+    High compatibility based on
+    startup stage, industry and
+    advisor expertise.
+  </p>
+
+  <div className="mt-5 h-3 overflow-hidden rounded-full bg-primary/10">
+    <div className="h-full w-[92%] rounded-full bg-primary" />
+  </div>
+
+  <div className="mt-6 flex flex-col gap-3">
+    <button className="h-12 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
+      Accept Request
+    </button>
+
+    <button className="h-12 rounded-2xl border border-border bg-card text-sm font-semibold">
+      Schedule Session
+    </button>
+  </div>
+</div>
           </div>
         </section>
 
@@ -271,6 +291,40 @@ export default function StartupDetailsPage() {
             </div>
 
             <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+  <div className="flex items-center gap-2">
+    <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+
+    <h3 className="text-2xl font-black text-foreground">
+      Why You&apos;re A Match
+    </h3>
+  </div>
+
+  <div className="mt-5 space-y-4">
+
+    <div className="flex items-center gap-3">
+      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+      <span>FinTech domain expertise</span>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+      <span>Seed stage mentoring experience</span>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+      <span>Fundraising & GTM support</span>
+    </div>
+
+    <div className="flex items-center gap-3">
+      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+      <span>Strong startup ecosystem fit</span>
+    </div>
+
+  </div>
+</div>
+
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
               <div className="flex items-center gap-2">
                 <Rocket className="h-5 w-5 text-orange-500" />
 
@@ -279,18 +333,77 @@ export default function StartupDetailsPage() {
                 </h3>
               </div>
 
-              <p className="mt-5 text-sm leading-8 text-muted-foreground">
-                Strong early-stage
-                traction with scalable
-                business model and
-                investor-ready positioning.
-              </p>
+              <div className="mt-5 space-y-4">
+
+  <div className="flex justify-between">
+    <span className="text-muted-foreground">
+      Active Users
+    </span>
+
+    <span className="font-semibold">
+      12K+
+    </span>
+  </div>
+
+  <div className="flex justify-between">
+    <span className="text-muted-foreground">
+      Team Size
+    </span>
+
+    <span className="font-semibold">
+      14
+    </span>
+  </div>
+
+  <div className="flex justify-between">
+    <span className="text-muted-foreground">
+      Funding Goal
+    </span>
+
+    <span className="font-semibold">
+      $500K
+    </span>
+  </div>
+
+  <div className="flex justify-between">
+    <span className="text-muted-foreground">
+      Growth Rate
+    </span>
+
+    <span className="font-semibold text-emerald-600">
+      +18%
+    </span>
+  </div>
+
+</div>
             </div>
           </div>
 
           {/* RIGHT */}
           <div className="space-y-5">
             <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+
+            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+  <h3 className="text-2xl font-black text-foreground">
+    Founder Profile
+  </h3>
+
+  <div className="mt-5">
+    <h4 className="text-lg font-bold text-foreground">
+      {startup.founder}
+    </h4>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Founder & CEO
+    </p>
+
+    <p className="mt-4 text-sm leading-7 text-muted-foreground">
+      Experienced startup operator focused on building scalable
+      technology-driven businesses and investor-ready ventures.
+    </p>
+  </div>
+</div>
+
               <h3 className="text-2xl font-black text-foreground">
                 Startup Information
               </h3>
@@ -359,21 +472,31 @@ export default function StartupDetailsPage() {
             </div>
 
             {/* CTA */}
-            <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
-              <h3 className="text-2xl font-black text-foreground">
-                Interested In Mentoring?
-              </h3>
+            <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6">
+  <h3 className="text-2xl font-black text-foreground">
+    Ready To Mentor?
+  </h3>
 
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                Accept mentorship request
-                and begin startup advisory
-                journey.
-              </p>
+  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+    Start your advisory journey and help this startup scale.
+  </p>
 
-              <button className="mt-6 h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
-                Accept Startup Request
-              </button>
-            </div>
+  <div className="mt-6 space-y-3">
+
+    <button className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
+      Accept Request
+    </button>
+
+    <button className="h-12 w-full rounded-2xl border border-border bg-card text-sm font-semibold">
+      Schedule Intro Call
+    </button>
+
+    <button className="h-12 w-full rounded-2xl border border-border bg-card text-sm font-semibold">
+      Save Startup
+    </button>
+
+  </div>
+</div>
           </div>
         </section>
       </main>

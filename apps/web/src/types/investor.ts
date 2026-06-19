@@ -14,4 +14,6 @@ export interface Investor {
   availabilityStatus?: string;
 
   portfolioCount?: string;
+
+  matchScore?: number;
 }

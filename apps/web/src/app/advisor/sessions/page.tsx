@@ -18,7 +18,6 @@ import {
   User,
   Users,
   Video,
-  Wallet,
   X,
 } from "lucide-react"
 
@@ -45,11 +44,6 @@ const navigation = [
     active: true,
   },
   {
-    name: "Earnings",
-    href: "/advisor/earnings",
-    icon: Wallet,
-  },
-  {
     name: "Profile",
     href: "/advisor/profile",
     icon: User,
@@ -62,7 +56,7 @@ const sessionsData = [
     startup: "FinVerse AI",
     founder: "Aarav Mehta",
     type: "Strategy Session",
-    date: "Today",
+    date: "18 Jun 2026",
     time: "5:00 PM",
     duration: "45 mins",
     location: "Google Meet",
@@ -75,7 +69,7 @@ const sessionsData = [
     founder: "Riya Kapoor",
     type: "Fundraising Guidance",
     date: "Tomorrow",
-    time: "11:30 AM",
+    time: "19 Jun 2026",
     duration: "60 mins",
     location: "Zoom",
     status: "Upcoming",
@@ -86,7 +80,7 @@ const sessionsData = [
     startup: "GreenByte",
     founder: "Kabir Shah",
     type: "Growth Advisory",
-    date: "Yesterday",
+    date: "17 Jun 2026",
     time: "4:00 PM",
     duration: "50 mins",
     location: "Google Meet",
@@ -200,16 +194,15 @@ export default function AdvisorSessionsPage() {
             <div className="p-4">
               <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-                  Sessions This Month
+                  Advisor Success Rate
                 </p>
 
                 <h3 className="mt-3 text-4xl font-black tracking-tight text-foreground">
-                  18
+                  94%
                 </h3>
 
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Mentorship sessions
-                  conducted
+                 Successful founder sessions
                 </p>
 
                 <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
@@ -273,16 +266,15 @@ export default function AdvisorSessionsPage() {
         <div className="p-4">
           <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-5">
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-              Sessions This Month
+              Advisor Success Rate
             </p>
 
             <h3 className="mt-3 text-4xl font-black tracking-tight text-foreground">
-              18
+              94%
             </h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Mentorship sessions
-              conducted
+              Successful founder sessions
             </p>
 
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
@@ -410,6 +402,46 @@ export default function AdvisorSessionsPage() {
             </div>
           </section>
 
+          <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-foreground">
+      18
+    </h3>
+    <p className="mt-2 text-sm text-muted-foreground">
+      Total Sessions
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-primary">
+      12
+    </h3>
+    <p className="mt-2 text-sm text-muted-foreground">
+      Upcoming Sessions
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-emerald-600">
+      6
+    </h3>
+    <p className="mt-2 text-sm text-muted-foreground">
+      Completed Sessions
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-orange-500">
+      4.9
+    </h3>
+    <p className="mt-2 text-sm text-muted-foreground">
+      Advisor Rating
+    </p>
+  </div>
+
+</section>
+
           {/* SESSION LIST */}
           <section className="mt-7 space-y-5">
             {filteredSessions.map(
@@ -476,14 +508,24 @@ export default function AdvisorSessionsPage() {
                             <MapPin className="h-4 w-4" />
                             {session.location}
                           </span>
+
+                        <span>•</span>
+
+                        <span className="font-semibold text-primary">
+                          Meeting Ready
+                        </span>
+
                         </div>
                       </div>
 
                       {/* ACTIONS */}
                       <div className="flex flex-wrap gap-3">
-                        <button className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
-                          Founder Details
-                        </button>
+                        <Link
+                          href={`/advisor/discover/${session.id}`}
+                          className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted flex items-center justify-center"
+                        >
+                          Startup Details
+                        </Link>
 
                         {session.status ===
                         "Completed" ? (
@@ -510,7 +552,7 @@ export default function AdvisorSessionsPage() {
                             {isJoined ? (
                               <span className="flex items-center gap-2">
                                 <Check className="h-4 w-4" />
-                                Joined
+                                In Progress
                               </span>
                             ) : (
                               <span className="flex items-center gap-2">

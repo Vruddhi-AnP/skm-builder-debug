@@ -339,60 +339,65 @@ export default function AdvisorDiscoverPage() {
                 </p>
               </div>
 
+
               {/* SEARCH */}
-              <div className="w-full xl:w-95">
-                <div className="rounded-[28px] border border-border bg-muted/40 p-5">
-                  <div className="flex h-14 items-center gap-3 rounded-2xl border border-border bg-card px-4">
-                    <Search className="h-5 w-5 text-muted-foreground" />
+              <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6 xl:w-[360px]">
+  <p className="text-sm font-semibold text-primary">
+    Startup Matches
+  </p>
 
-                    <input
-                      value={searchQuery}
-                      onChange={(e) =>
-                        setSearchQuery(
-                          e.target.value
-                        )
-                      }
-                      placeholder="Search startups..."
-                      className="flex-1 bg-transparent text-sm outline-none"
-                    />
-                  </div>
+  <h3 className="mt-2 text-5xl font-black text-foreground">
+    24
+  </h3>
 
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <button className="flex h-11 items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground">
-                      <Filter className="h-4 w-4" />
-                      Filters
-                    </button>
+  <p className="mt-3 text-sm text-muted-foreground">
+    AI matched startups based on your advisory profile,
+    expertise and mentoring history.
+  </p>
 
-                    <button className="h-11 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
-                      Search
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+  <div className="mt-5 h-3 overflow-hidden rounded-full bg-primary/10">
+    <div className="h-full w-[82%] rounded-full bg-primary" />
+  </div>
+
+  <p className="mt-2 text-xs font-semibold text-primary">
+    82% Profile Match Coverage
+  </p>
+</div>
+</div>
 
           {/* FILTERS */}
-          <section className="mt-7 flex flex-wrap gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() =>
-                  setSelectedCategory(
-                    category
-                  )
-                }
-                className={`h-11 rounded-2xl px-5 text-sm font-semibold transition ${
-                  selectedCategory ===
-                  category
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-border bg-card text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </section>
+          <section className="mt-7 rounded-[30px] border border-border bg-card p-5">
+  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+    <div className="relative w-full lg:max-w-md">
+      <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+
+      <input
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search startups, industries or founders..."
+        className="h-12 w-full rounded-2xl border border-border bg-background pl-12 pr-4 text-sm outline-none"
+      />
+    </div>
+
+    <div className="flex flex-wrap gap-3">
+      {categories.map((category) => (
+        <button
+          key={category}
+          onClick={() => setSelectedCategory(category)}
+          className={`h-11 rounded-2xl px-5 text-sm font-semibold transition ${
+            selectedCategory === category
+              ? "bg-primary text-primary-foreground"
+              : "border border-border bg-card text-muted-foreground hover:bg-muted"
+          }`}
+        >
+          {category}
+        </button>
+      ))}
+    </div>
+
+  </div>
+</section>
 
           {/* STARTUP CARDS */}
           <section className="mt-7 grid grid-cols-1 gap-5 xl:grid-cols-2">
@@ -431,8 +436,65 @@ export default function AdvisorDiscoverPage() {
               </div>
             )}
           </section>
+
+<section className="mt-7 grid gap-5 md:grid-cols-3">
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+      Featured Match
+    </p>
+
+    <h3 className="mt-3 text-xl font-black text-foreground">
+      FinVerse AI
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Highest compatibility with your FinTech expertise.
+    </p>
+
+    <div className="mt-4 flex items-center justify-between">
+      <span className="text-sm text-muted-foreground">
+        Match Score
+      </span>
+
+      <span className="font-bold text-primary">
+        96%
+      </span>
+    </div>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
+      New This Week
+    </p>
+
+    <h3 className="mt-3 text-xl font-black text-foreground">
+      8 Startups
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Recently added founders seeking advisors.
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <p className="text-xs font-semibold uppercase tracking-wide text-orange-500">
+      Requests Sent
+    </p>
+
+    <h3 className="mt-3 text-xl font-black text-foreground">
+      {requestedAdvisory.length}
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Advisory requests already submitted.
+    </p>
+  </div>
+</section>
+
+</section>
         </main>
       </div>
     </div>
+    
   )
 }

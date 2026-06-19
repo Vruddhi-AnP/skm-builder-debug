@@ -15,7 +15,6 @@ import {
   Menu,
   Search,
   Sparkles,
-  Star,
   User,
   Users,
   Wallet,
@@ -277,7 +276,7 @@ export default function AdvisorDashboardPage() {
               </h1>
 
               <p className="text-sm text-gray-500 mt-1">
-                Mentorship & ecosystem workspace
+                Manage startup mentorship, advisory sessions and founder requests
               </p>
             </div>
           </div>
@@ -341,82 +340,158 @@ export default function AdvisorDashboardPage() {
                   your advisor ecosystem presence.
                 </p>
 
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <Link
-                    href="/advisor/discover"
-                    className="h-11 px-5 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 text-sm font-semibold text-white flex items-center justify-center"
-                  >
-                    Discover Startups
-                  </Link>
+               <div className="mt-8 flex flex-wrap gap-3">
 
-                  <Link
-                    href="/advisor/sessions"
-                    className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-gray-700 flex items-center justify-center"
-                  >
-                    View Sessions
-                  </Link>
-                </div>
-              </div>
+  <Link
+    href="/advisor/discover"
+    className="h-12 px-6 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-500 text-sm font-semibold text-white flex items-center justify-center"
+  >
+    Discover Startups
+  </Link>
+
+  <Link
+    href="/advisor/sessions"
+    className="h-12 px-6 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-gray-700 flex items-center justify-center"
+  >
+    Upcoming Sessions
+  </Link>
+
+  <Link
+    href="/advisor/requests"
+    className="h-12 px-6 rounded-2xl border border-[#e8edf5] bg-white text-sm font-semibold text-gray-700 flex items-center justify-center"
+  >
+    Requests
+  </Link>
+
+</div>
+</div>
 
               {/* SCORE */}
               <div className="rounded-[30px] border-2 border-violet-500 bg-[#F7F4EE]/95 p-6">
                 <p className="text-base font-semibold text-[#0f172a]">
-                  Advisor Impact
-                </p>
+  Advisor Impact Score
+</p>
 
-                <h2 className="mt-5 text-6xl font-bold tracking-tight text-[#0f172a]">
-                  91
-                </h2>
+<h2 className="mt-4 text-6xl font-bold tracking-tight text-[#0f172a]">
+  91
+</h2>
 
-                <p className="mt-4 text-base text-gray-500">
-                  Top ecosystem mentor
-                </p>
+<div className="mt-5 space-y-3">
 
-                <div className="mt-7 h-3 w-full rounded-full bg-gray-100 overflow-hidden">
-                  <div className="h-full w-[91%] rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500" />
-                </div>
+  <div className="flex items-center justify-between text-sm">
+    <span className="text-gray-500">
+      Requests
+    </span>
+
+    <span className="font-semibold text-[#0f172a]">
+      34
+    </span>
+  </div>
+
+  <div className="flex items-center justify-between text-sm">
+    <span className="text-gray-500">
+      Sessions
+    </span>
+
+    <span className="font-semibold text-[#0f172a]">
+      18
+    </span>
+  </div>
+
+  <div className="flex items-center justify-between text-sm">
+    <span className="text-gray-500">
+      Earnings
+    </span>
+
+    <span className="font-semibold text-[#0f172a]">
+      ₹2L
+    </span>
+  </div>
+
+</div>
+
+                <div className="mt-6 flex items-center justify-between text-xs">
+  <span className="text-gray-500">
+    Monthly Performance
+  </span>
+
+  <span className="font-semibold text-violet-600">
+    91%
+  </span>
+</div>
+
+<div className="mt-2 h-3 w-full rounded-full bg-gray-100 overflow-hidden">
+  <div className="h-full w-[91%] rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500" />
+</div>
               </div>
             </div>
           </section>
 
           {/* SEARCH + FILTER */}
-          <section className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-5">
-            <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
-              {/* SEARCH */}
-              <div className="relative w-full lg:max-w-md">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          {/* TODAY'S FOCUS */}
+<section className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
+  <div className="flex items-center justify-between">
+    <div>
+      <h2 className="text-2xl font-bold tracking-tight text-[#0f172a]">
+        Today&apos;s Focus
+      </h2>
 
-                <input
-                  type="text"
-                  placeholder="Search startups or founders..."
-                  value={searchQuery}
-                  onChange={(e) =>
-                    setSearchQuery(e.target.value)
-                  }
-                  className="w-full h-12 rounded-2xl border border-[#edf1f7] bg-[#fafbff] pl-12 pr-4 text-sm outline-none focus:border-violet-400"
-                />
-              </div>
+      <p className="mt-1 text-sm text-gray-500">
+        Key actions requiring your attention today
+      </p>
+    </div>
 
-              {/* FILTERS */}
-              <div className="flex flex-wrap gap-3">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() =>
-                      setSelectedCategory(category)
-                    }
-                    className={`h-11 px-5 rounded-2xl text-sm font-semibold transition ${
-                      selectedCategory === category
-                        ? "bg-violet-500 text-white"
-                        : "border border-[#e8edf5] bg-[#F7F4EE]/95 text-gray-700 hover:bg-[#fafafa]"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </section>
+    <div className="rounded-full bg-violet-100 px-4 py-2 text-sm font-semibold text-violet-700">
+      6 Actions Pending
+    </div>
+  </div>
+
+  <div className="mt-6 grid gap-4 md:grid-cols-3">
+
+    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+      <p className="text-sm text-gray-500">
+        New Requests
+      </p>
+
+      <h3 className="mt-2 text-3xl font-bold text-[#0f172a]">
+        {filteredRequests.length}
+      </h3>
+
+      <p className="mt-2 text-xs font-semibold text-amber-600">
+        Review founder applications
+      </p>
+    </div>
+
+    <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5">
+      <p className="text-sm text-gray-500">
+        Upcoming Sessions
+      </p>
+
+      <h3 className="mt-2 text-3xl font-bold text-[#0f172a]">
+        {sessions.length}
+      </h3>
+
+      <p className="mt-2 text-xs font-semibold text-blue-600">
+        Prepare for mentorship calls
+      </p>
+    </div>
+
+    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+      <p className="text-sm text-gray-500">
+        Advisor Rating
+      </p>
+
+      <h3 className="mt-2 text-3xl font-bold text-[#0f172a]">
+        4.9
+      </h3>
+
+      <p className="mt-2 text-xs font-semibold text-emerald-600">
+        Top performing advisor
+      </p>
+    </div>
+
+  </div>
+</section>
 
           {/* STATS */}
           <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -436,6 +511,9 @@ export default function AdvisorDashboardPage() {
               <p className="mt-2 text-sm text-gray-500">
                 Advisory Requests
               </p>
+              <p className="mt-1 text-xs font-semibold text-emerald-600">
+                ↑ 12% vs last month
+              </p>
             </div>
 
             <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
@@ -453,6 +531,9 @@ export default function AdvisorDashboardPage() {
 
               <p className="mt-2 text-sm text-gray-500">
                 Sessions Conducted
+              </p>
+              <p className="mt-1 text-xs font-semibold text-emerald-600">
+                ↑ 8% vs last month
               </p>
             </div>
 
@@ -472,6 +553,9 @@ export default function AdvisorDashboardPage() {
               <p className="mt-2 text-sm text-gray-500">
                 Monthly Earnings
               </p>
+              <p className="mt-1 text-xs font-semibold text-emerald-600">
+                ↑ 24% vs last month
+              </p>
             </div>
 
             <div className="rounded-[28px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
@@ -489,6 +573,9 @@ export default function AdvisorDashboardPage() {
 
               <p className="mt-2 text-sm text-gray-500">
                 Active Founders
+              </p>
+              <p className="mt-1 text-xs font-semibold text-emerald-600">
+                ↑ 17% vs last month
               </p>
             </div>
           </section>
@@ -546,9 +633,31 @@ export default function AdvisorDashboardPage() {
 
                           <span>{item.founder}</span>
                         </div>
+
+                  <div className="mt-4">
+  <div className="mb-2 flex items-center justify-between text-xs">
+    <span className="font-medium text-gray-500">
+      Match Score
+    </span>
+
+    <span className="font-semibold text-violet-600">
+      {item.score}
+    </span>
+  </div>
+
+  <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+    <div
+      className="h-full rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500"
+      style={{
+        width: item.score,
+      }}
+    />
+  </div>
+</div>
+
                       </div>
 
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <button
                           className="h-11 px-4 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center"
                         >
@@ -570,6 +679,7 @@ export default function AdvisorDashboardPage() {
                             ? "Accepted"
                             : "Accept Request"}
                         </button>
+
                       </div>
                     </div>
                   </div>
@@ -586,7 +696,7 @@ export default function AdvisorDashboardPage() {
             </div>
 
             {/* RIGHT */}
-            <div className="space-y-5"></div>
+            <div className="space-y-5">
               {/* SESSIONS */}
               <div className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
                 <div className="flex items-center justify-between">
@@ -613,6 +723,10 @@ export default function AdvisorDashboardPage() {
                         {item.time}
                       </div>
 
+                      <p className="mt-2 text-xs text-violet-600 font-semibold">
+                        Strategy Session
+                      </p>
+
                       <button
                         onClick={() => {
                           setJoinedSessions((prev) => [...prev, item.id])
@@ -633,6 +747,44 @@ export default function AdvisorDashboardPage() {
                 </div>
               </div>
 
+                  <div className="rounded-[32px] border border-amber-200 bg-amber-50 p-6">
+  <h3 className="text-xl font-bold text-[#0f172a]">
+    Pending Actions
+  </h3>
+
+  <div className="mt-4 space-y-3">
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-gray-600">
+        New Requests
+      </span>
+
+      <span className="font-semibold text-[#0f172a]">
+        3
+      </span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-gray-600">
+        Sessions Today
+      </span>
+
+      <span className="font-semibold text-[#0f172a]">
+        2
+      </span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-gray-600">
+        Profile Updates
+      </span>
+
+      <span className="font-semibold text-[#0f172a]">
+        1
+      </span>
+    </div>
+  </div>
+</div>
+
               {/* QUICK ACTIONS */}
               <div className="rounded-[32px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
                 <h3 className="text-2xl font-bold tracking-tight text-[#0f172a]">
@@ -640,26 +792,53 @@ export default function AdvisorDashboardPage() {
                 </h3>
 
                   <div className="mt-5 grid grid-cols-2 gap-3">
-                    <Link
-                      href="/advisor/earnings"
-                      className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
-                    >
-                      <Wallet className="w-5 h-5 text-fuchsia-500 mx-auto" />
-                      <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
-                        Earnings
-                      </p>
-                    </Link>
 
-                    <Link
-                      href="/advisor/profile"
-                      className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
-                    >
-                      <Star className="w-5 h-5 text-orange-500 mx-auto" />
-                      <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
-                        Reviews
-                      </p>
-                    </Link>
-                  </div>
+  <Link
+    href="/advisor/requests"
+    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
+  >
+    <Briefcase className="w-5 h-5 text-violet-500 mx-auto" />
+
+    <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
+      Requests
+    </p>
+  </Link>
+
+  <Link
+    href="/advisor/sessions"
+    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
+  >
+    <CalendarDays className="w-5 h-5 text-blue-500 mx-auto" />
+
+    <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
+      Sessions
+    </p>
+  </Link>
+
+  <Link
+    href="/advisor/earnings"
+    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
+  >
+    <Wallet className="w-5 h-5 text-fuchsia-500 mx-auto" />
+
+    <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
+      Earnings
+    </p>
+  </Link>
+
+  <Link
+    href="/advisor/profile"
+    className="rounded-[22px] border border-[#edf1f7] bg-[#fafbff] p-5 hover:bg-[#F7F4EE]/95 transition"
+  >
+    <User className="w-5 h-5 text-orange-500 mx-auto" />
+
+    <p className="mt-3 text-sm font-semibold text-[#0f172a] text-center">
+      Profile
+    </p>
+  </Link>
+
+</div>
+              </div>
               </div>
           </section>
         </main>

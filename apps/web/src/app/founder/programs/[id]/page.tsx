@@ -239,7 +239,7 @@ export default function ProgramDetailsPage() {
             <div>
 
               <h2 className="text-4xl font-black tracking-tight text-[#16214A]">
-                Ready To Join?
+                Explore Program
               </h2>
 
               <p className="mt-5 max-w-2xl leading-8 text-slate-500">
@@ -255,7 +255,7 @@ export default function ProgramDetailsPage() {
             <div className="flex flex-col gap-4 sm:flex-row">
 
               <button className="rounded-2xl bg-primary px-7 py-4 font-semibold text-white transition hover:opacity-90">
-                Join Program
+                Explore programs
               </button>
 
               <Link

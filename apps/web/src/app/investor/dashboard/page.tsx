@@ -10,16 +10,13 @@ import {
   BarChart3,
   Bell,
   Bookmark,
-  Briefcase,
   Flame,
   Menu,
   Rocket,
   Search,
   Sparkles,
-  Star,
   TrendingUp,
   User,
-  Users,
   X,
 } from "lucide-react"
 
@@ -46,11 +43,6 @@ const navigation = [
     name: "Saved",
     href: "/investor/saved",
     icon: Bookmark,
-  },
-  {
-    name: "Programs",
-    href: "/investor/programs",
-    icon: Briefcase,
   },
   {
     name: "Profile",
@@ -308,7 +300,10 @@ const [interestedStartups, setInterestedStartups] =
 
           {/* RIGHT */}
           <div className="flex items-center gap-3">
-            <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card transition hover:bg-muted">
+            <button
+              onClick={() => alert("Notifications coming soon")}
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card transition hover:bg-muted"
+            >
               <Bell className="h-5 w-5 text-foreground" />
             </button>
 
@@ -337,7 +332,7 @@ const [interestedStartups, setInterestedStartups] =
         <main className="flex-1 overflow-x-hidden p-5 lg:p-7">
           {/* HERO */}
           <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
-            <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
+            <div className="max-w-3xl">
               <div className="max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-2">
                   <Sparkles className="h-4 w-4 text-primary" />
@@ -348,13 +343,13 @@ const [interestedStartups, setInterestedStartups] =
                 </div>
 
                 <h2 className="mt-6 text-4xl font-black leading-[1.1] tracking-tight text-foreground lg:text-5xl">
-                  Discover Startup Investment Opportunities
+                  Welcome Back, {getUserDisplayName(user?.name)}
                 </h2>
 
                 <p className="mt-5 text-base leading-8 text-muted-foreground">
-                  Explore verified founders,
-                  discover curated startups and
-                  build strategic ecosystem investments.
+                  Explore curated startup opportunities,
+                  track your saved startups and connect
+                  with founders that match your investment interests.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -374,32 +369,51 @@ const [interestedStartups, setInterestedStartups] =
                   </Link>
                 </div>
               </div>
-
-              {/* RIGHT CARD */}
-              <div className="w-full rounded-[32px] border border-primary/10 bg-primary/5 p-6 xl:w-85">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-                  Investment Readiness
-                </p>
-
-                <h2 className="mt-5 text-6xl font-black text-foreground">
-                  92%
-                </h2>
-
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Startup-investor alignment score
-                </p>
-
-                <div className="mt-6 h-3 overflow-hidden rounded-full bg-primary/10">
-                  <div className="h-full w-[92%] rounded-full bg-primary" />
-                </div>
-
-                <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-primary">
-                  <TrendingUp className="h-4 w-4" />
-                  +18% better matches this month
-                </div>
-              </div>
             </div>
           </section>
+
+          <section className="mt-7 grid gap-5 md:grid-cols-3">
+
+  <Link
+    href="/investor/discover"
+    className="rounded-[28px] border border-border bg-card p-6 shadow-sm hover:border-primary/20"
+  >
+    <h3 className="text-xl font-black text-foreground">
+      Discover Startups
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Browse startup opportunities.
+    </p>
+  </Link>
+
+  <Link
+    href="/investor/saved"
+    className="rounded-[28px] border border-border bg-card p-6 shadow-sm hover:border-primary/20"
+  >
+    <h3 className="text-xl font-black text-foreground">
+      Saved Startups
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Review your shortlisted startups.
+    </p>
+  </Link>
+
+  <Link
+    href="/investor/interested"
+    className="rounded-[28px] border border-border bg-card p-6 shadow-sm hover:border-primary/20"
+  >
+    <h3 className="text-xl font-black text-foreground">
+      Interested Startups
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Manage startups you&apos;re interested in.
+    </p>
+  </Link>
+
+</section>
 
           {/* STATS */}
           <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -413,26 +427,26 @@ const [interestedStartups, setInterestedStartups] =
 
             <InvestorStatCard
               icon={Bookmark}
-              title="24"
+              title={String(savedStartups.length)}
               subtitle="Saved Startups"
               iconBg="bg-fuchsia-100"
               iconColor="text-fuchsia-600"
             />
 
             <InvestorStatCard
-              icon={Users}
-              title="14"
-              subtitle="Founder Connections"
-              iconBg="bg-emerald-100"
-              iconColor="text-emerald-600"
+              icon={Flame}
+              title={String(interestedStartups.length)}
+              subtitle="Interested Startups"
+              iconBg="bg-orange-100"
+              iconColor="text-orange-600"
             />
 
             <InvestorStatCard
-              icon={Star}
-              title="4.9"
-              subtitle="Investor Rating"
-              iconBg="bg-orange-100"
-              iconColor="text-orange-500"
+              icon={TrendingUp}
+              title="128"
+              subtitle="Active Opportunities"
+              iconBg="bg-emerald-100"
+              iconColor="text-emerald-600"
             />
           </section>
 
@@ -441,11 +455,11 @@ const [interestedStartups, setInterestedStartups] =
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-3xl font-black text-foreground">
-                  Featured Startups
+                  Recommended Startups
                 </h2>
 
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Curated startups aligned with your interests
+                  Startups selected based on your preferences and activity.
                 </p>
               </div>
 

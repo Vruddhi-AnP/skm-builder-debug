@@ -17,7 +17,6 @@ import {
   Search,
   Sparkles,
   User,
-  Wallet,
   X,
 } from "lucide-react"
 
@@ -42,11 +41,6 @@ const navigation = [
     name: "Sessions",
     href: "/advisor/sessions",
     icon: CalendarDays,
-  },
-  {
-    name: "Earnings",
-    href: "/advisor/earnings",
-    icon: Wallet,
   },
   {
     name: "Profile",
@@ -106,11 +100,12 @@ export default function AdvisorRequestsPage() {
   const [rejectedRequests, setRejectedRequests] =
     useState<number[]>([])
 
-  const statuses = [
-    "All",
-    "Pending",
-    "Accepted",
-  ]
+const statuses = [
+  "All",
+  "Pending",
+  "Accepted",
+  "Rejected",
+]
 
   const filteredRequests = useMemo(() => {
     return requestsData.filter((item) => {
@@ -211,16 +206,15 @@ export default function AdvisorRequestsPage() {
             <div className="p-4">
               <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-5">
                 <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-                  Active Requests
+                  Advisor Match Rate
                 </p>
 
                 <h3 className="mt-3 text-4xl font-black tracking-tight text-foreground">
-                  34
+                  92%
                 </h3>
 
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Founder mentorship
-                  opportunities
+                  Average founder-advisor compatibility
                 </p>
 
                 <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
@@ -284,16 +278,15 @@ export default function AdvisorRequestsPage() {
         <div className="p-4">
           <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-5">
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-              Active Requests
+              Advisor Match Rate
             </p>
 
             <h3 className="mt-3 text-4xl font-black tracking-tight text-foreground">
-              34
+              92%
             </h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Founder mentorship
-              opportunities
+              Average founder-advisor compatibility
             </p>
 
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
@@ -426,6 +419,50 @@ export default function AdvisorRequestsPage() {
             </div>
           </section>
 
+        <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-foreground">
+      34
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Total Requests
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-primary">
+      {acceptedRequests.length}
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Accepted Requests
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-red-500">
+      {rejectedRequests.length}
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Rejected Requests
+    </p>
+  </div>
+
+  <div className="rounded-[28px] border border-border bg-card p-5">
+    <h3 className="text-3xl font-black text-emerald-600">
+      92%
+    </h3>
+
+    <p className="mt-2 text-sm text-muted-foreground">
+      Average Match Score
+    </p>
+  </div>
+
+</section>
+
           {/* REQUESTS */}
           <section className="mt-7 space-y-5">
             {filteredRequests.map(
@@ -501,15 +538,18 @@ export default function AdvisorRequestsPage() {
 
                         <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
                           <Clock3 className="h-4 w-4" />
-                          Applied 2 hours ago
+                          Applied: 14 Jun 2026
                         </div>
                       </div>
 
                       {/* ACTIONS */}
                       <div className="flex flex-wrap gap-3">
-                        <button className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
-                          View Profile
-                        </button>
+                       <Link
+                        href={`/advisor/discover/${request.id}`}
+                        className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted flex items-center justify-center"
+                      >
+                        View Startup
+                      </Link>
 
                         <button
                           onClick={() => {
@@ -535,20 +575,17 @@ export default function AdvisorRequestsPage() {
                           }
                           className={`h-11 rounded-2xl px-5 text-sm font-semibold transition ${
                             isAccepted
-                              ? "bg-emerald-500 text-white"
+                              ? "bg-blue-600 text-white"
                               : isRejected
                               ? "bg-muted text-muted-foreground"
                               : "bg-primary text-primary-foreground hover:opacity-90"
                           }`}
                         >
-                          {isAccepted ? (
-                            <span className="flex items-center gap-2">
-                              <Check className="h-4 w-4" />
-                              Accepted
-                            </span>
-                          ) : (
-                            "Accept"
-                          )}
+                         {isAccepted ? (
+                          "Schedule Session"
+                        ) : (
+                          "Accept"
+                        )}
                         </button>
 
                         <button

@@ -23,7 +23,6 @@ import {
   Star,
   User,
   Users,
-  Wallet,
   X,
 } from "lucide-react"
 
@@ -49,11 +48,6 @@ const navigation = [
     name: "Sessions",
     href: "/advisor/sessions",
     icon: CalendarDays,
-  },
-  {
-    name: "Earnings",
-    href: "/advisor/earnings",
-    icon: Wallet,
   },
   {
     name: "Profile",
@@ -218,31 +212,12 @@ export default function AdvisorProfilePage() {
     <Bell className="h-5 w-5 text-foreground" />
   </button>
 
-  {/* UPGRADE */}
-  <button
-    onClick={() =>
-      router.push(
-        "/onboarding/advisor/pricing"
-      )
-    }
-    className="inline-flex h-12 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
-  >
-    <Award className="h-4 w-4" />
-
-    Upgrade Plan
-  </button>
-
-  {/* SETTINGS */}
-  <button className="inline-flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
-    <User className="h-4 w-4" />
-
-    Settings
-  </button>
-
   {/* LOGOUT */}
   <button
     onClick={() => {
-      localStorage.clear()
+      localStorage.removeItem("user")
+
+      localStorage.removeItem("token")
 
       sessionStorage.clear()
 
@@ -277,9 +252,9 @@ export default function AdvisorProfilePage() {
                 {/* INFO */}
                 <div>
                   <div className="flex flex-wrap items-center gap-3">
-                    <p className="text-xs text-gray-500 capitalize">
-                      {user?.role ?? "Advisor"}
-                    </p>
+                    <h2 className="mt-2 text-4xl font-black text-foreground">
+                      {user?.name || "Advisor"}
+                    </h2>
                   </div>
 
                   <p className="mt-4 text-lg text-muted-foreground">
@@ -290,7 +265,7 @@ export default function AdvisorProfilePage() {
                   <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
-                      Mumbai, India
+                      Location Not Added
                     </span>
 
                     <span className="flex items-center gap-2">
@@ -305,14 +280,14 @@ export default function AdvisorProfilePage() {
                   </div>
 
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <button className="inline-flex h-11 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
+                    <Link
+                      href="/onboarding/advisor/profile"
+                      className="inline-flex h-11 items-center gap-2 rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                    >
                       <Edit3 className="h-4 w-4" />
                       Edit Profile
-                    </button>
+                    </Link>
 
-                    <button className="h-11 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
-                      Share Profile
-                    </button>
                   </div>
                 </div>
               </div>
@@ -341,10 +316,11 @@ export default function AdvisorProfilePage() {
 
           {/* STATS */}
           <section className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+
             <AdvisorStatCard
-              icon={Wallet}
-              title="₹2.4L"
-              subtitle="Total Earnings"
+              icon={Users}
+              title="22"
+              subtitle="Active Founders"
               iconBg="bg-primary/10"
               iconColor="text-primary"
             />
@@ -360,7 +336,7 @@ export default function AdvisorProfilePage() {
             <AdvisorStatCard
               icon={Award}
               title="14"
-              subtitle="Investor Ready Startups"
+              subtitle="Startup Matches"
               iconBg="bg-fuchsia-100"
               iconColor="text-fuchsia-600"
             />
@@ -414,6 +390,23 @@ export default function AdvisorProfilePage() {
               </div>
             </div>
 
+                        {/* AVAILABILITY */}
+          <div className="rounded-[32px] border border-border bg-card p-6 shadow-sm">
+  <h3 className="text-2xl font-black tracking-tight text-foreground">
+    Availability
+  </h3>
+
+  <div className="mt-5 flex flex-wrap gap-3">
+    <span className="rounded-2xl bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+      Mon - Fri
+    </span>
+
+    <span className="rounded-2xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      10:00 AM - 6:00 PM
+    </span>
+  </div>
+</div>
+
             {/* RIGHT */}
             <div className="space-y-5">
               {/* CONTACT */}
@@ -428,14 +421,14 @@ export default function AdvisorProfilePage() {
                       icon: Mail,
                       label: "Email",
                       value:
-                        "krishna@startupkamall.com",
+                        user?.email || "Not Added",
                       color: "text-primary",
                     },
                     {
                       icon: Phone,
                       label: "Phone",
                       value:
-                        "+91 98765 43210",
+                        "Not Added",
                       color:
                         "text-fuchsia-600",
                     },
@@ -443,7 +436,7 @@ export default function AdvisorProfilePage() {
                       icon: Globe,
                       label: "Website",
                       value:
-                        "startupkamall.com",
+                        "Not Added",
                       color:
                         "text-emerald-600",
                     },

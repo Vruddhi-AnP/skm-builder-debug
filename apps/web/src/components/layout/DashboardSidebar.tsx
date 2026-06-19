@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   Rocket,
   Users,
+  UserCircle,
 } from "lucide-react";
 
 import { getBuilderProgress } from "@/hooks/useLocalBuilder";
@@ -53,13 +54,6 @@ const navItems = [
         icon: BadgeDollarSign,
         locked: !builderDone,
       },
-
-      {
-        label: "Blueprints",
-        href: "/founder/pitch-deck",
-        icon: BookOpen,
-        locked: !builderDone,
-      },
     ],
   },
 
@@ -92,6 +86,12 @@ const navItems = [
         href: "/founder/investors",
         icon: BadgeDollarSign,
         locked: !builderDone,
+      },
+
+      {
+        label: "Profile",
+        href: "/founder/profile",
+        icon: Users,
       },
     ],
   },

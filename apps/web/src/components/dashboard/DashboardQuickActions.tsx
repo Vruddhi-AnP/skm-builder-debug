@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Rocket, FileText, Users, Briefcase } from "lucide-react";
+import { Rocket, Users, Briefcase, BadgeDollarSign } from "lucide-react";
 import {
   getCompletedStepCount,
   getBuilderProgress,
@@ -29,24 +29,7 @@ export default function DashboardQuickActions() {
         ? "bg-emerald-100 text-emerald-700"
         : "bg-amber-100 text-amber-700",
     },
-    {
-      title: "Blueprints",
-      description:
-        "Preview and download your Startup Blueprint and Business Model Canvas.",
-      icon: FileText,
-      href: "/founder/pitch-deck",
-      priority: false,
-
-      badge: builderDone
-        ? "Ready"
-        : "Locked",
-
-      badgeColor: builderDone
-        ? "bg-primary/10 text-primary"
-        : "bg-slate-100 text-slate-500",
-
-      locked: !builderDone,
-    },
+    
     {
       title: "Advisors",
 
@@ -91,6 +74,28 @@ export default function DashboardQuickActions() {
 
       locked: !builderDone,
     },
+    {
+  title: "Investors",
+
+  description:
+    "Discover investors aligned with your startup stage and sector.",
+
+  icon: BadgeDollarSign,
+
+  href: "/founder/investors",
+
+  priority: false,
+
+  badge: builderDone
+    ? "Available"
+    : "Locked",
+
+  badgeColor: builderDone
+    ? "bg-primary/10 text-primary"
+    : "bg-slate-100 text-slate-500",
+
+  locked: !builderDone,
+},
   ];
 
   return (

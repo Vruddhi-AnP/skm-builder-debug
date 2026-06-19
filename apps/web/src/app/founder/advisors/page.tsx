@@ -6,6 +6,7 @@ import AdvisorHero from "@/components/founder/advisors/advisor-hero";
 import AdvisorFilters from "@/components/founder/advisors/advisor-filters";
 import AdvisorCard from "@/components/founder/advisors/advisor-card";
 import AdvisorCTA from "@/components/founder/advisors/advisor-cta";
+import AdvisorStartupSnapshot from "@/components/founder/advisors/advisor-startup-snapshot";
 
 import { getAdvisors } from "@/lib/api";
 
@@ -96,6 +97,8 @@ export default function AdvisorsPage() {
         {/* HERO */}
         <AdvisorHero />
 
+        <AdvisorStartupSnapshot />
+        
         {/* FILTERS */}
         <AdvisorFilters
           search={search}

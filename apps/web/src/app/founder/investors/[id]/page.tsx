@@ -168,6 +168,29 @@ export default function InvestorProfilePage() {
                 <p className="mt-3 text-lg text-slate-500">
                   {investor.firmName}
                 </p>
+                <p className="mt-2 text-sm text-slate-500">
+                  Focused on {investor.investmentStage} startups
+                </p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+
+  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+    {investor.matchScore}
+  </span>
+
+  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+    ✓ Stage Match
+  </span>
+
+  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+    ✓ Industry Match
+  </span>
+
+  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+    ✓ Fundraising Ready
+  </span>
+
+</div>
 
                 {/* TAGS */}
                 <div className="mt-6 flex flex-wrap gap-3">
@@ -242,21 +265,45 @@ export default function InvestorProfilePage() {
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
 
               <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-                Investor Overview
+                Why This Investor Fits Your Startup
               </h2>
 
               <p className="mt-5 leading-8 text-slate-500">
-                {investor.fullName} actively
-                supports startups aligned
-                with scalable execution,
-                long-term growth and strong
-                founder-market fit. This
-                profile architecture is now
-                backend-ready for future
-                dynamic investor data.
-              </p>
+                Based on your Startup Builder responses,
+                this investor aligns with your startup stage,
+                funding goals and industry focus.
 
-            </div>
+                Their investment thesis and portfolio
+                suggest strong alignment with your
+                growth trajectory and fundraising objectives.
+              </p>
+               </div>
+
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+  <h2 className="text-3xl font-black text-[#16214A]">
+    Best For
+  </h2>
+
+  <div className="mt-6 flex flex-wrap gap-3">
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Seed Funding
+    </span>
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Investor Introductions
+    </span>
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      GTM Expansion
+    </span>
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Growth Capital
+    </span>
+
+  </div>
+</div>
 
             {/* FUNDING INFO */}
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
@@ -265,7 +312,7 @@ export default function InvestorProfilePage() {
                 Funding Focus
               </h2>
 
-              <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
 
                 <div className="rounded-3xl border border-border/60 bg-slate-50 p-6">
 
@@ -299,10 +346,104 @@ export default function InvestorProfilePage() {
 
             </div>
 
+{/* PORTFOLIO HIGHLIGHTS */}
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+  <h2 className="text-3xl font-black text-[#16214A]">
+    Portfolio Highlights
+  </h2>
+
+  <div className="mt-6 space-y-4">
+
+    <div className="rounded-2xl bg-slate-50 p-4">
+      SaaS Startups
+    </div>
+
+    <div className="rounded-2xl bg-slate-50 p-4">
+      Fintech Ventures
+    </div>
+
+    <div className="rounded-2xl bg-slate-50 p-4">
+      AI & DeepTech
+    </div>
+
+  </div>
+
+          </div>
           </div>
 
           {/* RIGHT */}
           <div className="space-y-6">
+
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+  <h2 className="text-2xl font-black text-[#16214A]">
+    Investor Match Analysis
+  </h2>
+
+  <div className="mt-6 space-y-4">
+
+    <div className="flex items-center justify-between">
+      <span>Stage Alignment</span>
+      <span className="font-bold text-emerald-600">✓</span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span>Industry Alignment</span>
+      <span className="font-bold text-emerald-600">✓</span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span>Funding Readiness</span>
+      <span className="font-bold text-emerald-600">✓</span>
+    </div>
+
+    <div className="mt-4 rounded-2xl bg-primary/10 p-4 text-center">
+      <p className="text-xs uppercase tracking-wide text-slate-500">
+        Overall Match
+      </p>
+
+      <p className="mt-2 text-3xl font-black text-primary">
+        {investor.matchScore}%
+      </p>
+
+      <p className="mt-3 text-center text-xs text-slate-500">
+        Based on your Startup Builder profile and funding goals
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+            <div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
+
+  <h2 className="text-2xl font-black text-[#16214A]">
+    Recommended Next Step
+  </h2>
+
+  <p className="mt-4 text-sm leading-7 text-slate-600">
+    Improve fundraising readiness before
+    connecting with investors.
+  </p>
+
+  <div className="mt-6 space-y-3">
+
+    <Link
+      href="/founder/programs"
+      className="block rounded-2xl bg-primary px-5 py-3 text-center font-semibold text-white"
+    >
+      Explore Programs
+    </Link>
+
+    <Link
+      href="/founder/advisors"
+      className="block rounded-2xl border border-border/60 bg-white px-5 py-3 text-center font-semibold text-slate-700"
+    >
+      Talk To Advisors
+    </Link>
+
+  </div>
+
+</div>
 
             {/* PORTFOLIO */}
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
@@ -331,18 +472,18 @@ export default function InvestorProfilePage() {
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
 
               <h2 className="text-2xl font-black text-[#16214A]">
-                Founder Funding Support
+                Startup Ka Mall Support
               </h2>
 
               <p className="mt-4 leading-8 text-slate-500">
-                Improve investor readiness,
-                strengthen your startup
-                positioning and prepare for
-                fundraising conversations.
+                Need help preparing for fundraising,
+                choosing investors or improving investor
+                readiness? Our Startup Ka Mall team can
+                guide your next step.
               </p>
 
               <button className="mt-6 w-full rounded-2xl border border-border/60 bg-slate-50 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-100">
-                Explore Founder Resources
+                Contact Support
               </button>
 
             </div>

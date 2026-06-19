@@ -162,6 +162,24 @@ export default function AdvisorProfilePage() {
                   {advisor.headline}
                 </p>
 
+                  <div className="mt-5 flex flex-wrap gap-2">
+  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+    92% Match
+  </span>
+
+  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+    ✓ Startup Stage Match
+  </span>
+
+  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+    ✓ Industry Match
+  </span>
+
+  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+    ✓ Execution Support
+  </span>
+</div>
+
                 {/* TAGS */}
                 <div className="mt-6 flex flex-wrap gap-3">
                   {advisor.expertise.map(
@@ -218,11 +236,7 @@ export default function AdvisorProfilePage() {
               </button>
 
               <button className="w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
-                Schedule Discovery Call
-              </button>
-
-              <button className="w-full rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50">
-                View Founder Resources
+                Message Advisor
               </button>
             </div>
           </div>
@@ -237,22 +251,49 @@ export default function AdvisorProfilePage() {
             {/* ABOUT */}
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
               <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+                Why This Advisor Fits Your Startup
+              </h2>
+
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
+              <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
                 About Advisor
               </h2>
 
               <p className="mt-5 leading-8 text-slate-500">
-                {advisor.fullName} supports
-                founders with startup
-                execution, business growth,
-                strategic planning and
-                scalable startup decision
-                making. This advisor profile
-                architecture is now aligned
-                with backend-driven dynamic
-                rendering for future API
-                integrations.
+                {advisor.headline}
               </p>
             </div>
+
+              <p className="mt-5 leading-8 text-slate-500">
+                Based on your Startup Builder responses, this advisor aligns with your current startup stage, execution priorities and growth objectives.
+
+                Their expertise in {advisor.expertise.join(", ")} can help accelerate validation, execution and fundraising readiness.
+              </p>
+            </div>
+
+          <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+    Best For
+  </h2>
+
+  <div className="mt-6 flex flex-wrap gap-3">
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Idea Validation
+    </span>
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      MVP Planning
+    </span>
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Go-To-Market Strategy
+    </span>
+
+    <span className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+      Investor Readiness
+    </span>
+  </div>
+</div>
 
             {/* EXPERIENCE */}
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
@@ -311,6 +352,51 @@ export default function AdvisorProfilePage() {
               </div>
             </div>
 
+          <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8">
+  <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+    What Founders Usually Achieve
+  </h2>
+
+  <div className="mt-6 space-y-4">
+
+    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+      <span className="text-emerald-500">✓</span>
+      <span className="font-medium text-slate-700">
+        Validate Startup Idea Faster
+      </span>
+    </div>
+
+    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+      <span className="text-emerald-500">✓</span>
+      <span className="font-medium text-slate-700">
+        Improve Go-To-Market Strategy
+      </span>
+    </div>
+
+    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+      <span className="text-emerald-500">✓</span>
+      <span className="font-medium text-slate-700">
+        Build Investor Readiness
+      </span>
+    </div>
+
+    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+      <span className="text-emerald-500">✓</span>
+      <span className="font-medium text-slate-700">
+        Avoid Early Execution Mistakes
+      </span>
+    </div>
+
+    <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
+      <span className="text-emerald-500">✓</span>
+      <span className="font-medium text-slate-700">
+        Accelerate Startup Growth
+      </span>
+    </div>
+
+  </div>
+</div>
+
             {/* FOUNDER CTA */}
             <div className="relative overflow-hidden rounded-[32px] border border-sky-100 bg-linear-to-br from-sky-50 via-cyan-50 to-blue-50 p-6 shadow-sm md:p-8">
               <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-40" />
@@ -335,7 +421,7 @@ export default function AdvisorProfilePage() {
                 </p>
 
                 <button className="mt-8 rounded-2xl bg-primary px-6 py-4 font-semibold text-white transition hover:opacity-90">
-                  Start Mentorship
+                  Book Mentorship Session
                 </button>
               </div>
             </div>
@@ -357,12 +443,12 @@ export default function AdvisorProfilePage() {
                 </div>
 
                 <h3 className="mt-3 text-2xl font-black text-[#16214A]">
-                  Saturday • 7 PM
+                  Available This Week
                 </h3>
 
                 <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
                   <Clock3 className="h-4 w-4" />
-                  1:1 Founder Strategy Call
+                  Schedule a 1:1 Founder Strategy Session
                 </div>
               </div>
 
@@ -371,19 +457,109 @@ export default function AdvisorProfilePage() {
               </button>
             </div>
 
+            <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+  <h2 className="text-2xl font-black text-[#16214A]">
+    Advisor Match Analysis
+  </h2>
+
+  <div className="mt-6 space-y-4">
+
+    <div className="flex items-center justify-between">
+      <span className="text-slate-600">
+        Startup Stage Match
+      </span>
+
+      <span className="font-bold text-emerald-600">
+        ✓
+      </span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span className="text-slate-600">
+        Industry Match
+      </span>
+
+      <span className="font-bold text-emerald-600">
+        ✓
+      </span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span className="text-slate-600">
+        Execution Guidance
+      </span>
+
+      <span className="font-bold text-emerald-600">
+        ✓
+      </span>
+    </div>
+
+    <div className="flex items-center justify-between">
+      <span className="text-slate-600">
+        Fundraising Support
+      </span>
+
+      <span className="font-bold text-emerald-600">
+        ✓
+      </span>
+    </div>
+
+    <div className="mt-4 rounded-2xl bg-primary/10 p-4 text-center">
+      <p className="text-xs uppercase tracking-wide text-slate-500">
+        Overall Match
+      </p>
+
+      <p className="mt-2 text-3xl font-black text-primary">
+        Highly Recommended
+      </p>
+    </div>
+
+    <p className="mt-3 text-center text-xs text-slate-500">
+      Based on your Startup Builder profile and execution goals
+    </p>
+
+  </div>
+</div>
+
+<div className="rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
+  <h2 className="text-2xl font-black text-[#16214A]">
+    Recommended Next Step
+  </h2>
+
+  <p className="mt-4 text-sm leading-7 text-slate-600">
+    Continue your founder journey with startup programs,
+    investor visibility and ecosystem support.
+  </p>
+
+  <div className="mt-6 space-y-3">
+
+    <Link
+      href="/founder/programs"
+      className="block w-full rounded-2xl bg-primary px-5 py-3 text-center font-semibold text-white"
+    >
+      Explore Programs
+    </Link>
+
+    <Link
+      href="/founder/investors"
+      className="block w-full rounded-2xl border border-border/60 bg-white px-5 py-3 text-center font-semibold text-slate-700"
+    >
+      Investor Visibility
+    </Link>
+
+  </div>
+</div>
+
             {/* SUPPORT */}
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
               <h2 className="text-2xl font-black text-[#16214A]">
-                Founder Support
+                Startup Ka Mall Support
               </h2>
 
               <p className="mt-4 leading-8 text-slate-500">
-                Need help choosing the
-                right advisor for your
-                startup stage? Our founder
-                support team can help you
-                identify the best mentorship
-                path.
+                Need help selecting the right mentor, program,
+                investor opportunity or startup resource?
+                Our Startup Ka Mall team can guide your next step.
               </p>
 
               <button className="mt-6 w-full rounded-2xl border border-border/60 bg-slate-50 px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-100">

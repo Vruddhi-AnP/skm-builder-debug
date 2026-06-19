@@ -46,11 +46,31 @@ export default function AdvisorCard({
           </div>
         </div>
 
+         <div className="mt-4 flex items-center gap-3">
+          <div className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+            92% Match
+          </div>
+
+          <p className="text-xs text-slate-500">
+            Based on startup stage & execution needs
+          </p>
+        </div>
+
         <div className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
           {
             advisor.availabilityStatus
           }
         </div>
+      </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+        <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          ✓ Startup Stage Match
+        </span>
+
+        <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          ✓ Industry Match
+        </span>
       </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
