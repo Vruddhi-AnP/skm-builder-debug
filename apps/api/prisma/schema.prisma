@@ -63,18 +63,34 @@ model FounderProfile {
 }
 
 model Startup {
-  id          String   @id @default(uuid())
-  name        String
-  industry    String?
+  id String @id @default(uuid())
+
+  name String
+
+  website String?
+
+  teamSize Int?
+
+  startupStage String?
+
+  industry String?
+
+  businessModel String?
+
+  problemStatement String?
+
+  solutionOverview String?
+
   description String?
 
-  founderId   String
+  founderId String
 
- founder User @relation("FounderStartups", fields: [founderId], references: [id])
+  founder User @relation("FounderStartups", fields: [founderId], references: [id])
 
   builder Builder?
 
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
 
   @@index([founderId])

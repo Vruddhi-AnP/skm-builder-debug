@@ -19,8 +19,23 @@ export class StartupService {
     return this.prisma.startup.create({
       data: {
         name: dto.name,
+
+        website: dto.website,
+
+        teamSize: dto.teamSize,
+
+        startupStage: dto.startupStage,
+
         industry: dto.industry,
+
+        businessModel: dto.businessModel,
+
+        problemStatement: dto.problemStatement,
+
+        solutionOverview: dto.solutionOverview,
+
         description: dto.description,
+
         founderId,
       },
     });
@@ -70,7 +85,21 @@ export class StartupService {
 
       data: {
         name: dto.name,
+
+        website: dto.website,
+
+        teamSize: dto.teamSize,
+
+        startupStage: dto.startupStage,
+
         industry: dto.industry,
+
+        businessModel: dto.businessModel,
+
+        problemStatement: dto.problemStatement,
+
+        solutionOverview: dto.solutionOverview,
+
         description: dto.description,
       },
     });

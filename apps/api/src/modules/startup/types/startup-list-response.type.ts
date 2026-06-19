@@ -12,10 +12,46 @@ export class StartupListItemDto {
   name: string;
 
   @ApiProperty({
+    example: 'https://skm.ai',
+    nullable: true,
+  })
+  website: string | null;
+
+  @ApiProperty({
+    example: 5,
+    nullable: true,
+  })
+  teamSize: number | null;
+
+  @ApiProperty({
+    example: 'MVP',
+    nullable: true,
+  })
+  startupStage: string | null;
+
+  @ApiProperty({
     example: 'Artificial Intelligence',
     nullable: true,
   })
   industry: string | null;
+
+  @ApiProperty({
+    example: 'SaaS Subscription',
+    nullable: true,
+  })
+  businessModel: string | null;
+
+  @ApiProperty({
+    example: 'Founders struggle to validate startup ideas.',
+    nullable: true,
+  })
+  problemStatement: string | null;
+
+  @ApiProperty({
+    example: 'AI-powered startup execution platform.',
+    nullable: true,
+  })
+  solutionOverview: string | null;
 
   @ApiProperty({
     example: 'AI-powered startup ecosystem platform',
