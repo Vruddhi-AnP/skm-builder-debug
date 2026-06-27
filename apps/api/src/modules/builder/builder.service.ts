@@ -38,4 +38,29 @@ export class BuilderService {
       },
     });
   }
+
+  async findBuilderByStartup(startupId: string, founderId: string) {
+    const startup = await this.prisma.startup.findFirst({
+      where: {
+        id: startupId,
+        founderId,
+      },
+    });
+
+    if (!startup) {
+      throw new NotFoundException('Startup not found');
+    }
+
+    const builder = await this.prisma.builder.findUnique({
+      where: {
+        startupId,
+      },
+    });
+
+    if (!builder) {
+      throw new NotFoundException('Builder not found');
+    }
+
+    return builder;
+  }
 }

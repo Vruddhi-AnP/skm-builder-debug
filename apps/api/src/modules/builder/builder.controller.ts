@@ -1,10 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -56,5 +57,33 @@ export class BuilderController {
     @GetUser('id') userId: string,
   ) {
     return this.builderService.saveBuilder(dto, userId);
+  }
+
+  @ApiOperation({
+    summary: 'Get builder workspace',
+
+    description:
+      'Returns the startup builder workspace for a startup owned by the authenticated founder.',
+  })
+  @ApiBearerAuth('access-token')
+  @ApiOkResponse({
+    description: 'Startup builder retrieved successfully',
+
+    type: BuilderSuccessResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Authentication token missing or invalid',
+  })
+  @ApiForbiddenResponse({
+    description: 'Only founders can access this endpoint',
+  })
+  @Auth(Role.FOUNDER)
+  @Get(':startupId')
+  findOne(
+    @Param('startupId') startupId: string,
+
+    @GetUser('id') userId: string,
+  ) {
+    return this.builderService.findBuilderByStartup(startupId, userId);
   }
 }
