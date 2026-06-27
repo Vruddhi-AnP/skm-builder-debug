@@ -16,9 +16,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-import AdminHeader from "@/components/admin/AdminHeader";
-import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminStatCard from "@/components/admin/AdminStatCard";
+import AdminShell from "@/components/admin/AdminShell";
 
 const stats = [
   {
@@ -40,48 +39,15 @@ const stats = [
 ];
 
 export default function AdminProfilePage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false);
 
     const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] flex">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <AdminSidebar
-            mobile
-            onClose={() =>
-              setSidebarOpen(false)
-            }
-          />
-
-          <div
-            className="flex-1 bg-black/20 backdrop-blur-sm"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <AdminSidebar />
-
-      {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* HEADER */}
-        <AdminHeader
-          title="Admin Profile"
-          subtitle="Manage administrator profile and platform access"
-          onMenuClick={() =>
-            setSidebarOpen(true)
-          }
-        />
-
-        {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
+  <AdminShell
+    title="Admin Profile"
+    subtitle="Manage administrator profile and platform access"
+  >
+      
           {/* PROFILE HERO */}
           <section className="rounded-[32px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 lg:p-8 shadow-sm">
             <div className="flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-8">
@@ -107,6 +73,10 @@ export default function AdminProfilePage() {
                   <p className="mt-3 text-[16px] text-[#64748B] max-w-2xl leading-relaxed">
                     Platform Operations &
                     Ecosystem Management
+                  </p>
+
+                  <p className="mt-2 text-sm text-[#64748B]">
+                    Last Login: Today • 10:42 AM
                   </p>
 
                   <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-sm text-[#475569]">
@@ -161,6 +131,11 @@ export default function AdminProfilePage() {
               >
                 <LogOut className="w-4 h-4" />
 
+                <button className="h-12 px-6 rounded-full border border-[#E8EDF5] bg-white text-sm font-semibold text-[#475569] hover:bg-[#F8FAFC] transition flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  Security Settings
+                </button>
+
                 Logout
               </button>
 
@@ -180,6 +155,41 @@ export default function AdminProfilePage() {
               />
             ))}
           </section>
+
+          {/* PLATFORM HEALTH */}
+<section className="mt-7">
+  <div className="grid gap-5 md:grid-cols-3">
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Pending Founder Approvals
+      </p>
+
+      <h3 className="mt-2 text-3xl font-bold text-[#0F172A]">
+        12
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Pending Program Reviews
+      </p>
+
+      <h3 className="mt-2 text-3xl font-bold text-[#0F172A]">
+        7
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Platform Health
+      </p>
+
+      <h3 className="mt-2 text-3xl font-bold text-emerald-600">
+        Healthy
+      </h3>
+    </div>
+  </div>
+</section>
 
           {/* DETAILS */}
           <section className="mt-7 grid grid-cols-1 2xl:grid-cols-2 gap-5">
@@ -266,12 +276,14 @@ export default function AdminProfilePage() {
 
               <div className="mt-6 space-y-4">
                 {[
-                  "Founder & advisor management",
-                  "Program application review",
-                  "Investor interest tracking",
-                  "Resource management",
-                  "Platform operations monitoring",
-                  "Consultation coordination",
+                  "Founder Verification",
+                  "Advisor Approval",
+                  "Investor Management",
+                  "Program Administration",
+                  "Consultation Scheduling",
+                  "Resource Library Management",
+                  "Platform Analytics",
+                  "Role & Access Control",
                 ].map((item) => (
                   <div
                     key={item}
@@ -292,8 +304,6 @@ export default function AdminProfilePage() {
               </button>
             </div>
           </section>
-        </main>
-      </div>
-    </div>
-  );
+  </AdminShell>
+);
 }

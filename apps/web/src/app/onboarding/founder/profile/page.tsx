@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
+import { createFounderProfile } from "@/services/founder.service";
+
 import {
   Briefcase,
   LinkIcon,
@@ -38,7 +40,7 @@ export default function FounderProfilePage() {
 
   const user = useLocalUser();
 
-const [selectedRole, setSelectedRole] = useState(() => {
+  const [selectedRole, setSelectedRole] = useState(() => {
   const saved = getFounderOnboarding();
   return saved.founderRole ?? "Solo Founder";
 });
@@ -57,13 +59,28 @@ const [formData, setFormData] = useState(() => {
   };
 });
 
-  const handleContinue = () => {
-  saveFounderOnboarding({
-    ...formData,
-    founderRole: selectedRole,
-  });
-  router.push("/onboarding/founder/startup");
-};
+    const handleContinue = async () => {
+      try {
+        await createFounderProfile({
+          phoneNumber: formData.phone,
+          location: formData.location,
+          founderRole: selectedRole,
+          startupExperience: formData.experience,
+          linkedinUrl: formData.linkedin,
+          founderGoal: formData.founderGoal,
+          bio: formData.bio,
+        });
+
+        saveFounderOnboarding({
+          ...formData,
+          founderRole: selectedRole,
+        });
+
+        router.push("/onboarding/founder/startup");
+      } catch (error) {
+        console.error("Founder Profile Save Failed:",error);
+      }
+    };
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">

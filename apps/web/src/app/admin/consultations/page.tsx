@@ -12,10 +12,9 @@ import {
   Search,
 } from "lucide-react";
 
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
 import AdminStatCard from "@/components/admin/AdminStatCard";
 import AdminEmptyState from "@/components/admin/AdminEmptyState";
+import AdminShell from "@/components/admin/AdminShell";
 
 const consultationsData = [
   {
@@ -48,8 +47,6 @@ const consultationsData = [
 ];
 
 export default function AdminConsultationsPage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false);
 
   const [selectedFilter, setSelectedFilter] =
     useState("All");
@@ -104,42 +101,11 @@ export default function AdminConsultationsPage() {
     }, [selectedFilter, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] flex">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <AdminSidebar
-            mobile
-            onClose={() =>
-              setSidebarOpen(false)
-            }
-          />
+  <AdminShell
+    title="Consultations"
+    subtitle="Manage founder and advisor consultation sessions"
+  >
 
-          <div
-            className="flex-1 bg-black/20 backdrop-blur-sm"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <AdminSidebar />
-
-      {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* HEADER */}
-        <AdminHeader
-          title="Consultations"
-          subtitle="Manage founder and advisor consultation sessions"
-          onMenuClick={() =>
-            setSidebarOpen(true)
-          }
-        />
-
-        {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
           {/* TOP */}
           <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
             <div>
@@ -204,6 +170,52 @@ export default function AdminConsultationsPage() {
               iconColor="text-emerald-500"
             />
           </section>
+
+          {/* TODAY'S SCHEDULE */}
+<section className="mt-7">
+  <div className="rounded-[30px] border border-[#E8EDF5] bg-white p-6 shadow-sm">
+    <div className="flex items-center justify-between">
+      <div>
+        <h3 className="text-2xl font-bold text-[#0F172A]">
+          Today&apos;s Schedule
+        </h3>
+
+        <p className="mt-2 text-sm text-[#64748B]">
+          Upcoming consultation sessions.
+        </p>
+      </div>
+    </div>
+
+    <div className="mt-6 grid gap-4 md:grid-cols-3">
+      <div className="rounded-2xl border border-[#E8EDF5] p-4">
+        <p className="font-semibold text-[#0F172A]">
+          10:00 AM
+        </p>
+        <p className="mt-1 text-sm text-[#64748B]">
+          Fundraising Strategy
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-[#E8EDF5] p-4">
+        <p className="font-semibold text-[#0F172A]">
+          1:30 PM
+        </p>
+        <p className="mt-1 text-sm text-[#64748B]">
+          Product Scaling
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-[#E8EDF5] p-4">
+        <p className="font-semibold text-[#0F172A]">
+          4:00 PM
+        </p>
+        <p className="mt-1 text-sm text-[#64748B]">
+          GTM Planning
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
           {/* FILTERS */}
           <section className="mt-7 flex flex-wrap gap-3">
@@ -346,8 +358,6 @@ export default function AdminConsultationsPage() {
               )
             )}
           </section>
-        </main>
-      </div>
-    </div>
-  );
+  </AdminShell>
+);
 }

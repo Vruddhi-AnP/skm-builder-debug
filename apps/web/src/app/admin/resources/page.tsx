@@ -12,9 +12,8 @@ import {
 } from "lucide-react";
 
 import AdminEmptyState from "@/components/admin/AdminEmptyState";
-import AdminHeader from "@/components/admin/AdminHeader";
-import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminStatCard from "@/components/admin/AdminStatCard";
+import AdminShell from "@/components/admin/AdminShell";
 
 const resourcesData = [
   {
@@ -47,8 +46,6 @@ const resourcesData = [
 ];
 
 export default function AdminResourcesPage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false);
 
   const [selectedFilter, setSelectedFilter] =
     useState("All");
@@ -60,6 +57,9 @@ export default function AdminResourcesPage() {
     "All",
     "Public",
     "Members",
+    "Videos",
+    "Guides",
+    "Toolkits",
   ];
 
   const filteredResources =
@@ -101,42 +101,11 @@ export default function AdminResourcesPage() {
     ]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] flex">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <AdminSidebar
-            mobile
-            onClose={() =>
-              setSidebarOpen(false)
-            }
-          />
-
-          <div
-            className="flex-1 bg-black/20 backdrop-blur-sm"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <AdminSidebar />
-
-      {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* HEADER */}
-        <AdminHeader
-          title="Resources"
-          subtitle="Manage ecosystem learning resources and content"
-          onMenuClick={() =>
-            setSidebarOpen(true)
-          }
-        />
-
-        {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
+  <AdminShell
+    title="Resources"
+    subtitle="Manage ecosystem learning resources and content"
+  >
+      
           {/* TOP */}
           <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
             <div>
@@ -172,7 +141,7 @@ export default function AdminResourcesPage() {
           </div>
 
           {/* STATS */}
-          <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+          <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             <AdminStatCard
               title="Total Resources"
               value="84"
@@ -194,6 +163,51 @@ export default function AdminResourcesPage() {
               iconColor="text-orange-500"
             />
           </section>
+
+          {/* RESOURCE OVERVIEW */}
+<section className="mt-7">
+  <div className="grid gap-4 md:grid-cols-4">
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Public Resources
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        58
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Members Only
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        26
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Video Library
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        14
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Recently Updated
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        9
+      </h3>
+    </div>
+  </div>
+</section>
 
           {/* FILTERS */}
           <section className="mt-7 flex flex-wrap gap-3">
@@ -256,7 +270,7 @@ export default function AdminResourcesPage() {
                           </span>
                         </div>
 
-                        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
                           <div>
                             <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
                               Resource Type
@@ -292,6 +306,16 @@ export default function AdminResourcesPage() {
                               }
                             </p>
                           </div>
+
+                          <div>
+                            <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                              Last Updated
+                            </p>
+
+                            <p className="mt-1 font-semibold text-[#0F172A]">
+                              2 days ago
+                            </p>
+                          </div>
                         </div>
                       </div>
 
@@ -308,7 +332,7 @@ export default function AdminResourcesPage() {
                         </button>
 
                         <button className="h-11 px-5 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0B173F] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#071133]/20">
-                          View Details
+                          Manage Resource
                           <ArrowUpRight className="w-4 h-4" />
                         </button>
                       </div>
@@ -318,8 +342,6 @@ export default function AdminResourcesPage() {
               )
             )}
           </section>
-        </main>
-      </div>
-    </div>
-  );
+  </AdminShell>
+);
 }

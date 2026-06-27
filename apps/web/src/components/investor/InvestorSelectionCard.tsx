@@ -55,6 +55,15 @@ export default function InvestorSelectionCard({
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                Readiness 82/100
+              </span>
+
+              <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
+                Seeking ₹50L
+              </span>
+            </div>
             <span className="flex items-center gap-1">
               <Globe className="h-4 w-4" />
               {startup.category}
@@ -96,6 +105,16 @@ export default function InvestorSelectionCard({
       <p className="mt-6 text-sm leading-7 text-muted-foreground">
         {startup.description}
       </p>
+
+      <div className="mt-5 rounded-2xl bg-muted/50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+          Why Recommended
+        </p>
+
+        <p className="mt-2 text-sm text-muted-foreground">
+          Matches your preferred industry, startup stage, and investment focus.
+        </p>
+      </div>
 
       {/* FOOTER */}
       <div className="mt-7 flex flex-wrap gap-3">

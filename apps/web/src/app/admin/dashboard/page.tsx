@@ -15,10 +15,9 @@ import {
   Wallet,
 } from "lucide-react";
 
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
 import AdminStatCard from "@/components/admin/AdminStatCard";
 import AdminEmptyState from "@/components/admin/AdminEmptyState";
+import AdminShell from "@/components/admin/AdminShell";
 
 const stats = [
   {
@@ -57,6 +56,12 @@ const stats = [
     icon: CalendarDays,
     iconColor: "text-indigo-500",
   },
+  {
+  title: "Platform Health",
+  value: "99.8%",
+  icon: Activity,
+  iconColor: "text-emerald-500",
+  },
 ];
 
 const activities = [
@@ -88,8 +93,6 @@ const activities = [
 ];
 
 export default function AdminDashboardPage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false);
 
   const [searchQuery, setSearchQuery] =
     useState("");
@@ -107,42 +110,11 @@ export default function AdminDashboardPage() {
     }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] flex">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <AdminSidebar
-            mobile
-            onClose={() =>
-              setSidebarOpen(false)
-            }
-          />
+  <AdminShell
+    title="Dashboard"
+    subtitle="Monitor platform operations and ecosystem activity"
+  >
 
-          <div
-            className="flex-1 bg-black/20 backdrop-blur-sm"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <AdminSidebar />
-
-      {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* HEADER */}
-        <AdminHeader
-          title="Dashboard"
-          subtitle="Monitor platform operations and ecosystem activity"
-          onMenuClick={() =>
-            setSidebarOpen(true)
-          }
-        />
-
-        {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
           {/* TOP */}
           <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
             <div>
@@ -191,6 +163,65 @@ export default function AdminDashboardPage() {
               />
             ))}
           </section>
+
+          {/* QUICK ACTIONS */}
+<section className="mt-7">
+  <div className="rounded-[30px] border border-[#E8EDF5] bg-white p-6 shadow-sm">
+    <div className="flex items-center justify-between">
+      <div>
+        <h3 className="text-2xl font-bold text-[#0F172A]">
+          Quick Actions
+        </h3>
+
+        <p className="mt-2 text-sm text-[#64748B]">
+          Frequently used admin operations.
+        </p>
+      </div>
+    </div>
+
+    <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <button className="rounded-2xl border border-[#E8EDF5] p-5 text-left transition hover:bg-[#F8FAFC]">
+        <h4 className="font-semibold text-[#0F172A]">
+          Review Founders
+        </h4>
+
+        <p className="mt-2 text-sm text-[#64748B]">
+          Pending founder approvals
+        </p>
+      </button>
+
+      <button className="rounded-2xl border border-[#E8EDF5] p-5 text-left transition hover:bg-[#F8FAFC]">
+        <h4 className="font-semibold text-[#0F172A]">
+          Assign Advisor
+        </h4>
+
+        <p className="mt-2 text-sm text-[#64748B]">
+          Match founders with advisors
+        </p>
+      </button>
+
+      <button className="rounded-2xl border border-[#E8EDF5] p-5 text-left transition hover:bg-[#F8FAFC]">
+        <h4 className="font-semibold text-[#0F172A]">
+          Review Interests
+        </h4>
+
+        <p className="mt-2 text-sm text-[#64748B]">
+          Investor interest requests
+        </p>
+      </button>
+
+      <button className="rounded-2xl border border-[#E8EDF5] p-5 text-left transition hover:bg-[#F8FAFC]">
+        <h4 className="font-semibold text-[#0F172A]">
+          Manage Programs
+        </h4>
+
+        <p className="mt-2 text-sm text-[#64748B]">
+          Accelerator & ecosystem programs
+        </p>
+      </button>
+    </div>
+  </div>
+</section>
 
           {/* BOTTOM SECTION */}
           <section className="mt-7 grid grid-cols-1 2xl:grid-cols-[1.5fr_1fr] gap-5">
@@ -347,8 +378,6 @@ export default function AdminDashboardPage() {
               </div>
             </div>
           </section>
-        </main>
-      </div>
-    </div>
-  );
+  </AdminShell>
+);
 }

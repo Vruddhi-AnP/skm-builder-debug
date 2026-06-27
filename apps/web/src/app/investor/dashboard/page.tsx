@@ -1,55 +1,21 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { usePathname } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
 import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
+import InvestorLayout from "@/components/investor/InvestorLayout";
 
 import {
-  BarChart3,
-  Bell,
   Bookmark,
   Flame,
-  Menu,
   Rocket,
   Search,
   Sparkles,
   TrendingUp,
-  User,
-  X,
 } from "lucide-react"
 
 import InvestorStatCard from "@/components/investor/InvestorStatCard"
 import InvestorSelectionCard from "@/components/investor/InvestorSelectionCard"
-
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/investor/dashboard",
-    icon: BarChart3,
-  },
-  {
-    name: "Discover",
-    href: "/investor/discover",
-    icon: Search,
-  },
-  {
-    name: "Interested",
-    href: "/investor/interested",
-    icon: Flame,
-  },
-  {
-    name: "Saved",
-    href: "/investor/saved",
-    icon: Bookmark,
-  },
-  {
-    name: "Profile",
-    href: "/investor/profile",
-    icon: User,
-  },
-]
 
 const startupData = [
   {
@@ -88,8 +54,6 @@ const startupData = [
 ]
 
 export default function InvestorDashboardPage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false)
 
  const [savedStartups, setSavedStartups] =
   useState<number[]>(() => {
@@ -116,220 +80,15 @@ const [interestedStartups, setInterestedStartups] =
   }, [])
 
   const user = useLocalUser();
-  const pathname = usePathname();
 
-  return (
-    <div className="flex min-h-screen bg-background">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
-            {/* LOGO */}
-            <div className="flex h-20 items-center justify-between border-b border-border px-5">
-              <Link
-                href="/investor/dashboard"
-                className="flex items-center"
-              >
-                <Image
-                  src="/logo.png"
-                  alt="Startup Ka Mall"
-                  width={180}
-                  height={50}
-                  className="h-auto w-41.25 object-contain"
-                />
-              </Link>
-
-              <button
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-muted"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* NAV */}
-            <div className="flex-1 space-y-2 overflow-y-auto px-4 py-5">
-              {navigation.map((item) => {
-                const Icon = item.icon
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() =>
-                      setSidebarOpen(false)
-                    }
-                    className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
-                      pathname === item.href
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-
-                    <span className="text-sm font-semibold">
-                      {item.name}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
-
-            {/* CARD */}
-            <div className="p-4">
-              <div className="rounded-[30px] border border-primary/10 bg-primary/5 p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-                  Investment Opportunities
-                </p>
-
-                <h3 className="mt-4 text-4xl font-black text-foreground">
-                  128
-                </h3>
-
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Curated startups matching your interests
-                </p>
-
-                <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
-                  <div className="h-full w-[84%] rounded-full bg-primary" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="flex-1 bg-black/40 backdrop-blur-sm"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
-        {/* LOGO */}
-        <div className="flex h-24 items-center border-b border-border px-6">
-          <Link
-            href="/investor/dashboard"
-            className="flex items-center"
-          >
-            <Image
-              src="/logo.png"
-              alt="Startup Ka Mall"
-              width={210}
-              height={60}
-              className="h-auto w-46.25 object-contain"
-            />
-          </Link>
-        </div>
-
-        {/* NAV */}
-        <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-          {navigation.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-all ${
-                  pathname === item.href
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                <Icon className="h-5 w-5" />
-
-                <span className="text-sm font-semibold">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* CARD */}
-        <div className="p-4">
-          <div className="rounded-[30px] border border-primary/10 bg-primary/5 p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-              Investment Opportunities
-            </p>
-
-            <h3 className="mt-4 text-4xl font-black text-foreground">
-              128
-            </h3>
-
-            <p className="mt-2 text-sm text-muted-foreground">
-              Curated startups matching your interests
-            </p>
-
-            <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
-              <div className="h-full w-[84%] rounded-full bg-primary" />
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* MAIN */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* HEADER */}
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setSidebarOpen(true)
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card lg:hidden"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-
-            <div>
-              <h1 className="text-3xl font-black text-foreground">
-                Investor Dashboard
-              </h1>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Explore high-potential startup opportunities
-              </p>
-            </div>
-          </div>
-
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => alert("Notifications coming soon")}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card transition hover:bg-muted"
-            >
-              <Bell className="h-5 w-5 text-foreground" />
-            </button>
-
-            <Link
-              href="/investor/profile"
-              className="flex h-12 items-center gap-3 rounded-2xl border border-border bg-card px-3"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">
-                {getUserInitial(user?.name)}
-              </div>
-
-              <div className="hidden sm:block">
-                <p className="text-sm font-semibold text-foreground">
-                  {getUserDisplayName(user?.name)}
-                </p>
-
-                <p className="text-xs text-muted-foreground">
-                  {user?.role ?? "Investor"}
-                </p>
-              </div>
-            </Link>
-          </div>
-        </header>
+    return (
+      <InvestorLayout
+        title="Investor Dashboard"
+        subtitle="Explore high-potential startup opportunities"
+      >
 
         {/* CONTENT */}
-        <main className="flex-1 overflow-x-hidden p-5 lg:p-7">
+        <>
           {/* HERO */}
           <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
             <div className="max-w-3xl">
@@ -347,9 +106,7 @@ const [interestedStartups, setInterestedStartups] =
                 </h2>
 
                 <p className="mt-5 text-base leading-8 text-muted-foreground">
-                  Explore curated startup opportunities,
-                  track your saved startups and connect
-                  with founders that match your investment interests.
+                  Discover high-potential startups matched to your investment preferences, monitor opportunities, and track your investment activity from one place.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -372,47 +129,45 @@ const [interestedStartups, setInterestedStartups] =
             </div>
           </section>
 
-          <section className="mt-7 grid gap-5 md:grid-cols-3">
+   <section className="mt-7">
+  <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p className="text-sm font-semibold text-primary">
+          Recommended Opportunity
+        </p>
 
-  <Link
-    href="/investor/discover"
-    className="rounded-[28px] border border-border bg-card p-6 shadow-sm hover:border-primary/20"
-  >
-    <h3 className="text-xl font-black text-foreground">
-      Discover Startups
-    </h3>
+        <h3 className="mt-2 text-3xl font-black text-foreground">
+          FinVerse AI
+        </h3>
 
-    <p className="mt-2 text-sm text-muted-foreground">
-      Browse startup opportunities.
-    </p>
-  </Link>
+        <p className="mt-2 text-sm text-muted-foreground">
+          AI-powered financial infrastructure helping SMEs automate capital operations.
+        </p>
 
-  <Link
-    href="/investor/saved"
-    className="rounded-[28px] border border-border bg-card p-6 shadow-sm hover:border-primary/20"
-  >
-    <h3 className="text-xl font-black text-foreground">
-      Saved Startups
-    </h3>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+            96% Match
+          </span>
 
-    <p className="mt-2 text-sm text-muted-foreground">
-      Review your shortlisted startups.
-    </p>
-  </Link>
+          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            Readiness 82/100
+          </span>
 
-  <Link
-    href="/investor/interested"
-    className="rounded-[28px] border border-border bg-card p-6 shadow-sm hover:border-primary/20"
-  >
-    <h3 className="text-xl font-black text-foreground">
-      Interested Startups
-    </h3>
+          <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
+            Seeking ₹50L
+          </span>
+        </div>
+      </div>
 
-    <p className="mt-2 text-sm text-muted-foreground">
-      Manage startups you&apos;re interested in.
-    </p>
-  </Link>
-
+      <Link
+        href="/investor/startup/1"
+        className="inline-flex h-12 items-center justify-center rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground"
+      >
+        View Startup
+      </Link>
+    </div>
+  </div>
 </section>
 
           {/* STATS */}
@@ -420,7 +175,7 @@ const [interestedStartups, setInterestedStartups] =
             <InvestorStatCard
               icon={Rocket}
               title="128"
-              subtitle="Startup Matches"
+              subtitle="Available Startups"
               iconBg="bg-primary/10"
               iconColor="text-primary"
             />
@@ -436,15 +191,15 @@ const [interestedStartups, setInterestedStartups] =
             <InvestorStatCard
               icon={Flame}
               title={String(interestedStartups.length)}
-              subtitle="Interested Startups"
+              subtitle="Interests Submitted"
               iconBg="bg-orange-100"
               iconColor="text-orange-600"
             />
 
             <InvestorStatCard
               icon={TrendingUp}
-              title="128"
-              subtitle="Active Opportunities"
+              title="8"
+              subtitle="New This Week"
               iconBg="bg-emerald-100"
               iconColor="text-emerald-600"
             />
@@ -503,8 +258,7 @@ const [interestedStartups, setInterestedStartups] =
               ))}
             </div>
           </section>
-        </main>
-      </div>
-    </div>
-  )
+            </>
+  </InvestorLayout>
+)
 }

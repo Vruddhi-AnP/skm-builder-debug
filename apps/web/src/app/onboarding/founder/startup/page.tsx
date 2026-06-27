@@ -8,6 +8,10 @@ import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
+import { createStartup } from "@/services/startup.service";
+
+ import axios from "axios";
+
 import {
   Briefcase,
   Building2,
@@ -67,10 +71,7 @@ const [selectedIndustries, setSelectedIndustries] =
   });
 
 const [selectedBusinessModel, setSelectedBusinessModel] =
-  useState(() => {
-    const saved = getFounderOnboarding();
-    return saved.startupDescription ?? "B2B";
-  });
+  useState("B2B");
 
 const [formData, setFormData] = useState(() => {
   const saved = getFounderOnboarding();
@@ -104,16 +105,90 @@ const [formData, setFormData] = useState(() => {
     }
   };
 
- const handleContinue = () => {
-  saveFounderOnboarding({
-    startupName: formData.startupName,
-    startupWebsite: formData.website,
-    startupStage: selectedStage,
-    startupIndustry: selectedIndustries.join(","),
-    startupDescription: formData.problemStatement,
-  });
-  router.push("/onboarding/founder/package");
+ const handleContinue = async () => {
+  setLoading(true);
+  try {
+    if (!formData.startupName.trim()) {
+  alert("Startup name is required");
+  setLoading(false);
+  return;
+}
+
+if (!selectedStage) {
+  alert("Startup stage is required");
+  setLoading(false);
+  return;
+}
+
+    const startup = await createStartup({
+      
+      name: formData.startupName,
+
+      website: formData.website,
+
+      teamSize: formData.teamSize
+        ? Number(formData.teamSize)
+        : undefined,
+
+      startupStage: selectedStage,
+
+      industry:
+        selectedIndustries.join(","),
+
+      businessModel:
+        selectedBusinessModel,
+
+      problemStatement:
+        formData.problemStatement,
+
+      solutionOverview:
+        formData.solution,
+
+      description:
+        formData.problemStatement,
+    });
+    console.log("STARTUP CREATED", startup);
+
+    saveFounderOnboarding({
+      startupId: startup.id,
+
+      startupName:
+        formData.startupName,
+
+      startupWebsite:
+        formData.website,
+
+      startupStage:
+        selectedStage,
+
+      startupIndustry:
+        selectedIndustries.join(","),
+
+      startupDescription:
+        formData.problemStatement,
+    });
+
+   setLoading(false);
+
+    router.push(
+      "/onboarding/founder/package"
+    );
+  } catch (error) {
+  if (axios.isAxiosError(error)) {
+    alert(
+      error.response?.data?.message ??
+      "Failed to create startup"
+    );
+  } else {
+    alert("Something went wrong");
+  }
+
+  setLoading(false);
+}
 };
+
+const [loading, setLoading] =
+  useState(false);
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">
@@ -522,10 +597,13 @@ const [formData, setFormData] = useState(() => {
 
             <button
               type="button"
+              disabled={loading}
               onClick={handleContinue}
               className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
             >
-              Continue
+              {loading
+              ? "Saving..."
+              : "Continue"}
 
             </button>
           </div>

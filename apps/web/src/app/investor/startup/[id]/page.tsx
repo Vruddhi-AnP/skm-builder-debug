@@ -3,67 +3,32 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import InvestorLayout from "@/components/investor/InvestorLayout";
 
 import {
   ArrowUpRight,
   BarChart3,
   Bell,
   Bookmark,
-  Briefcase,
   Building2,
   CalendarDays,
   CircleDollarSign,
-  Flame,
   Globe,
   LinkIcon,
   Mail,
   MapPin,
   Menu,
   Rocket,
-  Search,
   ShieldCheck,
   Sparkles,
   Star,
   Target,
   TrendingUp,
   Trophy,
-  User,
   Users,
   X,
 } from "lucide-react"
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/investor/dashboard",
-    icon: BarChart3,
-  },
-  {
-    name: "Discover",
-    href: "/investor/discover",
-    icon: Search,
-  },
-  {
-    name: "Interested",
-    href: "/investor/interested",
-    icon: Flame,
-  },
-  {
-    name: "Saved",
-    href: "/investor/saved",
-    icon: Bookmark,
-  },
-  {
-    name: "Programs",
-    href: "/investor/programs",
-    icon: Briefcase,
-  },
-  {
-    name: "Profile",
-    href: "/investor/profile",
-    icon: User,
-  },
-]
 
 const startups = [
   {
@@ -115,9 +80,6 @@ const startups = [
 export default function InvestorStartupDetailsPage() {
   const params = useParams()
 
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false)
-
   const [saved, setSaved] = useState(false)
 
   const [interested, setInterested] =
@@ -129,179 +91,13 @@ export default function InvestorStartupDetailsPage() {
     ) || startups[0]
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
-            <div className="flex h-20 items-center justify-between border-b border-border px-5">
-              <div>
-                <h2 className="text-xl font-black text-foreground">
-                  Startup Ka Mall
-                </h2>
-
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Investor Workspace
-                </p>
-              </div>
-
-              <button
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 space-y-2 overflow-y-auto px-4 py-5">
-              {navigation.map((item) => {
-                const Icon = item.icon
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() =>
-                      setSidebarOpen(false)
-                    }
-                    className="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-muted-foreground transition hover:bg-muted"
-                  >
-                    <Icon className="h-5 w-5" />
-
-                    <span className="text-sm font-semibold">
-                      {item.name}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-
-          <div
-            className="flex-1 bg-black/20"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* SIDEBAR */}
-      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
-        <div className="flex h-24 items-center border-b border-border px-6">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground">
-              I
-            </div>
-
-            <div>
-              <h2 className="text-[24px] font-black leading-none text-foreground">
-                Startup Ka Mall
-              </h2>
-
-              <p className="mt-2 text-xs text-muted-foreground">
-                Investor Workspace
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-          {navigation.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-muted-foreground transition hover:bg-muted"
-              >
-                <Icon className="h-5 w-5" />
-
-                <span className="text-sm font-semibold">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-
-        <div className="p-4">
-          <div className="rounded-[30px] border border-primary/10 bg-primary/5 p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-              Startup Match
-            </p>
-
-            <h3 className="mt-4 text-5xl font-black text-foreground">
-              {startup.match}
-            </h3>
-
-            <p className="mt-2 text-sm text-muted-foreground">
-              AI investment compatibility
-            </p>
-
-            <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
-              <div className="h-full w-[96%] rounded-full bg-primary" />
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* MAIN */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* HEADER */}
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setSidebarOpen(true)
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card lg:hidden"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-
-            <div>
-              <h1 className="text-[30px] font-black leading-none text-foreground">
-                Startup Details
-              </h1>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Investment opportunity overview
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
-              <Bell className="h-5 w-5 text-foreground" />
-            </button>
-
-            <Link
-              href="/investor/profile"
-              className="flex h-12 items-center gap-3 rounded-2xl border border-border bg-card px-3"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-black text-primary-foreground">
-                K
-              </div>
-
-              <div className="hidden sm:block">
-                <p className="text-sm font-semibold text-foreground">
-                  Krishna Shah
-                </p>
-
-                <p className="text-xs text-muted-foreground">
-                  Angel Investor
-                </p>
-              </div>
-            </Link>
-          </div>
-        </header>
+  <InvestorLayout
+    title="Startup Details"
+    subtitle="Investment opportunity overview"
+  >
 
         {/* CONTENT */}
-        <main className="flex-1 overflow-x-hidden p-5 lg:p-7">
+        <>
           {/* HERO */}
           <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
             <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
@@ -322,6 +118,17 @@ export default function InvestorStartupDetailsPage() {
                   <span className="rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
                     {startup.match} Match
                   </span>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    Seeking {startup.fundingAsk}
+                  </span>
+
+                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    Readiness 82/100
+                  </span>
+                </div>
+
                 </div>
 
                 <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
@@ -379,11 +186,6 @@ export default function InvestorStartupDetailsPage() {
                     {saved
                       ? "Saved"
                       : "Save Startup"}
-                  </button>
-
-                  <button className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-6 text-sm font-semibold text-foreground transition hover:bg-muted">
-                    <Mail className="h-4 w-4" />
-                    Contact Founder
                   </button>
                 </div>
               </div>
@@ -619,7 +421,7 @@ export default function InvestorStartupDetailsPage() {
                 <div className="mt-6 space-y-3">
                   <button className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground transition hover:opacity-90">
                     <Mail className="h-4 w-4" />
-                    Connect Founder
+                    Show Interest
                   </button>
 
                   <button className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted">
@@ -701,8 +503,7 @@ export default function InvestorStartupDetailsPage() {
               </div>
             </div>
           </section>
-        </main>
-      </div>
-    </div>
-  )
+            </>
+  </InvestorLayout>
+)
 }

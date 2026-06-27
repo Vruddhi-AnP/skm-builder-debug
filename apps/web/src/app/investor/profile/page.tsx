@@ -1,26 +1,21 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useLocalUser, getUserInitial, getUserDisplayName } from "@/hooks/useLocalUser";
+import InvestorLayout from "@/components/investor/InvestorLayout";
 
 import {
-  BarChart3,
   Bell,
-  Bookmark,
   Briefcase,
   Camera,
   CheckCircle2,
-  Flame,
   Globe,
   LinkIcon,
   Mail,
   MapPin,
-  Menu,
   Phone,
   Save,
-  Search,
   Sparkles,
   User,
   Wallet,
@@ -31,43 +26,7 @@ import {
   BadgeCheck,
 } from "lucide-react"
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/investor/dashboard",
-    icon: BarChart3,
-  },
-  {
-    name: "Discover",
-    href: "/investor/discover",
-    icon: Search,
-  },
-  {
-    name: "Interested",
-    href: "/investor/interested",
-    icon: Flame,
-  },
-  {
-    name: "Saved",
-    href: "/investor/saved",
-    icon: Bookmark,
-  },
-  {
-    name: "Programs",
-    href: "/investor/programs",
-    icon: Briefcase,
-  },
-  {
-    name: "Profile",
-    href: "/investor/profile",
-    icon: User,
-    active: true,
-  },
-]
-
 export default function InvestorProfilePage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false)
 
   const router = useRouter()
 
@@ -78,9 +37,9 @@ export default function InvestorProfilePage() {
 
   const [formData, setFormData] =
     useState({
-      fullName: "Krishna Shah",
-      email: "krishna@gmail.com",
-      phone: "+91 9876543210",
+      fullName: user?.name ?? "",
+      email: user?.email ?? "",
+      phone: "",
       location: "Mumbai, India",
       investorType: "Angel Investor",
       focusSector: "FinTech, SaaS",
@@ -113,161 +72,14 @@ export default function InvestorProfilePage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="flex h-full w-70 flex-col border-r border-border bg-card">
-            <div className="flex h-20 items-center justify-between border-b border-border px-5">
-              <div>
-                <h2 className="text-xl font-black text-foreground">
-                  Startup Ka Mall
-                </h2>
-
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Investor Workspace
-                </p>
-              </div>
-
-              <button
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 space-y-2 overflow-y-auto px-4 py-5">
-              {navigation.map((item) => {
-                const Icon = item.icon
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() =>
-                      setSidebarOpen(false)
-                    }
-                    className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition ${
-                      item.active
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-
-                    <span className="text-sm font-semibold">
-                      {item.name}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-
-          <div
-            className="flex-1 bg-black/20"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* SIDEBAR */}
-      <aside className="hidden w-70 flex-col border-r border-border bg-card lg:flex">
-        <div className="flex h-24 items-center border-b border-border px-6">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-xl font-black text-primary-foreground">
-              {getUserInitial(user?.name)}
-            </div>
-
-            <div>
-              <h2 className="text-[24px] font-black leading-none text-foreground">
-                Startup Ka Mall
-              </h2>
-
-              <p className="mt-2 text-xs text-muted-foreground">
-                Investor Workspace
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-          {navigation.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 transition ${
-                  item.active
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                <Icon className="h-5 w-5" />
-
-                <span className="text-sm font-semibold">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-
-        <div className="p-4">
-          <div className="rounded-[30px] border border-primary/10 bg-primary/5 p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-              Investor Profile
-            </p>
-
-            <h3 className="mt-4 text-4xl font-black text-foreground">
-              92%
-            </h3>
-
-            <p className="mt-2 text-sm text-muted-foreground">
-              Profile completion score
-            </p>
-
-            <div className="mt-5 h-2 overflow-hidden rounded-full bg-primary/10">
-              <div className="h-full w-[92%] rounded-full bg-primary" />
-            </div>
-          </div>
-        </div>
-      </aside>
+  <InvestorLayout
+    title="Investor Profile"
+    subtitle="Manage your investor identity and investment preferences"
+  >
 
       {/* MAIN */}
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* HEADER */}
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setSidebarOpen(true)
-              }
-              className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card lg:hidden"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-
-            <div>
-              <h1 className="text-[30px] font-black leading-none text-foreground">
-                Investor Profile
-              </h1>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Manage your investor identity &
-                investment preferences
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
+        
   {/* NOTIFICATION */}
   <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
     <Bell className="h-5 w-5 text-foreground" />
@@ -309,13 +121,6 @@ export default function InvestorProfilePage() {
     Upgrade Plan
   </button>
 
-  {/* SETTINGS */}
-  <button className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted">
-    <User className="h-4 w-4" />
-
-    Settings
-  </button>
-
   {/* LOGOUT */}
   <button
     onClick={() => {
@@ -332,10 +137,9 @@ export default function InvestorProfilePage() {
     Logout
   </button>
 </div>
-        </header>
 
         {/* CONTENT */}
-        <main className="flex-1 overflow-x-hidden p-5 lg:p-7">
+        <>
           {/* HERO */}
           <section className="rounded-[36px] border border-border bg-card p-6 shadow-sm lg:p-8">
             <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
@@ -377,12 +181,22 @@ export default function InvestorProfilePage() {
                       </span>
                     </div>
 
-                    <div className="inline-flex items-center gap-2 rounded-full bg-muted px-4 py-2">
-                      <Building2 className="h-4 w-4 text-primary" />
+                    <div className="mt-5 grid grid-cols-2 gap-3">
+                      <div className="rounded-xl bg-muted px-4 py-3 text-sm font-semibold">
+                        Portfolio: 14
+                      </div>
 
-                      <span className="text-sm font-semibold text-foreground">
-                        14 Portfolio Startups
-                      </span>
+                      <div className="rounded-xl bg-muted px-4 py-3 text-sm font-semibold">
+                        Saved: 8
+                      </div>
+
+                      <div className="rounded-xl bg-muted px-4 py-3 text-sm font-semibold">
+                        Interests: 5
+                      </div>
+
+                      <div className="rounded-xl bg-muted px-4 py-3 text-sm font-semibold">
+                        Connected: 3
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -392,15 +206,15 @@ export default function InvestorProfilePage() {
               <div className="w-full xl:w-[320px]">
                 <div className="rounded-[30px] border border-primary/10 bg-primary/5 p-6">
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-primary">
-                    Investor Strength
+                    Investor Activity
                   </p>
 
                   <h2 className="mt-5 text-6xl font-black text-foreground">
-                    94%
+                    14
                   </h2>
 
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    Founder-investor credibility score
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Portfolio Startups
                   </p>
 
                   <div className="mt-6 h-3 overflow-hidden rounded-full bg-primary/10">
@@ -659,8 +473,7 @@ export default function InvestorProfilePage() {
               </div>
             </div>
           </section>
-        </main>
-      </div>
-    </div>
-  )
+    </>
+  </InvestorLayout>
+)
 }

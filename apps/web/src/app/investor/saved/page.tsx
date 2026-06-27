@@ -2,61 +2,20 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
+import InvestorLayout from "@/components/investor/InvestorLayout";
 
 import {
-  BarChart3,
-  Bell,
   Bookmark,
-  Briefcase,
   ChevronRight,
-  Flame,
   Globe,
   MapPin,
-  Menu,
   Rocket,
-  Search,
   Sparkles,
   Star,
   Trash2,
   TrendingUp,
-  User,
   Users,
-  X,
 } from "lucide-react"
-
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/investor/dashboard",
-    icon: BarChart3,
-  },
-  {
-    name: "Discover",
-    href: "/investor/discover",
-    icon: Search,
-  },
-  {
-    name: "Interested",
-    href: "/investor/interested",
-    icon: Flame,
-  },
-  {
-    name: "Saved",
-    href: "/investor/saved",
-    icon: Bookmark,
-    active: true,
-  },
-  {
-    name: "Programs",
-    href: "/investor/programs",
-    icon: Briefcase,
-  },
-  {
-    name: "Profile",
-    href: "/investor/profile",
-    icon: User,
-  },
-]
 
 const savedStartupsData = [
   {
@@ -95,8 +54,6 @@ const savedStartupsData = [
 ]
 
 export default function InvestorSavedPage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false)
 
   const [savedStartups, setSavedStartups] =
     useState(savedStartupsData)
@@ -128,187 +85,10 @@ export default function InvestorSavedPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f8fc] flex">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="w-70 bg-[#F7F4EE]/95 h-full border-r border-[#edf1f7] flex flex-col">
-            <div className="h-20 border-b border-[#edf1f7] flex items-center justify-between px-5">
-              <div>
-                <h2 className="text-xl font-bold text-[#0f172a]">
-                  Startup Ka Mall
-                </h2>
-
-                <p className="text-xs text-gray-500 mt-1">
-                  Investor Workspace
-                </p>
-              </div>
-
-              <button
-                onClick={() =>
-                  setSidebarOpen(false)
-                }
-                className="h-10 w-10 rounded-xl bg-[#f6f8fc] flex items-center justify-center"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
-              {navigation.map((item) => {
-                const Icon = item.icon
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() =>
-                      setSidebarOpen(false)
-                    }
-                    className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition ${
-                      item.active
-                        ? "bg-violet-50 text-violet-600"
-                        : "text-gray-600 hover:bg-[#fafafa]"
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-
-                    <span className="font-semibold text-sm">
-                      {item.name}
-                    </span>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-
-          <div
-            className="flex-1 bg-black/20"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* SIDEBAR */}
-      <aside className="hidden lg:flex w-70 bg-[#F7F4EE]/95 border-r border-[#edf1f7] flex-col">
-        <div className="h-24 border-b border-[#edf1f7] flex items-center px-6">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xl font-bold">
-              I
-            </div>
-
-            <div>
-              <h2 className="text-[24px] font-bold text-[#0f172a] leading-none">
-                Startup Ka Mall
-              </h2>
-
-              <p className="text-xs text-gray-500 mt-2">
-                Investor Workspace
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          {navigation.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition ${
-                  item.active
-                    ? "bg-violet-50 text-violet-600"
-                    : "text-gray-600 hover:bg-[#fafafa]"
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-
-                <span className="font-semibold text-sm">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
-        </div>
-
-        <div className="p-4">
-          <div className="rounded-[30px] border border-violet-200 bg-[#fafbff] p-5">
-            <p className="text-[11px] uppercase tracking-wider font-semibold text-violet-500">
-              Saved Pipeline
-            </p>
-
-            <h3 className="mt-4 text-4xl font-bold text-[#0f172a]">
-              {savedStartups.length}
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-500">
-              Startups bookmarked for review
-            </p>
-
-            <div className="mt-5 h-2 rounded-full bg-gray-100 overflow-hidden">
-              <div className="h-full w-[82%] rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500" />
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* HEADER */}
-        <header className="sticky top-0 z-30 h-20 bg-[#f6f8fc]/90 backdrop-blur-xl border-b border-[#edf1f7] flex items-center justify-between px-5 lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setSidebarOpen(true)
-              }
-              className="lg:hidden h-11 w-11 rounded-xl bg-[#F7F4EE]/95 border border-[#edf1f7] flex items-center justify-center"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-
-            <div>
-              <h1 className="text-[30px] font-bold text-[#0f172a] leading-none">
-                Saved Startups
-              </h1>
-
-              <p className="text-sm text-gray-500 mt-1">
-                Manage bookmarked investment opportunities
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button className="h-12 w-12 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center justify-center">
-              <Bell className="w-5 h-5 text-gray-700" />
-            </button>
-
-            <Link
-              href="/investor/profile"
-              className="h-12 px-3 rounded-2xl border border-[#edf1f7] bg-[#F7F4EE]/95 flex items-center gap-3"
-            >
-              <div className="h-9 w-9 rounded-xl bg-linear-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
-                K
-              </div>
-
-              <div className="hidden sm:block">
-                <p className="text-sm font-semibold text-[#0f172a]">
-                  Krishna Shah
-                </p>
-
-                <p className="text-xs text-gray-500">
-                  Angel Investor
-                </p>
-              </div>
-            </Link>
-          </div>
-        </header>
-
-        {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
+  <InvestorLayout
+    title="Saved Startups"
+    subtitle="Manage bookmarked investment opportunities"
+  >
           {/* HERO */}
           <section className="rounded-[36px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6 lg:p-8">
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
@@ -322,12 +102,11 @@ export default function InvestorSavedPage() {
                 </div>
 
                 <h2 className="mt-6 text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-[#0f172a]">
-                  Saved Investment Opportunities
+                  Saved Startups
                 </h2>
 
                 <p className="mt-5 text-base leading-relaxed text-gray-500">
-                  Review startups you bookmarked and track promising opportunities for future investments.
-                </p>
+                  Keep track of promising startups, compare opportunities, and move investment prospects into your active pipeline.                </p>
               </div>
 
               <Link
@@ -373,14 +152,14 @@ export default function InvestorSavedPage() {
               </p>
             </div>
 
-            <div className="rounded-[30px] border border-[#e8edf5] bg-[#F7F4EE]/95 p-6">
+            <div className="rounded-[30px] border border-border bg-card p-6 shadow-sm">
               <Users className="w-6 h-6 text-fuchsia-500" />
 
-              <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
+              <h3 className="mt-5 text-3xl font-black text-foreground">
                 92%
               </h3>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Match Accuracy
               </p>
             </div>
@@ -389,11 +168,11 @@ export default function InvestorSavedPage() {
               <TrendingUp className="w-6 h-6 text-emerald-500" />
 
               <h3 className="mt-5 text-3xl font-bold text-[#0f172a]">
-                High
+                2
               </h3>
 
               <p className="mt-2 text-sm text-gray-500">
-                Opportunity Quality
+                Ready To Review
               </p>
             </div>
           </section>
@@ -416,6 +195,11 @@ export default function InvestorSavedPage() {
                       <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                         {startup.match} Match
                       </span>
+
+                      <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                        Readiness 82/100
+                      </span>
+
                     </div>
 
                     <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-500">
@@ -463,6 +247,12 @@ export default function InvestorSavedPage() {
                       Remove
                     </button>
 
+                    <button
+                      className="h-11 px-5 rounded-2xl bg-primary text-primary-foreground text-sm font-semibold"
+                    >
+                      Show Interest
+                    </button>
+
                     <Link
                       href={`/investor/startup/${startup.id}`}
                       className="h-11 px-5 rounded-2xl border border-[#e8edf5] bg-[#F7F4EE]/95 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center"
@@ -490,7 +280,7 @@ export default function InvestorSavedPage() {
                 </h3>
 
                 <p className="mt-3 text-sm text-gray-500">
-                  Start bookmarking startups from discover page.
+                  Browse startups and save the ones you want to review later.
                 </p>
 
                 <Link
@@ -502,8 +292,6 @@ export default function InvestorSavedPage() {
               </div>
             )}
           </section>
-        </main>
-      </div>
-    </div>
-  )
+  </InvestorLayout>
+)
 }

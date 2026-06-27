@@ -14,6 +14,7 @@ export interface FounderOnboardingData {
   startupDescription: string;
   startupWebsite: string;
   selectedPackage: string;
+  startupId?: string
 }
 
 const STORAGE_KEY = "founderOnboarding";

@@ -11,10 +11,9 @@ import {
   Users,
 } from "lucide-react";
 
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
 import AdminStatCard from "@/components/admin/AdminStatCard";
 import AdminEmptyState from "@/components/admin/AdminEmptyState";
+import AdminShell from "@/components/admin/AdminShell";
 
 const advisorsData = [
   {
@@ -47,8 +46,6 @@ const advisorsData = [
 ];
 
 export default function AdminAdvisorsPage() {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false);
 
   const [selectedFilter, setSelectedFilter] =
     useState("All");
@@ -60,6 +57,8 @@ export default function AdminAdvisorsPage() {
     "All",
     "Active",
     "Pending",
+    "Available",
+    "Busy",
   ];
 
   const filteredAdvisors =
@@ -97,42 +96,11 @@ export default function AdminAdvisorsPage() {
     }, [selectedFilter, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FB] flex">
-      {/* MOBILE SIDEBAR */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <AdminSidebar
-            mobile
-            onClose={() =>
-              setSidebarOpen(false)
-            }
-          />
-
-          <div
-            className="flex-1 bg-black/20 backdrop-blur-sm"
-            onClick={() =>
-              setSidebarOpen(false)
-            }
-          />
-        </div>
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <AdminSidebar />
-
-      {/* MAIN */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* HEADER */}
-        <AdminHeader
-          title="Advisors"
-          subtitle="Manage startup advisors and ecosystem experts"
-          onMenuClick={() =>
-            setSidebarOpen(true)
-          }
-        />
-
-        {/* CONTENT */}
-        <main className="flex-1 p-5 lg:p-7 overflow-x-hidden">
+  <AdminShell
+    title="Advisors"
+    subtitle="Manage startup advisors and ecosystem experts"
+  >
+      
           {/* TOP */}
           <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
             <div>
@@ -190,6 +158,51 @@ export default function AdminAdvisorsPage() {
               iconColor="text-orange-500"
             />
           </section>
+
+          {/* ADVISOR WORKLOAD */}
+<section className="mt-7">
+  <div className="grid gap-4 md:grid-cols-4">
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Available
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        42
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Busy
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        18
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Pending Approval
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        4
+      </h3>
+    </div>
+
+    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+      <p className="text-sm text-[#64748B]">
+        Sessions This Week
+      </p>
+
+      <h3 className="mt-2 text-2xl font-bold text-[#0F172A]">
+        126
+      </h3>
+    </div>
+  </div>
+</section>
 
           {/* FILTERS */}
           <section className="mt-7 flex flex-wrap gap-3">
@@ -299,7 +312,7 @@ export default function AdminAdvisorsPage() {
                         </button>
 
                         <button className="h-11 px-5 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0B173F] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#071133]/20">
-                          Open Details
+                          Assign Founder
                           <ArrowUpRight className="w-4 h-4" />
                         </button>
                       </div>
@@ -309,8 +322,6 @@ export default function AdminAdvisorsPage() {
               )
             )}
           </section>
-        </main>
-      </div>
-    </div>
-  );
+  </AdminShell>
+);
 }
