@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 
 import {
   ApiBadRequestResponse,
@@ -20,6 +20,8 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 import { BuilderService } from './builder.service';
 
 import { CreateBuilderDto } from './dto/create-builder.dto';
+
+import { UpdateBuilderDto } from './dto/update-builder.dto';
 
 import { BuilderSuccessResponseDto } from './dto/builder-success-response.dto';
 
@@ -85,5 +87,35 @@ export class BuilderController {
     @GetUser('id') userId: string,
   ) {
     return this.builderService.findBuilderByStartup(startupId, userId);
+  }
+
+  @ApiOperation({
+    summary: 'Update builder workspace',
+
+    description:
+      'Updates an existing startup builder workspace for a startup owned by the authenticated founder.',
+  })
+  @ApiBearerAuth('access-token')
+  @ApiOkResponse({
+    description: 'Startup builder updated successfully',
+
+    type: BuilderSuccessResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Authentication token missing or invalid',
+  })
+  @ApiForbiddenResponse({
+    description: 'Only founders can access this endpoint',
+  })
+  @Auth(Role.FOUNDER)
+  @Patch(':startupId')
+  update(
+    @Param('startupId') startupId: string,
+
+    @Body() dto: UpdateBuilderDto,
+
+    @GetUser('id') userId: string,
+  ) {
+    return this.builderService.updateBuilder(startupId, dto, userId);
   }
 }
