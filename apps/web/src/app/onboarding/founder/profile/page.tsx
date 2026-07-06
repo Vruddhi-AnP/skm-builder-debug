@@ -59,7 +59,92 @@ const [formData, setFormData] = useState(() => {
   };
 });
 
+const [errors, setErrors] = useState({
+  fullName: "",
+  email: "",
+  phone: "",
+  location: "",
+  experience: "",
+  linkedin: "",
+  founderGoal: "",
+  bio: "",
+});
+
+const validateForm = () => {
+  const newErrors = {
+    fullName: "",
+    email: "",
+    phone: "",
+    location: "",
+    experience: "",
+    linkedin: "",
+    founderGoal: "",
+    bio: "",
+  };
+
+  let isValid = true;
+
+  if (!formData.fullName.trim()) {
+    newErrors.fullName = "Full Name is required";
+    isValid = false;
+  }
+
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required";
+    isValid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    newErrors.email = "Enter a valid email address";
+    isValid = false;
+  }
+
+  if (!formData.phone.trim()) {
+    newErrors.phone = "Phone Number is required";
+    isValid = false;
+  } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
+    newErrors.phone = "Phone Number must be 10 digits";
+    isValid = false;
+  }
+
+  if (!formData.location.trim()) {
+    newErrors.location = "Location is required";
+    isValid = false;
+  }
+
+  if (!formData.experience.trim()) {
+    newErrors.experience = "Startup Experience is required";
+    isValid = false;
+  }
+
+  if (!formData.founderGoal.trim()) {
+    newErrors.founderGoal = "Founder Goal is required";
+    isValid = false;
+  }
+
+  if (!formData.bio.trim()) {
+    newErrors.bio = "Founder Bio is required";
+    isValid = false;
+  }
+
+  // LinkedIn OPTIONAL
+  if (
+    formData.linkedin.trim() &&
+    !/^https?:\/\/(www\.)?linkedin\.com\/.*$/i.test(formData.linkedin)
+  ) {
+    newErrors.linkedin = "Enter a valid LinkedIn profile URL";
+    isValid = false;
+  }
+
+  setErrors(newErrors);
+
+  return isValid;
+};
+
     const handleContinue = async () => {
+
+      if (!validateForm()) {
+        return;
+      }
+
       try {
         await createFounderProfile({
           phoneNumber: formData.phone,
@@ -250,15 +335,27 @@ const [formData, setFormData] = useState(() => {
                   type="text"
                   placeholder="Enter full name"
                   value={formData.fullName}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
                       fullName: e.target.value,
-                    })
-                  }
+                    });
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      fullName: "",
+                    }));
+                  }}
                   className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
+
+                  {errors.fullName && (
+              <p className="mt-2 text-sm text-red-500">
+                {errors.fullName}
+              </p>
+            )}
+
             </div>
 
             {/* EMAIL */}
@@ -274,15 +371,27 @@ const [formData, setFormData] = useState(() => {
                   type="email"
                   placeholder="Enter email address"
                   value={formData.email}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
                       email: e.target.value,
-                    })
-                  }
+                    });
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      email: "",
+                    }));
+                  }}
                   className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
+
+                  {errors.email && (
+              <p className="mt-2 text-sm text-red-500">
+                {errors.email}
+              </p>
+            )}
+
             </div>
 
             {/* PHONE */}
@@ -296,41 +405,64 @@ const [formData, setFormData] = useState(() => {
                   type="text"
                   placeholder="+91 9876543210"
                   value={formData.phone}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
                       phone: e.target.value,
-                    })
-                  }
+                    });
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      phone: "",
+                    }));
+                  }}
                   className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
+
+                  {errors.phone && (
+              <p className="mt-2 text-sm text-red-500">
+                {errors.phone}
+              </p>
+            )}
+
             </div>
 
             {/* LOCATION */}
-            <div>
-              <label className="text-sm font-semibold text-foreground">
-                Location
-              </label>
+<div>
+  <label className="text-sm font-semibold text-foreground">
+    Location
+  </label>
 
-              <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
-                <MapPin className="h-5 w-5 text-muted-foreground" />
+  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
+    <MapPin className="h-5 w-5 text-muted-foreground" />
 
-                <input
-                  type="text"
-                  placeholder="Mumbai, India"
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      location: e.target.value,
-                    })
-                  }
-                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-              </div>
-            </div>
-          </div>
+    <input
+      type="text"
+      placeholder="Mumbai, India"
+      value={formData.location}
+      onChange={(e) => {
+        setFormData({
+          ...formData,
+          location: e.target.value,
+        });
+
+        setErrors((prev) => ({
+          ...prev,
+          location: "",
+        }));
+      }}
+      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+    />
+  </div>
+
+  {errors.location && (
+    <p className="mt-2 text-sm text-red-500">
+      {errors.location}
+    </p>
+  )}
+</div>
+</div>
 
           {/* ROLE */}
           <div className="mt-8">
@@ -361,53 +493,75 @@ const [formData, setFormData] = useState(() => {
           {/* EXPERIENCE + LINKEDIN */}
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {/* EXPERIENCE */}
-            <div>
-              <label className="text-sm font-semibold text-foreground">
-                Startup Experience
-              </label>
+<div>
+  <label className="text-sm font-semibold text-foreground">
+    Startup Experience
+  </label>
 
-              <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
-                <Briefcase className="h-5 w-5 text-muted-foreground" />
+  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
+    <Briefcase className="h-5 w-5 text-muted-foreground" />
 
-                <input
-                  type="text"
-                  placeholder="First-time founder"
-                  value={formData.experience}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      experience: e.target.value,
-                    })
-                  }
-                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-              </div>
-            </div>
+    <input
+      type="text"
+      placeholder="First-time founder"
+      value={formData.experience}
+      onChange={(e) => {
+        setFormData({
+          ...formData,
+          experience: e.target.value,
+        });
 
-            {/* LINKEDIN */}
-            <div>
-              <label className="text-sm font-semibold text-foreground">
-                LinkedIn Profile
-              </label>
+        setErrors((prev) => ({
+          ...prev,
+          experience: "",
+        }));
+      }}
+      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+    />
+  </div>
 
-              <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
-                <LinkIcon className="h-5 w-5 text-muted-foreground" />
+  {errors.experience && (
+    <p className="mt-2 text-sm text-red-500">
+      {errors.experience}
+    </p>
+  )}
+</div>
 
-                <input
-                  type="text"
-                  placeholder="LinkedIn profile URL"
-                  value={formData.linkedin}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      linkedin: e.target.value,
-                    })
-                  }
-                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-              </div>
-            </div>
-          </div>
+           {/* LINKEDIN */}
+<div>
+  <label className="text-sm font-semibold text-foreground">
+    LinkedIn Profile
+  </label>
+
+  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
+    <LinkIcon className="h-5 w-5 text-muted-foreground" />
+
+    <input
+      type="text"
+      placeholder="LinkedIn profile URL"
+      value={formData.linkedin}
+      onChange={(e) => {
+        setFormData({
+          ...formData,
+          linkedin: e.target.value,
+        });
+
+        setErrors((prev) => ({
+          ...prev,
+          linkedin: "",
+        }));
+      }}
+      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+    />
+  </div>
+
+  {errors.linkedin && (
+    <p className="mt-2 text-sm text-red-500">
+      {errors.linkedin}
+    </p>
+  )}
+</div>
+</div>  
 
           {/* GOAL */}
           <div className="mt-8">
@@ -422,15 +576,27 @@ const [formData, setFormData] = useState(() => {
                 type="text"
                 placeholder="Raise funding, build MVP, scale startup..."
                 value={formData.founderGoal}
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormData({
                     ...formData,
                     founderGoal: e.target.value,
-                  })
-                }
+                  });
+
+                  setErrors((prev) => ({
+                    ...prev,
+                    founderGoal: "",
+                  }));
+                }}
                 className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               />
             </div>
+
+                {errors.founderGoal && (
+            <p className="mt-2 text-sm text-red-500">
+              {errors.founderGoal}
+            </p>
+          )}
+
           </div>
 
           {/* BIO */}
@@ -443,14 +609,26 @@ const [formData, setFormData] = useState(() => {
               rows={5}
               placeholder="Tell us about your founder journey..."
               value={formData.bio}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
                   bio: e.target.value,
-                })
-              }
+                });
+
+                setErrors((prev) => ({
+                  ...prev,
+                  bio: "",
+                }));
+              }}
               className="mt-3 w-full resize-none rounded-[28px] border border-border bg-background px-5 py-4 text-sm outline-none transition placeholder:text-muted-foreground focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
             />
+
+              {errors.bio && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.bio}
+                </p>
+              )}
+
           </div>
 
           {/* INFO CARD */}
@@ -495,6 +673,6 @@ const [formData, setFormData] = useState(() => {
           </div>
         </div>
       </div>
-    </div>
+    </div>    
   );
 }

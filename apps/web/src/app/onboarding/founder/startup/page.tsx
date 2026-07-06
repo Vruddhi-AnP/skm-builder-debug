@@ -75,6 +75,7 @@ const [selectedBusinessModel, setSelectedBusinessModel] =
 
 const [formData, setFormData] = useState(() => {
   const saved = getFounderOnboarding();
+
   return {
     startupName: saved.startupName ?? "",
     website: saved.startupWebsite ?? "",
@@ -82,6 +83,17 @@ const [formData, setFormData] = useState(() => {
     problemStatement: "",
     solution: "",
   };
+});
+
+const [errors, setErrors] = useState({
+  startupName: "",
+  website: "",
+  teamSize: "",
+  startupStage: "",
+  industry: "",
+  businessModel: "",
+  problemStatement: "",
+  solution: "",
 });
 
   const toggleIndustry = (
@@ -105,20 +117,81 @@ const [formData, setFormData] = useState(() => {
     }
   };
 
+  const validateForm = () => {
+  const newErrors = {
+    startupName: "",
+    website: "",
+    teamSize: "",
+    startupStage: "",
+    industry: "",
+    businessModel: "",
+    problemStatement: "",
+    solution: "",
+  };
+
+  let isValid = true;
+
+  if (!formData.startupName.trim()) {
+    newErrors.startupName = "Startup Name is required";
+    isValid = false;
+  }
+
+  if (
+    formData.website.trim() &&
+    !/^https?:\/\/.+/i.test(formData.website)
+  ) {
+    newErrors.website = "Enter a valid website URL";
+    isValid = false;
+  }
+
+  if (!formData.teamSize.trim()) {
+    newErrors.teamSize = "Team Size is required";
+    isValid = false;
+  } else if (!/^\d+$/.test(formData.teamSize)) {
+    newErrors.teamSize = "Team Size must be a number";
+    isValid = false;
+  }
+
+  if (!selectedStage) {
+    newErrors.startupStage = "Please select a startup stage";
+    isValid = false;
+  }
+
+  if (selectedIndustries.length === 0) {
+    newErrors.industry = "Please select at least one industry";
+    isValid = false;
+  }
+
+  if (!selectedBusinessModel) {
+    newErrors.businessModel = "Please select a business model";
+    isValid = false;
+  }
+
+  if (!formData.problemStatement.trim()) {
+    newErrors.problemStatement =
+      "Problem Statement is required";
+    isValid = false;
+  }
+
+  if (!formData.solution.trim()) {
+    newErrors.solution =
+      "Solution Overview is required";
+    isValid = false;
+  }
+
+  setErrors(newErrors);
+
+  return isValid;
+};
+
  const handleContinue = async () => {
-  setLoading(true);
-  try {
-    if (!formData.startupName.trim()) {
-  alert("Startup name is required");
-  setLoading(false);
+
+  if (!validateForm()) {
   return;
 }
 
-if (!selectedStage) {
-  alert("Startup stage is required");
-  setLoading(false);
-  return;
-}
+  setLoading(true);
+  try {
 
     const startup = await createStartup({
       
@@ -356,16 +429,27 @@ const [loading, setLoading] =
                   type="text"
                   placeholder="Enter startup name"
                   value={formData.startupName}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
-                      startupName:
-                        e.target.value,
-                    })
-                  }
+                      startupName: e.target.value,
+                    });
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      startupName: "",
+                    }));
+                  }}
                   className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
+
+                  {errors.startupName && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {errors.startupName}
+                    </p>
+                  )}
+
             </div>
 
             {/* WEBSITE */}
@@ -381,16 +465,27 @@ const [loading, setLoading] =
                   type="text"
                   placeholder="https://startup.com"
                   value={formData.website}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
-                      website:
-                        e.target.value,
-                    })
-                  }
+                      website: e.target.value,
+                    });
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      website: "",
+                    }));
+                  }}
                   className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
+
+                  {errors.website && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {errors.website}
+                    </p>
+                  )}
+
             </div>
 
             {/* TEAM SIZE */}
@@ -406,16 +501,27 @@ const [loading, setLoading] =
                   type="text"
                   placeholder="5 team members"
                   value={formData.teamSize}
-                  onChange={(e) =>
+                 onChange={(e) => {
                     setFormData({
                       ...formData,
-                      teamSize:
-                        e.target.value,
-                    })
-                  }
+                      teamSize: e.target.value,
+                    });
+
+                    setErrors((prev) => ({
+                      ...prev,
+                      teamSize: "",
+                    }));
+                  }}
                   className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 />
               </div>
+
+                  {errors.teamSize && (
+                    <p className="mt-2 text-sm text-red-500">
+                      {errors.teamSize}
+                    </p>
+                  )}
+
             </div>
           </div>
 
@@ -443,6 +549,13 @@ const [loading, setLoading] =
                 </button>
               ))}
             </div>
+
+              {errors.startupStage && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.startupStage}
+                </p>
+              )}
+
           </div>
 
           {/* INDUSTRIES */}
@@ -488,6 +601,13 @@ const [loading, setLoading] =
                 );
               })}
             </div>
+
+                {errors.industry && (
+                  <p className="mt-2 text-sm text-red-500">
+                    {errors.industry}
+                  </p>
+                )}
+
           </div>
 
           {/* BUSINESS MODEL */}
@@ -517,6 +637,13 @@ const [loading, setLoading] =
                 </button>
               ))}
             </div>
+
+              {errors.businessModel && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.businessModel}
+                </p>
+              )}
+
           </div>
 
           {/* PROBLEM */}
@@ -531,15 +658,26 @@ const [loading, setLoading] =
               value={
                 formData.problemStatement
               }
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
-                  problemStatement:
-                    e.target.value,
-                })
-              }
+                  problemStatement: e.target.value,
+                });
+
+                setErrors((prev) => ({
+                  ...prev,
+                  problemStatement: "",
+                }));
+              }}
               className="mt-3 w-full resize-none rounded-[28px] border border-border bg-background px-5 py-4 text-sm outline-none transition placeholder:text-muted-foreground focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
             />
+
+              {errors.problemStatement && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.problemStatement}
+                </p>
+              )}
+
           </div>
 
           {/* SOLUTION */}
@@ -552,15 +690,26 @@ const [loading, setLoading] =
               rows={5}
               placeholder="Describe your product, platform or solution."
               value={formData.solution}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
-                  solution:
-                    e.target.value,
-                })
-              }
+                  solution: e.target.value,
+                });
+
+                setErrors((prev) => ({
+                  ...prev,
+                  solution: "",
+                }));
+              }}
               className="mt-3 w-full resize-none rounded-[28px] border border-border bg-background px-5 py-4 text-sm outline-none transition placeholder:text-muted-foreground focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
             />
+
+              {errors.solution && (
+                <p className="mt-2 text-sm text-red-500">
+                    {errors.solution}
+                  </p>
+                )}
+
           </div>
 
           {/* INFO CARD */}
