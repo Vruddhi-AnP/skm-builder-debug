@@ -23,8 +23,13 @@ const navigation = [
     icon: Search,
   },
   {
-    name: "Portfolio",
-    href: "/investor/portfolio",
+    name: "Interested",
+    href: "/investor/interested",
+    icon: Briefcase,
+  },
+  {
+    name: "Saved",
+    href: "/investor/saved",
     icon: Briefcase,
   },
   {

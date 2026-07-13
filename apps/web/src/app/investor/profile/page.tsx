@@ -77,9 +77,9 @@ export default function InvestorProfilePage() {
     subtitle="Manage your investor identity and investment preferences"
   >
 
-      {/* MAIN */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        
+      {/* MAIN */}       
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          
   {/* NOTIFICATION */}
   <button className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card">
     <Bell className="h-5 w-5 text-foreground" />
@@ -109,15 +109,10 @@ export default function InvestorProfilePage() {
 
   {/* UPGRADE */}
   <button
-    onClick={() =>
-      router.push(
-        "/onboarding/investor/package"
-      )
-    }
+    onClick={() => router.push("/onboarding/investor/package")}
     className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-5 text-sm font-semibold text-foreground transition hover:bg-muted"
   >
     <Sparkles className="h-4 w-4 text-primary" />
-
     Upgrade Plan
   </button>
 
@@ -125,15 +120,12 @@ export default function InvestorProfilePage() {
   <button
     onClick={() => {
       localStorage.clear()
-
       sessionStorage.clear()
-
       router.push("/login")
     }}
     className="flex h-12 items-center gap-2 rounded-2xl border border-red-100 bg-red-50 px-5 text-sm font-semibold text-red-600 transition hover:bg-red-100"
   >
     <X className="h-4 w-4" />
-
     Logout
   </button>
 </div>
