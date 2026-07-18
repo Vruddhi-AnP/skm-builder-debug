@@ -14,26 +14,89 @@ enum Role {
   admin
 }
 
+enum ExperienceLevel {
+  YEARS_1_TO_3
+  YEARS_3_TO_5
+  YEARS_5_TO_10
+  YEARS_10_PLUS
+}
+
+enum StartupStage {
+  IDEA_STAGE
+  MVP_STAGE
+  EARLY_REVENUE
+  SCALING_STAGE
+}
+
+enum MentorshipType {
+  ONE_TO_ONE_ADVISORY
+  GROUP_MENTORSHIP
+  EXECUTION_GUIDANCE
+  STRATEGIC_CONSULTING
+}
+
+enum WeeklyAvailability {
+  HOURS_1_TO_5
+  HOURS_5_TO_10
+  HOURS_10_TO_20
+  HOURS_20_PLUS
+}
+
+enum PreferredTimeSlot {
+  MORNING
+  AFTERNOON
+  EVENING
+  FLEXIBLE
+}
+
+enum SessionMode {
+  VIRTUAL
+  IN_PERSON
+  HYBRID
+}
+
+enum PreferredTimezone {
+  IST
+  PST
+  EST
+  GMT
+}
+
+enum AdvisorPricingModel {
+  FREE_MENTORSHIP
+  PAID_SESSIONS
+  MONTHLY_ADVISORY
+  EQUITY_BASED
+}
+
+enum EquityInterest {
+  OPEN_TO_EQUITY
+  ONLY_PAID
+  FLEXIBLE
+}
+
 model User {
-  id           String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  email        String   @unique
+  email String @unique
 
-  password     String
+  password String
 
   refreshToken String?
 
-  name         String?
+  name String?
 
-  role         Role
+  role Role
 
-  createdAt    DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  updatedAt    DateTime @updatedAt
-  
+  updatedAt DateTime @updatedAt
+
   founderProfile FounderProfile?
 
-  startups     Startup[] @relation("FounderStartups")
+  advisorProfile AdvisorProfile?
+
+  startups Startup[] @relation("FounderStartups")
 }
 
 model FounderProfile {
@@ -97,7 +160,7 @@ model Startup {
 }
 
 model Builder {
-  id        String @id @default(uuid())
+  id String @id @default(uuid())
 
   startupId String @unique
 
@@ -107,4 +170,62 @@ model Builder {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AdvisorProfile {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  // ==========================
+  // Identity
+  // ==========================
+
+  phoneNumber     String?
+  currentRole     String?
+  organization    String?
+  linkedinUrl     String?
+  experienceLevel ExperienceLevel?
+
+  // ==========================
+  // Expertise
+  // ==========================
+
+  expertiseArea  String?
+  industry       String?
+  startupStage   StartupStage?
+  mentorshipType MentorshipType?
+  keySkills      String?
+  advisoryGoal   String?
+
+  // ==========================
+  // Availability
+  // ==========================
+
+  weeklyAvailability          WeeklyAvailability?
+  preferredTimeSlot           PreferredTimeSlot?
+  sessionMode                 SessionMode?
+  preferredTimezone           PreferredTimezone?
+  languages                   String?
+  founderEngagementPreference String?
+
+  // ==========================
+  // Pricing
+  // ==========================
+
+  advisoryPricingModel AdvisorPricingModel?
+  sessionPrice         Decimal?             @db.Decimal(10, 2)
+  monthlyRetainer      Decimal?             @db.Decimal(10, 2)
+  equityInterest       EquityInterest?
+  consultationType     String?
+  advisoryNotes        String?
+
+  // ==========================
+  // Metadata
+  // ==========================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
 }
