@@ -75,6 +75,46 @@ enum EquityInterest {
   FLEXIBLE
 }
 
+enum InvestorType {
+  ANGEL_INVESTOR
+  VC_FIRM
+  FAMILY_OFFICE
+  MICRO_VC
+  CORPORATE_VC
+}
+
+enum InvestmentFocus {
+  FINTECH
+  HEALTHTECH
+  SAAS
+  AI_AUTOMATION
+  CLIMATE_TECH
+  ENTERPRISE
+  CONSUMER
+}
+
+enum PreferredStartupStage {
+  IDEA_STAGE
+  MVP_READY
+  EARLY_REVENUE
+  SEED_STAGE
+  PRE_SERIES_A
+}
+
+enum InvestmentTicketSize {
+  FIVE_TO_TEN_LAKH
+  TEN_TO_TWENTY_FIVE_LAKH
+  TWENTY_FIVE_TO_FIFTY_LAKH
+  ABOVE_FIFTY_LAKH
+}
+
+enum GeographyPreference {
+  INDIA
+  GLOBAL
+  MIDDLE_EAST
+  SOUTH_EAST_ASIA
+}
+
 model User {
   id String @id @default(uuid())
 
@@ -95,6 +135,8 @@ model User {
   founderProfile FounderProfile?
 
   advisorProfile AdvisorProfile?
+
+  investorProfile InvestorProfile?
 
   startups Startup[] @relation("FounderStartups")
 }
@@ -220,6 +262,47 @@ model AdvisorProfile {
   consultationType     String?
   advisoryNotes        String?
 
+  // ==========================
+  // Metadata
+  // ==========================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model InvestorProfile {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  // ==========================
+  // Identity
+  // ==========================
+
+  fullName        String
+  firmName        String
+  location        String
+  linkedinUrl     String
+  shortBio        String?
+  experienceLevel ExperienceLevel
+  investorType    InvestorType
+
+  // ==========================
+  // Investment Preferences
+  // ==========================
+
+  investmentFocus InvestmentFocus[]
+
+  // ==========================
+  // Investment Strategy
+  // ==========================
+
+  preferredStartupStages        PreferredStartupStage[]
+  investmentTicketSizes         InvestmentTicketSize[]
+  geographyPreferences          GeographyPreference[]
+  interestedInFounderMentorship Boolean
   // ==========================
   // Metadata
   // ==========================
