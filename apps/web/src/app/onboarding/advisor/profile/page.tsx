@@ -8,6 +8,8 @@ import Link from "next/link";
 
 import Image from "next/image";
 
+import { advisorService } from "@/services/advisor.service";
+
 import {
   BriefcaseBusiness,
   Building2,
@@ -27,17 +29,22 @@ export default function AdvisorProfilePage() {
   const router = useRouter();
 
   const [formData, setFormData] =
-    useState(() => ({
-      fullName: "",
-      email: "",
-      phone: "",
-      linkedinUrl: "",
-      currentRole: "",
-      company: "",
-      experience: "",
+  useState(() => ({
+    fullName: "",
+    email: "",
 
-      ...getAdvisorOnboarding(),
-    }));
+    phoneNumber: "",
+
+    linkedinUrl: "",
+
+    currentRole: "",
+
+    organization: "",
+
+    experienceLevel: "",
+
+    ...getAdvisorOnboarding(),
+}));
 
   const handleChange = (
     e:
@@ -51,15 +58,23 @@ export default function AdvisorProfilePage() {
     });
   };
 
-  const handleContinue = () => {
-    saveAdvisorOnboarding(
-      formData
-    );
+ const handleContinue = async () => {
+  try {
+    saveAdvisorOnboarding(formData);
 
-    router.push(
-      "/onboarding/advisor/expertise"
-    );
-  };
+    await advisorService.createProfile({
+      phoneNumber: formData.phoneNumber,
+      currentRole: formData.currentRole,
+      organization: formData.organization,
+      linkedinUrl: formData.linkedinUrl,
+      experienceLevel: formData.experienceLevel,
+    });
+
+    router.push("/onboarding/advisor/expertise");
+  } catch (error) {
+    console.error("Failed to create advisor profile:", error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
@@ -260,9 +275,9 @@ export default function AdvisorProfilePage() {
 
                 <input
                   type="text"
-                  name="phone"
+                  name="phoneNumber"
                   value={
-                    formData.phone ||
+                    formData.phoneNumber ||
                     ""
                   }
                   onChange={
@@ -345,9 +360,9 @@ export default function AdvisorProfilePage() {
 
                 <input
                   type="text"
-                  name="company"
+                  name="organization"
                   value={
-                    formData.company ||
+                    formData.organization ||
                     ""
                   }
                   onChange={
@@ -368,9 +383,9 @@ export default function AdvisorProfilePage() {
               </label>
 
               <select
-                name="experience"
+                name="experienceLevel"
                 value={
-                  formData.experience ||
+                  formData.experienceLevel ||
                   ""
                 }
                 onChange={
@@ -383,19 +398,19 @@ export default function AdvisorProfilePage() {
                   level
                 </option>
 
-                <option value="1-3">
+                <option value="YEARS_1_TO_3">
                   1 - 3 Years
                 </option>
 
-                <option value="3-5">
+                <option value="YEARS_3_TO_5">
                   3 - 5 Years
                 </option>
 
-                <option value="5-10">
+                <option value="YEARS_5_TO_10">
                   5 - 10 Years
                 </option>
 
-                <option value="10+">
+                <option value="YEARS_10_PLUS">
                   10+ Years
                 </option>
 

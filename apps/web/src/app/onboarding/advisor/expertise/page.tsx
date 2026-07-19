@@ -7,8 +7,10 @@ import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 
+import { advisorService } from "@/services/advisor.service";
+
 import {
-  ArrowLeft,
+  ArrowLeft,  
   BadgeCheck,
   BriefcaseBusiness,
   ShieldCheck,
@@ -26,15 +28,15 @@ export default function AdvisorExpertisePage() {
 
   const [formData, setFormData] =
     useState(() => ({
-      expertiseAreas: "",
-      industries: "",
-      startupStages: "",
+      expertiseArea: "",
+      industry: "",
+      startupStage: "",
       mentorshipType: "",
-      skills: "",
+      keySkills: "",
       advisoryGoal: "",
 
       ...getAdvisorOnboarding(),
-    }));
+  }));
 
   const handleChange = (
     e:
@@ -49,15 +51,24 @@ export default function AdvisorExpertisePage() {
     });
   };
 
-  const handleContinue = () => {
-    saveAdvisorOnboarding(
-      formData
-    );
+  const handleContinue = async () => {
+  try {
+    saveAdvisorOnboarding(formData);
 
-    router.push(
-      "/onboarding/advisor/availability"
-    );
-  };
+    await advisorService.updateProfile({
+      expertiseArea: formData.expertiseArea,
+      industry: formData.industry,
+      startupStage: formData.startupStage,
+      mentorshipType: formData.mentorshipType,
+      keySkills: formData.keySkills,
+      advisoryGoal: formData.advisoryGoal,
+    });
+
+    router.push("/onboarding/advisor/availability");
+  } catch (error) {
+    console.error("Failed to update advisor expertise:", error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
@@ -195,9 +206,9 @@ export default function AdvisorExpertisePage() {
 
                 <input
                   type="text"
-                  name="expertiseAreas"
+                  name="expertiseArea"
                   value={
-                    formData.expertiseAreas ||
+                    formData.expertiseArea ||
                     ""
                   }
                   onChange={
@@ -223,9 +234,9 @@ export default function AdvisorExpertisePage() {
 
                 <input
                   type="text"
-                  name="industries"
+                  name="industry"
                   value={
-                    formData.industries ||
+                    formData.industry ||
                     ""
                   }
                   onChange={
@@ -246,9 +257,9 @@ export default function AdvisorExpertisePage() {
               </label>
 
               <select
-                name="startupStages"
+                name="startupStage"
                 value={
-                  formData.startupStages ||
+                  formData.startupStage ||
                   ""
                 }
                 onChange={
@@ -260,19 +271,19 @@ export default function AdvisorExpertisePage() {
                   Select startup stage
                 </option>
 
-                <option value="idea-stage">
+                <option value="IDEA_STAGE">
                   Idea Stage
                 </option>
 
-                <option value="mvp-stage">
+                <option value="MVP_STAGE">
                   MVP Stage
                 </option>
 
-                <option value="early-revenue">
+                <option value="EARLY_REVENUE">
                   Early Revenue
                 </option>
 
-                <option value="scaling-stage">
+                <option value="SCALING_STAGE">
                   Scaling Stage
                 </option>
 
@@ -301,19 +312,19 @@ export default function AdvisorExpertisePage() {
                   Select mentorship type
                 </option>
 
-                <option value="1-1-advisory">
+                <option value="ONE_TO_ONE_ADVISORY">
                   1:1 Advisory
                 </option>
 
-                <option value="group-mentorship">
+                <option value="GROUP_MENTORSHIP">
                   Group Mentorship
                 </option>
 
-                <option value="execution-guidance">
+                <option value="EXECUTION_GUIDANCE">
                   Execution Guidance
                 </option>
 
-                <option value="strategic-consulting">
+                <option value="STRATEGIC_CONSULTING">
                   Strategic Consulting
                 </option>
 
@@ -332,9 +343,9 @@ export default function AdvisorExpertisePage() {
                 <BadgeCheck className="mt-1 h-5 w-5 text-muted-foreground" />
 
                 <textarea
-                  name="skills"
+                  name="keySkills"
                   value={
-                    formData.skills || ""
+                    formData.keySkills || ""
                   }
                   onChange={
                     handleChange

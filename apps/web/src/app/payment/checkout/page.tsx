@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 
 import {
   CreditCard,
@@ -14,6 +17,16 @@ import {
 
 export default function CheckoutPage() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+const role =
+  searchParams.get("role") ?? "founder";
+
+const roleTitle = {
+  founder: "Founder",
+  advisor: "Advisor",
+}[role] ?? "User";
 
   const [selectedMethod, setSelectedMethod] =
     useState("");
@@ -121,7 +134,7 @@ export default function CheckoutPage() {
 
     setTimeout(() => {
       router.push(
-        "/onboarding/founder/success"
+        `/onboarding/${role}/success`
       );
     }, 1200);
   };
@@ -143,8 +156,8 @@ export default function CheckoutPage() {
         </h1>
 
         <p className="mt-3 text-[#64748B]">
-          Complete secure founder onboarding
-          payment process
+          Complete secure {roleTitle.toLowerCase()} onboarding
+          payment process.
         </p>
 
         {/* METHODS */}

@@ -7,6 +7,8 @@ import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 
+import { advisorService } from "@/services/advisor.service";
+
 import {
   ArrowLeft,
   CalendarDays,
@@ -25,17 +27,16 @@ import {
 export default function AdvisorAvailabilityPage() {
   const router = useRouter();
 
-  const [formData, setFormData] =
-    useState(() => ({
-      weeklyAvailability: "",
-      preferredTime: "",
-      sessionMode: "",
-      timezone: "",
-      languages: "",
-      founderPreferences: "",
+  const [formData, setFormData] = useState(() => ({
+    weeklyAvailability: "",
+    preferredTimeSlot: "",
+    sessionMode: "",
+    preferredTimezone: "",
+    languages: "",
+    founderEngagementPreference: "",
 
-      ...getAdvisorOnboarding(),
-    }));
+    ...getAdvisorOnboarding(),
+  }));
 
   const handleChange = (
     e:
@@ -50,16 +51,29 @@ export default function AdvisorAvailabilityPage() {
     });
   };
 
-  const handleContinue = () => {
-    saveAdvisorOnboarding(
-      formData
-    );
+  const handleContinue = async () => {
+    try {
+      saveAdvisorOnboarding(formData);
 
-    router.push(
-      "/onboarding/advisor/pricing"
-    );
+      await advisorService.updateProfile({
+        weeklyAvailability: formData.weeklyAvailability,
+        preferredTimeSlot: formData.preferredTimeSlot,
+        sessionMode: formData.sessionMode,
+        preferredTimezone: formData.preferredTimezone,
+        languages: formData.languages,
+        founderEngagementPreference:
+          formData.founderEngagementPreference,
+      });
+
+      router.push("/onboarding/advisor/pricing");
+    } catch (error) {
+      console.error(
+        "Failed to update advisor availability:",
+        error
+      );
+    }
   };
-
+  
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-border bg-card p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-10 lg:p-14">
@@ -207,19 +221,19 @@ export default function AdvisorAvailabilityPage() {
                     Select availability
                   </option>
 
-                  <option value="1-5-hours">
+                  <option value="HOURS_1_TO_5">
                     1 - 5 Hours / Week
                   </option>
 
-                  <option value="5-10-hours">
+                  <option value="HOURS_5_TO_10">
                     5 - 10 Hours / Week
                   </option>
 
-                  <option value="10-20-hours">
+                  <option value="HOURS_10_TO_20">
                     10 - 20 Hours / Week
                   </option>
 
-                  <option value="20-plus-hours">
+                  <option value="HOURS_20_PLUS">
                     20+ Hours / Week
                   </option>
 
@@ -239,9 +253,9 @@ export default function AdvisorAvailabilityPage() {
                 <Clock3 className="h-5 w-5 text-muted-foreground" />
 
                 <select
-                  name="preferredTime"
+                  name="preferredTimeSlot"
                   value={
-                    formData.preferredTime ||
+                    formData.preferredTimeSlot ||
                     ""
                   }
                   onChange={
@@ -253,19 +267,19 @@ export default function AdvisorAvailabilityPage() {
                     Select preferred timing
                   </option>
 
-                  <option value="morning">
+                  <option value="MORNING">
                     Morning Sessions
                   </option>
 
-                  <option value="afternoon">
+                  <option value="AFTERNOON">
                     Afternoon Sessions
                   </option>
 
-                  <option value="evening">
+                  <option value="EVENING">
                     Evening Sessions
                   </option>
 
-                  <option value="flexible">
+                  <option value="FLEXIBLE">
                     Flexible Timing
                   </option>
 
@@ -299,16 +313,16 @@ export default function AdvisorAvailabilityPage() {
                     Select session mode
                   </option>
 
-                  <option value="virtual-only">
-                    Virtual Only
+                  <option value="VIRTUAL">
+                    Virtual
                   </option>
 
-                  <option value="in-person-only">
-                    In-Person Only
+                  <option value="IN_PERSON">
+                    In-Person
                   </option>
 
-                  <option value="hybrid">
-                    Hybrid Sessions
+                  <option value="HYBRID">
+                    Hybrid
                   </option>
 
                 </select>
@@ -327,9 +341,9 @@ export default function AdvisorAvailabilityPage() {
                 <Globe2 className="h-5 w-5 text-muted-foreground" />
 
                 <select
-                  name="timezone"
+                  name="preferredTimezone"
                   value={
-                    formData.timezone ||
+                    formData.preferredTimezone ||
                     ""
                   }
                   onChange={
@@ -341,19 +355,19 @@ export default function AdvisorAvailabilityPage() {
                     Select timezone
                   </option>
 
-                  <option value="ist">
+                  <option value="IST">
                     IST (India)
                   </option>
 
-                  <option value="pst">
+                  <option value="PST">
                     PST (US Pacific)
                   </option>
 
-                  <option value="est">
+                  <option value="EST">
                     EST (US Eastern)
                   </option>
 
-                  <option value="gmt">
+                  <option value="GMT">
                     GMT (Europe)
                   </option>
 
@@ -397,9 +411,9 @@ export default function AdvisorAvailabilityPage() {
               </label>
 
               <textarea
-                name="founderPreferences"
+                name="founderEngagementPreference"
                 value={
-                  formData.founderPreferences ||
+                  formData.founderEngagementPreference ||
                   ""
                 }
                 onChange={

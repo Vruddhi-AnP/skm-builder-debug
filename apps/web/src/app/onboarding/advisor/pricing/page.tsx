@@ -7,6 +7,8 @@ import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 
+import { advisorService } from "@/services/advisor.service";
+
 import {
   ArrowLeft,
   BadgeIndianRupee,
@@ -22,45 +24,41 @@ import {
 } from "@/lib/advisor-onboarding";
 
 const pricingPlans = [
-  {
-    title: "Free Mentorship",
-    description:
-      "Provide free guidance and support to early-stage founders.",
-  },
-
-  {
-    title: "Paid Sessions",
-    description:
-      "Charge founders for structured consultation sessions.",
-  },
-
-  {
-    title: "Monthly Advisory",
-    description:
-      "Offer long-term startup advisory retainers.",
-  },
-
-  {
-    title: "Equity Based",
-    description:
-      "Support startups in exchange for equity opportunities.",
-  },
-];
+    {
+      title: "Free Mentorship",
+      value: "FREE_MENTORSHIP",
+      description: "...",
+    },
+    {
+      title: "Paid Sessions",
+      value: "PAID_SESSIONS",
+      description: "...",
+    },
+    {
+      title: "Monthly Advisory",
+      value: "MONTHLY_ADVISORY",
+      description: "...",
+    },
+    {
+      title: "Equity Based",
+      value: "EQUITY_BASED",
+      description: "...",
+    },
+  ];
 
 export default function AdvisorPricingPage() {
   const router = useRouter();
 
-  const [formData, setFormData] =
-    useState(() => ({
-      pricingModel: "",
-      sessionPricing: "",
-      monthlyRetainer: "",
-      equityInterest: "",
-      consultationType: "",
-      pricingNotes: "",
+  const [formData, setFormData] = useState(() => ({
+    advisoryPricingModel: "",
+    sessionPrice: "",
+    monthlyRetainer: "",
+    equityInterest: "",
+    consultationType: "",
+    advisoryNotes: "",
 
-      ...getAdvisorOnboarding(),
-    }));
+    ...getAdvisorOnboarding(),
+  }));
 
   const handleChange = (
     e:
@@ -80,19 +78,47 @@ export default function AdvisorPricingPage() {
   ) => {
     setFormData({
       ...formData,
-      pricingModel: plan,
+      advisoryPricingModel: plan,
     });
   };
 
-  const handleComplete = () => {
-    saveAdvisorOnboarding(
-      formData
-    );
+ const handleComplete = async () => {
+  try {
+    saveAdvisorOnboarding(formData);
+
+    await advisorService.updateProfile({
+      advisoryPricingModel:
+        formData.advisoryPricingModel,
+
+      sessionPrice: formData.sessionPrice
+        ? Number(formData.sessionPrice)
+        : undefined,
+
+      monthlyRetainer:
+        formData.monthlyRetainer
+          ? Number(formData.monthlyRetainer)
+          : undefined,
+
+      equityInterest:
+        formData.equityInterest,
+
+      consultationType:
+        formData.consultationType,
+
+      advisoryNotes:
+        formData.advisoryNotes,
+    });
 
     router.push(
-      "/onboarding/advisor/success"
+      "/payment/checkout?role=advisor&plan=pro"
     );
-  };
+  } catch (error) {
+    console.error(
+      "Failed to update advisor pricing:",
+      error
+    );
+  }
+};
 
   return (
     <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
@@ -224,12 +250,12 @@ export default function AdvisorPricingPage() {
                 type="button"
                 onClick={() =>
                   handlePlanSelect(
-                    item.title
+                    item.value
                   )
                 }
                 className={`rounded-[2rem] border bg-card p-6 text-left transition-all hover:-translate-y-1 hover:shadow-lg ${
-                  formData.pricingModel ===
-                  item.title
+                  formData.advisoryPricingModel ===
+                  item.value
                     ? "border-primary ring-4 ring-primary/10"
                     : "border-border hover:border-primary/30"
                 }`}
@@ -269,16 +295,16 @@ export default function AdvisorPricingPage() {
                 <BadgeIndianRupee className="h-5 w-5 text-muted-foreground" />
 
                 <input
-                  type="text"
-                  name="sessionPricing"
+                  type="number"
+                  name="sessionPrice"
                   value={
-                    formData.sessionPricing ||
+                    formData.sessionPrice ||
                     ""
                   }
                   onChange={
                     handleChange
                   }
-                  placeholder="Ex: ₹2,000 per session"
+                  placeholder="Ex: 2000 per session"
                   className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
 
@@ -297,7 +323,7 @@ export default function AdvisorPricingPage() {
                 <CreditCard className="h-5 w-5 text-muted-foreground" />
 
                 <input
-                  type="text"
+                  type="number"
                   name="monthlyRetainer"
                   value={
                     formData.monthlyRetainer ||
@@ -306,7 +332,7 @@ export default function AdvisorPricingPage() {
                   onChange={
                     handleChange
                   }
-                  placeholder="Ex: ₹25,000 monthly"
+                  placeholder="Ex: 25000 monthly"
                   className="h-full w-full bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
 
@@ -335,15 +361,15 @@ export default function AdvisorPricingPage() {
                   Select preference
                 </option>
 
-                <option value="equity-advisory">
+                <option value="OPEN_TO_EQUITY">
                   Open to Equity Advisory
                 </option>
 
-                <option value="paid-only">
+                <option value="ONLY_PAID">
                   Only Paid Advisory
                 </option>
 
-                <option value="flexible">
+                <option value="FLEXIBLE">
                   Flexible Engagement
                 </option>
 
@@ -386,9 +412,9 @@ export default function AdvisorPricingPage() {
               </label>
 
               <textarea
-                name="pricingNotes"
+                name="advisoryNotes"
                 value={
-                  formData.pricingNotes ||
+                  formData.advisoryNotes ||
                   ""
                 }
                 onChange={
@@ -418,17 +444,10 @@ export default function AdvisorPricingPage() {
             </button>
 
             <button
-              onClick={
-                handleComplete
-              }
+              onClick={handleComplete}
               className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
-              <Link
-                  href="/payment?role=advisor&plan=pro"
-                >
-                  Proceed to Payment
-                </Link>
-
+              Proceed to Payment
             </button>
 
           </div>

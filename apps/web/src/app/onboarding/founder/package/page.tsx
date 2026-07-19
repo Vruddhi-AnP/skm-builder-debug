@@ -540,7 +540,7 @@ export default function PackageSelectionPage() {
               </Link>
             ) : (
               <Link
-                href={`/payment?role=founder&plan=${
+                href={`/payment/checkout?role=founder&plan=${
                   selectedPackage ===
                   "Growth Package"
                     ? "growth"
