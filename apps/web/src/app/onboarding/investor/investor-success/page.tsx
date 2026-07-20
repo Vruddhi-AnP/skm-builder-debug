@@ -4,6 +4,17 @@ import Link from "next/link";
 
 import Image from "next/image";
 
+import { useEffect, useRef, useState } from "react";
+
+import { useRouter } from "next/navigation";
+
+import {
+  getInvestorOnboarding,
+  clearInvestorOnboarding,
+} from "@/lib/investor-onboarding";
+
+import { investorService } from "@/services/investor.service";
+
 import {
   ArrowLeft,
   CheckCircle2,
@@ -15,6 +26,64 @@ import {
 } from "lucide-react";
 
 export default function InvestorSuccessPage() {
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(true);
+
+  const hasCreated = useRef(false);
+
+  useEffect(() => {
+     if (hasCreated.current) return;
+
+    hasCreated.current = true;
+
+    const createInvestorProfile = async () => {
+      try {
+        const data = getInvestorOnboarding();
+
+        if (
+          !data.fullName ||
+          !data.firmName ||
+          !data.location ||
+          !data.linkedinUrl ||
+          !data.experienceLevel ||
+          !data.investorType ||
+          !data.investmentFocus?.length ||
+          !data.preferredStartupStages?.length ||
+          !data.investmentTicketSizes?.length ||
+          !data.geographyPreferences?.length ||
+          data.interestedInFounderMentorship === undefined
+        ) {
+          console.error("Investor onboarding data is incomplete.");
+          return;
+        }
+
+        console.log("===== INVESTOR DATA =====");
+        console.log(JSON.stringify(data, null, 2));
+
+        await investorService.createProfile(data);
+
+        clearInvestorOnboarding();
+      } catch (error) {
+        console.error("Investor profile creation failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    createInvestorProfile();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f4f1ea]">
+        <p className="text-lg font-semibold text-[#13235b]">
+          Completing your onboarding...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f4f1ea] px-4 py-10">
       <div className="mx-auto max-w-6xl">
@@ -280,14 +349,12 @@ export default function InvestorSuccessPage() {
               </Link>
 
               {/* DASHBOARD */}
-              <Link
-                href="/investor/dashboard"
+              <button
+                onClick={() => router.push("/investor/dashboard")}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#13235b] px-6 text-sm font-semibold text-white transition hover:opacity-90"
               >
-
                 Go To Dashboard
-
-              </Link>
+              </button>
 
             </div>
 

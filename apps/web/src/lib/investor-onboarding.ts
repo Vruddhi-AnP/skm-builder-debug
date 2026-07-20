@@ -1,19 +1,27 @@
 export interface InvestorOnboardingData {
   fullName: string;
-  email: string;
-  phone: string;
+
   firmName: string;
-  role: string;
-  linkedinUrl: string;
+
   location: string;
-  bio: string;
-  investmentStages: string[];
-  industries: string[];
-  ticketSize: string;
-  geography: string;
-  founderPreference: string;
-  communicationStyle: string;
-  decisionTimeline: string;
+
+  linkedinUrl: string;
+
+  shortBio: string;
+
+  experienceLevel: string;
+
+  investorType: string;
+
+  investmentFocus: string[];
+
+  preferredStartupStages: string[];
+
+  investmentTicketSizes: string[];
+
+  geographyPreferences: string[];
+
+  interestedInFounderMentorship: boolean;
 }
 
 const STORAGE_KEY = "investorOnboarding";

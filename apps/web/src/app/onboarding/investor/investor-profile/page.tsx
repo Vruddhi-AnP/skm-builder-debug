@@ -24,44 +24,81 @@ import {
 } from "@/lib/investor-onboarding";
 
 const investorTypes = [
-  "Angel Investor",
-  "VC Firm",
-  "Family Office",
-  "Micro VC",
-  "Corporate VC",
+  {
+    label: "Angel Investor",
+    value: "ANGEL_INVESTOR",
+  },
+
+  {
+    label: "VC Firm",
+    value: "VC_FIRM",
+  },
+
+  {
+    label: "Family Office",
+    value: "FAMILY_OFFICE",
+  },
+
+  {
+    label: "Micro VC",
+    value: "MICRO_VC",
+  },
+
+  {
+    label: "Corporate VC",
+    value: "CORPORATE_VC",
+  },
 ];
 
 export default function InvestorProfilePage() {
   const router = useRouter();
 
-  const [selectedType, setSelectedType] = useState(() => {
+ const [selectedType, setSelectedType] = useState(() => {
   const saved = getInvestorOnboarding();
-  return saved.role ?? "Angel Investor";
+
+  return (
+    saved.investorType ??
+    "ANGEL_INVESTOR"
+  );
 });
 
 const [formData, setFormData] = useState(() => {
   const saved = getInvestorOnboarding();
+
   return {
     fullName: saved.fullName ?? "",
+
     firmName: saved.firmName ?? "",
+
     location: saved.location ?? "",
-    linkedin: saved.linkedinUrl ?? "",
-    experience: saved.bio ?? "",
-    bio: saved.bio ?? "",
+
+    linkedinUrl: saved.linkedinUrl ?? "",
+
+    shortBio: saved.shortBio ?? "",
+
+    experienceLevel:
+      saved.experienceLevel ??
+      "",
   };
 });
 
-  const handleContinue = () => {
-  saveInvestorOnboarding({
-    fullName: formData.fullName,
-    firmName: formData.firmName,
-    location: formData.location,
-    linkedinUrl: formData.linkedin,
-    bio: formData.bio,
-    role: selectedType,
-  });
-  router.push("/onboarding/investor/investor-focus");
-};
+  const handleContinue =
+  async () => {
+    try {
+      saveInvestorOnboarding({
+        ...formData,
+
+        investorType:
+          selectedType,
+      });
+
+      router.push(
+        "/onboarding/investor/investor-focus"
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f4f1ea] px-4 py-10">
@@ -310,25 +347,40 @@ const [formData, setFormData] = useState(() => {
                     Experience
                   </label>
 
-                  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-[#ddd7cb] bg-[#f8f6f1] px-4 transition focus-within:border-[#13235b]/30 focus-within:ring-4 focus-within:ring-[#13235b]/10">
+                  <div className="flex-1 bg-transparent text-sm text-[#13235b] outline-none">
 
                     <Briefcase className="h-5 w-5 text-[#6b7280]" />
 
-                    <input
-                      type="text"
-                      placeholder="5+ years"
-                      value={
-                        formData.experience
-                      }
+                    <select
+                      value={formData.experienceLevel}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          experience:
-                            e.target.value,
+                          experienceLevel: e.target.value,
                         })
                       }
-                      className="flex-1 bg-transparent text-sm text-[#13235b] outline-none placeholder:text-[#8b909c]"
-                    />
+                      className="mt-3 h-14 w-full rounded-2xl border border-[#ddd7cb] bg-[#f8f6f1] px-4 text-sm text-[#13235b] outline-none"
+                    >
+                      <option value="">
+                        Select Experience
+                      </option>
+
+                      <option value="YEARS_1_TO_3">
+                        1 - 3 Years
+                      </option>
+
+                      <option value="YEARS_3_TO_5">
+                        3 - 5 Years
+                      </option>
+
+                      <option value="YEARS_5_TO_10">
+                        5 - 10 Years
+                      </option>
+
+                      <option value="YEARS_10_PLUS">
+                        10+ Years
+                      </option>
+                    </select>
 
                   </div>
 
@@ -348,24 +400,24 @@ const [formData, setFormData] = useState(() => {
                   {investorTypes.map(
                     (type) => (
                       <button
-                        key={type}
+                        key={type.label}
                         type="button"
                         onClick={() =>
                           setSelectedType(
-                            type
+                            type.value
                           )
                         }
                         className={`h-11 rounded-2xl px-5 text-sm font-semibold transition
 
                         ${
                           selectedType ===
-                          type
+                          type.value
                             ? "bg-[#13235b] text-white"
                             : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
                         }
                         `}
                       >
-                        {type}
+                        {type.label}
                       </button>
                     )
                   )}
@@ -388,12 +440,12 @@ const [formData, setFormData] = useState(() => {
                   <input
                     type="text"
                     placeholder="LinkedIn profile URL"
-                    value={formData.linkedin}
+                    value={formData.linkedinUrl}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        linkedin:
-                          e.target.value,
+                        linkedinUrl:
+                          e.target.value
                       })
                     }
                     className="flex-1 bg-transparent text-sm text-[#13235b] outline-none placeholder:text-[#8b909c]"
@@ -413,11 +465,11 @@ const [formData, setFormData] = useState(() => {
                 <textarea
                   rows={5}
                   placeholder="Tell startups about your investment background..."
-                  value={formData.bio}
+                  value={formData.shortBio}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      bio: e.target.value,
+                      shortBio: e.target.value,
                     })
                   }
                   className="mt-3 w-full resize-none rounded-[28px] border border-[#ddd7cb] bg-[#f8f6f1] px-5 py-4 text-sm text-[#13235b] outline-none transition placeholder:text-[#8b909c] focus:border-[#13235b]/30 focus:ring-4 focus:ring-[#13235b]/10"

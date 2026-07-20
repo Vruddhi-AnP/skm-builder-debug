@@ -27,43 +27,43 @@ import {
 
 const focusAreas = [
   {
-    id: "fintech",
+    id: "FINTECH",
     title: "FinTech",
     icon: TrendingUp,
   },
 
   {
-    id: "healthtech",
+    id: "HEALTHTECH",
     title: "HealthTech",
     icon: HeartPulse,
   },
 
   {
-    id: "saas",
+    id: "SAAS",
     title: "SaaS",
     icon: Globe,
   },
 
   {
-    id: "ai",
+    id: "AI_AUTOMATION",
     title: "AI & Automation",
     icon: Brain,
   },
 
   {
-    id: "climate",
+    id: "CLIMATE_TECH",
     title: "ClimateTech",
     icon: ShieldCheck,
   },
 
   {
-    id: "enterprise",
+    id: "ENTERPRISE",
     title: "Enterprise",
     icon: Building2,
   },
 
   {
-    id: "consumer",
+    id: "CONSUMER",
     title: "Consumer",
     icon: Rocket,
   },
@@ -75,9 +75,7 @@ export default function InvestorFocusPage() {
  const [selectedFocus, setSelectedFocus] =
   useState<string[]>(() => {
     const saved = getInvestorOnboarding();
-    return saved.industries
-      ? saved.industries
-      : ["fintech", "ai"];
+    return saved.investmentFocus || [];
   });
 
   const toggleFocus = (id: string) => {
@@ -97,7 +95,7 @@ export default function InvestorFocusPage() {
 
   const handleContinue = () => {
   saveInvestorOnboarding({
-    industries: selectedFocus,
+    investmentFocus: selectedFocus,
   });
   router.push("/onboarding/investor/investor-preferences");
 };

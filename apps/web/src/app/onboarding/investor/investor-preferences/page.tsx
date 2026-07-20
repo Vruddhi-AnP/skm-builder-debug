@@ -23,25 +23,64 @@ import {
 } from "@/lib/investor-onboarding";
 
 const investmentStages = [
-  "Idea Stage",
-  "MVP Ready",
-  "Early Revenue",
-  "Seed Stage",
-  "Pre-Series A",
+  {
+    label: "Idea Stage",
+    value: "IDEA_STAGE",
+  },
+  {
+    label: "MVP Ready",
+    value: "MVP_READY",
+  },
+  {
+    label: "Early Revenue",
+    value: "EARLY_REVENUE",
+  },
+  {
+    label: "Seed Stage",
+    value: "SEED_STAGE",
+  },
+  {
+    label: "Pre-Series A",
+    value: "PRE_SERIES_A",
+  },
 ];
 
 const ticketSizes = [
-  "₹5L - ₹10L",
-  "₹10L - ₹25L",
-  "₹25L - ₹50L",
-  "₹50L+",
+  {
+    label: "₹5L - ₹10L",
+    value: "FIVE_TO_TEN_LAKH",
+  },
+  {
+    label: "₹10L - ₹25L",
+    value: "TEN_TO_TWENTY_FIVE_LAKH",
+  },
+  {
+    label: "₹25L - ₹50L",
+    value: "TWENTY_FIVE_TO_FIFTY_LAKH",
+  },
+  {
+    label: "Above ₹50L",
+    value: "ABOVE_FIFTY_LAKH",
+  },
 ];
 
 const geographies = [
-  "India",
-  "Global",
-  "Middle East",
-  "South East Asia",
+  {
+    label: "India",
+    value: "INDIA",
+  },
+  {
+    label: "Global",
+    value: "GLOBAL",
+  },
+  {
+    label: "Middle East",
+    value: "MIDDLE_EAST",
+  },
+  {
+    label: "South East Asia",
+    value: "SOUTH_EAST_ASIA",
+  },
 ];
 
 export default function InvestorPreferencesPage() {
@@ -50,15 +89,15 @@ export default function InvestorPreferencesPage() {
  const [selectedStages, setSelectedStages] =
   useState<string[]>(() => {
     const saved = getInvestorOnboarding();
-    return saved.investmentStages ?? ["Seed Stage"];
+    return saved.preferredStartupStages ?? ["SEED_STAGE"];
   });
 
 const [selectedTickets, setSelectedTickets] =
   useState<string[]>(() => {
     const saved = getInvestorOnboarding();
-    return saved.ticketSize
-      ? [saved.ticketSize]
-      : ["₹10L - ₹25L"];
+    return saved.investmentTicketSizes ?? [
+      "TEN_TO_TWENTY_FIVE_LAKH",
+    ];
   });
 
 const [
@@ -66,9 +105,9 @@ const [
   setSelectedGeographies,
 ] = useState<string[]>(() => {
   const saved = getInvestorOnboarding();
-  return saved.geography
-    ? [saved.geography]
-    : ["India"];
+  return saved.geographyPreferences ?? [
+    "INDIA",
+  ];
 });
 
 const [
@@ -76,7 +115,7 @@ const [
   setMentorshipInterest,
 ] = useState(() => {
   const saved = getInvestorOnboarding();
-  return saved.founderPreference ?? "Yes";
+  return saved.interestedInFounderMentorship ?? true;
 });
 
   const toggleSelection = (
@@ -102,10 +141,10 @@ const [
 
  const handleContinue = () => {
   saveInvestorOnboarding({
-    investmentStages: selectedStages,
-    ticketSize: selectedTickets.join(","),
-    geography: selectedGeographies.join(","),
-    founderPreference: mentorshipInterest,
+    preferredStartupStages: selectedStages,
+    investmentTicketSizes: selectedTickets,
+    geographyPreferences: selectedGeographies,
+    interestedInFounderMentorship: mentorshipInterest,
   });
   router.push("/onboarding/investor/investor-success");
 };
@@ -295,43 +334,33 @@ const [
 
                 <div className="mt-7 flex flex-wrap gap-3">
 
-                  {investmentStages.map(
-                    (stage) => {
-                      const active =
-                        selectedStages.includes(
-                          stage
-                        );
+                  {investmentStages.map((stage) => {
+                    const active = selectedStages.includes(stage.value);
 
-                      return (
-                        <button
-                          key={stage}
-                          onClick={() =>
-                            toggleSelection(
-                              stage,
-                              selectedStages,
-                              setSelectedStages
-                            )
-                          }
-                          className={`flex h-12 items-center gap-2 rounded-2xl px-5 text-sm font-semibold transition
+                    return (
+                      <button
+                        key={stage.value}
+                        onClick={() =>
+                          toggleSelection(
+                            stage.value,
+                            selectedStages,
+                            setSelectedStages
+                          )
+                        }
+                        className={`flex h-12 items-center gap-2 rounded-2xl px-5 text-sm font-semibold transition
 
-                          ${
-                            active
-                              ? "bg-[#13235b] text-white"
-                              : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
-                          }
-                          `}
-                        >
+                        ${
+                          active
+                            ? "bg-[#13235b] text-white"
+                            : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
+                        }`}
+                      >
+                        {active && <Check className="h-4 w-4" />}
 
-                          {active && (
-                            <Check className="h-4 w-4" />
-                          )}
-
-                          {stage}
-
-                        </button>
-                      );
-                    }
-                  )}
+                        {stage.label}
+                      </button>
+                    );
+                  })}
 
                 </div>
 
@@ -366,43 +395,33 @@ const [
 
                 <div className="mt-7 flex flex-wrap gap-3">
 
-                  {ticketSizes.map(
-                    (ticket) => {
-                      const active =
-                        selectedTickets.includes(
-                          ticket
-                        );
+                 {ticketSizes.map((ticket) => {
+                  const active = selectedTickets.includes(ticket.value);
 
-                      return (
-                        <button
-                          key={ticket}
-                          onClick={() =>
-                            toggleSelection(
-                              ticket,
-                              selectedTickets,
-                              setSelectedTickets
-                            )
-                          }
-                          className={`flex h-12 items-center gap-2 rounded-2xl px-5 text-sm font-semibold transition
+                  return (
+                   <button
+                      key={ticket.value}
+                      onClick={() =>
+                        toggleSelection(
+                          ticket.value,
+                          selectedTickets,
+                          setSelectedTickets
+                        )
+                      }
+                      className={`flex h-12 items-center gap-2 rounded-2xl px-5 text-sm font-semibold transition
 
-                          ${
-                            active
-                              ? "bg-[#13235b] text-white"
-                              : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
-                          }
-                          `}
-                        >
+                      ${
+                        active
+                          ? "bg-[#13235b] text-white"
+                          : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
+                      }`}
+                    >
+                      {active && <Check className="h-4 w-4" />}
 
-                          {active && (
-                            <Check className="h-4 w-4" />
-                          )}
-
-                          {ticket}
-
-                        </button>
-                      );
-                    }
-                  )}
+                      {ticket.label}
+                    </button>
+                  );
+                })}
 
                 </div>
 
@@ -439,15 +458,15 @@ const [
                   {geographies.map((geo) => {
                     const active =
                       selectedGeographies.includes(
-                        geo
+                        geo.value
                       );
 
                     return (
                       <button
-                        key={geo}
+                        key={geo.value}
                         onClick={() =>
                           toggleSelection(
-                            geo,
+                            geo.value,
                             selectedGeographies,
                             setSelectedGeographies
                           )
@@ -466,7 +485,7 @@ const [
                           <Check className="h-4 w-4" />
                         )}
 
-                        {geo}
+                        {geo.label}
 
                       </button>
                     );
@@ -505,29 +524,23 @@ const [
 
                 <div className="mt-7 flex flex-wrap gap-3">
 
-                  {["Yes", "No"].map(
-                    (item) => (
-                      <button
-                        key={item}
-                        onClick={() =>
-                          setMentorshipInterest(
-                            item
-                          )
-                        }
-                        className={`h-12 rounded-2xl px-6 text-sm font-semibold transition
-
+                  {[
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
+                  ].map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => setMentorshipInterest(item.value)}
+                      className={`h-12 rounded-2xl px-6 text-sm font-semibold transition
                         ${
-                          mentorshipInterest ===
-                          item
-                            ? "bg-[#13235b] text-white"
-                            : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
-                        }
-                        `}
-                      >
-                        {item}
-                      </button>
-                    )
-                  )}
+                        mentorshipInterest === item.value
+                          ? "bg-[#13235b] text-white"
+                          : "border border-[#ddd7cb] bg-[#f8f6f1] text-[#13235b] hover:bg-[#ece8de]"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
 
                 </div>
 
