@@ -1,8 +1,3 @@
-// import { Controller } from '@nestjs/common';
-
-// @Controller('investor')
-// export class InvestorController {}
-
 import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 
 import {
