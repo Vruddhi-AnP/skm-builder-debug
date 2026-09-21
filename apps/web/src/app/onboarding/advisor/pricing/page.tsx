@@ -110,7 +110,7 @@ export default function AdvisorPricingPage() {
     });
 
     router.push(
-      "/payment/checkout?role=advisor&plan=pro"
+      "/onboarding/advisor/success"
     );
   } catch (error) {
     console.error(
@@ -447,7 +447,7 @@ export default function AdvisorPricingPage() {
               onClick={handleComplete}
               className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] hover:bg-primary/90"
             >
-              Proceed to Payment
+              Complete Profile
             </button>
 
           </div>

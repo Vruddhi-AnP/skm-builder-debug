@@ -529,32 +529,14 @@ export default function PackageSelectionPage() {
             Back
           </button>
 
-          {selectedPackage ===
-            "Builder Access" ? (
-              <Link
-                href="/founder/dashboard"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-              >
-                Continue Free
+          <button
+  type="button"
+  onClick={handleContinue}
+  className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+>
+  Continue
+</button>
 
-              </Link>
-            ) : (
-              <Link
-                href={`/payment/checkout?role=founder&plan=${
-                  selectedPackage ===
-                  "Growth Package"
-                    ? "growth"
-                    : selectedPackage ===
-                      "Advisor Access"
-                    ? "advisor"
-                    : "investor"
-                }`}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-              >
-                Proceed to Payment
-
-              </Link>
-            )}
         </div>
       </div>
     </div>
