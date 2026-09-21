@@ -10,6 +10,9 @@ import Image from "next/image";
 
 import { createFounderProfile } from "@/services/founder.service";
 
+import { acceptConsent } from "@/services/auth.service";
+import { toast } from "sonner";
+
 import {
   Briefcase,
   LinkIcon,
@@ -40,38 +43,32 @@ export default function FounderProfilePage() {
 
   const user = useLocalUser();
 
+  const [termsAccepted, setTermsAccepted] = useState(
+    () => user?.termsAccepted ?? false,
+  );
+
+  const [saving, setSaving] = useState(false);
+
   const [selectedRole, setSelectedRole] = useState(() => {
-  const saved = getFounderOnboarding();
-  return saved.founderRole ?? "Solo Founder";
-});
+    const saved = getFounderOnboarding();
+    return saved.founderRole ?? "Solo Founder";
+  });
 
-const [formData, setFormData] = useState(() => {
-  const saved = getFounderOnboarding();
-  return {
-    fullName: saved.fullName ?? "",
-    email: saved.email ?? user?.email ?? "",
-    phone: saved.phone ?? "",
-    location: saved.location ?? "",
-    linkedin: saved.linkedin ?? "",
-    experience: saved.experience ?? "",
-    bio: saved.bio ?? "",
-    founderGoal: saved.founderGoal ?? "",
-  };
-});
+  const [formData, setFormData] = useState(() => {
+    const saved = getFounderOnboarding();
+    return {
+      fullName: saved.fullName ?? "",
+      email: saved.email ?? user?.email ?? "",
+      phone: saved.phone ?? "",
+      location: saved.location ?? "",
+      linkedin: saved.linkedin ?? "",
+      experience: saved.experience ?? "",
+      bio: saved.bio ?? "",
+      founderGoal: saved.founderGoal ?? "",
+    };
+  });
 
-const [errors, setErrors] = useState({
-  fullName: "",
-  email: "",
-  phone: "",
-  location: "",
-  experience: "",
-  linkedin: "",
-  founderGoal: "",
-  bio: "",
-});
-
-const validateForm = () => {
-  const newErrors = {
+  const [errors, setErrors] = useState({
     fullName: "",
     email: "",
     phone: "",
@@ -80,117 +77,169 @@ const validateForm = () => {
     linkedin: "",
     founderGoal: "",
     bio: "",
+  });
+
+  const validateForm = () => {
+    const newErrors = {
+      fullName: "",
+      email: "",
+      phone: "",
+      location: "",
+      experience: "",
+      linkedin: "",
+      founderGoal: "",
+      bio: "",
+    };
+
+    let isValid = true;
+
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full Name is required";
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+      isValid = false;
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone Number is required";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
+      newErrors.phone = "Phone Number must be 10 digits";
+      isValid = false;
+    }
+
+    if (!formData.location.trim()) {
+      newErrors.location = "Location is required";
+      isValid = false;
+    }
+
+    if (!formData.experience.trim()) {
+      newErrors.experience = "Startup Experience is required";
+      isValid = false;
+    }
+
+    if (!formData.founderGoal.trim()) {
+      newErrors.founderGoal = "Founder Goal is required";
+      isValid = false;
+    }
+
+    if (!formData.bio.trim()) {
+      newErrors.bio = "Founder Bio is required";
+      isValid = false;
+    }
+
+    // LinkedIn OPTIONAL
+    if (
+      formData.linkedin.trim() &&
+      !/^https?:\/\/(www\.)?linkedin\.com\/.*$/i.test(formData.linkedin)
+    ) {
+      newErrors.linkedin = "Enter a valid LinkedIn profile URL";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    return isValid;
   };
 
-  let isValid = true;
+  const handleContinue = async () => {
+    if (!validateForm()) {
+      return;
+    }
 
-  if (!formData.fullName.trim()) {
-    newErrors.fullName = "Full Name is required";
-    isValid = false;
-  }
+    if (!termsAccepted) {
+      toast.error(
+        "You must accept the Terms & Conditions and Startup Idea/Data Disclaimer",
+      );
+      return;
+    }
 
-  if (!formData.email.trim()) {
-    newErrors.email = "Email is required";
-    isValid = false;
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    newErrors.email = "Enter a valid email address";
-    isValid = false;
-  }
+    try {
+      setSaving(true);
 
-  if (!formData.phone.trim()) {
-    newErrors.phone = "Phone Number is required";
-    isValid = false;
-  } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
-    newErrors.phone = "Phone Number must be 10 digits";
-    isValid = false;
-  }
-
-  if (!formData.location.trim()) {
-    newErrors.location = "Location is required";
-    isValid = false;
-  }
-
-  if (!formData.experience.trim()) {
-    newErrors.experience = "Startup Experience is required";
-    isValid = false;
-  }
-
-  if (!formData.founderGoal.trim()) {
-    newErrors.founderGoal = "Founder Goal is required";
-    isValid = false;
-  }
-
-  if (!formData.bio.trim()) {
-    newErrors.bio = "Founder Bio is required";
-    isValid = false;
-  }
-
-  // LinkedIn OPTIONAL
-  if (
-    formData.linkedin.trim() &&
-    !/^https?:\/\/(www\.)?linkedin\.com\/.*$/i.test(formData.linkedin)
-  ) {
-    newErrors.linkedin = "Enter a valid LinkedIn profile URL";
-    isValid = false;
-  }
-
-  setErrors(newErrors);
-
-  return isValid;
-};
-
-    const handleContinue = async () => {
-
-      if (!validateForm()) {
-        return;
-      }
-
-      try {
-        await createFounderProfile({
-          phoneNumber: formData.phone,
-          location: formData.location,
-          founderRole: selectedRole,
-          startupExperience: formData.experience,
-          linkedinUrl: formData.linkedin,
-          founderGoal: formData.founderGoal,
-          bio: formData.bio,
+      if (!user?.termsAccepted) {
+        const consentResponse = await acceptConsent({
+          termsAccepted: true,
         });
 
-        saveFounderOnboarding({
-          ...formData,
-          founderRole: selectedRole,
-        });
+        const rawUser = localStorage.getItem("user");
 
-        router.push("/onboarding/founder/startup");
-      } catch (error) {
-        console.error("Founder Profile Save Failed:",error);
+        if (rawUser) {
+          const storedUser = JSON.parse(rawUser);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              ...storedUser,
+              ...consentResponse.data,
+            }),
+          );
+        }
       }
-    };
+
+      await createFounderProfile({
+        phoneNumber: formData.phone,
+        location: formData.location,
+        founderRole: selectedRole,
+        startupExperience: formData.experience,
+        linkedinUrl: formData.linkedin,
+        founderGoal: formData.founderGoal,
+        bio: formData.bio,
+      });
+
+      saveFounderOnboarding({
+        ...formData,
+        founderRole: selectedRole,
+      });
+
+      router.push("/onboarding/founder/startup");
+    } catch (error) {
+      console.error("Founder Profile Save Failed:", error);
+
+      const axiosError = error as {
+        response?: { data?: { message?: string | string[] } };
+        message?: string;
+      };
+
+      const backendMessage = axiosError?.response?.data?.message;
+
+      if (Array.isArray(backendMessage)) {
+        toast.error(backendMessage[0]);
+      } else if (typeof backendMessage === "string") {
+        toast.error(backendMessage);
+      } else {
+        toast.error("Unable to continue. Please try again.");
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">
       <div className="mx-auto max-w-5xl">
         {/* TOP BAR */}
         <div className="mb-10 flex items-center justify-between">
-          <Link
-  href="/"
-  className="flex items-center gap-4"
->
-  <Image
-    src="/logo.png"
-    alt="Startup Ka Mall"
-    width={190}
-    height={60}
-    priority
-    className="h-auto w-42.5 object-contain sm:w-47.5"
-  />
+          <Link href="/" className="flex items-center gap-4">
+            <Image
+              src="/logo.png"
+              alt="Startup Ka Mall"
+              width={190}
+              height={60}
+              priority
+              className="h-auto w-42.5 object-contain sm:w-47.5"
+            />
 
-  <div>
-    <p className="text-sm text-slate-500">
-      Startup Ecosystem
-    </p>
-  </div>
-</Link>
+            <div>
+              <p className="text-sm text-slate-500">Startup Ecosystem</p>
+            </div>
+          </Link>
 
           <div className="hidden items-center gap-3 rounded-full border border-primary/10 bg-primary/5 px-5 py-2 text-sm font-semibold text-primary sm:flex">
             Step 1 of 4
@@ -217,8 +266,8 @@ const validateForm = () => {
               </h1>
 
               <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-                Build your founder identity and personalize
-                your startup-building ecosystem experience.
+                Build your founder identity and personalize your
+                startup-building ecosystem experience.
               </p>
             </div>
 
@@ -253,9 +302,7 @@ const validateForm = () => {
                 Onboarding Progress
               </p>
 
-              <span className="text-sm font-bold text-primary">
-                25%
-              </span>
+              <span className="text-sm font-bold text-primary">25%</span>
             </div>
 
             <div className="h-2 overflow-hidden rounded-full bg-muted">
@@ -265,43 +312,40 @@ const validateForm = () => {
 
           {/* STEPS */}
           <div className="mt-8 grid gap-4 md:grid-cols-4">
-            {[
-              "Founder Profile",
-              "Startup Profile",
-              "Programs",
-              "Complete",
-            ].map((step, index) => (
-              <div
-                key={step}
-                className={`rounded-2xl border p-4 ${
-                  index === 0
-                    ? "border-primary bg-primary/5"
-                    : "border-border bg-background"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold ${
-                      index === 0
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
+            {["Founder Profile", "Startup Profile", "Programs", "Complete"].map(
+              (step, index) => (
+                <div
+                  key={step}
+                  className={`rounded-2xl border p-4 ${
+                    index === 0
+                      ? "border-primary bg-primary/5"
+                      : "border-border bg-background"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold ${
+                        index === 0
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {index + 1}
+                    </div>
 
-                  <div>
-                    <h3 className="text-sm font-semibold text-foreground">
-                      {step}
-                    </h3>
+                    <div>
+                      <h3 className="text-sm font-semibold text-foreground">
+                        {step}
+                      </h3>
 
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Builder workflow step
-                    </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Builder workflow step
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
 
@@ -314,9 +358,8 @@ const validateForm = () => {
             </h2>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-              Share your founder identity and experience
-              to personalize advisor recommendations,
-              startup workflows and ecosystem access.
+              Share your founder identity and experience to personalize advisor
+              recommendations, startup workflows and ecosystem access.
             </p>
           </div>
 
@@ -350,12 +393,9 @@ const validateForm = () => {
                 />
               </div>
 
-                  {errors.fullName && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.fullName}
-              </p>
-            )}
-
+              {errors.fullName && (
+                <p className="mt-2 text-sm text-red-500">{errors.fullName}</p>
+              )}
             </div>
 
             {/* EMAIL */}
@@ -386,12 +426,9 @@ const validateForm = () => {
                 />
               </div>
 
-                  {errors.email && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.email}
-              </p>
-            )}
-
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-500">{errors.email}</p>
+              )}
             </div>
 
             {/* PHONE */}
@@ -420,49 +457,44 @@ const validateForm = () => {
                 />
               </div>
 
-                  {errors.phone && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.phone}
-              </p>
-            )}
-
+              {errors.phone && (
+                <p className="mt-2 text-sm text-red-500">{errors.phone}</p>
+              )}
             </div>
 
             {/* LOCATION */}
-<div>
-  <label className="text-sm font-semibold text-foreground">
-    Location
-  </label>
+            <div>
+              <label className="text-sm font-semibold text-foreground">
+                Location
+              </label>
 
-  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
-    <MapPin className="h-5 w-5 text-muted-foreground" />
+              <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
+                <MapPin className="h-5 w-5 text-muted-foreground" />
 
-    <input
-      type="text"
-      placeholder="Mumbai, India"
-      value={formData.location}
-      onChange={(e) => {
-        setFormData({
-          ...formData,
-          location: e.target.value,
-        });
+                <input
+                  type="text"
+                  placeholder="Mumbai, India"
+                  value={formData.location}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      location: e.target.value,
+                    });
 
-        setErrors((prev) => ({
-          ...prev,
-          location: "",
-        }));
-      }}
-      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-    />
-  </div>
+                    setErrors((prev) => ({
+                      ...prev,
+                      location: "",
+                    }));
+                  }}
+                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
 
-  {errors.location && (
-    <p className="mt-2 text-sm text-red-500">
-      {errors.location}
-    </p>
-  )}
-</div>
-</div>
+              {errors.location && (
+                <p className="mt-2 text-sm text-red-500">{errors.location}</p>
+              )}
+            </div>
+          </div>
 
           {/* ROLE */}
           <div className="mt-8">
@@ -475,9 +507,7 @@ const validateForm = () => {
                 <button
                   key={role}
                   type="button"
-                  onClick={() =>
-                    setSelectedRole(role)
-                  }
+                  onClick={() => setSelectedRole(role)}
                   className={`h-11 rounded-2xl px-5 text-sm font-semibold transition ${
                     selectedRole === role
                       ? "bg-primary text-primary-foreground"
@@ -493,75 +523,71 @@ const validateForm = () => {
           {/* EXPERIENCE + LINKEDIN */}
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {/* EXPERIENCE */}
-<div>
-  <label className="text-sm font-semibold text-foreground">
-    Startup Experience
-  </label>
+            <div>
+              <label className="text-sm font-semibold text-foreground">
+                Startup Experience
+              </label>
 
-  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
-    <Briefcase className="h-5 w-5 text-muted-foreground" />
+              <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
+                <Briefcase className="h-5 w-5 text-muted-foreground" />
 
-    <input
-      type="text"
-      placeholder="First-time founder"
-      value={formData.experience}
-      onChange={(e) => {
-        setFormData({
-          ...formData,
-          experience: e.target.value,
-        });
+                <input
+                  type="text"
+                  placeholder="First-time founder"
+                  value={formData.experience}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      experience: e.target.value,
+                    });
 
-        setErrors((prev) => ({
-          ...prev,
-          experience: "",
-        }));
-      }}
-      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-    />
-  </div>
+                    setErrors((prev) => ({
+                      ...prev,
+                      experience: "",
+                    }));
+                  }}
+                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
 
-  {errors.experience && (
-    <p className="mt-2 text-sm text-red-500">
-      {errors.experience}
-    </p>
-  )}
-</div>
+              {errors.experience && (
+                <p className="mt-2 text-sm text-red-500">{errors.experience}</p>
+              )}
+            </div>
 
-           {/* LINKEDIN */}
-<div>
-  <label className="text-sm font-semibold text-foreground">
-    LinkedIn Profile
-  </label>
+            {/* LINKEDIN */}
+            <div>
+              <label className="text-sm font-semibold text-foreground">
+                LinkedIn Profile
+              </label>
 
-  <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
-    <LinkIcon className="h-5 w-5 text-muted-foreground" />
+              <div className="mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-background px-4">
+                <LinkIcon className="h-5 w-5 text-muted-foreground" />
 
-    <input
-      type="text"
-      placeholder="LinkedIn profile URL"
-      value={formData.linkedin}
-      onChange={(e) => {
-        setFormData({
-          ...formData,
-          linkedin: e.target.value,
-        });
+                <input
+                  type="text"
+                  placeholder="LinkedIn profile URL"
+                  value={formData.linkedin}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      linkedin: e.target.value,
+                    });
 
-        setErrors((prev) => ({
-          ...prev,
-          linkedin: "",
-        }));
-      }}
-      className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-    />
-  </div>
+                    setErrors((prev) => ({
+                      ...prev,
+                      linkedin: "",
+                    }));
+                  }}
+                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
 
-  {errors.linkedin && (
-    <p className="mt-2 text-sm text-red-500">
-      {errors.linkedin}
-    </p>
-  )}
-</div>
-</div>  
+              {errors.linkedin && (
+                <p className="mt-2 text-sm text-red-500">{errors.linkedin}</p>
+              )}
+            </div>
+          </div>
 
           {/* GOAL */}
           <div className="mt-8">
@@ -591,12 +617,9 @@ const validateForm = () => {
               />
             </div>
 
-                {errors.founderGoal && (
-            <p className="mt-2 text-sm text-red-500">
-              {errors.founderGoal}
-            </p>
-          )}
-
+            {errors.founderGoal && (
+              <p className="mt-2 text-sm text-red-500">{errors.founderGoal}</p>
+            )}
           </div>
 
           {/* BIO */}
@@ -623,12 +646,9 @@ const validateForm = () => {
               className="mt-3 w-full resize-none rounded-[28px] border border-border bg-background px-5 py-4 text-sm outline-none transition placeholder:text-muted-foreground focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
             />
 
-              {errors.bio && (
-                <p className="mt-2 text-sm text-red-500">
-                  {errors.bio}
-                </p>
-              )}
-
+            {errors.bio && (
+              <p className="mt-2 text-sm text-red-500">{errors.bio}</p>
+            )}
           </div>
 
           {/* INFO CARD */}
@@ -640,10 +660,9 @@ const validateForm = () => {
                 </h3>
 
                 <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                  Your founder profile helps us personalize
-                  startup recommendations, advisor matching,
-                  investor readiness insights and execution
-                  workflows across the ecosystem.
+                  Your founder profile helps us personalize startup
+                  recommendations, advisor matching, investor readiness insights
+                  and execution workflows across the ecosystem.
                 </p>
               </div>
 
@@ -652,6 +671,22 @@ const validateForm = () => {
               </div>
             </div>
           </div>
+
+          {!user?.termsAccepted && (
+            <label className="mt-8 flex cursor-pointer items-start gap-3 rounded-[28px] border border-border bg-background p-5">
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 shrink-0 accent-primary"
+              />
+
+              <span className="text-sm leading-6 text-muted-foreground">
+                I accept the Terms &amp; Conditions and Startup Idea/Data
+                Disclaimer.
+              </span>
+            </label>
+          )}
 
           {/* ACTIONS */}
           <div className="mt-10 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row">
@@ -665,14 +700,14 @@ const validateForm = () => {
             <button
               type="button"
               onClick={handleContinue}
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+              disabled={saving}
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Continue
-
+              {saving ? "Saving..." : "Continue"}
             </button>
           </div>
         </div>
       </div>
-    </div>    
+    </div>
   );
 }

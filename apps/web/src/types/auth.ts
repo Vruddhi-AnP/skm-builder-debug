@@ -1,15 +1,13 @@
-export type UserRole =
-  | "founder"
-  | "advisor"
-  | "investor"
-  | "admin"
-  | "builder";
+export type UserRole = "founder" | "advisor" | "investor" | "admin" | "builder";
 
 export interface AuthUser {
   id: string;
   email: string;
   name: string | null;
   role: UserRole;
+  termsAccepted: boolean;
+  termsAcceptedAt: string | null;
+  termsVersion: string | null;
 }
 
 // The actual payload inside response.data
@@ -34,9 +32,29 @@ export interface SignupPayload {
   email: string;
   password: string;
   role: UserRole;
+  termsAccepted: boolean;
 }
 
 export interface LoginPayload {
   email: string;
   password: string;
+}
+
+export interface ConsentPayload {
+  termsAccepted: boolean;
+}
+
+export interface ConsentResponseData {
+  termsAccepted: boolean;
+  termsAcceptedAt: string | null;
+  termsVersion: string | null;
+}
+
+export interface ConsentApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  path: string;
+  timestamp: string;
+  data: ConsentResponseData;
 }

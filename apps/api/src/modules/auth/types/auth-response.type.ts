@@ -26,6 +26,23 @@ export class AuthUserDto {
     example: Role.FOUNDER,
   })
   role: Role;
+
+  @ApiProperty({
+    example: true,
+  })
+  termsAccepted: boolean;
+
+  @ApiProperty({
+    example: '2026-09-21T12:30:00.000Z',
+    nullable: true,
+  })
+  termsAcceptedAt: Date | null;
+
+  @ApiProperty({
+    example: 'SKM-MVP-1.1',
+    nullable: true,
+  })
+  termsVersion: string | null;
 }
 
 export class AuthResponseDataDto {

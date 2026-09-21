@@ -14,43 +14,45 @@ import { ShieldCheck } from "lucide-react";
 export default function SignupPage() {
   const router = useRouter();
 
-  const [formData, setFormData] =
-    useState<SignupPayload>({
-      name: "",
-      email: "",
-      password: "",
-      role: "founder",
-    });
+  const [formData, setFormData] = useState<SignupPayload>({
+    name: "",
+    email: "",
+    password: "",
+    role: "founder",
+    termsAccepted: false,
+  });
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (
-      e: React.ChangeEvent<
-        HTMLInputElement | HTMLSelectElement
-      >
-    ) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    };
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const handleSignup = async (
-      e: React.FormEvent<HTMLFormElement>
-    ) => {
-      e.preventDefault();
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!emailRegex.test(formData.email)) {
-        toast.error("Invalid email address");
-        return;
-      }
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Invalid email address");
+      return;
+    }
 
-      if (formData.password.length < 6) {
-        return;
-      }
+    if (formData.password.length < 6) {
+      return;
+    }
+
+    if (!formData.termsAccepted) {
+      toast.error(
+        "You must accept the Terms & Conditions and Startup Idea/Data Disclaimer",
+      );
+      return;
+    }
 
     try {
       setLoading(true);
@@ -84,8 +86,7 @@ export default function SignupPage() {
         message?: string;
       };
 
-      const backendMessage =
-        axiosError?.response?.data?.message;
+      const backendMessage = axiosError?.response?.data?.message;
 
       if (Array.isArray(backendMessage)) {
         toast.error(backendMessage[0]);
@@ -114,10 +115,7 @@ export default function SignupPage() {
           footerLink="/login"
           footerLinkText="Login"
         >
-          <form
-            onSubmit={handleSignup}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSignup} className="space-y-5">
             {/* NAME */}
             <div>
               <label className="mb-2 block text-sm font-semibold text-slate-700">
@@ -197,6 +195,27 @@ export default function SignupPage() {
                 <option value="investor">Investor</option>
               </select>
             </div>
+
+            {/* CONSENT */}
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-border/60 bg-[#F7F4EE]/70 p-4">
+              <input
+                type="checkbox"
+                checked={formData.termsAccepted}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    termsAccepted: e.target.checked,
+                  }))
+                }
+                required
+                className="mt-1 h-4 w-4 shrink-0 accent-primary"
+              />
+
+              <span className="text-sm leading-6 text-slate-700">
+                I accept the Terms &amp; Conditions and Startup Idea/Data
+                Disclaimer.
+              </span>
+            </label>
 
             {/* BUTTON */}
             <button
