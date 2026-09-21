@@ -115,6 +115,27 @@ enum GeographyPreference {
   SOUTH_EAST_ASIA
 }
 
+enum AccountStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum ConsultationStatus {
+  NEW
+  CONTACTED
+  SCHEDULED
+  CLOSED
+  REJECTED
+}
+
+enum VisibilityStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
 model User {
   id String @id @default(uuid())
 
@@ -127,6 +148,11 @@ model User {
   name String?
 
   role Role
+
+  termsAccepted   Boolean       @default(false)
+  termsAcceptedAt DateTime?
+  termsVersion    String?
+  accountStatus   AccountStatus @default(PENDING)
 
   createdAt DateTime @default(now())
 
@@ -194,6 +220,8 @@ model Startup {
 
   builder Builder?
 
+  readinessAssessments ReadinessAssessment[]
+
   createdAt DateTime @default(now())
 
   updatedAt DateTime @updatedAt
@@ -212,6 +240,21 @@ model Builder {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ReadinessAssessment {
+  id              String   @id @default(uuid())
+  startupId       String
+  overallScore    Int
+  scoreBand       String
+  parameterScores Json
+  suggestions     Json
+  generatedAt     DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  startup Startup @relation(fields: [startupId], references: [id])
+
+  @@index([startupId])
 }
 
 model AdvisorProfile {
@@ -263,6 +306,14 @@ model AdvisorProfile {
   advisoryNotes        String?
 
   // ==========================
+  // Admin Controls
+  // ==========================
+
+  accountStatus    AccountStatus    @default(PENDING)
+  visibilityStatus VisibilityStatus @default(DRAFT)
+  planCode         String?
+
+  // ==========================
   // Metadata
   // ==========================
 
@@ -270,6 +321,22 @@ model AdvisorProfile {
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model ConsultationRequest {
+  id         String             @id @default(uuid())
+  founderId  String
+  advisorId  String
+  startupId  String?
+  message    String?
+  status     ConsultationStatus @default(NEW)
+  adminNotes String?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  @@index([founderId])
+  @@index([advisorId])
+  @@index([status])
 }
 
 model InvestorProfile {
