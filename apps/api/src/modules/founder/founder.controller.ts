@@ -2,7 +2,6 @@ import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 
 import {
   ApiBearerAuth,
-  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -34,15 +33,14 @@ export class FounderController {
 
   @ApiBearerAuth('access-token')
   @ApiOperation({
-    summary: 'Create founder profile',
-
-    description: 'Creates a founder profile for the authenticated founder.',
+    summary: 'Create or update founder profile',
+    description:
+      'Creates the authenticated founder profile, or updates the existing profile during onboarding.',
   })
   @Auth(Role.FOUNDER)
-  @ResponseMessage('Founder profile created successfully')
+  @ResponseMessage('Founder profile saved successfully')
   @ApiCreatedResponse({
-    description: 'Founder profile created successfully',
-
+    description: 'Founder profile saved successfully',
     type: FounderProfileSuccessResponseDto,
   })
   @ApiUnauthorizedResponse({
@@ -51,13 +49,9 @@ export class FounderController {
   @ApiForbiddenResponse({
     description: 'Only founders can access this endpoint',
   })
-  @ApiConflictResponse({
-    description: 'Founder profile already exists',
-  })
   @Post('profile')
   createProfile(
     @Body() dto: CreateFounderProfileDto,
-
     @GetUser('id') userId: string,
   ) {
     return this.founderService.createProfile(userId, dto);
@@ -66,14 +60,12 @@ export class FounderController {
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Get founder profile',
-
     description: 'Returns the founder profile of the authenticated founder.',
   })
   @Auth(Role.FOUNDER)
   @ResponseMessage('Founder profile retrieved successfully')
   @ApiOkResponse({
     description: 'Founder profile retrieved successfully',
-
     type: FounderProfileSuccessResponseDto,
   })
   @ApiUnauthorizedResponse({
@@ -90,14 +82,12 @@ export class FounderController {
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Update founder profile',
-
     description: 'Updates the founder profile of the authenticated founder.',
   })
   @Auth(Role.FOUNDER)
   @ResponseMessage('Founder profile updated successfully')
   @ApiOkResponse({
     description: 'Founder profile updated successfully',
-
     type: FounderProfileSuccessResponseDto,
   })
   @ApiUnauthorizedResponse({
@@ -109,7 +99,6 @@ export class FounderController {
   @Patch('profile')
   updateProfile(
     @Body() dto: UpdateFounderProfileDto,
-
     @GetUser('id') userId: string,
   ) {
     return this.founderService.updateProfile(userId, dto);

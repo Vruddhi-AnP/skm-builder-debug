@@ -2,28 +2,26 @@ import api from "@/lib/axios";
 
 export interface CreateStartupPayload {
   name: string;
-
   website?: string;
-
   teamSize?: number;
-
   startupStage?: string;
-
   industry?: string;
-
   businessModel?: string;
-
   problemStatement?: string;
-
   solutionOverview?: string;
-
   description?: string;
 }
 
 export interface StartupResponse {
   id: string;
   name: string;
+  website?: string | null;
+  teamSize?: number | null;
+  startupStage?: string | null;
   industry: string | null;
+  businessModel?: string | null;
+  problemStatement?: string | null;
+  solutionOverview?: string | null;
   description: string | null;
   founderId: string;
   createdAt: string;
@@ -31,31 +29,28 @@ export interface StartupResponse {
 }
 
 export const createStartup = async (
-  data: CreateStartupPayload
+  data: CreateStartupPayload,
 ): Promise<StartupResponse> => {
   const response = await api.post("/startup", data);
-  // Backend envelope: { success, statusCode, message, data: { ...startup } }
   return response.data.data;
 };
 
-export const getMyStartups = async () => {
+export const getMyStartups = async (): Promise<StartupResponse[]> => {
   const response = await api.get("/startup");
   return response.data.data;
 };
 
-export const getStartupById = async (id: string) => {
+export const getStartupById = async (
+  id: string,
+): Promise<StartupResponse> => {
   const response = await api.get(`/startup/${id}`);
   return response.data.data;
 };
 
 export const updateStartup = async (
   id: string,
-  data: Record<string, unknown>
-) => {
-  const response = await api.patch(
-    `/startup/${id}`,
-    data
-  );
-
+  data: Partial<CreateStartupPayload>,
+): Promise<StartupResponse> => {
+  const response = await api.patch(`/startup/${id}`, data);
   return response.data.data;
 };

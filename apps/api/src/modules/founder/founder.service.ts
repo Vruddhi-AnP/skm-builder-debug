@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -15,20 +11,28 @@ export class FounderService {
   constructor(private prisma: PrismaService) {}
 
   async createProfile(userId: string, dto: CreateFounderProfileDto) {
-    const existingProfile = await this.prisma.founderProfile.findUnique({
+    return this.prisma.founderProfile.upsert({
       where: {
         userId,
       },
-    });
-
-    if (existingProfile) {
-      throw new ConflictException('Founder profile already exists');
-    }
-
-    return this.prisma.founderProfile.create({
-      data: {
+      create: {
         userId,
 
+        phoneNumber: dto.phoneNumber,
+
+        location: dto.location,
+
+        founderRole: dto.founderRole,
+
+        startupExperience: dto.startupExperience,
+
+        linkedinUrl: dto.linkedinUrl,
+
+        founderGoal: dto.founderGoal,
+
+        bio: dto.bio,
+      },
+      update: {
         phoneNumber: dto.phoneNumber,
 
         location: dto.location,

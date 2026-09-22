@@ -8,7 +8,11 @@ import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
-import { createStartup } from "@/services/startup.service";
+import {
+  createStartup,
+  getMyStartups,
+  updateStartup,
+} from "@/services/startup.service";
 
  import axios from "axios";
 
@@ -185,19 +189,17 @@ const [errors, setErrors] = useState({
 };
 
  const handleContinue = async () => {
-
   if (!validateForm()) {
-  return;
-}
+    return;
+  }
 
   setLoading(true);
-  try {
 
-    const startup = await createStartup({
-      
+  try {
+    const payload = {
       name: formData.startupName,
 
-      website: formData.website,
+      website: formData.website || undefined,
 
       teamSize: formData.teamSize
         ? Number(formData.teamSize)
@@ -205,59 +207,70 @@ const [errors, setErrors] = useState({
 
       startupStage: selectedStage,
 
-      industry:
-        selectedIndustries.join(","),
+      industry: selectedIndustries.join(","),
 
-      businessModel:
-        selectedBusinessModel,
+      businessModel: selectedBusinessModel,
 
-      problemStatement:
-        formData.problemStatement,
+      problemStatement: formData.problemStatement,
 
-      solutionOverview:
-        formData.solution,
+      solutionOverview: formData.solution,
 
-      description:
-        formData.problemStatement,
-    });
-    console.log("STARTUP CREATED", startup);
+      description: formData.problemStatement,
+    };
+
+    const onboarding = getFounderOnboarding();
+
+    let startupId =
+      onboarding.startupId ??
+      localStorage.getItem("startupId") ??
+      undefined;
+
+    let startup;
+
+    if (startupId) {
+      try {
+        startup = await updateStartup(startupId, payload);
+      } catch {
+        startupId = undefined;
+      }
+    }
+
+    if (!startup) {
+      const existingStartups = await getMyStartups();
+
+      const existingStartup = existingStartups[0];
+
+      if (existingStartup) {
+        startup = await updateStartup(existingStartup.id, payload);
+      } else {
+        startup = await createStartup(payload);
+      }
+    }
+
+    localStorage.setItem("startupId", startup.id);
 
     saveFounderOnboarding({
       startupId: startup.id,
-
-      startupName:
-        formData.startupName,
-
-      startupWebsite:
-        formData.website,
-
-      startupStage:
-        selectedStage,
-
-      startupIndustry:
-        selectedIndustries.join(","),
-
-      startupDescription:
-        formData.problemStatement,
+      startupName: formData.startupName,
+      startupWebsite: formData.website,
+      startupStage: selectedStage,
+      startupIndustry: selectedIndustries.join(","),
+      startupDescription: formData.problemStatement,
     });
 
-   setLoading(false);
-
-    router.push(
-      "/onboarding/founder/package"
-    );
+    router.push("/onboarding/founder/package");
   } catch (error) {
-  if (axios.isAxiosError(error)) {
-    alert(
-      error.response?.data?.message ??
-      "Failed to create startup"
-    );
-  } else {
-    alert("Something went wrong");
+    if (axios.isAxiosError(error)) {
+      alert(
+        error.response?.data?.message ??
+          "Failed to save startup",
+      );
+    } else {
+      alert("Something went wrong");
+    }
+  } finally {
+    setLoading(false);
   }
-
-  setLoading(false);
-}
 };
 
 const [loading, setLoading] =

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 
 import Link from "next/link";
 
@@ -30,6 +30,16 @@ import {
   getFounderOnboarding,
 } from "@/lib/founder-onboarding";
 
+const subscribe = () => () => {};
+
+function useHasMounted() {
+  return useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+}
+
 const founderRoles = [
   "Solo Founder",
   "Technical Founder",
@@ -42,6 +52,8 @@ export default function FounderProfilePage() {
   const router = useRouter();
 
   const user = useLocalUser();
+
+  const mounted = useHasMounted();
 
   const [termsAccepted, setTermsAccepted] = useState(
     () => user?.termsAccepted ?? false,
@@ -56,6 +68,7 @@ export default function FounderProfilePage() {
 
   const [formData, setFormData] = useState(() => {
     const saved = getFounderOnboarding();
+
     return {
       fullName: saved.fullName ?? "",
       email: saved.email ?? user?.email ?? "",
@@ -188,7 +201,7 @@ export default function FounderProfilePage() {
         location: formData.location,
         founderRole: selectedRole,
         startupExperience: formData.experience,
-        linkedinUrl: formData.linkedin,
+        linkedinUrl: formData.linkedin.trim() || undefined,
         founderGoal: formData.founderGoal,
         bio: formData.bio,
       });
@@ -220,6 +233,10 @@ export default function FounderProfilePage() {
       setSaving(false);
     }
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">
@@ -551,7 +568,9 @@ export default function FounderProfilePage() {
               </div>
 
               {errors.experience && (
-                <p className="mt-2 text-sm text-red-500">{errors.experience}</p>
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.experience}
+                </p>
               )}
             </div>
 
@@ -618,7 +637,9 @@ export default function FounderProfilePage() {
             </div>
 
             {errors.founderGoal && (
-              <p className="mt-2 text-sm text-red-500">{errors.founderGoal}</p>
+              <p className="mt-2 text-sm text-red-500">
+                {errors.founderGoal}
+              </p>
             )}
           </div>
 
@@ -697,6 +718,7 @@ export default function FounderProfilePage() {
             >
               Back
             </button>
+
             <button
               type="button"
               onClick={handleContinue}

@@ -1,16 +1,15 @@
 "use client";
 
+import { useEffect } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 
 import {
   ArrowLeft,
   CheckCircle2,
   LayoutDashboard,
-  Loader2,
   Rocket,
   ShieldCheck,
   Sparkles,
@@ -18,8 +17,10 @@ import {
   Users,
 } from "lucide-react";
 
-import { getFounderOnboarding, clearFounderOnboarding } from "@/lib/founder-onboarding";
-import { createStartup } from "@/services/startup.service";
+import {
+  clearFounderOnboarding,
+  getFounderOnboarding,
+} from "@/lib/founder-onboarding";
 
 const nextSteps = [
   {
@@ -47,68 +48,21 @@ const nextSteps = [
 
 export default function FounderSuccessPage() {
   const router = useRouter();
-  const [saving, setSaving] = useState(true);
-  const [saved, setSaved] = useState(false);
-  const hasCalled = useRef(false);
 
   useEffect(() => {
-    // Guard against double-call in React strict mode
-    if (hasCalled.current) return;
-    hasCalled.current = true;
+    const onboarding = getFounderOnboarding();
 
-    async function saveStartup() {
-      try {
-        const onboarding = getFounderOnboarding();
-
-        // Only call if we have a startup name — minimum required field
-        if (!onboarding.startupName) {
-          setSaving(false);
-          setSaved(true);
-          return;
-        }
-
-        const startup = await createStartup({
-          name: onboarding.startupName,
-          industry: onboarding.startupIndustry ?? "General",
-          description: onboarding.startupDescription,
-        });
-
-        // Store startupId for builder sync later
-        localStorage.setItem("startupId", startup.id);
-
-        clearFounderOnboarding();
-        setSaved(true);
-      } catch (error: unknown) {
-        const axiosError = error as {
-          response?: { data?: { message?: string | string[] } };
-          message?: string;
-        };
-
-        const backendMessage = axiosError?.response?.data?.message;
-
-        if (Array.isArray(backendMessage)) {
-          toast.error(backendMessage[0]);
-        } else if (typeof backendMessage === "string") {
-          toast.error(backendMessage);
-        } else {
-          toast.error("Failed to save startup. You can continue to your dashboard.");
-        }
-
-        // Still allow navigation even if save fails
-        setSaved(true);
-      } finally {
-        setSaving(false);
-      }
+    if (onboarding.startupId) {
+      localStorage.setItem("startupId", onboarding.startupId);
     }
 
-    saveStartup();
+    clearFounderOnboarding();
   }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-5xl">
         <div className="rounded-[40px] border border-border bg-card p-8 shadow-sm lg:p-12">
-
           {/* TOP BAR */}
           <div className="mb-10 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-4">
@@ -120,6 +74,7 @@ export default function FounderSuccessPage() {
                 priority
                 className="h-auto w-42.5 object-contain sm:w-47.5"
               />
+
               <div>
                 <p className="text-sm text-slate-500">Startup Ecosystem</p>
               </div>
@@ -132,11 +87,7 @@ export default function FounderSuccessPage() {
 
           {/* SUCCESS ICON */}
           <div className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-primary text-primary-foreground shadow-lg">
-            {saving ? (
-              <Loader2 className="h-10 w-10 animate-spin" />
-            ) : (
-              <CheckCircle2 className="h-10 w-10" />
-            )}
+            <CheckCircle2 className="h-10 w-10" />
           </div>
 
           {/* CONTENT */}
@@ -144,13 +95,15 @@ export default function FounderSuccessPage() {
             <div className="flex flex-wrap items-center gap-3">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2">
                 <Sparkles className="h-4 w-4 text-primary" />
+
                 <span className="text-sm font-semibold text-primary">
-                  {saving ? "Saving your startup..." : "Founder Onboarding Completed"}
+                  Founder Onboarding Completed
                 </span>
               </div>
 
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2">
                 <ShieldCheck className="h-4 w-4 text-emerald-600" />
+
                 <p className="text-xs font-medium text-emerald-800">
                   Secure founder ecosystem & encrypted workflows
                 </p>
@@ -162,9 +115,8 @@ export default function FounderSuccessPage() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-              {saving
-                ? "Setting up your startup workspace. Just a moment..."
-                : "Your founder onboarding is complete. Your startup workspace, execution dashboard and ecosystem access are now ready."}
+              Your founder onboarding is complete. Your startup workspace,
+              execution dashboard and ecosystem access are now ready.
             </p>
           </div>
 
@@ -174,24 +126,42 @@ export default function FounderSuccessPage() {
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
                 <Users className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="mt-5 text-3xl font-black text-foreground">250+</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Startup Advisors</p>
+
+              <h3 className="mt-5 text-3xl font-black text-foreground">
+                250+
+              </h3>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+                Startup Advisors
+              </p>
             </div>
 
             <div className="rounded-[28px] border border-border bg-background p-6">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
                 <Rocket className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="mt-5 text-3xl font-black text-foreground">100+</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Founder Programs</p>
+
+              <h3 className="mt-5 text-3xl font-black text-foreground">
+                100+
+              </h3>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+                Founder Programs
+              </p>
             </div>
 
             <div className="rounded-[28px] border border-border bg-background p-6">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
                 <TrendingUp className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="mt-5 text-3xl font-black text-foreground">₹50Cr+</h3>
-              <p className="mt-2 text-sm text-muted-foreground">Ecosystem Access</p>
+
+              <h3 className="mt-5 text-3xl font-black text-foreground">
+                ₹50Cr+
+              </h3>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+                Ecosystem Access
+              </p>
             </div>
           </div>
 
@@ -201,9 +171,11 @@ export default function FounderSuccessPage() {
               <div className="inline-flex self-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
                 Founder Journey
               </div>
+
               <h3 className="text-3xl font-black tracking-tight text-foreground">
                 What Happens Next?
               </h3>
+
               <p className="mx-auto max-w-2xl text-sm leading-7 text-muted-foreground">
                 Continue building your startup through structured execution
                 workflows, founder programs and ecosystem collaboration.
@@ -213,6 +185,7 @@ export default function FounderSuccessPage() {
             <div className="mt-10 space-y-5">
               {nextSteps.map((item) => {
                 const Icon = item.icon;
+
                 return (
                   <div
                     key={item.id}
@@ -222,15 +195,18 @@ export default function FounderSuccessPage() {
                       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
                         <Icon className="h-6 w-6" />
                       </div>
+
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-3">
                           <span className="text-sm font-black text-primary">
                             {item.id}
                           </span>
+
                           <h4 className="text-xl font-black text-foreground">
                             {item.title}
                           </h4>
                         </div>
+
                         <p className="mt-3 text-sm leading-7 text-muted-foreground">
                           {item.description}
                         </p>
@@ -247,6 +223,7 @@ export default function FounderSuccessPage() {
             <h3 className="text-lg font-black text-foreground">
               Founder Ecosystem Access
             </h3>
+
             <p className="mt-3 text-sm leading-7 text-muted-foreground">
               Your founder profile and startup workflows will now personalize
               startup builder recommendations, advisor matching, investor
@@ -257,6 +234,7 @@ export default function FounderSuccessPage() {
           {/* ACTIONS */}
           <div className="mt-10 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row">
             <button
+              type="button"
               onClick={() => router.push("/onboarding/founder/package")}
               className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-background px-6 text-sm font-semibold text-foreground transition hover:bg-muted"
             >
@@ -265,21 +243,13 @@ export default function FounderSuccessPage() {
             </button>
 
             <button
-              disabled={saving}
+              type="button"
               onClick={() => router.push("/founder/dashboard")}
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
             >
-              {saving ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Go To Founder Dashboard"
-              )}
+              Go To Founder Dashboard
             </button>
           </div>
-
         </div>
       </div>
     </div>
