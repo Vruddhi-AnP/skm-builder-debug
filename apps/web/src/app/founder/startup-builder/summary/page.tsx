@@ -1,10 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { saveBuilderData } from "@/services/builder.service";
-import { getBuilderData } from "@/hooks/useLocalBuilder";
-import { useState } from "react";
-import { toast } from "sonner";
+import {
+  getBuilderDataByStartupId,
+  type BuilderData,
+} from "@/services/builder.service";
+
+import {
+  getBuilderData,
+  saveBuilderStep,
+} from "@/hooks/useLocalBuilder";
+
+import { resolveFounderStartupId } from "@/services/startup.service";
+
+import { useEffect, useState } from "react";
 
 import {
   BarChart3,
@@ -72,15 +81,103 @@ const summarySections = [
 export default function SummaryPage() {
   const router = useRouter();
 
-  const [syncing, setSyncing] = useState(false);
+  const [builderData, setBuilderData] =
+  useState<BuilderData | null>(null);
 
-  const builderData = getBuilderData();
+const [isLoading, setIsLoading] = useState(true);
+const [errorMessage, setErrorMessage] = useState("");
 
-  const ideaDefinition = builderData.ideaDefinition ?? {};
-  const problemDefinition = builderData.problemDefinition ?? {};
-  const marketResearch = builderData.marketResearch ?? {};
-  const solutionDesign = builderData.solutionDesign ?? {};
-  const businessModel = builderData.businessModel ?? {};
+useEffect(() => {
+  let active = true;
+
+  const loadSummary = async () => {
+    try {
+      const startupId =
+        await resolveFounderStartupId();
+
+      const builder =
+        await getBuilderDataByStartupId(startupId);
+
+      if (!active) {
+        return;
+      }
+
+      setBuilderData(builder.data);
+
+      // Keep localStorage only as fallback/cache.
+      saveBuilderStep(
+        "ideaDefinition",
+        builder.data.ideaDefinition as Record<string, string>,
+      );
+
+      saveBuilderStep(
+        "problemDefinition",
+        builder.data.problemDefinition as Record<string, string>,
+      );
+
+      saveBuilderStep(
+        "marketResearch",
+        builder.data.marketResearch as Record<string, string>,
+      );
+
+      saveBuilderStep(
+        "solutionDesign",
+        builder.data.solutionDesign as Record<string, string>,
+      );
+
+      saveBuilderStep(
+        "businessModel",
+        builder.data.businessModel as Record<string, string>,
+      );
+    } catch {
+      if (!active) {
+        return;
+      }
+
+      const localData = getBuilderData();
+
+      setBuilderData({
+        ideaDefinition: localData.ideaDefinition ?? {},
+        problemDefinition: localData.problemDefinition ?? {},
+        marketResearch: localData.marketResearch ?? {},
+        solutionDesign: localData.solutionDesign ?? {},
+        businessModel: localData.businessModel ?? {},
+      });
+
+      setErrorMessage(
+        "Could not load the latest builder data from the server. Showing the local fallback copy.",
+      );
+    } finally {
+      if (active) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  void loadSummary();
+
+  return () => {
+    active = false;
+  };
+}, []);
+
+const ideaDefinition =
+  builderData?.ideaDefinition ?? {};
+
+const problemDefinition =
+  builderData?.problemDefinition ?? {};
+
+const marketResearch =
+  builderData?.marketResearch ?? {};
+
+const solutionDesign =
+  builderData?.solutionDesign ?? {};
+
+  const getStringValue = (value: unknown): string =>
+  typeof value === "string" ? value : "";
+
+const businessModel =
+  builderData?.businessModel ?? {};
 
  const sections = [
   ideaDefinition,
@@ -97,29 +194,25 @@ const completedSections = sections.filter(
 const readinessScore = Math.round(
   (completedSections / sections.length) * 100
 );
-
-const handleSyncToBackend = async () => {
-  const startupId = localStorage.getItem("startupId");
-  if (!startupId) {
-    toast.error("No startup found. Please complete onboarding first.");
-    return;
-  }
-  
-  const data = getBuilderData() as unknown as Record<string, unknown>;
-  
-  try {
-    setSyncing(true);
-    await saveBuilderData({ startupId, data });
-    toast.success("Builder data saved to your startup profile!");
-  } catch {
-    toast.error("Failed to sync. Your local progress is still saved.");
-  } finally {
-    setSyncing(false);
-  }
-};
+if (isLoading) {
+  return (
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-8 text-sm font-semibold text-slate-600">
+      Loading startup summary...
+    </div>
+  );
+}
 
   return (
     <div className="space-y-8">
+
+      {errorMessage && (
+  <div
+    role="alert"
+    className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-800"
+  >
+    {errorMessage}
+  </div>
+)}
       {/* HERO */}
       <section className="overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
@@ -192,6 +285,7 @@ const handleSyncToBackend = async () => {
           </div>
         </div>
       </section>
+      
 
       {/* EXECUTIVE SUMMARY */}
       <section className="rounded-[32px] border border-primary/10 bg-linear-to-br from-primary/5 to-cyan-50 p-8 lg:p-10">
@@ -204,7 +298,7 @@ const handleSyncToBackend = async () => {
             </div>
 
             <h2 className="mt-6 text-4xl font-black tracking-tight text-[#16214A]">
-              {ideaDefinition.startupName || "Your Startup"}
+              {getStringValue(ideaDefinition.startupName) || "Your Startup"}
             </h2>
 
             <p className="mt-5 max-w-4xl text-base leading-8 text-[#6B6B6B]">
@@ -606,15 +700,16 @@ const handleSyncToBackend = async () => {
 
         {/* NEXT */}
         <button
-          onClick={async () => {
-            await handleSyncToBackend();
-            router.push("/founder/startup-builder/readiness-score");
-          }}
-          disabled={syncing}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-60"
-        >
-          {syncing ? "Saving..." : "Continue to Readiness Score"}
-        </button>
+  type="button"
+  onClick={() => {
+    router.push(
+      "/founder/startup-builder/readiness-score",
+    );
+  }}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+>
+  Continue to Readiness Score
+</button>
       </div>
     </div>
   );

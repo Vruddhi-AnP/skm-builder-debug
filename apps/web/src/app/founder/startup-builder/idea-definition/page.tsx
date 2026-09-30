@@ -1,9 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import { useRouter } from "next/navigation";
 import { saveBuilderStep, getBuilderData, getBuilderProgress } from "@/hooks/useLocalBuilder";
+
+import {
+  createEmptyBuilderData,
+  getBuilderDataByStartupId,
+  saveBuilderData,
+  updateBuilderData,
+  type BuilderData,
+} from "@/services/builder.service";
+
+import { resolveFounderStartupId } from "@/services/startup.service";
 
 import {
   Accordion,
@@ -35,29 +46,124 @@ interface IdeaDefinitionForm {
   additionalNotes: string;
 }
 
+const EMPTY_IDEA_FORM: IdeaDefinitionForm = {
+  startupName: "",
+  startupVision: "",
+  startupStage: "",
+  startupCategory: "",
+  targetAudience: "",
+  solutionType: "",
+  founderGoal: "",
+  founderMotivation: "",
+  problemStatement: "",
+  uniqueValueProposition: "",
+  additionalNotes: "",
+};
+
+function getStringValues(
+  data: Record<string, unknown>,
+): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(data).filter(
+      (entry): entry is [string, string] =>
+        typeof entry[1] === "string",
+    ),
+  );
+}
+
 export default function IdeaDefinitionPage() {
   const router = useRouter();
 
   const [saved, setSaved] = useState(false);
+const [startupId, setStartupId] = useState<string | null>(null);
+const [isLoading, setIsLoading] = useState(true);
+const [isSaving, setIsSaving] = useState(false);
+const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<IdeaDefinitionForm>(() => {
-  const saved = getBuilderData();
-
-  return {
-    startupName: "",
-    startupVision: "",
-    startupStage: "",
-    startupCategory: "",
-    targetAudience: "",
-    solutionType: "",
-    founderGoal: "",
-    founderMotivation: "",
-    problemStatement: "",
-    uniqueValueProposition: "",
-    additionalNotes: "",
-    ...(saved.ideaDefinition ?? {}),
-  };
+const [formData, setFormData] = useState<IdeaDefinitionForm>({
+  ...EMPTY_IDEA_FORM,
 });
+
+useEffect(() => {
+  let active = true;
+
+  const loadBuilder = async () => {
+    try {
+      const resolvedStartupId = await resolveFounderStartupId();
+
+      if (!active) return;
+
+      setStartupId(resolvedStartupId);
+
+      try {
+        const builder =
+          await getBuilderDataByStartupId(resolvedStartupId);
+
+        if (!active) return;
+
+        const apiIdeaDefinition = getStringValues(
+          builder.data.ideaDefinition,
+        );
+
+        const restoredForm: IdeaDefinitionForm = {
+          ...EMPTY_IDEA_FORM,
+          ...apiIdeaDefinition,
+        };
+
+        setFormData(restoredForm);
+
+        // Keep localStorage only as a fallback copy.
+        saveBuilderStep(
+          "ideaDefinition",
+          restoredForm as unknown as Record<string, string>,
+        );
+      } catch (error) {
+        if (!active) return;
+
+        const localDraft =
+          getBuilderData().ideaDefinition ?? {};
+
+        setFormData({
+          ...EMPTY_IDEA_FORM,
+          ...localDraft,
+        });
+
+        if (
+          !axios.isAxiosError(error) ||
+          error.response?.status !== 404
+        ) {
+          setErrorMessage(
+            "Could not load saved builder data from the server. A local draft is being shown.",
+          );
+        }
+      }
+    } catch {
+      if (!active) return;
+
+      const localDraft =
+        getBuilderData().ideaDefinition ?? {};
+
+      setFormData({
+        ...EMPTY_IDEA_FORM,
+        ...localDraft,
+      });
+
+      setErrorMessage(
+        "Could not resolve your startup from the server. Please try again.",
+      );
+    } finally {
+      if (active) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  void loadBuilder();
+
+  return () => {
+    active = false;
+  };
+}, []);
 
   const progress = getBuilderProgress();
 
@@ -97,6 +203,105 @@ export default function IdeaDefinitionPage() {
       [field]: value,
     }));
   };
+
+  const persistIdeaDefinition = async (
+  navigateNext: boolean,
+) => {
+  const localPayload =
+    formData as unknown as Record<string, string>;
+
+  if (!startupId) {
+    saveBuilderStep("ideaDefinition", localPayload);
+
+    setErrorMessage(
+      "Startup could not be resolved. Your draft is saved locally, but it has not been saved to the server.",
+    );
+
+    return;
+  }
+
+  setIsSaving(true);
+  setErrorMessage(null);
+
+  try {
+    let builderExists = true;
+
+    try {
+      await getBuilderDataByStartupId(startupId);
+    } catch (error) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status === 404
+      ) {
+        builderExists = false;
+      } else {
+        throw error;
+      }
+    }
+
+    if (builderExists) {
+      await updateBuilderData(startupId, {
+        data: {
+          ideaDefinition: {
+            ...formData,
+          },
+        },
+      });
+    } else {
+      const localDraft = getBuilderData();
+
+      const completeBuilderData: BuilderData = {
+        ...createEmptyBuilderData(),
+        ...localDraft,
+        ideaDefinition: {
+          ...formData,
+        },
+      };
+
+      await saveBuilderData({
+        startupId,
+        data: completeBuilderData,
+      });
+    }
+
+    // API succeeded. Now refresh the local fallback.
+    saveBuilderStep("ideaDefinition", localPayload);
+
+    setSaved(true);
+
+    if (navigateNext) {
+      router.push(
+        "/founder/startup-builder/problem-definition",
+      );
+
+      return;
+    }
+
+    window.setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+  } catch {
+    // Backend remains authoritative.
+    // Keep only a temporary local draft on failure.
+    saveBuilderStep("ideaDefinition", localPayload);
+
+    setErrorMessage(
+      "Could not save this step to the server. Your draft is kept locally. Please try again.",
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
+
+if (isLoading) {
+  return (
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-8">
+      <p className="text-sm font-semibold text-slate-600">
+        Loading your saved builder data...
+      </p>
+    </div>
+  );
+}
 
   return (
     <div className="space-y-8">
@@ -608,46 +813,60 @@ export default function IdeaDefinitionPage() {
           </div>
 
       {/* FOOTER */}
-      <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        {/* SAVE */}
-        <button
-  type="button"
-  onClick={() => {
-    saveBuilderStep("ideaDefinition", formData as unknown as Record<string, string>);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  }}
-  className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
-    saved
-      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-      : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
-  }`}
->
-  {saved ? (
-    <>
-      <CheckCircle2 className="h-4 w-4" />
-      Saved!
-    </>
-  ) : (
-    <>
-      <Save className="h-4 w-4" />
-      Save Draft
-    </>
-  )}
-</button>
+      {/* SAVE ERROR */}
+{errorMessage && (
+  <div
+    role="alert"
+    className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
+  >
+    {errorMessage}
+  </div>
+)}
 
-        {/* NEXT */}
-        <button
-          type="button"
-          onClick={() => {
-            saveBuilderStep("ideaDefinition", formData as unknown as Record<string, string>);
-            router.push("/founder/startup-builder/problem-definition");
-          }}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-        >
-          Continue to Problem Definition
-        </button>
-      </div>
+{/* FOOTER */}
+<div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
+  {/* SAVE */}
+  <button
+    type="button"
+    disabled={isSaving}
+    onClick={() => {
+      void persistIdeaDefinition(false);
+    }}
+    className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+      saved
+        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+        : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+    }`}
+  >
+    {isSaving ? (
+      "Saving..."
+    ) : saved ? (
+      <>
+        <CheckCircle2 className="h-4 w-4" />
+        Saved!
+      </>
+    ) : (
+      <>
+        <Save className="h-4 w-4" />
+        Save Draft
+      </>
+    )}
+  </button>
+
+  {/* NEXT */}
+  <button
+    type="button"
+    disabled={isSaving}
+    onClick={() => {
+      void persistIdeaDefinition(true);
+    }}
+    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+  >
+    {isSaving
+      ? "Saving..."
+      : "Continue to Problem Definition"}
+  </button>
+</div>
     </div>
     </div>
   );

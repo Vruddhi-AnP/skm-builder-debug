@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useSyncExternalStore } from "react";
+
 import { usePathname } from "next/navigation";
 
 import {
@@ -15,6 +16,16 @@ import {
   Rocket,
   ChevronRight,
 } from "lucide-react";
+
+const subscribe = () => () => {};
+
+function useHasMounted() {
+  return useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+}
 
 const steps = [
   {
@@ -60,8 +71,11 @@ export default function StartupBuilderLayout({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+const hasMounted = useHasMounted();
 
-  const progress = getBuilderProgress();
+const progress = hasMounted
+  ? getBuilderProgress()
+  : 0;
 
   return (
     <div className="min-h-screen bg-[#f8fbff]">
@@ -197,7 +211,9 @@ export default function StartupBuilderLayout({
                           <CheckCircle2 className="h-4 w-4 text-emerald-500" />
 
                           <p className="text-xs font-medium text-slate-500">
-                            {step.key ? getStepStatus(step.key) : "Pending"}
+                            {hasMounted && step.key
+  ? getStepStatus(step.key)
+  : "Pending"}
                           </p>
                         </div>
                       </div>

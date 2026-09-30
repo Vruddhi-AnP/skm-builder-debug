@@ -1,8 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import { useRouter } from "next/navigation";
 import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
+
+import {
+  createEmptyBuilderData,
+  getBuilderDataByStartupId,
+  saveBuilderData,
+  updateBuilderData,
+} from "@/services/builder.service";
+
+import { resolveFounderStartupId } from "@/services/startup.service";
 
 import {
   BarChart3,
@@ -29,38 +40,180 @@ interface MarketResearchForm {
   founderInsights: string;
 }
 
+const EMPTY_MARKET_FORM: MarketResearchForm = {
+  marketCategory: "",
+  marketTrends: [],
+  targetCustomers: [],
+  customerPainPoints: [],
+  competitors: [],
+  competitiveAdvantages: [],
+  marketSize: "",
+  marketDemand: "",
+  customerBehavior: "",
+  growthOpportunity: "",
+  founderInsights: "",
+};
+
+const getStringValue = (value: unknown): string =>
+  typeof value === "string" ? value : "";
+
+const getStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is string => typeof item === "string",
+    );
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeMarketResearch = (
+  raw: Record<string, unknown>,
+): MarketResearchForm => ({
+  marketCategory: getStringValue(raw.marketCategory),
+  marketTrends: getStringArray(raw.marketTrends),
+  targetCustomers: getStringArray(raw.targetCustomers),
+  customerPainPoints: getStringArray(raw.customerPainPoints),
+  competitors: getStringArray(raw.competitors),
+  competitiveAdvantages: getStringArray(
+    raw.competitiveAdvantages,
+  ),
+  marketSize: getStringValue(raw.marketSize),
+  marketDemand: getStringValue(raw.marketDemand),
+  customerBehavior: getStringValue(raw.customerBehavior),
+  growthOpportunity: getStringValue(raw.growthOpportunity),
+  founderInsights: getStringValue(raw.founderInsights),
+});
+
+const serializeMarketResearch = (
+  form: MarketResearchForm,
+): Record<string, string> => ({
+  marketCategory: form.marketCategory,
+  marketTrends: form.marketTrends.join(","),
+  targetCustomers: form.targetCustomers.join(","),
+  customerPainPoints: form.customerPainPoints.join(","),
+  competitors: form.competitors.join(","),
+  competitiveAdvantages:
+    form.competitiveAdvantages.join(","),
+  marketSize: form.marketSize,
+  marketDemand: form.marketDemand,
+  customerBehavior: form.customerBehavior,
+  growthOpportunity: form.growthOpportunity,
+  founderInsights: form.founderInsights,
+});
+
+
+
 export default function MarketResearchPage() {
   const router = useRouter();
 
   const [saved, setSaved] = useState(false);
 
- const [formData, setFormData] = useState<MarketResearchForm>(() => {
-  const saved = getBuilderData();
-  const raw = (saved.marketResearch ?? {}) as Record<string, string>;
-  return {
-    marketCategory: raw.marketCategory ?? "",
-    marketSize: raw.marketSize ?? "",
-    marketDemand: raw.marketDemand ?? "",
-    customerBehavior: raw.customerBehavior ?? "",
-    growthOpportunity: raw.growthOpportunity ?? "",
-    founderInsights: raw.founderInsights ?? "",
-    marketTrends: raw.marketTrends
-      ? raw.marketTrends.split(",").filter(Boolean)
-      : [],
-    targetCustomers: raw.targetCustomers
-      ? raw.targetCustomers.split(",").filter(Boolean)
-      : [],
-    customerPainPoints: raw.customerPainPoints
-      ? raw.customerPainPoints.split(",").filter(Boolean)
-      : [],
-    competitors: raw.competitors
-      ? raw.competitors.split(",").filter(Boolean)
-      : [],
-    competitiveAdvantages: raw.competitiveAdvantages
-      ? raw.competitiveAdvantages.split(",").filter(Boolean)
-      : [],
+const [formData, setFormData] =
+  useState<MarketResearchForm>(() => ({
+    ...EMPTY_MARKET_FORM,
+  }));
+
+const [startupId, setStartupId] =
+  useState<string | null>(null);
+
+const [isLoading, setIsLoading] = useState(true);
+const [isSaving, setIsSaving] = useState(false);
+const [errorMessage, setErrorMessage] = useState("");
+
+useEffect(() => {
+  let active = true;
+
+  const loadMarketResearch = async () => {
+    try {
+      const resolvedStartupId =
+        await resolveFounderStartupId();
+
+      if (!active) {
+        return;
+      }
+
+      setStartupId(resolvedStartupId);
+
+      try {
+        const builder =
+          await getBuilderDataByStartupId(
+            resolvedStartupId,
+          );
+
+        if (!active) {
+          return;
+        }
+
+        const marketResearch =
+          normalizeMarketResearch(
+            builder.data?.marketResearch ?? {},
+          );
+
+        setFormData(marketResearch);
+
+        // Temporary local fallback copy.
+        saveBuilderStep(
+          "marketResearch",
+          serializeMarketResearch(marketResearch),
+        );
+      } catch (error: unknown) {
+        if (!active) {
+          return;
+        }
+
+        const localMarket =
+          getBuilderData().marketResearch ?? {};
+
+        setFormData(
+          normalizeMarketResearch(localMarket),
+        );
+
+        const isNotFound =
+          axios.isAxiosError(error) &&
+          error.response?.status === 404;
+
+        if (!isNotFound) {
+          setErrorMessage(
+            "Could not load Market Research from the server. Showing your local draft.",
+          );
+        }
+      }
+    } catch {
+      if (!active) {
+        return;
+      }
+
+      const localMarket =
+        getBuilderData().marketResearch ?? {};
+
+      setFormData(
+        normalizeMarketResearch(localMarket),
+      );
+
+      setErrorMessage(
+        "Could not resolve your startup from the server. Your draft is local only.",
+      );
+    } finally {
+      if (active) {
+        setIsLoading(false);
+      }
+    }
   };
-});
+
+  void loadMarketResearch();
+
+  return () => {
+    active = false;
+  };
+}, []);
 
   const marketSegments = [
     "AI", "SaaS", "FinTech", "Healthcare",
@@ -110,31 +263,96 @@ export default function MarketResearchPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
- const handleSave = () => {
-  const payload: Record<string, string> = {
-    marketCategory: formData.marketCategory,
-    marketSize: formData.marketSize,
-    marketDemand: formData.marketDemand,
-    customerBehavior: formData.customerBehavior,
-    growthOpportunity: formData.growthOpportunity,
-    founderInsights: formData.founderInsights,
+ const persistMarketResearch = async (
+  navigateNext: boolean,
+) => {
+  const marketResearch =
+    serializeMarketResearch(formData);
 
-    marketTrends: formData.marketTrends.join(","),
-    targetCustomers: formData.targetCustomers.join(","),
-    customerPainPoints: formData.customerPainPoints.join(","),
-    competitors: formData.competitors.join(","),
-    competitiveAdvantages:
-      formData.competitiveAdvantages.join(","),
-  };
+  if (!startupId) {
+    saveBuilderStep(
+      "marketResearch",
+      marketResearch,
+    );
 
-  saveBuilderStep("marketResearch", payload);
+    setErrorMessage(
+      "Startup could not be resolved. Your draft is saved locally, but it has not been saved to the server.",
+    );
 
-  setSaved(true);
+    return;
+  }
 
-  setTimeout(() => {
-    setSaved(false);
-  }, 2000);
+  setIsSaving(true);
+  setErrorMessage("");
+
+  try {
+    try {
+      await getBuilderDataByStartupId(startupId);
+
+      await updateBuilderData(startupId, {
+        data: {
+          marketResearch,
+        },
+      });
+    } catch (error: unknown) {
+      const isNotFound =
+        axios.isAxiosError(error) &&
+        error.response?.status === 404;
+
+      if (!isNotFound) {
+        throw error;
+      }
+
+      const localData = getBuilderData();
+
+      await saveBuilderData({
+        startupId,
+        data: {
+          ...createEmptyBuilderData(),
+          ...localData,
+          marketResearch,
+        },
+      });
+    }
+
+    // Backend save succeeded.
+    saveBuilderStep(
+      "marketResearch",
+      marketResearch,
+    );
+
+    setSaved(true);
+
+    window.setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+
+    if (navigateNext) {
+      router.push(
+        "/founder/startup-builder/solution-design",
+      );
+    }
+  } catch {
+    saveBuilderStep(
+      "marketResearch",
+      marketResearch,
+    );
+
+    setErrorMessage(
+      "Could not save Market Research to the server. Your draft is saved locally. Please try again.",
+    );
+  } finally {
+    setIsSaving(false);
+  }
 };
+if (isLoading) {
+  return (
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-8 text-sm font-semibold text-slate-600">
+      Loading saved Market Research...
+    </div>
+  );
+}
+
 
   return (
     <div className="space-y-8">
@@ -528,34 +746,56 @@ SOM: 2% market capture over 3 years..."
         </div>
       </div>
 
+      {errorMessage && (
+  <div
+    role="alert"
+    className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
+  >
+    {errorMessage}
+  </div>
+)}
+
+
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <button
-          type="button"
-          onClick={handleSave}
-          className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
-            saved
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
-          }`}
-        >
-          {saved ? (
-            <><CheckCircle2 className="h-4 w-4" />Saved!</>
-          ) : (
-            <><Save className="h-4 w-4" />Save Draft</>
-          )}
-        </button>
-
+  type="button"
+  onClick={() => {
+    void persistMarketResearch(false);
+  }}
+  disabled={isSaving}
+  className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+    saved
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+  }`}
+>
+  {isSaving ? (
+    <>Saving...</>
+  ) : saved ? (
+    <>
+      <CheckCircle2 className="h-4 w-4" />
+      Saved!
+    </>
+  ) : (
+    <>
+      <Save className="h-4 w-4" />
+      Save Draft
+    </>
+  )}
+</button>
         <button
-          type="button"
-          onClick={() => {
-            handleSave();
-            router.push("/founder/startup-builder/solution-design");
-          }}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-        >
-          Continue to Solution Design
-        </button>
+  type="button"
+  onClick={() => {
+    void persistMarketResearch(true);
+  }}
+  disabled={isSaving}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {isSaving
+    ? "Saving..."
+    : "Continue to Solution Design"}
+</button>
       </div>
     </div>
   );

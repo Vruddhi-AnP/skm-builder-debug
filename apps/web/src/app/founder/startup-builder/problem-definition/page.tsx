@@ -1,10 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import { useRouter } from "next/navigation";
 
 import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
+
+import {
+  createEmptyBuilderData,
+  getBuilderDataByStartupId,
+  saveBuilderData,
+  updateBuilderData,
+} from "@/services/builder.service";
+
+import { resolveFounderStartupId } from "@/services/startup.service";
 
 import {
   Accordion,
@@ -37,37 +47,171 @@ interface ProblemDefinitionForm {
   founderObservations: string;
 }
 
+const EMPTY_PROBLEM_FORM: ProblemDefinitionForm = {
+  coreProblemStatement: "",
+  problemSeverity: "",
+  affectedUsers: [],
+  currentAlternatives: [],
+  marketGap: "",
+  customerFrustrations: "",
+  operationalImpact: "",
+  problemAreas: [],
+  problemFrequency: "",
+  problemUrgency: "",
+  founderObservations: "",
+};
+
+const getStringValue = (value: unknown): string =>
+  typeof value === "string" ? value : "";
+
+const getStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is string => typeof item === "string",
+    );
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeProblemDefinition = (
+  raw: Record<string, unknown>,
+): ProblemDefinitionForm => ({
+  coreProblemStatement: getStringValue(raw.coreProblemStatement),
+  problemSeverity: getStringValue(raw.problemSeverity),
+  affectedUsers: getStringArray(raw.affectedUsers),
+  currentAlternatives: getStringArray(raw.currentAlternatives),
+  marketGap: getStringValue(raw.marketGap),
+  customerFrustrations: getStringValue(raw.customerFrustrations),
+  operationalImpact: getStringValue(raw.operationalImpact),
+  problemAreas: getStringArray(raw.problemAreas),
+  problemFrequency: getStringValue(raw.problemFrequency),
+  problemUrgency: getStringValue(raw.problemUrgency),
+  founderObservations: getStringValue(raw.founderObservations),
+});
+
+const serializeProblemDefinition = (
+  form: ProblemDefinitionForm,
+): Record<string, string> => ({
+  coreProblemStatement: form.coreProblemStatement,
+  problemSeverity: form.problemSeverity,
+  affectedUsers: form.affectedUsers.join(","),
+  currentAlternatives: form.currentAlternatives.join(","),
+  marketGap: form.marketGap,
+  customerFrustrations: form.customerFrustrations,
+  operationalImpact: form.operationalImpact,
+  problemAreas: form.problemAreas.join(","),
+  problemFrequency: form.problemFrequency,
+  problemUrgency: form.problemUrgency,
+  founderObservations: form.founderObservations,
+});
+
 export default function ProblemDefinitionPage() {
   const router = useRouter();
 
   const [saved, setSaved] = useState(false);
 
-  const [formData, setFormData] =
-  useState<ProblemDefinitionForm>(() => {
+const [formData, setFormData] =
+  useState<ProblemDefinitionForm>(() => ({
+    ...EMPTY_PROBLEM_FORM,
+  }));
 
-    const saved = getBuilderData();
 
-    const raw = (saved.problemDefinition ?? {}) as Record<string, string>;
-    return {
-      coreProblemStatement: raw.coreProblemStatement ?? "",
-      problemSeverity: raw.problemSeverity ?? "",
-      marketGap: raw.marketGap ?? "",
-      customerFrustrations: raw.customerFrustrations ?? "",
-      operationalImpact: raw.operationalImpact ?? "",
-      problemFrequency: raw.problemFrequency ?? "",
-      problemUrgency: raw.problemUrgency ?? "",
-      founderObservations: raw.founderObservations ?? "",
-      affectedUsers: raw.affectedUsers
-        ? raw.affectedUsers.split(",").filter(Boolean)
-        : [],
-      currentAlternatives: raw.currentAlternatives
-        ? raw.currentAlternatives.split(",").filter(Boolean)
-        : [],
-      problemAreas: raw.problemAreas
-        ? raw.problemAreas.split(",").filter(Boolean)
-        : [],
-    };
-  });
+const [startupId, setStartupId] = useState<string | null>(null);
+const [isLoading, setIsLoading] = useState(true);
+const [isSaving, setIsSaving] = useState(false);
+const [errorMessage, setErrorMessage] = useState("");
+
+useEffect(() => {
+  let active = true;
+
+  const loadProblemDefinition = async () => {
+    try {
+      const resolvedStartupId = await resolveFounderStartupId();
+
+      if (!active) {
+        return;
+      }
+
+      setStartupId(resolvedStartupId);
+
+      try {
+        const builder =
+          await getBuilderDataByStartupId(resolvedStartupId);
+
+        if (!active) {
+          return;
+        }
+
+        const problemDefinition =
+          normalizeProblemDefinition(
+            builder.data?.problemDefinition ?? {},
+          );
+
+        setFormData(problemDefinition);
+
+        // Temporary local fallback copy.
+        saveBuilderStep(
+          "problemDefinition",
+          serializeProblemDefinition(problemDefinition),
+        );
+      } catch (error: unknown) {
+        if (!active) {
+          return;
+        }
+
+        const localProblem =
+          getBuilderData().problemDefinition ?? {};
+
+        setFormData(
+          normalizeProblemDefinition(localProblem),
+        );
+
+        const isNotFound =
+          axios.isAxiosError(error) &&
+          error.response?.status === 404;
+
+        if (!isNotFound) {
+          setErrorMessage(
+            "Could not load Problem Definition from the server. Showing your local draft.",
+          );
+        }
+      }
+    } catch {
+      if (!active) {
+        return;
+      }
+
+      const localProblem =
+        getBuilderData().problemDefinition ?? {};
+
+      setFormData(
+        normalizeProblemDefinition(localProblem),
+      );
+
+      setErrorMessage(
+        "Could not resolve your startup from the server. Your draft is local only.",
+      );
+    } finally {
+      if (active) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  void loadProblemDefinition();
+
+  return () => {
+    active = false;
+  };
+}, []);
 
   const problemAreas = [
     "Manual Operations",
@@ -153,6 +297,98 @@ export default function ProblemDefinitionPage() {
       [field]: value,
     }));
   };
+
+  const persistProblemDefinition = async (
+  navigateNext: boolean,
+) => {
+  const problemDefinition =
+    serializeProblemDefinition(formData);
+
+  if (!startupId) {
+    saveBuilderStep(
+      "problemDefinition",
+      problemDefinition,
+    );
+
+    setErrorMessage(
+      "Startup could not be resolved. Your draft is saved locally, but it has not been saved to the server.",
+    );
+
+    return;
+  }
+
+  setIsSaving(true);
+  setErrorMessage("");
+
+  try {
+    try {
+      await getBuilderDataByStartupId(startupId);
+
+      await updateBuilderData(startupId, {
+        data: {
+          problemDefinition,
+        },
+      });
+    } catch (error: unknown) {
+      const isNotFound =
+        axios.isAxiosError(error) &&
+        error.response?.status === 404;
+
+      if (!isNotFound) {
+        throw error;
+      }
+
+      const localData = getBuilderData();
+
+      await saveBuilderData({
+        startupId,
+        data: {
+          ...createEmptyBuilderData(),
+          ...localData,
+          problemDefinition,
+        },
+      });
+    }
+
+    // Server succeeded. Keep only a fallback copy locally.
+    saveBuilderStep(
+      "problemDefinition",
+      problemDefinition,
+    );
+
+    setSaved(true);
+
+    window.setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+
+    if (navigateNext) {
+      router.push(
+        "/founder/startup-builder/market-research",
+      );
+    }
+  } catch {
+    // Temporary draft fallback only.
+    saveBuilderStep(
+      "problemDefinition",
+      problemDefinition,
+    );
+
+    setErrorMessage(
+      "Could not save Problem Definition to the server. Your draft is saved locally. Please try again.",
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
+
+if (isLoading) {
+  return (
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-8 text-sm font-semibold text-slate-600">
+      Loading saved Problem Definition...
+    </div>
+  );
+}
 
   return (
     <div className="space-y-8">
@@ -664,59 +900,60 @@ export default function ProblemDefinitionPage() {
 
       </div>
 
+      {errorMessage && (
+  <div
+    role="alert"
+    className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
+  >
+    {errorMessage}
+  </div>
+)}
+
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
         
         {/* SAVE */}
-          <button
-            type="button"
-            onClick={() => {
-              saveBuilderStep("problemDefinition", {
-                ...formData,
-                affectedUsers: formData.affectedUsers.join(","),
-
-                currentAlternatives:
-                  formData.currentAlternatives.join(","),
-
-                problemAreas:
-                  formData.problemAreas.join(","),
-              } as Record<string, string>);
-              setSaved(true);
-              setTimeout(() => setSaved(false), 2000);
-            }}
-            className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
-              saved
-                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
-            }`}
-          >
-            {saved ? (
-              <><CheckCircle2 className="h-4 w-4" />Saved!</>
-            ) : (
-              <><Save className="h-4 w-4" />Save Draft</>
-            )}
-          </button>
+          
+        <button
+  type="button"
+  onClick={() => {
+    void persistProblemDefinition(false);
+  }}
+  disabled={isSaving}
+  className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+    saved
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+  }`}
+>
+  {isSaving ? (
+    <>Saving...</>
+  ) : saved ? (
+    <>
+      <CheckCircle2 className="h-4 w-4" />
+      Saved!
+    </>
+  ) : (
+    <>
+      <Save className="h-4 w-4" />
+      Save Draft
+    </>
+  )}
+</button>
 
           {/* NEXT */}
-          <button
-            type="button"
-            onClick={() => {
-              saveBuilderStep("problemDefinition", {
-              ...formData,
-              affectedUsers: formData.affectedUsers.join(","),
-
-              currentAlternatives:
-                formData.currentAlternatives.join(","),
-
-              problemAreas:
-                formData.problemAreas.join(","),
-            } as Record<string, string>);
-              router.push("/founder/startup-builder/market-research");
-            }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-          >
-            Continue to Market Research
-          </button>
+<button
+  type="button"
+  onClick={() => {
+    void persistProblemDefinition(true);
+  }}
+  disabled={isSaving}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {isSaving
+    ? "Saving..."
+    : "Continue to Market Research"}
+</button>
       </div>
     </div>
   );

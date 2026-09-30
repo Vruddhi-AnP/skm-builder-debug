@@ -1,8 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import { useRouter } from "next/navigation";
 import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
+
+import {
+  createEmptyBuilderData,
+  getBuilderDataByStartupId,
+  saveBuilderData,
+  updateBuilderData,
+} from "@/services/builder.service";
+
+import { resolveFounderStartupId } from "@/services/startup.service";
+
 
 import {
   LayoutDashboard,
@@ -26,33 +38,173 @@ interface SolutionDesignForm {
   automationStrategy: string;
 }
 
+const EMPTY_SOLUTION_FORM: SolutionDesignForm = {
+  solutionType: "",
+  selectedFeatures: [],
+  platformType: "",
+  businessModel: "",
+  userJourney: [],
+  experienceGoals: [],
+  solutionNotes: "",
+  productVision: "",
+  scalabilityPlan: "",
+  automationStrategy: "",
+};
+
+const getStringValue = (value: unknown): string =>
+  typeof value === "string" ? value : "";
+
+const getStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is string => typeof item === "string",
+    );
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeSolutionDesign = (
+  raw: Record<string, unknown>,
+): SolutionDesignForm => ({
+  solutionType: getStringValue(raw.solutionType),
+  selectedFeatures: getStringArray(raw.selectedFeatures),
+  platformType: getStringValue(raw.platformType),
+  businessModel: getStringValue(raw.businessModel),
+  userJourney: getStringArray(raw.userJourney),
+  experienceGoals: getStringArray(raw.experienceGoals),
+  solutionNotes: getStringValue(raw.solutionNotes),
+  productVision: getStringValue(raw.productVision),
+  scalabilityPlan: getStringValue(raw.scalabilityPlan),
+  automationStrategy: getStringValue(raw.automationStrategy),
+});
+
+const serializeSolutionDesign = (
+  form: SolutionDesignForm,
+): Record<string, string> => ({
+  solutionType: form.solutionType,
+  selectedFeatures: form.selectedFeatures.join(","),
+  platformType: form.platformType,
+  businessModel: form.businessModel,
+  userJourney: form.userJourney.join(","),
+  experienceGoals: form.experienceGoals.join(","),
+  solutionNotes: form.solutionNotes,
+  productVision: form.productVision,
+  scalabilityPlan: form.scalabilityPlan,
+  automationStrategy: form.automationStrategy,
+});
+
 export default function SolutionDesignPage() {
   const router = useRouter();
 
   const [saved, setSaved] = useState(false);
 
- const [formData, setFormData] = useState<SolutionDesignForm>(() => {
-  const saved = getBuilderData();
-  const raw = (saved.solutionDesign ?? {}) as Record<string, string>;
-  return {
-    solutionType: raw.solutionType ?? "",
-    platformType: raw.platformType ?? "",
-    businessModel: raw.businessModel ?? "",
-    solutionNotes: raw.solutionNotes ?? "",
-    productVision: raw.productVision ?? "",
-    scalabilityPlan: raw.scalabilityPlan ?? "",
-    automationStrategy: raw.automationStrategy ?? "",
-    selectedFeatures: raw.selectedFeatures
-      ? raw.selectedFeatures.split(",").filter(Boolean)
-      : [],
-    userJourney: raw.userJourney
-      ? raw.userJourney.split(",").filter(Boolean)
-      : [],
-    experienceGoals: raw.experienceGoals
-      ? raw.experienceGoals.split(",").filter(Boolean)
-      : [],
+const [formData, setFormData] =
+  useState<SolutionDesignForm>(() => ({
+    ...EMPTY_SOLUTION_FORM,
+  }));
+
+const [startupId, setStartupId] =
+  useState<string | null>(null);
+
+const [isLoading, setIsLoading] = useState(true);
+const [isSaving, setIsSaving] = useState(false);
+const [errorMessage, setErrorMessage] = useState("");
+
+useEffect(() => {
+  let active = true;
+
+  const loadSolutionDesign = async () => {
+    try {
+      const resolvedStartupId =
+        await resolveFounderStartupId();
+
+      if (!active) {
+        return;
+      }
+
+      setStartupId(resolvedStartupId);
+
+      try {
+        const builder =
+          await getBuilderDataByStartupId(
+            resolvedStartupId,
+          );
+
+        if (!active) {
+          return;
+        }
+
+        const solutionDesign =
+          normalizeSolutionDesign(
+            builder.data?.solutionDesign ?? {},
+          );
+
+        setFormData(solutionDesign);
+
+        // Temporary local fallback copy.
+        saveBuilderStep(
+          "solutionDesign",
+          serializeSolutionDesign(solutionDesign),
+        );
+      } catch (error: unknown) {
+        if (!active) {
+          return;
+        }
+
+        const localSolution =
+          getBuilderData().solutionDesign ?? {};
+
+        setFormData(
+          normalizeSolutionDesign(localSolution),
+        );
+
+        const isNotFound =
+          axios.isAxiosError(error) &&
+          error.response?.status === 404;
+
+        if (!isNotFound) {
+          setErrorMessage(
+            "Could not load Solution Design from the server. Showing your local draft.",
+          );
+        }
+      }
+    } catch {
+      if (!active) {
+        return;
+      }
+
+      const localSolution =
+        getBuilderData().solutionDesign ?? {};
+
+      setFormData(
+        normalizeSolutionDesign(localSolution),
+      );
+
+      setErrorMessage(
+        "Could not resolve your startup from the server. Your draft is local only.",
+      );
+    } finally {
+      if (active) {
+        setIsLoading(false);
+      }
+    }
   };
-});
+
+  void loadSolutionDesign();
+
+  return () => {
+    active = false;
+  };
+}, []);
+
 
   const solutionTypes = [
     "AI Automation",
@@ -136,34 +288,95 @@ export default function SolutionDesignPage() {
     }));
   };
 
-  const handleSave = () => {
-  const payload: Record<string, string> = {
-    solutionType: formData.solutionType,
-    platformType: formData.platformType,
-    businessModel: formData.businessModel,
-    solutionNotes: formData.solutionNotes,
-    productVision: formData.productVision,
-    scalabilityPlan: formData.scalabilityPlan,
-    automationStrategy: formData.automationStrategy,
+  const persistSolutionDesign = async (
+  navigateNext: boolean,
+) => {
+  const solutionDesign =
+    serializeSolutionDesign(formData);
 
-    selectedFeatures:
-      formData.selectedFeatures.join(","),
+  if (!startupId) {
+    saveBuilderStep(
+      "solutionDesign",
+      solutionDesign,
+    );
 
-    userJourney:
-      formData.userJourney.join(","),
+    setErrorMessage(
+      "Startup could not be resolved. Your draft is saved locally, but it has not been saved to the server.",
+    );
 
-    experienceGoals:
-      formData.experienceGoals.join(","),
-  };
+    return;
+  }
 
-  saveBuilderStep("solutionDesign", payload);
+  setIsSaving(true);
+  setErrorMessage("");
 
-  setSaved(true);
+  try {
+    try {
+      await getBuilderDataByStartupId(startupId);
 
-  setTimeout(() => {
-    setSaved(false);
-  }, 2000);
+      await updateBuilderData(startupId, {
+        data: {
+          solutionDesign,
+        },
+      });
+    } catch (error: unknown) {
+      const isNotFound =
+        axios.isAxiosError(error) &&
+        error.response?.status === 404;
+
+      if (!isNotFound) {
+        throw error;
+      }
+
+      const localData = getBuilderData();
+
+      await saveBuilderData({
+        startupId,
+        data: {
+          ...createEmptyBuilderData(),
+          ...localData,
+          solutionDesign,
+        },
+      });
+    }
+
+    saveBuilderStep(
+      "solutionDesign",
+      solutionDesign,
+    );
+
+    setSaved(true);
+
+    window.setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+
+    if (navigateNext) {
+      router.push(
+        "/founder/startup-builder/business-model",
+      );
+    }
+  } catch {
+    saveBuilderStep(
+      "solutionDesign",
+      solutionDesign,
+    );
+
+    setErrorMessage(
+      "Could not save Solution Design to the server. Your draft is saved locally. Please try again.",
+    );
+  } finally {
+    setIsSaving(false);
+  }
 };
+
+if (isLoading) {
+  return (
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-8 text-sm font-semibold text-slate-600">
+      Loading saved Solution Design...
+    </div>
+  );
+}
 
   return (
     <div className="space-y-8">
@@ -642,35 +855,57 @@ export default function SolutionDesignPage() {
 </div>
 </div>
 
+{errorMessage && (
+  <div
+    role="alert"
+    className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
+  >
+    {errorMessage}
+  </div>
+)}
+
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
        {/* SAVE DRAFT */}
         <button
-          type="button"
-          onClick={handleSave}
-          className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
-            saved
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
-          }`}
-        >
-          {saved ? (
-            <><CheckCircle2 className="h-4 w-4" />Saved!</>
-          ) : (
-            <><Save className="h-4 w-4" />Save Draft</>
-          )}
-        </button>
+  type="button"
+  onClick={() => {
+    void persistSolutionDesign(false);
+  }}
+  disabled={isSaving}
+  className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+    saved
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+  }`}
+>
+  {isSaving ? (
+    <>Saving...</>
+  ) : saved ? (
+    <>
+      <CheckCircle2 className="h-4 w-4" />
+      Saved!
+    </>
+  ) : (
+    <>
+      <Save className="h-4 w-4" />
+      Save Draft
+    </>
+  )}
+</button>
 
 {/* CONTINUE */}
 <button
   type="button"
   onClick={() => {
-    handleSave();
-    router.push("/founder/startup-builder/business-model");
+    void persistSolutionDesign(true);
   }}
-  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+  disabled={isSaving}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
 >
-  Continue to Business Model
+  {isSaving
+    ? "Saving..."
+    : "Continue to Business Model"}
 </button>
       </div>
     </div>

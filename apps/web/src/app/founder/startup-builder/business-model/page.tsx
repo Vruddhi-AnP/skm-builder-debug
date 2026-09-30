@@ -1,8 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import { useRouter } from "next/navigation";
 import { saveBuilderStep, getBuilderData } from "@/hooks/useLocalBuilder";
+
+import {
+  createEmptyBuilderData,
+  getBuilderDataByStartupId,
+  saveBuilderData,
+  updateBuilderData,
+} from "@/services/builder.service";
+
+import { resolveFounderStartupId } from "@/services/startup.service";
 
 import {
   Coins,
@@ -28,35 +39,178 @@ interface BusinessModelForm {
   founderBusinessNotes: string;
 }
 
+const EMPTY_BUSINESS_FORM: BusinessModelForm = {
+  revenueModel: "",
+  pricingStrategy: "",
+  acquisitionChannels: [],
+  costStructures: [],
+  scalingChallenges: [],
+  revenueTimeline: "",
+  targetRevenue: "",
+  monetizationStrategy: "",
+  customerAcquisitionStrategy: "",
+  growthStrategy: "",
+  founderBusinessNotes: "",
+};
+
+const getStringValue = (value: unknown): string =>
+  typeof value === "string" ? value : "";
+
+const getStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is string => typeof item === "string",
+    );
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const normalizeBusinessModel = (
+  raw: Record<string, unknown>,
+): BusinessModelForm => ({
+  revenueModel: getStringValue(raw.revenueModel),
+  pricingStrategy: getStringValue(raw.pricingStrategy),
+  acquisitionChannels: getStringArray(raw.acquisitionChannels),
+  costStructures: getStringArray(raw.costStructures),
+  scalingChallenges: getStringArray(raw.scalingChallenges),
+  revenueTimeline: getStringValue(raw.revenueTimeline),
+  targetRevenue: getStringValue(raw.targetRevenue),
+  monetizationStrategy: getStringValue(raw.monetizationStrategy),
+  customerAcquisitionStrategy: getStringValue(
+    raw.customerAcquisitionStrategy,
+  ),
+  growthStrategy: getStringValue(raw.growthStrategy),
+  founderBusinessNotes: getStringValue(raw.founderBusinessNotes),
+});
+
+const serializeBusinessModel = (
+  form: BusinessModelForm,
+): Record<string, string> => ({
+  revenueModel: form.revenueModel,
+  pricingStrategy: form.pricingStrategy,
+  acquisitionChannels: form.acquisitionChannels.join(","),
+  costStructures: form.costStructures.join(","),
+  scalingChallenges: form.scalingChallenges.join(","),
+  revenueTimeline: form.revenueTimeline,
+  targetRevenue: form.targetRevenue,
+  monetizationStrategy: form.monetizationStrategy,
+  customerAcquisitionStrategy:
+    form.customerAcquisitionStrategy,
+  growthStrategy: form.growthStrategy,
+  founderBusinessNotes: form.founderBusinessNotes,
+});
+
 export default function BusinessModelPage() {
   const router = useRouter();
 
   const [saved, setSaved] = useState(false);
 
-  const [formData, setFormData] =
-  useState<BusinessModelForm>(() => {
-    const saved = getBuilderData();
-    const raw = (saved.businessModel ?? {}) as Record<string, string>;
-    return {
-      revenueModel: raw.revenueModel ?? "",
-      pricingStrategy: raw.pricingStrategy ?? "",
-      revenueTimeline: raw.revenueTimeline ?? "",
-      targetRevenue: raw.targetRevenue ?? "",
-      monetizationStrategy: raw.monetizationStrategy ?? "",
-      customerAcquisitionStrategy: raw.customerAcquisitionStrategy ?? "",
-      growthStrategy: raw.growthStrategy ?? "",
-      founderBusinessNotes: raw.founderBusinessNotes ?? "",
-      acquisitionChannels: raw.acquisitionChannels
-        ? raw.acquisitionChannels.split(",").filter(Boolean)
-        : [],
-      costStructures: raw.costStructures
-        ? raw.costStructures.split(",").filter(Boolean)
-        : [],
-      scalingChallenges: raw.scalingChallenges
-        ? raw.scalingChallenges.split(",").filter(Boolean)
-        : [],
-    };
-  });
+const [formData, setFormData] =
+  useState<BusinessModelForm>(() => ({
+    ...EMPTY_BUSINESS_FORM,
+  }));
+
+const [startupId, setStartupId] =
+  useState<string | null>(null);
+
+const [isLoading, setIsLoading] = useState(true);
+const [isSaving, setIsSaving] = useState(false);
+const [errorMessage, setErrorMessage] = useState("");
+
+useEffect(() => {
+  let active = true;
+
+  const loadBusinessModel = async () => {
+    try {
+      const resolvedStartupId =
+        await resolveFounderStartupId();
+
+      if (!active) {
+        return;
+      }
+
+      setStartupId(resolvedStartupId);
+
+      try {
+        const builder =
+          await getBuilderDataByStartupId(
+            resolvedStartupId,
+          );
+
+        if (!active) {
+          return;
+        }
+
+        const businessModel =
+          normalizeBusinessModel(
+            builder.data?.businessModel ?? {},
+          );
+
+        setFormData(businessModel);
+
+        // Temporary local fallback copy.
+        saveBuilderStep(
+          "businessModel",
+          serializeBusinessModel(businessModel),
+        );
+      } catch (error: unknown) {
+        if (!active) {
+          return;
+        }
+
+        const localBusiness =
+          getBuilderData().businessModel ?? {};
+
+        setFormData(
+          normalizeBusinessModel(localBusiness),
+        );
+
+        const isNotFound =
+          axios.isAxiosError(error) &&
+          error.response?.status === 404;
+
+        if (!isNotFound) {
+          setErrorMessage(
+            "Could not load Business Model from the server. Showing your local draft.",
+          );
+        }
+      }
+    } catch {
+      if (!active) {
+        return;
+      }
+
+      const localBusiness =
+        getBuilderData().businessModel ?? {};
+
+      setFormData(
+        normalizeBusinessModel(localBusiness),
+      );
+
+      setErrorMessage(
+        "Could not resolve your startup from the server. Your draft is local only.",
+      );
+    } finally {
+      if (active) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  void loadBusinessModel();
+
+  return () => {
+    active = false;
+  };
+}, []);
 
   const revenueModels = [
     "Subscription",
@@ -137,16 +291,95 @@ export default function BusinessModelPage() {
     }));
   };
 
-  const handleSave = () => {
-  saveBuilderStep("businessModel", {
-    ...formData,
-    acquisitionChannels: formData.acquisitionChannels.join(","),
-    costStructures: formData.costStructures.join(","),
-    scalingChallenges: formData.scalingChallenges.join(","),
-  } as Record<string, string>);
-  setSaved(true);
-  setTimeout(() => setSaved(false), 2000);
+  const persistBusinessModel = async (
+  navigateNext: boolean,
+) => {
+  const businessModel =
+    serializeBusinessModel(formData);
+
+  if (!startupId) {
+    saveBuilderStep(
+      "businessModel",
+      businessModel,
+    );
+
+    setErrorMessage(
+      "Startup could not be resolved. Your draft is saved locally, but it has not been saved to the server.",
+    );
+
+    return;
+  }
+
+  setIsSaving(true);
+  setErrorMessage("");
+
+  try {
+    try {
+      await getBuilderDataByStartupId(startupId);
+
+      await updateBuilderData(startupId, {
+        data: {
+          businessModel,
+        },
+      });
+    } catch (error: unknown) {
+      const isNotFound =
+        axios.isAxiosError(error) &&
+        error.response?.status === 404;
+
+      if (!isNotFound) {
+        throw error;
+      }
+
+      const localData = getBuilderData();
+
+      await saveBuilderData({
+        startupId,
+        data: {
+          ...createEmptyBuilderData(),
+          ...localData,
+          businessModel,
+        },
+      });
+    }
+
+    saveBuilderStep(
+      "businessModel",
+      businessModel,
+    );
+
+    setSaved(true);
+
+    window.setTimeout(() => {
+      setSaved(false);
+    }, 2000);
+
+    if (navigateNext) {
+      router.push(
+        "/founder/startup-builder/summary",
+      );
+    }
+  } catch {
+    saveBuilderStep(
+      "businessModel",
+      businessModel,
+    );
+
+    setErrorMessage(
+      "Could not save Business Model to the server. Your draft is saved locally. Please try again.",
+    );
+  } finally {
+    setIsSaving(false);
+  }
 };
+
+if (isLoading) {
+  return (
+    <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-8 text-sm font-semibold text-slate-600">
+      Loading saved Business Model...
+    </div>
+  );
+}
 
   return (
     <div className="space-y-8">
@@ -671,34 +904,56 @@ export default function BusinessModelPage() {
 </div>
 </div>
 
+{errorMessage && (
+  <div
+    role="alert"
+    className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700"
+  >
+    {errorMessage}
+  </div>
+)}
+
       {/* FOOTER */}
       <div className="flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
          <button
-            type="button"
-            onClick={handleSave}
-            className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition ${
-              saved
-                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
-            }`}
-          >
-            {saved ? (
-              <><CheckCircle2 className="h-4 w-4" />Saved!</>
-            ) : (
-              <><Save className="h-4 w-4" />Save Draft</>
-            )}
-          </button>
+  type="button"
+  onClick={() => {
+    void persistBusinessModel(false);
+  }}
+  disabled={isSaving}
+  className={`inline-flex items-center justify-center gap-2 rounded-2xl border px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+    saved
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-border/60 bg-[#F7F4EE]/95 text-slate-700 hover:bg-muted"
+  }`}
+>
+  {isSaving ? (
+    <>Saving...</>
+  ) : saved ? (
+    <>
+      <CheckCircle2 className="h-4 w-4" />
+      Saved!
+    </>
+  ) : (
+    <>
+      <Save className="h-4 w-4" />
+      Save Draft
+    </>
+  )}
+</button>
 
           <button
-            type="button"
-            onClick={() => {
-              handleSave();
-              router.push("/founder/startup-builder/summary");
-            }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-          >
-            Continue to Summary
-          </button>
+  type="button"
+  onClick={() => {
+    void persistBusinessModel(true);
+  }}
+  disabled={isSaving}
+  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {isSaving
+    ? "Saving..."
+    : "Continue to Summary"}
+</button>
       </div>
     </div>
   );

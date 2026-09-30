@@ -54,3 +54,28 @@ export const updateStartup = async (
   const response = await api.patch(`/startup/${id}`, data);
   return response.data.data;
 };
+
+export const resolveFounderStartupId = async (): Promise<string> => {
+  const startups = await getMyStartups();
+
+  if (!startups.length) {
+    throw new Error("No startup found for the authenticated founder.");
+  }
+
+  const storedStartupId =
+    typeof window !== "undefined"
+      ? localStorage.getItem("startupId")
+      : null;
+
+  const matchedStartup = storedStartupId
+    ? startups.find((startup) => startup.id === storedStartupId)
+    : undefined;
+
+  const startupId = matchedStartup?.id ?? startups[0].id;
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("startupId", startupId);
+  }
+
+  return startupId;
+};
