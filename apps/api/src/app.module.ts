@@ -22,6 +22,8 @@ import { ReadinessModule } from './modules/readiness/readiness.module';
 
 import { AdvisorModule } from './modules/advisor/advisor.module';
 
+import { ConsultationModule } from './modules/consultation/consultation.module';
+
 import { InvestorModule } from './modules/investor/investor.module';
 
 import { AdminModule } from './modules/admin/admin.module';
@@ -56,6 +58,8 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
     ReadinessModule,
 
     AdvisorModule,
+
+    ConsultationModule,
 
     InvestorModule,
 
