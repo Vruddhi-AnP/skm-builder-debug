@@ -18,6 +18,8 @@ import { StartupModule } from './modules/startup/startup.module';
 
 import { BuilderModule } from './modules/builder/builder.module';
 
+import { ReadinessModule } from './modules/readiness/readiness.module';
+
 import { AdvisorModule } from './modules/advisor/advisor.module';
 
 import { InvestorModule } from './modules/investor/investor.module';
@@ -50,6 +52,8 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
     StartupModule,
 
     BuilderModule,
+
+    ReadinessModule,
 
     AdvisorModule,
 

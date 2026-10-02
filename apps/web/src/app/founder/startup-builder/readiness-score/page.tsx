@@ -1,113 +1,314 @@
 "use client";
 
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 
-import { getBuilderProgress, getCompletedStepCount } from "@/hooks/useLocalBuilder";
-
 import ReadinessReport from "@/components/reports/ReadinessReport";
-import { getReadinessReport } from "@/services/report.service";
+
+import {
+  buildReadinessReport,
+  calculateReadinessAssessment,
+  getLatestReadinessAssessment,
+  type ReadinessAssessment,
+} from "@/services/report.service";
+
+import {
+  getBuilderDataByStartupId,
+} from "@/services/builder.service";
+
+import {
+  getStartupById,
+  resolveFounderStartupId,
+} from "@/services/startup.service";
 
 import {
   exportReadinessReport,
 } from "@/services/export.service";
+
+import type {
+  ReadinessReportData,
+} from "@/types/report";
 
 import {
   AlertTriangle,
   BarChart3,
   BriefcaseBusiness,
   CheckCircle2,
-  ShieldCheck,
-  TrendingUp,
-  Rocket,
   Download,
+  Rocket,
+  ShieldCheck,
   Sparkles,
   Target,
-  Users,
-  GraduationCap,
+  TrendingUp,
 } from "lucide-react";
-
-const readinessMetrics = [
-  {
-    title: "Idea Validation",
-    score: "85%",
-    status: "Strong",
-  },
-
-  {
-    title: "Market Opportunity",
-    score: "72%",
-    status: "Good",
-  },
-
-  {
-    title: "Business Model",
-    score: "58%",
-    status: "Moderate",
-  },
-
-  {
-    title: "Execution Readiness",
-    score: "74%",
-    status: "Good",
-  },
-];
-
-const strengths = [
-  "Clear startup vision and positioning",
-  "Strong founder problem understanding",
-  "Scalable SaaS ecosystem opportunity",
-  "High-growth startup enablement market",
-  "Modern workflow-first product direction",
-];
-
-const improvements = [
-  "Improve customer acquisition strategy",
-  "Strengthen monetization validation",
-  "Expand market competitor benchmarking",
-  "Improve investor traction roadmap",
-  "Increase founder execution automation",
-];
 
 export default function ReadinessScorePage() {
   const router = useRouter();
-  const completedCount = getCompletedStepCount();
-  const progress = getBuilderProgress();
-  const report = getReadinessReport();report
+
+  const [assessment, setAssessment] =
+    useState<ReadinessAssessment | null>(null);
+
+  const [report, setReport] =
+    useState<ReadinessReportData | null>(null);
+
+  const [isLoading, setIsLoading] =
+    useState(true);
+
+  const [errorMessage, setErrorMessage] =
+    useState("");
+
+  useEffect(() => {
+    let active = true;
+
+    const loadReadiness = async () => {
+      try {
+        setIsLoading(true);
+        setErrorMessage("");
+
+        const startupId =
+          await resolveFounderStartupId();
+
+        const [
+          builderRecord,
+          startup,
+        ] = await Promise.all([
+          getBuilderDataByStartupId(startupId),
+          getStartupById(startupId),
+        ]);
+
+        let latestAssessment:
+          | ReadinessAssessment
+          | null = null;
+
+        try {
+          latestAssessment =
+            await getLatestReadinessAssessment(
+              startupId,
+            );
+        } catch {
+          latestAssessment = null;
+        }
+
+        const builderUpdatedAt =
+          new Date(
+            builderRecord.updatedAt,
+          ).getTime();
+
+        const assessmentGeneratedAt =
+          latestAssessment
+            ? new Date(
+                latestAssessment.generatedAt,
+              ).getTime()
+            : 0;
+
+        const assessmentResult =
+          latestAssessment &&
+          assessmentGeneratedAt >=
+            builderUpdatedAt
+            ? latestAssessment
+            : await calculateReadinessAssessment(
+                startupId,
+              );
+
+        if (!active) {
+          return;
+        }
+
+        setAssessment(
+          assessmentResult,
+        );
+
+        setReport(
+          buildReadinessReport(
+            assessmentResult,
+            builderRecord.data,
+            startup,
+          ),
+        );
+      } catch (error) {
+        if (!active) {
+          return;
+        }
+
+        console.error(
+          "Failed to load readiness assessment:",
+          error,
+        );
+
+        setErrorMessage(
+          "Could not calculate your readiness score. Please confirm your Startup Builder is saved and try again.",
+        );
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void loadReadiness();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const readinessMetrics =
+    useMemo(() => {
+      if (!assessment) {
+        return [];
+      }
+
+      const entries = [
+        {
+          title:
+            "Problem Clarity & Validation",
+          score:
+            assessment.parameterScores
+              .problemClarityValidation,
+        },
+        {
+          title:
+            "Customer & Market Clarity",
+          score:
+            assessment.parameterScores
+              .customerMarketClarity,
+        },
+        {
+          title:
+            "Solution Definition",
+          score:
+            assessment.parameterScores
+              .solutionDefinition,
+        },
+        {
+          title:
+            "Product / MVP Readiness",
+          score:
+            assessment.parameterScores
+              .productMvpReadiness,
+        },
+        {
+          title:
+            "Business Model Clarity",
+          score:
+            assessment.parameterScores
+              .businessModelClarity,
+        },
+        {
+          title:
+            "Team / Founder Readiness",
+          score:
+            assessment.parameterScores
+              .teamFounderReadiness,
+        },
+        {
+          title:
+            "Execution Readiness",
+          score:
+            assessment.parameterScores
+              .executionReadiness,
+        },
+      ];
+
+      return entries.map(
+        (item) => ({
+          ...item,
+
+          status:
+            item.score >= 75
+              ? "Strong"
+              : item.score >= 50
+                ? "Good"
+                : "Moderate",
+        }),
+      );
+    }, [assessment]);
+
+  const strengths =
+    useMemo(() => {
+      return [
+        ...readinessMetrics,
+      ]
+        .filter(
+          (item) =>
+            item.score >= 50,
+        )
+        .sort(
+          (a, b) =>
+            b.score - a.score,
+        )
+        .slice(0, 3)
+        .map(
+          (item) =>
+            `${item.title}: ${item.score}%`,
+        );
+    }, [readinessMetrics]);
+
+  const improvements =
+    assessment?.suggestions ?? [];
+
+  const progress =
+    assessment?.overallScore ?? 0;
 
   const readinessLabel =
-    progress === 100
-      ? "Investor Ready"
-      : progress >= 60
-      ? "Strong Early-Stage Potential"
-      : progress >= 40
-      ? "Good Foundation Building"
-      : "Getting Started";
+    assessment?.scoreBand ?? "";
 
-  if (completedCount === 0) {
-  return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
-      <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-        <ShieldCheck className="h-10 w-10" />
-      </div>
-      <h2 className="mt-6 text-3xl font-black text-[#16214A]">
-        Complete the Startup Builder First
-      </h2>
-      <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-slate-500">
-        Your readiness score is calculated from your Startup Builder responses.
-        Complete at least one module to see your score.
-      </p>
-      <button
-        onClick={() => router.push("/founder/startup-builder")}
-        className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-      >
-        Open Startup Builder
-      </button>
-    </div>
-  );
-}
-
+  if (isLoading) {
     return (
-  <div className="space-y-8">
+      <div className="flex min-h-[60vh] items-center justify-center rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center">
+        <div>
+          <ShieldCheck className="mx-auto h-10 w-10 text-primary" />
+
+          <h2 className="mt-5 text-2xl font-black text-[#16214A]">
+            Calculating Readiness Score
+          </h2>
+
+          <p className="mt-3 text-sm text-slate-500">
+            Evaluating your persisted
+            Startup Builder responses...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (
+    errorMessage ||
+    !assessment
+  ) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center">
+        <AlertTriangle className="h-10 w-10 text-amber-600" />
+
+        <h2 className="mt-5 text-2xl font-black text-[#16214A]">
+          Readiness Score Unavailable
+        </h2>
+
+        <p className="mt-3 max-w-lg text-sm leading-7 text-slate-500">
+          {errorMessage ||
+            "Your readiness assessment could not be loaded."}
+        </p>
+
+        <button
+          onClick={() =>
+            router.push(
+              "/founder/startup-builder",
+            )
+          }
+          className="mt-8 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+        >
+          Open Startup Builder
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
       {/* HERO */}
       <section className="print-page print-card overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95">
         <div className="grid gap-8 p-6 lg:grid-cols-[1.2fr_0.8fr] lg:p-10">
@@ -115,7 +316,8 @@ export default function ReadinessScorePage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-cyan-700">
               <Rocket className="h-4 w-4" />
-              Startup Builder • Final Module
+              Startup Builder • Final
+              Module
             </div>
 
             <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight text-[#16214A] md:text-5xl">
@@ -126,70 +328,72 @@ export default function ReadinessScorePage() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
-              Analyze startup readiness, investor
-              potential, execution scalability and
-              business maturity before moving into
-              fundraising and platform launch.
+              Evaluate your startup
+              across problem, market,
+              solution, MVP, business
+              model, founder and
+              execution readiness.
             </p>
           </div>
 
           {/* SCORE CARD */}
           <div className="rounded-[28px] border border-primary/10 bg-primary/5 p-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-5">
               <div>
                 <p className="text-sm font-medium text-slate-500">
                   Overall Readiness
                 </p>
 
-                {/* NEW */}
-                <>
-                  <h2 className="mt-3 text-6xl font-black tracking-tight text-[#16214A]">
-                    {progress}%
-                  </h2>
+                <h2 className="mt-3 text-6xl font-black tracking-tight text-[#16214A]">
+                  {progress}%
+                </h2>
 
-                  <p
-                    className={`mt-2 text-sm font-bold ${
-                      progress >= 60
-                        ? "text-emerald-600"
-                        : "text-amber-600"
-                    }`}
-                  >
-                    {readinessLabel}
-                  </p>
-                </>
-                </div>
+                <p
+                  className={`mt-2 text-sm font-bold ${
+                    progress >= 60
+                      ? "text-emerald-600"
+                      : "text-amber-600"
+                  }`}
+                >
+                  {readinessLabel}
+                </p>
+              </div>
+
               <div className="rounded-3xl bg-[#F7F4EE]/95 p-5 text-primary shadow-sm">
                 <ShieldCheck className="h-10 w-10" />
               </div>
             </div>
 
             <div className="mt-8 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div 
-                className="h-full rounded-full bg-primary transition-all duration-500" 
-                style={{ width: `${progress}%` }}
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{
+                  width: `${progress}%`,
+                }}
               />
             </div>
 
             <p className="mt-5 text-sm leading-7 text-slate-500">
-              Your startup demonstrates strong
-              execution potential with opportunities to
-              improve investor readiness and scalable
-              monetization systems.
+              This score is calculated
+              from your saved Startup
+              Builder responses across
+              seven weighted readiness
+              parameters.
             </p>
           </div>
         </div>
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-  <span>
-    Confidential Document
-  </span>
-
+        <span>
+          Confidential Document
+        </span>
       </section>
 
-      {/* METRICS */}
+      {/* READINESS BREAKDOWN */}
       <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
         <div className="mb-8">
           <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
@@ -197,142 +401,173 @@ export default function ReadinessScorePage() {
           </h2>
 
           <p className="mt-2 text-[#6B6B6B]">
-            Startup performance analysis across core
-            execution pillars.
+            Startup readiness across
+            the seven scoring
+            parameters.
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          {readinessMetrics.map((metric) => (
-            <div
-              key={metric.title}
-              className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition hover:-translate-y-1 hover:border-primary/20 hover:bg-[#F7F4EE]/95 hover:shadow-lg"
-            >
-              <div className="flex items-start justify-between gap-5">
-                <div>
-                  <h3 className="text-2xl font-black text-[#16214A]">
-                    {metric.title}
-                  </h3>
+          {readinessMetrics.map(
+            (metric) => (
+              <div
+                key={metric.title}
+                className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-6 transition hover:-translate-y-1 hover:border-primary/20 hover:bg-[#F7F4EE]/95 hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <div>
+                    <h3 className="text-2xl font-black text-[#16214A]">
+                      {
+                        metric.title
+                      }
+                    </h3>
 
-                  <p className="mt-2 text-sm text-slate-500">
-                    Startup evaluation category
-                  </p>
-                </div>
+                    <p className="mt-2 text-sm text-slate-500">
+                      Startup
+                      evaluation
+                      category
+                    </p>
+                  </div>
 
-                <div
-                  className={`rounded-full px-4 py-2 text-xs font-bold
-                  
-                  ${
-                    metric.status === "Strong"
-                      ? "bg-emerald-100 text-emerald-700"
-                      : metric.status === "Good"
-                      ? "bg-cyan-100 text-cyan-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }
-                `}
-                >
-                  {metric.status}
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-sm font-medium text-slate-500">
-                    Performance Score
-                  </p>
-
-                  <p className="text-sm font-black text-primary">
-                    {metric.score}
-                  </p>
-                </div>
-
-                <div className="h-3 overflow-hidden rounded-full bg-slate-200">
                   <div
-                    className="h-full rounded-full bg-primary"
-                    style={{
-                      width: metric.score,
-                    }}
-                  />
+                    className={`rounded-full px-4 py-2 text-xs font-bold ${
+                      metric.status ===
+                      "Strong"
+                        ? "bg-emerald-100 text-emerald-700"
+                        : metric.status ===
+                            "Good"
+                          ? "bg-cyan-100 text-cyan-700"
+                          : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {
+                      metric.status
+                    }
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="text-sm font-medium text-slate-500">
+                      Performance
+                      Score
+                    </p>
+
+                    <p className="text-sm font-black text-primary">
+                      {
+                        metric.score
+                      }
+                      %
+                    </p>
+                  </div>
+
+                  <div className="h-3 overflow-hidden rounded-full bg-slate-200">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{
+                        width: `${metric.score}%`,
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ),
+          )}
         </div>
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-  <span>
-    Confidential Document
-  </span>
-
+        <span>
+          Confidential Document
+        </span>
       </section>
 
-      {/* STRENGTHS + IMPROVEMENTS */}
-      <div className="grid gap-6">
-        {/* STRENGTHS */}
-        <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-black text-[#16214A]">
-                Startup Strengths
-              </h2>
-
-              <p className="text-sm text-slate-500">
-                Positive startup execution indicators
-              </p>
-            </div>
+      {/* STRONGEST AREAS */}
+      <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">
+            <CheckCircle2 className="h-5 w-5" />
           </div>
 
+          <div>
+            <h2 className="text-2xl font-black text-[#16214A]">
+              Strongest Readiness
+              Areas
+            </h2>
+
+            <p className="text-sm text-slate-500">
+              Highest scoring areas
+              from the current
+              assessment
+            </p>
+          </div>
+        </div>
+
+        {strengths.length > 0 ? (
           <div className="space-y-4">
-            {strengths.map((item) => (
-              <div
-                key={item}
-                className="flex items-start gap-4 rounded-2xl bg-[#f8fbff] p-4"
-              >
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+            {strengths.map(
+              (item) => (
+                <div
+                  key={item}
+                  className="flex items-start gap-4 rounded-2xl bg-[#f8fbff] p-4"
+                >
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
 
-                <p className="text-sm font-medium leading-7 text-slate-700">
-                  {item}
-                </p>
-              </div>
-            ))}
+                  <p className="text-sm font-medium leading-7 text-slate-700">
+                    {item}
+                  </p>
+                </div>
+              ),
+            )}
+          </div>
+        ) : (
+          <div className="rounded-2xl bg-[#f8fbff] p-4">
+            <p className="text-sm leading-7 text-slate-600">
+              No readiness area has
+              reached the 50% level
+              yet. Continue refining
+              your Startup Builder
+              responses.
+            </p>
+          </div>
+        )}
+
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
+
+        <span>
+          Confidential Document
+        </span>
+      </section>
+
+      {/* IMPROVEMENT AREAS */}
+      <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
+            <AlertTriangle className="h-5 w-5" />
           </div>
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+          <div>
+            <h2 className="text-2xl font-black text-[#16214A]">
+              Improvement Areas
+            </h2>
 
-  <span>
-    Confidential Document
-  </span>
-        </section>
-
-        {/* IMPROVEMENTS */}
-        <section className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
-              <AlertTriangle className="h-5 w-5" />
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-black text-[#16214A]">
-                Improvement Areas
-              </h2>
-
-              <p className="text-sm text-slate-500">
-                Recommended next execution steps
-              </p>
-            </div>
+            <p className="text-sm text-slate-500">
+              Recommendations based
+              on the lowest scoring
+              readiness parameters
+            </p>
           </div>
+        </div>
 
-          <div className="space-y-4">
-            {improvements.map((item) => (
+        <div className="space-y-4">
+          {improvements.map(
+            (item) => (
               <div
                 key={item}
                 className="flex items-start gap-4 rounded-2xl bg-[#f8fbff] p-4"
@@ -343,47 +578,49 @@ export default function ReadinessScorePage() {
                   {item}
                 </p>
               </div>
-            ))}
-          </div>
+            ),
+          )}
+        </div>
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-  <span>
-    Confidential Document
-  </span>
+        <span>
+          Confidential Document
+        </span>
+      </section>
 
-        </section>
-      </div>
-
-      {/* INVESTOR ANALYSIS */}
+      {/* READINESS ANALYSIS */}
       <section className="print-page print-card rounded-[32px] border border-primary/10 bg-linear-to-r from-primary/5 to-cyan-50 p-8">
         <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
-          {/* LEFT */}
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#F7F4EE]/95 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
               <TrendingUp className="h-4 w-4" />
-              Investor Readiness Analysis
+              Readiness Analysis
             </div>
 
             <h2 className="text-4xl font-black tracking-tight text-[#16214A]">
-              Startup is
+              Startup is{" "}
               <span className="text-primary">
-                {" "}
-                Fundraising Ready
+                {readinessLabel}
               </span>
             </h2>
 
             <p className="mt-5 max-w-3xl text-base leading-8 text-[#6B6B6B]">
-              Your startup demonstrates strong
-              early-stage positioning with scalable
-              business direction, growing market
-              opportunity and clear execution workflows.
+              This assessment is
+              calculated from your
+              persisted Startup
+              Builder responses
+              across problem,
+              market, solution,
+              product, business,
+              founder and execution
+              readiness.
             </p>
           </div>
 
-          {/* RIGHT */}
           <div className="grid gap-4 sm:grid-cols-2">
             {/* MARKET */}
             <div className="rounded-[28px] border border-white/70 bg-[#F7F4EE]/95 p-5 shadow-sm">
@@ -392,13 +629,19 @@ export default function ReadinessScorePage() {
               </div>
 
               <h3 className="mt-4 text-xl font-black text-[#16214A]">
-                Market Potential
+                Customer &
+                Market Clarity
               </h3>
 
               <p className="mt-2 text-sm leading-7 text-[#6B6B6B]">
-                Strong opportunity within startup
-                enablement and founder infrastructure
-                systems.
+                {
+                  assessment
+                    .parameterScores
+                    .customerMarketClarity
+                }
+                % readiness based on
+                your saved customer
+                and market responses.
               </p>
             </div>
 
@@ -409,52 +652,76 @@ export default function ReadinessScorePage() {
               </div>
 
               <h3 className="mt-4 text-xl font-black text-[#16214A]">
-                Business Scalability
+                Business Model
+                Clarity
               </h3>
 
               <p className="mt-2 text-sm leading-7 text-[#6B6B6B]">
-                SaaS-first startup model supports
-                recurring scalable business growth.
+                {
+                  assessment
+                    .parameterScores
+                    .businessModelClarity
+                }
+                % readiness based on
+                your saved business
+                model responses.
               </p>
             </div>
           </div>
         </div>
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-  <span>
-    Confidential Document
-  </span>
-
+        <span>
+          Confidential Document
+        </span>
       </section>
 
-      {/* FINAL METRICS */}
+      {/* KEY METRICS */}
       <section className="print-page grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         {[
           {
-            title: "Founder Clarity",
-            value: "88%",
-            desc: "Execution understanding",
+            title:
+              "Founder Readiness",
+            value:
+              assessment
+                .parameterScores
+                .teamFounderReadiness,
+            desc:
+              "Founder execution preparedness",
           },
-
           {
-            title: "Market Fit",
-            value: "73%",
-            desc: "Demand opportunity",
+            title:
+              "Market Clarity",
+            value:
+              assessment
+                .parameterScores
+                .customerMarketClarity,
+            desc:
+              "Customer and market understanding",
           },
-
           {
-            title: "Scalability",
-            value: "81%",
-            desc: "Growth readiness",
+            title:
+              "Product Readiness",
+            value:
+              assessment
+                .parameterScores
+                .productMvpReadiness,
+            desc:
+              "MVP and product preparedness",
           },
-
           {
-            title: "Investor Potential",
-            value: "69%",
-            desc: "Fundraising readiness",
+            title:
+              "Execution",
+            value:
+              assessment
+                .parameterScores
+                .executionReadiness,
+            desc:
+              "Execution preparedness",
           },
         ].map((item) => (
           <div
@@ -470,14 +737,14 @@ export default function ReadinessScorePage() {
             </div>
 
             <h3 className="mt-5 text-5xl font-black tracking-tight text-[#16214A]">
-              {item.value}
+              {item.value}%
             </h3>
 
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-200">
               <div
                 className="h-full rounded-full bg-primary"
                 style={{
-                  width: item.value,
+                  width: `${item.value}%`,
                 }}
               />
             </div>
@@ -488,171 +755,123 @@ export default function ReadinessScorePage() {
           </div>
         ))}
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-  <span>
-    Confidential Document
-  </span>
-
+        <span>
+          Confidential Document
+        </span>
       </section>
 
-        {/* RECOMMENDED NEXT STEPS */}
-<section className="print-page grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
-  {/* LEFT */}
-  <div className="print-page print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
-    <div className="mb-8">
-      <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
-        Recommended Next Steps
-      </h2>
+      {/* RECOMMENDED NEXT STEPS */}
+      <section className="print-page grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
+        <div className="print-card rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm lg:p-8">
+          <div className="mb-8">
+            <h2 className="text-3xl font-black tracking-tight text-[#16214A]">
+              Recommended Next
+              Steps
+            </h2>
 
-      <p className="mt-2 text-[#6B6B6B]">
-        Suggested founder execution improvements before scaling.
-      </p>
-    </div>
+            <p className="mt-2 text-[#6B6B6B]">
+              Suggested execution
+              improvements based on
+              your current readiness
+              assessment.
+            </p>
+          </div>
 
-    <div className="space-y-5">
-      {[
-        {
-          title: "Improve Founder Validation",
-          desc: "Strengthen founder interviews and user feedback collection.",
-        },
-
-        {
-          title: "Prepare Investor Readiness",
-          desc: "Build investor pitch material and fundraising strategy.",
-        },
-
-        {
-          title: "Expand Market Analysis",
-          desc: "Improve competitor benchmarking and positioning.",
-        },
-
-        {
-          title: "Improve Monetization Systems",
-          desc: "Define scalable recurring revenue opportunities.",
-        },
-
-        {
-          title: "Launch MVP Execution Plan",
-          desc: "Create milestone-based startup execution roadmap.",
-        },
-      ].map((item, index) => (
-        <div
-          key={item.title}
-          className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-5 transition hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div className="flex gap-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-black text-primary">
-              {index + 1}
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-lg font-black text-[#16214A]">
-                {item.title}
-              </h3>
-
-              <p className="mt-2 text-sm leading-7 text-slate-600">
-                {item.desc}
-              </p>
-
-              <div className="mt-5 flex flex-wrap gap-3">
-                <button
-                  onClick={() =>
-                    router.push("/founder/advisors")
-                  }
-                  className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-white transition hover:opacity-90"
+          <div className="space-y-5">
+            {improvements.map(
+              (item, index) => (
+                <div
+                  key={`${index}-${item}`}
+                  className="rounded-[28px] border border-border/60 bg-[#f8fbff] p-5 transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <Users className="h-3.5 w-3.5" />
-                  Advisors
-                </button>
+                  <div className="flex gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-black text-primary">
+                      {index + 1}
+                    </div>
 
-                <button
-                  onClick={() =>
-                    router.push("/investor")
-                  }
-                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary/30 hover:bg-primary/5"
-                >
-                  Investors
-                </button>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-black text-[#16214A]">
+                        Improvement
+                        Action
+                      </h3>
 
-                <button
-                  onClick={() =>
-                    router.push("/founder/programs")
-                  }
-                  className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition hover:border-primary/30 hover:bg-primary/5"
-                >
-                  <GraduationCap className="h-3.5 w-3.5" />
-                  Programs
-                </button>
-
-              </div>
-            </div>
+                      <p className="mt-2 text-sm leading-7 text-slate-600">
+                        {item}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ),
+            )}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
 
-  {/* RIGHT */}
-  <div className="print-card rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
-    <h3 className="text-2xl font-black text-[#16214A]">
-      Founder Status
-    </h3>
+        {/* STATUS */}
+        <div className="print-card rounded-[32px] border border-primary/10 bg-primary/5 p-6 shadow-sm">
+          <h3 className="text-2xl font-black text-[#16214A]">
+            Readiness Status
+          </h3>
 
-    <div className="mt-6 space-y-4">
-      {[
-        {
-          title: "Startup Stage",
-          value: "Early Validation",
-        },
+          <div className="mt-6 space-y-4">
+            {[
+              {
+                title:
+                  "Overall Band",
+                value:
+                  readinessLabel,
+              },
+              {
+                title:
+                  "Founder Readiness",
+                value: `${assessment.parameterScores.teamFounderReadiness}%`,
+              },
+              {
+                title:
+                  "Execution Readiness",
+                value: `${assessment.parameterScores.executionReadiness}%`,
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl bg-[#F7F4EE]/95 p-5 shadow-sm"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {item.title}
+                </p>
 
-        {
-          title: "Founder Readiness",
-          value: "Strong Potential",
-        },
+                <h4 className="mt-2 text-lg font-black text-primary">
+                  {item.value}
+                </h4>
+              </div>
+            ))}
 
-        {
-          title: "Investor Readiness",
-          value: "Improving",
-        },
-      ].map((item) => (
-        <div
-          key={item.title}
-          className="rounded-2xl bg-[#F7F4EE]/95 p-5 shadow-sm"
-        >
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            {item.title}
-          </p>
-
-          <h4 className="mt-2 text-lg font-black text-primary">
-            {item.value}
-          </h4>
+            <button
+              onClick={() =>
+                router.push(
+                  "/founder/dashboard",
+                )
+              }
+              className="print:hidden inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+            >
+              Go To Dashboard
+            </button>
+          </div>
         </div>
-      ))}
 
-<button
-  onClick={() =>
-    router.push("/founder/dashboard")
-  }
-  className="print:hidden inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
-      >
-        Go To Dashboard
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-      </button>
-    </div>
-  </div>
-
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
-
-  <span>
-    Confidential Document
-  </span>
-
-</section>
+        <span>
+          Confidential Document
+        </span>
+      </section>
 
       {/* FINAL CTA */}
       <section className="print-page print-card rounded-[32px] border border-primary/10 bg-primary/5 p-8 text-center">
@@ -662,54 +881,63 @@ export default function ReadinessScorePage() {
           </div>
 
           <h2 className="mt-6 text-4xl font-black tracking-tight text-[#16214A]">
-            Startup Blueprint Completed
+            Readiness Assessment
+            Generated
           </h2>
 
           <p className="mt-5 text-base leading-8 text-[#6B6B6B]">
-            Your startup execution workflow has been
-            successfully structured with market,
-            product, business and readiness insights.
+            Your latest readiness
+            assessment has been
+            calculated from your
+            saved Startup Builder
+            responses.
           </p>
         </div>
 
-  <span>
-    Startup Ka Mall • Founder Report
-  </span>
+        <span>
+          Startup Ka Mall • Founder
+          Report
+        </span>
 
-  <span>
-    Confidential Document
-  </span>
-
+        <span>
+          Confidential Document
+        </span>
       </section>
 
-      {/* Hidden Export Version */}
-<div className="hidden">
-  <ReadinessReport report={report} />
-</div>
+      {/* HIDDEN EXPORT VERSION */}
+      {report && (
+        <div className="hidden">
+          <ReadinessReport
+            report={report}
+          />
+        </div>
+      )}
 
       {/* FOOTER */}
       <div className="print:hidden flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        {/* EXPORT */}
-        <button
-          onClick={exportReadinessReport}
-          className="print:hidden inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
-        >
-          <Download className="h-4 w-4" />
+        {report && (
+          <button
+            onClick={
+              exportReadinessReport
+            }
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
+          >
+            <Download className="h-4 w-4" />
+            Export Readiness Report
+          </button>
+        )}
 
-          Export Readiness Report
-        </button>
-
-        {/* COMPLETE */}
         <button
           onClick={() =>
-            router.push("/founder/dashboard")
+            router.push(
+              "/founder/dashboard",
+            )
           }
-          className="print:inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:opacity-90"
         >
           Complete Startup Builder
-
         </button>
       </div>
     </div>
-    );
+  );
 }
