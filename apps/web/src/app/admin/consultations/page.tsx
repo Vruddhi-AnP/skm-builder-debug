@@ -1,96 +1,237 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import {
-  ArrowUpRight,
-  Briefcase,
-  CalendarDays,
   CheckCircle2,
   Clock3,
   MessageSquare,
   Search,
+  Send,
 } from "lucide-react";
 
-import AdminStatCard from "@/components/admin/AdminStatCard";
 import AdminEmptyState from "@/components/admin/AdminEmptyState";
 import AdminShell from "@/components/admin/AdminShell";
+import AdminStatCard from "@/components/admin/AdminStatCard";
 
-const consultationsData = [
-  {
-    id: 1,
-    founder: "Aarav Mehta",
-    startup: "FinVerse AI",
-    advisor: "Rohan Kapoor",
-    topic: "Fundraising Strategy",
-    date: "24 May 2026",
-    status: "Scheduled",
-  },
-  {
-    id: 2,
-    founder: "Neha Sharma",
-    startup: "HealthSync",
-    advisor: "Priya Menon",
-    topic: "Growth & GTM",
-    date: "22 May 2026",
-    status: "Completed",
-  },
-  {
-    id: 3,
-    founder: "Rahul Jain",
-    startup: "GreenByte",
-    advisor: "Aditya Sharma",
-    topic: "Product Scaling",
-    date: "27 May 2026",
-    status: "Pending",
-  },
-];
+import api from "@/lib/axios";
+
+type ConsultationStatus =
+  | "NEW"
+  | "CONTACTED"
+  | "SCHEDULED"
+  | "CLOSED"
+  | "REJECTED";
+
+interface AdminConsultation {
+  id: string;
+
+  founderId: string;
+  advisorId: string;
+  startupId: string | null;
+
+  message: string | null;
+
+  status: ConsultationStatus;
+
+  adminNotes: string | null;
+
+  createdAt: string;
+  updatedAt: string;
+
+  founder: {
+    id: string;
+    name: string;
+  };
+
+  startup: {
+    id: string;
+    name: string;
+  } | null;
+
+  advisor: {
+    id: string;
+    name: string;
+    currentRole: string | null;
+    organization: string | null;
+  };
+}
+
+interface ApiEnvelope<T> {
+  data: T;
+}
+
+function formatEnum(
+  value: string
+) {
+  return value
+    .toLowerCase()
+    .split("_")
+    .map(
+      (part) =>
+        part.charAt(0).toUpperCase() +
+        part.slice(1)
+    )
+    .join(" ");
+}
+
+function statusClass(
+  status: ConsultationStatus
+) {
+  if (status === "CLOSED") {
+    return "bg-emerald-100 text-emerald-700";
+  }
+
+  if (status === "SCHEDULED") {
+    return "bg-sky-100 text-sky-700";
+  }
+
+  if (status === "REJECTED") {
+    return "bg-red-100 text-red-700";
+  }
+
+  if (status === "CONTACTED") {
+    return "bg-violet-100 text-violet-700";
+  }
+
+  return "bg-orange-100 text-orange-700";
+}
 
 export default function AdminConsultationsPage() {
+  const [
+    consultations,
+    setConsultations,
+  ] = useState<AdminConsultation[]>(
+    []
+  );
 
-  const [selectedFilter, setSelectedFilter] =
-    useState("All");
+  const [
+    selectedFilter,
+    setSelectedFilter,
+  ] = useState("ALL");
 
   const [searchQuery, setSearchQuery] =
     useState("");
 
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState<string | null>(null);
+
+  const [actionKey, setActionKey] =
+    useState<string | null>(null);
+
+  const [notes, setNotes] =
+    useState<Record<string, string>>(
+      {}
+    );
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadConsultations() {
+      try {
+        const response =
+          await api.get<
+            ApiEnvelope<
+              AdminConsultation[]
+            >
+          >(
+            "/admin/consultations"
+          );
+
+        if (!active) {
+          return;
+        }
+
+        const data =
+          response.data.data;
+
+        setConsultations(data);
+
+        setNotes(
+          Object.fromEntries(
+            data.map(
+              (consultation) => [
+                consultation.id,
+                consultation.adminNotes ??
+                  "",
+              ]
+            )
+          )
+        );
+      } catch (loadError) {
+        console.error(
+          "Failed to load consultations",
+          loadError
+        );
+
+        if (active) {
+          setError(
+            "Failed to load consultations. Make sure you are authenticated as an admin."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadConsultations();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const filters = [
-    "All",
-    "Pending",
-    "Scheduled",
-    "Completed",
+    "ALL",
+    "NEW",
+    "CONTACTED",
+    "SCHEDULED",
+    "CLOSED",
+    "REJECTED",
   ];
 
   const filteredConsultations =
     useMemo(() => {
-      return consultationsData.filter(
-        (item) => {
+      const normalizedSearch =
+        searchQuery
+          .trim()
+          .toLowerCase();
+
+      return consultations.filter(
+        (consultation) => {
           const matchesFilter =
-            selectedFilter === "All" ||
-            item.status ===
+            selectedFilter === "ALL" ||
+            consultation.status ===
               selectedFilter;
 
+          const searchable = [
+            consultation.founder.name,
+            consultation.startup
+              ?.name ?? "",
+            consultation.advisor.name,
+            consultation.message ?? "",
+            consultation.adminNotes ??
+              "",
+          ];
+
           const matchesSearch =
-            item.founder
-              .toLowerCase()
-              .includes(
-                searchQuery.toLowerCase()
-              ) ||
-            item.startup
-              .toLowerCase()
-              .includes(
-                searchQuery.toLowerCase()
-              ) ||
-            item.advisor
-              .toLowerCase()
-              .includes(
-                searchQuery.toLowerCase()
-              ) ||
-            item.topic
-              .toLowerCase()
-              .includes(
-                searchQuery.toLowerCase()
-              );
+            !normalizedSearch ||
+            searchable.some((value) =>
+              value
+                .toLowerCase()
+                .includes(
+                  normalizedSearch
+                )
+            );
 
           return (
             matchesFilter &&
@@ -98,266 +239,456 @@ export default function AdminConsultationsPage() {
           );
         }
       );
-    }, [selectedFilter, searchQuery]);
+    }, [
+      consultations,
+      searchQuery,
+      selectedFilter,
+    ]);
+
+  const newCount =
+    consultations.filter(
+      (item) =>
+        item.status === "NEW"
+    ).length;
+
+  const scheduledCount =
+    consultations.filter(
+      (item) =>
+        item.status ===
+        "SCHEDULED"
+    ).length;
+
+  const closedCount =
+    consultations.filter(
+      (item) =>
+        item.status === "CLOSED"
+    ).length;
+
+  function mergeConsultation(
+    consultationId: string,
+    changes: Partial<AdminConsultation>
+  ) {
+    setConsultations((current) =>
+      current.map((item) =>
+        item.id === consultationId
+          ? {
+              ...item,
+              ...changes,
+            }
+          : item
+      )
+    );
+  }
+
+  async function updateStatus(
+    consultationId: string,
+    status: ConsultationStatus
+  ) {
+    const key =
+      `${consultationId}:status`;
+
+    try {
+      setActionKey(key);
+      setError(null);
+
+      const response =
+        await api.patch<
+          ApiEnvelope<
+            Partial<AdminConsultation>
+          >
+        >(
+          `/admin/consultations/${consultationId}/status`,
+          {
+            status,
+          }
+        );
+
+      mergeConsultation(
+        consultationId,
+        response.data.data
+      );
+    } catch (updateError) {
+      console.error(
+        "Failed to update consultation status",
+        updateError
+      );
+
+      setError(
+        "Failed to update consultation status."
+      );
+    } finally {
+      setActionKey(null);
+    }
+  }
+
+  async function saveNotes(
+    consultationId: string
+  ) {
+    const key =
+      `${consultationId}:notes`;
+
+    try {
+      setActionKey(key);
+      setError(null);
+
+      const response =
+        await api.patch<
+          ApiEnvelope<
+            Partial<AdminConsultation>
+          >
+        >(
+          `/admin/consultations/${consultationId}/notes`,
+          {
+            adminNotes:
+              notes[consultationId] ??
+              "",
+          }
+        );
+
+      mergeConsultation(
+        consultationId,
+        response.data.data
+      );
+    } catch (updateError) {
+      console.error(
+        "Failed to save consultation notes",
+        updateError
+      );
+
+      setError(
+        "Failed to save admin notes."
+      );
+    } finally {
+      setActionKey(null);
+    }
+  }
 
   return (
-  <AdminShell
-    title="Consultations"
-    subtitle="Manage founder and advisor consultation sessions"
-  >
+    <AdminShell
+      title="Consultations"
+      subtitle="Manage real founder-advisor consultation requests"
+    >
+      <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+        <div>
+          <h2 className="text-3xl font-bold leading-tight text-[#0F172A] lg:text-[38px]">
+            Consultation Management
+          </h2>
 
-          {/* TOP */}
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
-            <div>
-              <h2 className="text-3xl lg:text-[38px] font-bold text-[#0F172A] leading-tight">
-                Consultation Management
-              </h2>
+          <p className="mt-2 max-w-2xl text-[15px] text-[#64748B]">
+            Review consultation
+            requests, coordinate status
+            changes, and maintain admin
+            notes.
+          </p>
+        </div>
 
-              <p className="mt-2 text-[15px] text-[#64748B] max-w-2xl">
-                Monitor founder-advisor
-                sessions, mentorship
-                activities, and consultation
-                workflows across the
-                ecosystem.
-              </p>
-            </div>
+        <div className="flex h-12 w-full items-center gap-3 rounded-full border border-[#E2E8F0] bg-[#F7F4EE]/95 px-5 shadow-sm xl:w-[320px]">
+          <Search className="h-4 w-4 text-[#94A3B8]" />
 
-            {/* SEARCH */}
-            <div className="h-12 w-full xl:w-[320px] rounded-full border border-[#E2E8F0] bg-[#F7F4EE]/95 px-5 flex items-center gap-3 shadow-sm">
-              <Search className="w-4 h-4 text-[#94A3B8]" />
+          <input
+            type="text"
+            placeholder="Search consultations..."
+            value={searchQuery}
+            onChange={(event) =>
+              setSearchQuery(
+                event.target.value
+              )
+            }
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-[#94A3B8]"
+          />
+        </div>
+      </div>
 
-              <input
-                type="text"
-                placeholder="Search consultations..."
-                value={searchQuery}
-                onChange={(e) =>
-                  setSearchQuery(
-                    e.target.value
-                  )
-                }
-                className="flex-1 bg-transparent outline-none text-sm placeholder:text-[#94A3B8]"
-              />
-            </div>
+      <section className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <AdminStatCard
+          title="Total Requests"
+          value={String(
+            consultations.length
+          )}
+          icon={MessageSquare}
+          iconColor="text-sky-500"
+        />
+
+        <AdminStatCard
+          title="New"
+          value={String(newCount)}
+          icon={Clock3}
+          iconColor="text-orange-500"
+        />
+
+        <AdminStatCard
+          title="Scheduled"
+          value={String(
+            scheduledCount
+          )}
+          icon={Send}
+          iconColor="text-violet-500"
+        />
+
+        <AdminStatCard
+          title="Closed"
+          value={String(
+            closedCount
+          )}
+          icon={CheckCircle2}
+          iconColor="text-emerald-500"
+        />
+      </section>
+
+      <section className="mt-7 flex flex-wrap gap-3">
+        {filters.map((filter) => (
+          <button
+            key={filter}
+            type="button"
+            onClick={() =>
+              setSelectedFilter(
+                filter
+              )
+            }
+            className={`h-11 rounded-full px-5 text-sm font-semibold transition-all duration-200 ${
+              selectedFilter ===
+              filter
+                ? "bg-[#071133] text-white shadow-lg shadow-[#071133]/20"
+                : "border border-[#E8EDF5] bg-[#F7F4EE]/95 text-[#475569] hover:bg-white"
+            }`}
+          >
+            {formatEnum(filter)}
+          </button>
+        ))}
+      </section>
+
+      {error && (
+        <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+          {error}
+        </div>
+      )}
+
+      <section className="mt-7 space-y-5">
+        {loading ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map(
+              (item) => (
+                <div
+                  key={item}
+                  className="h-80 animate-pulse rounded-[30px] bg-white"
+                />
+              )
+            )}
           </div>
+        ) : filteredConsultations.length ===
+          0 ? (
+          <AdminEmptyState
+            title="No Consultations Found"
+            description="No consultation requests matched the current filters."
+          />
+        ) : (
+          filteredConsultations.map(
+            (consultation) => {
+              const statusBusy =
+                actionKey ===
+                `${consultation.id}:status`;
 
-          {/* STATS */}
-          <section className="mt-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            <AdminStatCard
-              title="Total Sessions"
-              value="124"
-              icon={MessageSquare}
-              iconColor="text-sky-500"
-            />
+              const notesBusy =
+                actionKey ===
+                `${consultation.id}:notes`;
 
-            <AdminStatCard
-              title="Scheduled"
-              value="37"
-              icon={CalendarDays}
-              iconColor="text-violet-500"
-            />
-
-            <AdminStatCard
-              title="Pending Requests"
-              value="14"
-              icon={Clock3}
-              iconColor="text-orange-500"
-            />
-
-            <AdminStatCard
-              title="Completed"
-              value="73"
-              icon={CheckCircle2}
-              iconColor="text-emerald-500"
-            />
-          </section>
-
-          {/* TODAY'S SCHEDULE */}
-<section className="mt-7">
-  <div className="rounded-[30px] border border-[#E8EDF5] bg-white p-6 shadow-sm">
-    <div className="flex items-center justify-between">
-      <div>
-        <h3 className="text-2xl font-bold text-[#0F172A]">
-          Today&apos;s Schedule
-        </h3>
-
-        <p className="mt-2 text-sm text-[#64748B]">
-          Upcoming consultation sessions.
-        </p>
-      </div>
-    </div>
-
-    <div className="mt-6 grid gap-4 md:grid-cols-3">
-      <div className="rounded-2xl border border-[#E8EDF5] p-4">
-        <p className="font-semibold text-[#0F172A]">
-          10:00 AM
-        </p>
-        <p className="mt-1 text-sm text-[#64748B]">
-          Fundraising Strategy
-        </p>
-      </div>
-
-      <div className="rounded-2xl border border-[#E8EDF5] p-4">
-        <p className="font-semibold text-[#0F172A]">
-          1:30 PM
-        </p>
-        <p className="mt-1 text-sm text-[#64748B]">
-          Product Scaling
-        </p>
-      </div>
-
-      <div className="rounded-2xl border border-[#E8EDF5] p-4">
-        <p className="font-semibold text-[#0F172A]">
-          4:00 PM
-        </p>
-        <p className="mt-1 text-sm text-[#64748B]">
-          GTM Planning
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-          {/* FILTERS */}
-          <section className="mt-7 flex flex-wrap gap-3">
-            {filters.map((filter) => (
-              <button
-                key={filter}
-                onClick={() =>
-                  setSelectedFilter(
-                    filter
-                  )
-                }
-                className={`h-11 px-5 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  selectedFilter ===
-                  filter
-                    ? "bg-[#071133] text-white shadow-lg shadow-[#071133]/20"
-                    : "bg-[#F7F4EE]/95 border border-[#E8EDF5] text-[#475569] hover:bg-white"
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
-          </section>
-
-          {/* LIST */}
-          <section className="mt-7 space-y-5">
-            {filteredConsultations.length ===
-            0 ? (
-              <AdminEmptyState
-                title="No Consultations Found"
-                description="No consultations matched your current search or selected filters."
-              />
-            ) : (
-              filteredConsultations.map(
-                (consultation) => (
-                  <div
-                    key={consultation.id}
-                    className="rounded-[30px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 shadow-sm hover:shadow-md transition-all duration-300"
-                  >
-                    <div className="flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-6">
-                      {/* LEFT */}
-                      <div className="flex-1 min-w-0">
+              return (
+                <div
+                  key={consultation.id}
+                  className="rounded-[30px] border border-[#E8EDF5] bg-[#F7F4EE]/95 p-6 shadow-sm"
+                >
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                      <div>
                         <div className="flex flex-wrap items-center gap-3">
                           <h3 className="text-2xl font-bold text-[#0F172A]">
-                            {consultation.startup}
+                            {consultation
+                              .startup
+                              ?.name ||
+                              "Startup not available"}
                           </h3>
 
                           <span
-                            className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                              consultation.status ===
-                              "Completed"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : consultation.status ===
-                                  "Scheduled"
-                                ? "bg-sky-100 text-sky-700"
-                                : "bg-orange-100 text-orange-700"
-                            }`}
-                          >
-                            {
+                            className={`rounded-full px-3 py-1 text-xs font-semibold ${statusClass(
                               consultation.status
-                            }
+                            )}`}
+                          >
+                            {formatEnum(
+                              consultation.status
+                            )}
                           </span>
                         </div>
 
-                        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
-                          <div>
-                            <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
-                              Founder
-                            </p>
-
-                            <p className="mt-1 font-semibold text-[#0F172A]">
-                              {
-                                consultation.founder
-                              }
-                            </p>
-                          </div>
-
-                          <div>
-                            <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
-                              Advisor
-                            </p>
-
-                            <p className="mt-1 font-semibold text-[#0F172A]">
-                              {
-                                consultation.advisor
-                              }
-                            </p>
-                          </div>
-
-                          <div>
-                            <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
-                              Topic
-                            </p>
-
-                            <p className="mt-1 font-semibold text-[#0F172A]">
-                              {
-                                consultation.topic
-                              }
-                            </p>
-                          </div>
-
-                          <div>
-                            <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
-                              Date
-                            </p>
-
-                            <p className="mt-1 font-semibold text-[#0F172A]">
-                              {
-                                consultation.date
-                              }
-                            </p>
-                          </div>
-
-                          <div>
-                            <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
-                              Session Type
-                            </p>
-
-                            <p className="mt-1 font-semibold text-[#0F172A]">
-                              Virtual Session
-                            </p>
-                          </div>
-                        </div>
+                        <p className="mt-2 text-sm text-[#64748B]">
+                          Requested{" "}
+                          {new Date(
+                            consultation.createdAt
+                          ).toLocaleString()}
+                        </p>
                       </div>
 
-                      {/* RIGHT */}
-                      <div className="flex flex-wrap gap-3">
-                        <button className="h-11 px-5 rounded-full border border-[#E8EDF5] bg-[#F7F4EE]/95 text-sm font-semibold text-[#475569] hover:bg-white transition-all duration-200 flex items-center gap-2">
-                          <Briefcase className="w-4 h-4" />
-                          Manage Session
-                        </button>
+                      <select
+                        value={
+                          consultation.status
+                        }
+                        disabled={statusBusy}
+                        onChange={(event) =>
+                          void updateStatus(
+                            consultation.id,
+                            event.target
+                              .value as ConsultationStatus
+                          )
+                        }
+                        className="h-11 rounded-xl border border-[#E8EDF5] bg-white px-4 text-sm font-semibold text-[#0F172A] outline-none disabled:opacity-50"
+                      >
+                        <option value="NEW">
+                          New
+                        </option>
 
-                        <button className="h-11 px-5 rounded-full bg-[#071133] text-white text-sm font-semibold hover:bg-[#0B173F] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#071133]/20">
-                          Open Details
-                          <ArrowUpRight className="w-4 h-4" />
-                        </button>
+                        <option value="CONTACTED">
+                          Contacted
+                        </option>
+
+                        <option value="SCHEDULED">
+                          Scheduled
+                        </option>
+
+                        <option value="CLOSED">
+                          Closed
+                        </option>
+
+                        <option value="REJECTED">
+                          Rejected
+                        </option>
+                      </select>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                          Founder
+                        </p>
+
+                        <p className="mt-1 font-semibold text-[#0F172A]">
+                          {
+                            consultation
+                              .founder
+                              .name
+                          }
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                          Startup
+                        </p>
+
+                        <p className="mt-1 font-semibold text-[#0F172A]">
+                          {consultation
+                            .startup
+                            ?.name ||
+                            "Not available"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-[#94A3B8]">
+                          Advisor
+                        </p>
+
+                        <p className="mt-1 font-semibold text-[#0F172A]">
+                          {
+                            consultation
+                              .advisor.name
+                          }
+                        </p>
+
+                        {(consultation
+                          .advisor
+                          .currentRole ||
+                          consultation
+                            .advisor
+                            .organization) && (
+                          <p className="mt-1 text-sm text-[#64748B]">
+                            {[
+                              consultation
+                                .advisor
+                                .currentRole,
+                              consultation
+                                .advisor
+                                .organization,
+                            ]
+                              .filter(
+                                Boolean
+                              )
+                              .join(" · ")}
+                          </p>
+                        )}
                       </div>
                     </div>
+
+                    <div className="rounded-2xl border border-[#E8EDF5] bg-white p-5">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-[#94A3B8]">
+                        Founder Request
+                      </p>
+
+                      <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-[#475569]">
+                        {consultation.message ||
+                          "No message provided."}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-[#E8EDF5] pt-5">
+                      <label
+                        htmlFor={`notes-${consultation.id}`}
+                        className="text-xs font-semibold uppercase tracking-wider text-[#94A3B8]"
+                      >
+                        Admin Notes
+                      </label>
+
+                      <textarea
+                        id={`notes-${consultation.id}`}
+                        rows={4}
+                        value={
+                          notes[
+                            consultation.id
+                          ] ?? ""
+                        }
+                        onChange={(event) =>
+                          setNotes(
+                            (current) => ({
+                              ...current,
+                              [consultation.id]:
+                                event
+                                  .target
+                                  .value,
+                            })
+                          )
+                        }
+                        placeholder="Add internal coordination notes..."
+                        className="mt-3 w-full resize-y rounded-2xl border border-[#E8EDF5] bg-white p-4 text-sm outline-none focus:border-[#071133]"
+                      />
+
+                      <button
+                        type="button"
+                        disabled={notesBusy}
+                        onClick={() =>
+                          void saveNotes(
+                            consultation.id
+                          )
+                        }
+                        className="mt-3 rounded-xl bg-[#071133] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
+                      >
+                        Save Admin Notes
+                      </button>
+                    </div>
                   </div>
-                )
-              )
-            )}
-          </section>
-  </AdminShell>
-);
+                </div>
+              );
+            }
+          )
+        )}
+      </section>
+    </AdminShell>
+  );
 }

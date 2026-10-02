@@ -26,6 +26,8 @@ import { CreateConsultationDto } from './dto/create-consultation.dto';
 
 import { UpdateConsultationStatusDto } from './dto/update-consultation-status.dto';
 
+import { UpdateConsultationAdminNotesDto } from './dto/update-consultation-admin-notes.dto';
+
 @ApiTags('Consultations')
 @ApiBearerAuth('access-token')
 @Controller()
@@ -139,5 +141,32 @@ export class ConsultationController {
     dto: UpdateConsultationStatusDto,
   ) {
     return this.consultationService.updateStatus(consultationId, dto);
+  }
+  @ApiOperation({
+    summary: 'Update consultation admin notes',
+  })
+  @ApiOkResponse({
+    description: 'Consultation admin notes updated successfully',
+  })
+  @ApiNotFoundResponse({
+    description: 'Consultation request not found',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Authentication token missing or invalid',
+  })
+  @ApiForbiddenResponse({
+    description: 'Only administrators can access this endpoint',
+  })
+  @Auth(Role.ADMIN)
+  @Patch('admin/consultations/:id/notes')
+  @ResponseMessage('Consultation admin notes updated successfully')
+  updateAdminNotes(
+    @Param('id')
+    consultationId: string,
+
+    @Body()
+    dto: UpdateConsultationAdminNotesDto,
+  ) {
+    return this.consultationService.updateAdminNotes(consultationId, dto);
   }
 }

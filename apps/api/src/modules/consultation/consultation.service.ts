@@ -16,6 +16,8 @@ import { CreateConsultationDto } from './dto/create-consultation.dto';
 
 import { UpdateConsultationStatusDto } from './dto/update-consultation-status.dto';
 
+import { UpdateConsultationAdminNotesDto } from './dto/update-consultation-admin-notes.dto';
+
 const OPEN_CONSULTATION_STATUSES: ConsultationStatus[] = [
   ConsultationStatus.NEW,
   ConsultationStatus.CONTACTED,
@@ -135,21 +137,175 @@ export class ConsultationService {
   }
 
   async findAllForAdmin() {
-    return this.prisma.consultationRequest.findMany({
-      select: {
-        id: true,
-        founderId: true,
-        advisorId: true,
-        startupId: true,
-        message: true,
-        status: true,
-        adminNotes: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-
+    const requests = await this.prisma.consultationRequest.findMany({
       orderBy: {
         createdAt: 'desc',
+      },
+    });
+
+    const founderIds = [
+      ...new Set(requests.map((request) => request.founderId)),
+    ];
+
+    const startupIds = [
+      ...new Set(
+        requests
+          .map((request) => request.startupId)
+          .filter((startupId): startupId is string => Boolean(startupId)),
+      ),
+    ];
+
+    const advisorIds = [
+      ...new Set(requests.map((request) => request.advisorId)),
+    ];
+
+    const [founders, startups, advisors] = await Promise.all([
+      this.prisma.user.findMany({
+        where: {
+          id: {
+            in: founderIds,
+          },
+        },
+
+        select: {
+          id: true,
+          name: true,
+        },
+      }),
+
+      this.prisma.startup.findMany({
+        where: {
+          id: {
+            in: startupIds,
+          },
+        },
+
+        select: {
+          id: true,
+          name: true,
+        },
+      }),
+
+      this.prisma.advisorProfile.findMany({
+        where: {
+          id: {
+            in: advisorIds,
+          },
+        },
+
+        select: {
+          id: true,
+          currentRole: true,
+          organization: true,
+
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+    const founderMap = new Map(
+      founders.map((founder) => [founder.id, founder]),
+    );
+
+    const startupMap = new Map(
+      startups.map((startup) => [startup.id, startup]),
+    );
+
+    const advisorMap = new Map(
+      advisors.map((advisor) => [advisor.id, advisor]),
+    );
+
+    return requests.map((request) => {
+      const founder = founderMap.get(request.founderId);
+
+      const startup = request.startupId
+        ? startupMap.get(request.startupId)
+        : undefined;
+
+      const advisor = advisorMap.get(request.advisorId);
+
+      return {
+        id: request.id,
+
+        founderId: request.founderId,
+
+        advisorId: request.advisorId,
+
+        startupId: request.startupId,
+
+        message: request.message,
+
+        status: request.status,
+
+        adminNotes: request.adminNotes,
+
+        createdAt: request.createdAt,
+
+        updatedAt: request.updatedAt,
+
+        founder: {
+          id: request.founderId,
+
+          name: founder?.name ?? 'Unknown Founder',
+        },
+
+        startup: request.startupId
+          ? {
+              id: request.startupId,
+
+              name: startup?.name ?? 'Unknown Startup',
+            }
+          : null,
+
+        advisor: {
+          id: request.advisorId,
+
+          name: advisor?.user.name ?? 'Unknown Advisor',
+
+          currentRole: advisor?.currentRole ?? null,
+
+          organization: advisor?.organization ?? null,
+        },
+      };
+    });
+  }
+
+  async updateAdminNotes(
+    consultationId: string,
+    dto: UpdateConsultationAdminNotesDto,
+  ) {
+    const existing = await this.prisma.consultationRequest.findUnique({
+      where: {
+        id: consultationId,
+      },
+
+      select: {
+        id: true,
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Consultation request not found.');
+    }
+
+    return this.prisma.consultationRequest.update({
+      where: {
+        id: consultationId,
+      },
+
+      data: {
+        adminNotes: dto.adminNotes.trim(),
+      },
+
+      select: {
+        id: true,
+        status: true,
+        adminNotes: true,
+        updatedAt: true,
       },
     });
   }
