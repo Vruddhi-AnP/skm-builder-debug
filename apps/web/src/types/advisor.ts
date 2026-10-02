@@ -2,20 +2,33 @@ export interface Advisor {
   id: string;
 
   fullName: string;
-
   headline: string;
 
   expertise: string[];
-
   category: string;
 
-  yearsExperience?: number;
+  organization: string | null;
+  experienceLevel: string | null;
 
-  availabilityStatus?: string;
+  startupStage: string | null;
+  mentorshipType: string | null;
 
-  rating?: number;
+  advisoryGoal: string | null;
 
-  totalSessions?: number;
+  availabilityStatus: string | null;
+  preferredTimeSlot: string | null;
+  sessionMode: string | null;
+  preferredTimezone: string | null;
 
-  startupCount?: number;
+  languages: string[];
+
+  founderEngagementPreference:
+    | string
+    | null;
+
+  advisoryPricingModel:
+    | string
+    | null;
+
+  consultationType: string | null;
 }

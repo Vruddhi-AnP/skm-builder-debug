@@ -1,5 +1,9 @@
 import axios from "axios";
 
+import authApi from "./axios";
+
+import type { Advisor } from "@/types/advisor";
+
 const baseURL =
   process.env.NEXT_PUBLIC_API_URL;
 
@@ -10,137 +14,49 @@ if (!baseURL) {
 }
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "", 
+  baseURL:
+    process.env.NEXT_PUBLIC_API_URL ?? "",
 });
 
+/* ======================================================
+   API RESPONSE TYPE
+====================================================== */
 
+interface ApiEnvelope<T> {
+  data: T;
+}
 
 /* ======================================================
    ADVISORS
 ====================================================== */
 
-export async function getAdvisors() {
-  /*
-    TEMP MOCK DATA
+export async function getAdvisors(): Promise<
+  Advisor[]
+> {
+  const response =
+    await authApi.get<
+      ApiEnvelope<Advisor[]>
+    >("/advisor/discover");
 
-    Later replace with:
-
-    const response = await api.get("/advisors");
-    return response.data.data;
-  */
-
-  return [
-    {
-      id: "rahul-mehta",
-
-      fullName: "Rahul Mehta",
-
-      headline:
-        "Startup Strategy Advisor",
-
-      expertise: [
-        "SaaS",
-        "GTM",
-        "Startup Validation",
-      ],
-
-      category: "Technology",
-
-      yearsExperience: 12,
-
-      availabilityStatus:
-        "Available This Week",
-
-      rating: 4.9,
-
-      totalSessions: 120,
-
-      startupCount: 45,
-    },
-
-    {
-      id: "priya-sharma",
-
-      fullName: "Priya Sharma",
-
-      headline:
-        "Fundraising Mentor",
-
-      expertise: [
-        "Pitch Decks",
-        "Investor Readiness",
-      ],
-
-      category: "Fundraising",
-
-      yearsExperience: 10,
-
-      availabilityStatus:
-        "2 Slots Available",
-
-      rating: 4.8,
-
-      totalSessions: 200,
-
-      startupCount: 70,
-    },
-
-    {
-      id: "aman-verma",
-
-      fullName: "Aman Verma",
-
-      headline:
-        "Product & MVP Expert",
-
-      expertise: [
-        "Product Strategy",
-        "MVP Execution",
-      ],
-
-      category: "Product",
-
-      yearsExperience: 8,
-
-      availabilityStatus:
-        "Available Tomorrow",
-
-      rating: 4.7,
-
-      totalSessions: 90,
-
-      startupCount: 30,
-    },
-
-    {
-      id: "neha-kapoor",
-
-      fullName: "Neha Kapoor",
-
-      headline:
-        "Growth Advisor",
-
-      expertise: [
-        "Growth",
-        "User Acquisition",
-        "Branding",
-      ],
-
-      category: "Growth",
-
-      yearsExperience: 9,
-
-      availabilityStatus:
-        "Open for Consultation",
-
-      rating: 4.9,
-
-      totalSessions: 150,
-
-      startupCount: 55,
-    },
-  ];
+  return response.data.data;
 }
+
+export async function getAdvisorById(
+  advisorId: string
+): Promise<Advisor> {
+  const response =
+    await authApi.get<
+      ApiEnvelope<Advisor>
+    >(
+      `/advisor/discover/${advisorId}`
+    );
+
+  return response.data.data;
+}
+
+/* ======================================================
+   INVESTORS
+====================================================== */
 
 export async function getInvestors() {
   /*
@@ -254,6 +170,9 @@ export async function getInvestors() {
   ];
 }
 
+/* ======================================================
+   PROGRAMS
+====================================================== */
 
 export async function getPrograms() {
   /*
@@ -369,6 +288,9 @@ export async function getPrograms() {
   ];
 }
 
+/* ======================================================
+   RESOURCES
+====================================================== */
 
 export async function getResources() {
   /*

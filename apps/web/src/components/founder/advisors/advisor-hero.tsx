@@ -1,4 +1,29 @@
-export default function AdvisorHero() {
+interface Props {
+  advisorCount: number;
+}
+
+export default function AdvisorHero({
+  advisorCount,
+}: Props) {
+  const summaryItems = [
+    {
+      label: "Available Advisors",
+      value: String(advisorCount),
+    },
+    {
+      label: "Account Status",
+      value: "Approved",
+    },
+    {
+      label: "Visibility",
+      value: "Published",
+    },
+    {
+      label: "Contact Data",
+      value: "Protected",
+    },
+  ];
+
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8 lg:p-10">
       <div className="relative z-10 flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
@@ -15,47 +40,29 @@ export default function AdvisorHero() {
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-8 text-[#6B6B6B]">
-            Get guidance from experienced
-            startup mentors, operators and
-            fundraising experts.
+            Browse approved and published
+            advisor profiles available on
+            Startup Ka Mall.
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 xl:w-[340px]">
-          {[
-            {
-              label: "Advisors",
-              value: "120+",
-            },
+          {summaryItems.map(
+            (item) => (
+              <div
+                key={item.label}
+                className="rounded-2xl border border-border/60 bg-[#f8fbff] p-5"
+              >
+                <p className="text-sm text-slate-500">
+                  {item.label}
+                </p>
 
-            {
-              label: "Sessions",
-              value: "850+",
-            },
-
-            {
-              label: "Startups",
-              value: "2.5K+",
-            },
-
-            {
-              label: "Rating",
-              value: "4.9",
-            },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className="rounded-2xl border border-border/60 bg-[#f8fbff] p-5"
-            >
-              <p className="text-sm text-slate-500">
-                {item.label}
-              </p>
-
-              <h3 className="mt-2 text-3xl font-black text-primary">
-                {item.value}
-              </h3>
-            </div>
-          ))}
+                <h3 className="mt-2 text-xl font-black text-primary">
+                  {item.value}
+                </h3>
+              </div>
+            )
+          )}
         </div>
       </div>
     </div>

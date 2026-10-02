@@ -10,6 +10,8 @@ interface Props {
   setSelectedExpertise: (
     value: string
   ) => void;
+
+  expertiseOptions: string[];
 }
 
 export default function AdvisorFilters({
@@ -17,6 +19,7 @@ export default function AdvisorFilters({
   setSearch,
   selectedExpertise,
   setSelectedExpertise,
+  expertiseOptions,
 }: Props) {
   return (
     <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-5 shadow-sm">
@@ -24,8 +27,10 @@ export default function AdvisorFilters({
         <div className="flex-1">
           <input
             value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
+            onChange={(event) =>
+              setSearch(
+                event.target.value
+              )
             }
             placeholder="Search advisors..."
             className="h-14 w-full rounded-2xl border border-border/60 px-5 outline-none transition focus:border-primary"
@@ -35,36 +40,32 @@ export default function AdvisorFilters({
         <div className="xl:w-60">
           <select
             value={selectedExpertise}
-            onChange={(e) =>
+            onChange={(event) =>
               setSelectedExpertise(
-                e.target.value
+                event.target.value
               )
             }
             className="h-14 w-full rounded-2xl border border-border/60 px-5 outline-none transition focus:border-primary"
           >
-            <option>
+            <option value="All Expertise">
               All Expertise
             </option>
 
-            <option>
-              Fundraising
-            </option>
-
-            <option>
-              Product
-            </option>
-
-            <option>
-              Growth
-            </option>
-
-            <option>
-              Technology
-            </option>
+            {expertiseOptions.map(
+              (option) => (
+                <option
+                  key={option}
+                  value={option}
+                >
+                  {option}
+                </option>
+              )
+            )}
           </select>
         </div>
 
         <button
+          type="button"
           onClick={() => {
             setSearch("");
             setSelectedExpertise(
