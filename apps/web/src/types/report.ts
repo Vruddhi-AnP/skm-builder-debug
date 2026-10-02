@@ -1,45 +1,56 @@
 export interface ReadinessMetric {
-  title: string
-  score: number
-  status: "Strong" | "Good" | "Moderate"
-  insight: string
+  title: string;
+  score: number;
+  status: "Strong" | "Good" | "Moderate";
+  insight: string;
 }
 
 export interface ReadinessReportData {
-  generatedDate: string
+  generatedDate: string;
 
   founder: {
-    name: string
-    email?: string
-  }
+    name: string;
+    email?: string;
+  };
 
   startup: {
-    name: string
-    sector: string
-    stage: string
-  }
+    name: string;
+    sector: string;
+    stage: string;
+  };
 
-  executiveSummary: string
+  blueprint: {
+    problemStatement: string;
+    targetCustomer: string;
+    solutionSummary: string;
+    valueProposition: string;
+    businessModel: string;
+    mvpDefinition: string;
+  };
+
+  executiveSummary: string;
 
   readiness: {
-    overallScore: number
-    label: string
+    overallScore: number;
+    label: string;
 
-    marketScore: number
-    productScore: number
-    businessScore: number
-    executionScore: number
-  }
+    marketScore: number;
+    productScore: number;
+    businessScore: number;
+    executionScore: number;
+  };
 
-  strengths: string[]
+  strengths: string[];
 
-  improvements: string[]
+  improvements: string[];
 
-  metrics: ReadinessMetric[]
+  metrics: ReadinessMetric[];
 
   recommendations: {
-    immediate: string[]
-    shortTerm: string[]
-    longTerm: string[]
-  }
+    immediate: string[];
+    shortTerm: string[];
+    longTerm: string[];
+  };
+
+  disclaimer: string;
 }

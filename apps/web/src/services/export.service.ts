@@ -1,39 +1,106 @@
+function escapeHtml(
+  value: string,
+): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 export const exportReadinessReport =
   async () => {
     const report =
-      document.querySelector(
-        ".print-report"
-      ) as HTMLElement;
+      document.querySelector<HTMLElement>(
+        ".print-report",
+      );
 
-    if (!report) return;
+    if (!report) {
+      console.error(
+        "Startup Blueprint report was not found.",
+      );
+      return;
+    }
+
+    const startupName =
+      report.dataset.startupName?.trim();
+
+    const documentTitle =
+      startupName
+        ? `${startupName} - Startup Blueprint`
+        : "Startup Blueprint";
 
     const iframe =
       document.createElement("iframe");
 
+    iframe.setAttribute(
+      "title",
+      "Startup Blueprint Print Frame",
+    );
+
     iframe.style.position = "fixed";
-    iframe.style.right = "0";
-    iframe.style.bottom = "0";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
+    iframe.style.left = "-10000px";
+    iframe.style.top = "0";
+    iframe.style.width = "1px";
+    iframe.style.height = "1px";
     iframe.style.border = "0";
 
-    document.body.appendChild(iframe);
+    document.body.appendChild(
+      iframe,
+    );
+
+    const printWindow =
+      iframe.contentWindow;
 
     const doc =
-      iframe.contentWindow?.document;
+      printWindow?.document;
 
-    if (!doc) return;
+    const cleanup = () => {
+      if (
+        iframe.parentNode
+      ) {
+        iframe.parentNode.removeChild(
+          iframe,
+        );
+      }
+    };
+
+    if (
+      !printWindow ||
+      !doc
+    ) {
+      cleanup();
+
+      throw new Error(
+        "Unable to create the Blueprint print document.",
+      );
+    }
 
     doc.open();
 
     doc.write(`
+      <!doctype html>
+
       <html>
         <head>
+          <meta charset="utf-8" />
+
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+          />
+
           <title>
-            Startup Readiness Report
+            ${escapeHtml(documentTitle)}
           </title>
 
           <style>
+            @page {
+              size: A4;
+              margin: 0;
+            }
+
             * {
               box-sizing: border-box;
             }
@@ -42,89 +109,127 @@ export const exportReadinessReport =
             body {
               margin: 0;
               padding: 0;
-              background: white;
+              background: #ffffff;
+              color: #334155;
               font-family: Arial, sans-serif;
-              color: #0F172A;
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
             }
 
-            body {
-              padding: 0;
-            }
-
             .print-report {
-              width: 100%;
-              background: white;
+              width: 210mm;
+              margin: 0 auto;
+              background: #ffffff;
             }
 
-            .print-page {
+            .blueprint-page {
               width: 210mm;
               min-height: 297mm;
               margin: 0 auto;
-              padding: 20mm;
-              background: white;
+              padding: 18mm;
+              background: #ffffff;
+
               page-break-after: always;
               break-after: page;
-              overflow: hidden;
-              position: relative;
             }
 
-            .print-page:last-child {
+            .blueprint-page:last-child {
               page-break-after: auto;
               break-after: auto;
             }
 
-            .print-card,
-            .print-section {
-              break-inside: avoid;
+            .blueprint-card {
               page-break-inside: avoid;
+              break-inside: avoid;
             }
 
+            nav,
+            aside,
+            header,
             button,
+            .print-hide,
             .print\\:hidden {
               display: none !important;
             }
 
-            .report-footer {
-              position: absolute;
-              bottom: 10mm;
-              left: 20mm;
-              right: 20mm;
-              display: flex;
-              justify-content: space-between;
-              font-size: 11px;
-              color: #64748B;
-              border-top: 1px solid #E2E8F0;
-              padding-top: 10px;
+            img,
+            svg {
+              max-width: 100%;
             }
 
-            @page {
-              size: A4;
-              margin: 0;
+            p,
+            h1,
+            h2,
+            h3,
+            h4,
+            span,
+            div {
+              overflow-wrap: anywhere;
+            }
+
+            @media screen {
+              body {
+                background: #e2e8f0;
+              }
+
+              .blueprint-page {
+                margin: 12px auto;
+                box-shadow:
+                  0 10px 30px
+                  rgba(15, 23, 42, 0.08);
+              }
+            }
+
+            @media print {
+              html,
+              body {
+                width: 210mm;
+                background: #ffffff;
+              }
+
+              .print-report {
+                width: 210mm;
+              }
+
+              .blueprint-page {
+                margin: 0;
+                box-shadow: none;
+              }
             }
           </style>
         </head>
 
         <body>
-          <div class="print-report">
-            ${report.innerHTML}
-          </div>
+          ${report.outerHTML}
         </body>
       </html>
     `);
 
     doc.close();
 
-    setTimeout(() => {
-      iframe.contentWindow?.focus();
-
-      iframe.contentWindow?.print();
-
-      setTimeout(() => {
-        document.body.removeChild(
-          iframe
+    await new Promise<void>(
+      (resolve) => {
+        window.setTimeout(
+          resolve,
+          300,
         );
-      }, 1500);
-    }, 800);
+      },
+    );
+
+    printWindow.focus();
+
+    printWindow.addEventListener(
+      "afterprint",
+      cleanup,
+      {
+        once: true,
+      },
+    );
+
+    printWindow.print();
+
+    window.setTimeout(
+      cleanup,
+      60000,
+    );
   };

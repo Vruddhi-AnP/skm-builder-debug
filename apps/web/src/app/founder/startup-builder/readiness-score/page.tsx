@@ -46,6 +46,40 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+
+interface StoredAuthUser {
+  name?: string | null;
+}
+
+function getStoredFounderName(): string {
+  if (
+    typeof window === "undefined"
+  ) {
+    return "";
+  }
+
+  const storedUser =
+    localStorage.getItem("user");
+
+  if (!storedUser) {
+    return "";
+  }
+
+  try {
+    const user =
+      JSON.parse(
+        storedUser,
+      ) as StoredAuthUser;
+
+    return typeof user.name ===
+      "string"
+      ? user.name.trim()
+      : "";
+  } catch {
+    return "";
+  }
+}
+
 export default function ReadinessScorePage() {
   const router = useRouter();
 
@@ -73,12 +107,21 @@ export default function ReadinessScorePage() {
           await resolveFounderStartupId();
 
         const [
-          builderRecord,
-          startup,
-        ] = await Promise.all([
-          getBuilderDataByStartupId(startupId),
-          getStartupById(startupId),
-        ]);
+  builderRecord,
+  startup,
+] = await Promise.all([
+  getBuilderDataByStartupId(startupId),
+  getStartupById(startupId),
+]);
+
+const founderName =
+  getStoredFounderName();
+
+if (!founderName) {
+  throw new Error(
+    "Signed-in founder name is unavailable. Please log in again.",
+  );
+}
 
         let latestAssessment:
           | ReadinessAssessment
@@ -124,10 +167,11 @@ export default function ReadinessScorePage() {
 
         setReport(
           buildReadinessReport(
-            assessmentResult,
-            builderRecord.data,
-            startup,
-          ),
+  assessmentResult,
+  builderRecord.data,
+  startup,
+  founderName,
+),
         );
       } catch (error) {
         if (!active) {
@@ -923,7 +967,7 @@ export default function ReadinessScorePage() {
             className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/60 bg-[#F7F4EE]/95 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-muted"
           >
             <Download className="h-4 w-4" />
-            Export Readiness Report
+            Export Startup Blueprint
           </button>
         )}
 
