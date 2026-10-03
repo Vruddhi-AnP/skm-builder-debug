@@ -10,7 +10,11 @@ import { AdminController } from './admin.controller';
 
 function createContext(role: Role): ExecutionContext {
   return {
-    getHandler: () => AdminController.prototype.findAdvisors,
+    getHandler: () => {
+      // Reflector needs the original controller method reference to read @Auth metadata.
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      return AdminController.prototype.findAdvisors;
+    },
 
     getClass: () => AdminController,
 
