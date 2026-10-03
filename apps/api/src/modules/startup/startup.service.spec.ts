@@ -1,18 +1,38 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
+
+import { PrismaService } from '../../prisma/prisma.service';
+
 import { StartupService } from './startup.service';
 
-describe('StartupService', () => {
+describe('StartupService ownership', () => {
+  const startupFindFirst = jest.fn();
+
+  const prisma = {
+    startup: {
+      findFirst: startupFindFirst,
+    },
+  } as unknown as PrismaService;
+
   let service: StartupService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [StartupService],
-    }).compile();
+  beforeEach(() => {
+    jest.clearAllMocks();
 
-    service = module.get<StartupService>(StartupService);
+    service = new StartupService(prisma);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('prevents a founder from accessing another founder startup', async () => {
+    startupFindFirst.mockResolvedValue(null);
+
+    await expect(
+      service.findOneByFounder('startup-owned-by-someone-else', 'founder-a'),
+    ).rejects.toBeInstanceOf(NotFoundException);
+
+    expect(startupFindFirst).toHaveBeenCalledWith({
+      where: {
+        id: 'startup-owned-by-someone-else',
+        founderId: 'founder-a',
+      },
+    });
   });
 });

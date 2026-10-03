@@ -199,6 +199,16 @@ describe('Readiness rules', () => {
     expect(result.overallScore).toBeLessThanOrEqual(100);
   });
 
+  it('scores completed evidence higher than an empty builder', () => {
+    const emptyResult = calculateReadiness(almostEmptyBuilder);
+
+    const completedResult = calculateReadiness(wellDefinedBuilder);
+
+    expect(completedResult.overallScore).toBeGreaterThan(
+      emptyResult.overallScore,
+    );
+  });
+
   it('returns the same result for the same input', () => {
     const first = calculateReadiness(wellDefinedBuilder);
 
