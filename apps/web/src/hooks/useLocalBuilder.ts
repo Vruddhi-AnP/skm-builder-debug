@@ -1,6 +1,7 @@
 "use client";
 
-const BUILDER_KEY = "skmBuilderData";
+const LEGACY_BUILDER_KEY = "skmBuilderData";
+const BUILDER_KEY_PREFIX = "skmBuilderData";
 
 export type BuilderStepKey =
   | "ideaDefinition"
@@ -19,6 +20,10 @@ export interface BuilderStepData {
   businessModel?: Record<string, string>;
 }
 
+interface StoredUser {
+  id?: string | null;
+}
+
 const STEP_ORDER: BuilderStepKey[] = [
   "ideaDefinition",
   "problemDefinition",
@@ -27,11 +32,69 @@ const STEP_ORDER: BuilderStepKey[] = [
   "businessModel",
 ];
 
-export function getBuilderData(): BuilderStepData {
-  if (typeof window === "undefined") return {};
+function getBuilderStorageKey(): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   try {
-    const raw = localStorage.getItem(BUILDER_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const storedUser = localStorage.getItem("user");
+
+    if (!storedUser) {
+      return null;
+    }
+
+    const user = JSON.parse(storedUser) as StoredUser;
+
+    const userId = typeof user.id === "string" ? user.id.trim() : "";
+
+    if (!userId) {
+      return null;
+    }
+
+    const startupId = localStorage.getItem("startupId")?.trim() ?? "";
+
+    if (startupId) {
+      return `${BUILDER_KEY_PREFIX}:${userId}:${startupId}`;
+    }
+
+    return `${BUILDER_KEY_PREFIX}:${userId}`;
+  } catch {
+    return null;
+  }
+}
+
+function removeLegacyBuilderData(): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  localStorage.removeItem(LEGACY_BUILDER_KEY);
+}
+
+export function getBuilderData(): BuilderStepData {
+  if (typeof window === "undefined") {
+    return {};
+  }
+
+  const storageKey = getBuilderStorageKey();
+
+  if (!storageKey) {
+    return {};
+  }
+
+  /*
+   * The old global key was shared by every account in the browser.
+   * It cannot be safely attributed to a founder, so never migrate it.
+   * Backend data remains authoritative and will repopulate the
+   * account-scoped draft after a successful API load.
+   */
+  removeLegacyBuilderData();
+
+  try {
+    const raw = localStorage.getItem(storageKey);
+
+    return raw ? (JSON.parse(raw) as BuilderStepData) : {};
   } catch {
     return {};
   }
@@ -39,40 +102,81 @@ export function getBuilderData(): BuilderStepData {
 
 export function saveBuilderStep(
   step: BuilderStepKey,
-  data: Record<string, string>
+  data: Record<string, string>,
 ): void {
+  const storageKey = getBuilderStorageKey();
+
+  if (!storageKey) {
+    return;
+  }
+
+  removeLegacyBuilderData();
+
   const existing = getBuilderData();
-  const updated = { ...existing, [step]: data };
-  localStorage.setItem(BUILDER_KEY, JSON.stringify(updated));
+
+  const updated = {
+    ...existing,
+    [step]: data,
+  };
+
+  localStorage.setItem(storageKey, JSON.stringify(updated));
 }
 
 export function getStepStatus(step: BuilderStepKey): StepStatus {
   const data = getBuilderData();
   const stepData = data[step];
-  if (!stepData) return "Pending";
-  const hasValues = Object.values(stepData).some((v) => v?.trim().length > 0);
+
+  if (!stepData) {
+    return "Pending";
+  }
+
+  const hasValues = Object.values(stepData).some(
+    (value) => value?.trim().length > 0,
+  );
+
   return hasValues ? "Completed" : "Pending";
 }
 
 export function getBuilderProgress(): number {
   const data = getBuilderData();
+
   const completed = STEP_ORDER.filter((step) => {
     const stepData = data[step];
-    if (!stepData) return false;
-    return Object.values(stepData).some((v) => v?.trim().length > 0);
+
+    if (!stepData) {
+      return false;
+    }
+
+    return Object.values(stepData).some((value) => value?.trim().length > 0);
   }).length;
+
   return Math.round((completed / STEP_ORDER.length) * 100);
 }
 
 export function getCompletedStepCount(): number {
   const data = getBuilderData();
+
   return STEP_ORDER.filter((step) => {
     const stepData = data[step];
-    if (!stepData) return false;
-    return Object.values(stepData).some((v) => v?.trim().length > 0);
+
+    if (!stepData) {
+      return false;
+    }
+
+    return Object.values(stepData).some((value) => value?.trim().length > 0);
   }).length;
 }
 
 export function clearBuilderData(): void {
-  localStorage.removeItem(BUILDER_KEY);
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const storageKey = getBuilderStorageKey();
+
+  if (storageKey) {
+    localStorage.removeItem(storageKey);
+  }
+
+  removeLegacyBuilderData();
 }

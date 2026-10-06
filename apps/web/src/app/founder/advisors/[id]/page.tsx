@@ -1,15 +1,12 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { type FormEvent, useEffect, useState } from "react";
 
 import Link from "next/link";
 
-import {
-  useParams,
-} from "next/navigation";
+import { useParams } from "next/navigation";
+
+import axios from "axios";
 
 import {
   ArrowLeft,
@@ -22,17 +19,19 @@ import {
   UserRound,
 } from "lucide-react";
 
+import { getAdvisorById } from "@/lib/api";
+
 import {
-  getAdvisorById,
-} from "@/lib/api";
+  createConsultation,
+  getMyConsultations,
+  type ConsultationRequest,
+} from "@/services/consultation.service";
 
-import type {
-  Advisor,
-} from "@/types/advisor";
+import { resolveFounderStartupId } from "@/services/startup.service";
 
-function formatEnum(
-  value: string | null
-) {
+import type { Advisor } from "@/types/advisor";
+
+function formatEnum(value: string | null | undefined) {
   if (!value) {
     return "Not specified";
   }
@@ -40,12 +39,30 @@ function formatEnum(
   return value
     .toLowerCase()
     .split("_")
-    .map(
-      (part) =>
-        part.charAt(0).toUpperCase() +
-        part.slice(1)
-    )
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+}
+
+function isOpenConsultation(status: ConsultationRequest["status"]) {
+  return status === "NEW" || status === "CONTACTED" || status === "SCHEDULED";
+}
+
+function findLatestConsultation(
+  requests: ConsultationRequest[],
+  advisorId: string,
+  startupId: string,
+) {
+  return (
+    requests
+      .filter(
+        (request) =>
+          request.advisorId === advisorId && request.startupId === startupId,
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0] ?? null
+  );
 }
 
 export default function AdvisorProfilePage() {
@@ -58,88 +75,184 @@ export default function AdvisorProfilePage() {
         ? params.id[0]
         : undefined;
 
-  const [advisor, setAdvisor] =
-    useState<Advisor | null>(null);
+  const [advisor, setAdvisor] = useState<Advisor | null>(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [error, setError] =
-    useState(false);
+  const [error, setError] = useState(false);
+
+  const [consultationMessage, setConsultationMessage] = useState("");
+
+  const [consultationStartupId, setConsultationStartupId] = useState<
+    string | null
+  >(null);
+
+  const [consultationRequest, setConsultationRequest] =
+    useState<ConsultationRequest | null>(null);
+
+  const [consultationSubmitting, setConsultationSubmitting] = useState(false);
+
+  const [consultationError, setConsultationError] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
-  if (!advisorId) {
-    return;
-  }
+    if (!advisorId) {
+      return;
+    }
 
-  let active = true;
+    let active = true;
 
-  async function loadAdvisor(
-    id: string
-  ) {
-    try {
-      setLoading(true);
-      setError(false);
+    async function loadAdvisor(id: string) {
+      try {
+        setLoading(true);
+        setError(false);
 
-      const data =
-        await getAdvisorById(id);
+        const data = await getAdvisorById(id);
 
-      if (active) {
-        setAdvisor(data);
+        if (active) {
+          setAdvisor(data);
+        }
+      } catch (loadError) {
+        console.error("Failed to load advisor", loadError);
+
+        if (active) {
+          setAdvisor(null);
+          setError(true);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
       }
-    } catch (loadError) {
-      console.error(
-        "Failed to load advisor",
-        loadError
-      );
+    }
 
-      if (active) {
-        setAdvisor(null);
-        setError(true);
+    void loadAdvisor(advisorId);
+
+    return () => {
+      active = false;
+    };
+  }, [advisorId]);
+
+  useEffect(() => {
+    if (!advisorId) {
+      return;
+    }
+
+    let active = true;
+
+    async function loadConsultationContext(id: string) {
+      try {
+        setConsultationError(null);
+
+        const startupId = await resolveFounderStartupId();
+
+        const requests = await getMyConsultations();
+
+        if (!active) {
+          return;
+        }
+
+        setConsultationStartupId(startupId);
+
+        setConsultationRequest(findLatestConsultation(requests, id, startupId));
+      } catch (loadError) {
+        console.error("Failed to load consultation context", loadError);
+
+        if (active) {
+          setConsultationStartupId(null);
+
+          setConsultationError(
+            "Your startup could not be resolved. Please complete your startup profile first.",
+          );
+        }
+      }
+    }
+
+    void loadConsultationContext(advisorId);
+
+    return () => {
+      active = false;
+    };
+  }, [advisorId]);
+
+  async function handleConsultationSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!advisorId || !consultationStartupId) {
+      setConsultationError(
+        "Your startup could not be resolved. Please complete your startup profile first.",
+      );
+      return;
+    }
+
+    const message = consultationMessage.trim();
+
+    if (!message) {
+      setConsultationError("Please describe the support you need.");
+      return;
+    }
+
+    try {
+      setConsultationSubmitting(true);
+      setConsultationError(null);
+
+      const created = await createConsultation({
+        advisorId,
+        startupId: consultationStartupId,
+        message,
+      });
+
+      setConsultationRequest(created);
+
+      setConsultationMessage("");
+    } catch (submitError) {
+      console.error("Failed to create consultation request", submitError);
+
+      if (
+        axios.isAxiosError(submitError) &&
+        submitError.response?.status === 409
+      ) {
+        setConsultationError(
+          "You already have an open consultation request with this advisor.",
+        );
+      } else {
+        setConsultationError(
+          "Unable to submit the consultation request. Please try again.",
+        );
       }
     } finally {
-      if (active) {
-        setLoading(false);
-      }
+      setConsultationSubmitting(false);
     }
   }
 
-  void loadAdvisor(advisorId);
+  if (!advisorId) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-4">
+        <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-red-50">
+            <UserRound className="h-10 w-10 text-red-500" />
+          </div>
 
-  return () => {
-    active = false;
-  };
-}, [advisorId]);
+          <h1 className="mt-8 text-4xl font-black tracking-tight text-[#16214A]">
+            Advisor Not Found
+          </h1>
 
-if (!advisorId) {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f8fbff] px-4">
-      <div className="w-full max-w-2xl rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-10 text-center shadow-sm">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-red-50">
-          <UserRound className="h-10 w-10 text-red-500" />
+          <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-slate-500">
+            This advisor is unavailable, not published, or no longer accessible.
+          </p>
+
+          <Link
+            href="/founder/advisors"
+            className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 font-semibold text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back To Advisors
+          </Link>
         </div>
-
-        <h1 className="mt-8 text-4xl font-black tracking-tight text-[#16214A]">
-          Advisor Not Found
-        </h1>
-
-        <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-slate-500">
-          This advisor is unavailable,
-          not published, or no longer
-          accessible.
-        </p>
-
-        <Link
-          href="/founder/advisors"
-          className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 font-semibold text-white"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back To Advisors
-        </Link>
-      </div>
-    </main>
-  );
-}
+      </main>
+    );
+  }
 
   if (loading) {
     return (
@@ -170,9 +283,7 @@ if (!advisorId) {
           </h1>
 
           <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-slate-500">
-            This advisor is unavailable,
-            not published, or no longer
-            accessible.
+            This advisor is unavailable, not published, or no longer accessible.
           </p>
 
           <Link
@@ -203,16 +314,12 @@ if (!advisorId) {
         <section className="rounded-[36px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm md:p-8 lg:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-start">
             <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-[28px] bg-primary text-4xl font-black text-white">
-              {advisor.fullName
-                .charAt(0)
-                .toUpperCase() || "A"}
+              {advisor.fullName.charAt(0).toUpperCase() || "A"}
             </div>
 
             <div className="flex-1">
               <div className="inline-flex rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
-                {formatEnum(
-                  advisor.availabilityStatus
-                )}
+                {formatEnum(advisor.availabilityStatus)}
               </div>
 
               <h1 className="mt-5 text-4xl font-black tracking-tight text-[#16214A] md:text-5xl">
@@ -220,31 +327,25 @@ if (!advisorId) {
               </h1>
 
               <p className="mt-3 text-lg text-slate-500">
-                {advisor.headline ||
-                  "Startup Advisor"}
+                {advisor.headline || "Startup Advisor"}
               </p>
 
               {advisor.organization && (
                 <p className="mt-2 text-sm font-semibold text-slate-400">
-                  {
-                    advisor.organization
-                  }
+                  {advisor.organization}
                 </p>
               )}
 
-              {advisor.expertise.length >
-                0 && (
+              {advisor.expertise.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-3">
-                  {advisor.expertise.map(
-                    (item) => (
-                      <span
-                        key={item}
-                        className="rounded-2xl border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700"
-                      >
-                        {item}
-                      </span>
-                    )
-                  )}
+                  {advisor.expertise.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-2xl border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
@@ -278,8 +379,7 @@ if (!advisorId) {
                   </p>
 
                   <p className="mt-2 font-bold text-[#16214A]">
-                    {advisor.category ||
-                      "Not specified"}
+                    {advisor.category || "Not specified"}
                   </p>
                 </div>
 
@@ -291,9 +391,7 @@ if (!advisorId) {
                   </p>
 
                   <p className="mt-2 font-bold text-[#16214A]">
-                    {formatEnum(
-                      advisor.startupStage
-                    )}
+                    {formatEnum(advisor.startupStage)}
                   </p>
                 </div>
 
@@ -305,9 +403,7 @@ if (!advisorId) {
                   </p>
 
                   <p className="mt-2 font-bold text-[#16214A]">
-                    {formatEnum(
-                      advisor.experienceLevel
-                    )}
+                    {formatEnum(advisor.experienceLevel)}
                   </p>
                 </div>
 
@@ -319,9 +415,7 @@ if (!advisorId) {
                   </p>
 
                   <p className="mt-2 font-bold text-[#16214A]">
-                    {formatEnum(
-                      advisor.mentorshipType
-                    )}
+                    {formatEnum(advisor.mentorshipType)}
                   </p>
                 </div>
               </div>
@@ -353,9 +447,7 @@ if (!advisorId) {
                   </div>
 
                   <p className="mt-2 font-semibold text-slate-700">
-                    {formatEnum(
-                      advisor.availabilityStatus
-                    )}
+                    {formatEnum(advisor.availabilityStatus)}
                   </p>
                 </div>
 
@@ -366,9 +458,7 @@ if (!advisorId) {
                   </div>
 
                   <p className="mt-2 font-semibold text-slate-700">
-                    {formatEnum(
-                      advisor.preferredTimeSlot
-                    )}
+                    {formatEnum(advisor.preferredTimeSlot)}
                   </p>
                 </div>
 
@@ -379,49 +469,36 @@ if (!advisorId) {
                   </div>
 
                   <p className="mt-2 font-semibold text-slate-700">
-                    {formatEnum(
-                      advisor.sessionMode
-                    )}
+                    {formatEnum(advisor.sessionMode)}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-slate-400">
-                    Timezone
-                  </p>
+                  <p className="text-sm text-slate-400">Timezone</p>
 
                   <p className="mt-2 font-semibold text-slate-700">
-                    {formatEnum(
-                      advisor.preferredTimezone
-                    )}
+                    {formatEnum(advisor.preferredTimezone)}
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="rounded-[32px] border border-border/60 bg-[#F7F4EE]/95 p-6 shadow-sm">
-              <h2 className="text-2xl font-black text-[#16214A]">
-                Languages
-              </h2>
+              <h2 className="text-2xl font-black text-[#16214A]">Languages</h2>
 
               <div className="mt-5 flex flex-wrap gap-2">
-                {advisor.languages.length >
-                0 ? (
-                  advisor.languages.map(
-                    (language) => (
-                      <span
-                        key={language}
-                        className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 text-sm font-semibold text-primary"
-                      >
-                        <Languages className="h-4 w-4" />
-                        {language}
-                      </span>
-                    )
-                  )
+                {advisor.languages.length > 0 ? (
+                  advisor.languages.map((language) => (
+                    <span
+                      key={language}
+                      className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 text-sm font-semibold text-primary"
+                    >
+                      <Languages className="h-4 w-4" />
+                      {language}
+                    </span>
+                  ))
                 ) : (
-                  <p className="text-sm text-slate-500">
-                    Not specified
-                  </p>
+                  <p className="text-sm text-slate-500">Not specified</p>
                 )}
               </div>
             </div>
@@ -438,8 +515,7 @@ if (!advisorId) {
                   </p>
 
                   <p className="mt-2 font-semibold text-slate-700">
-                    {advisor.consultationType ||
-                      "Not specified"}
+                    {advisor.consultationType || "Not specified"}
                   </p>
                 </div>
 
@@ -449,11 +525,89 @@ if (!advisorId) {
                   </p>
 
                   <p className="mt-2 font-semibold text-slate-700">
-                    {formatEnum(
-                      advisor.advisoryPricingModel
-                    )}
+                    {formatEnum(advisor.advisoryPricingModel)}
                   </p>
                 </div>
+              </div>
+
+              <div className="mt-6 border-t border-border/60 pt-6">
+                {consultationRequest && (
+                  <div className="mb-6 rounded-3xl border border-sky-100 bg-sky-50 p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <p className="font-bold text-[#16214A]">
+                        Your Consultation Request
+                      </p>
+
+                      <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-primary">
+                        {formatEnum(consultationRequest.status)}
+                      </span>
+                    </div>
+
+                    {consultationRequest.message && (
+                      <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-600">
+                        {consultationRequest.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {(!consultationRequest ||
+                  !isOpenConsultation(consultationRequest.status)) && (
+                  <form
+                    onSubmit={handleConsultationSubmit}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label
+                        htmlFor="consultation-message"
+                        className="text-sm font-bold text-[#16214A]"
+                      >
+                        Request Consultation
+                      </label>
+
+                      <p className="mt-1 text-sm leading-6 text-slate-500">
+                        Tell the advisor what support you need.
+                      </p>
+                    </div>
+
+                    <textarea
+                      id="consultation-message"
+                      rows={5}
+                      value={consultationMessage}
+                      onChange={(event) =>
+                        setConsultationMessage(event.target.value)
+                      }
+                      placeholder="Example: I need guidance on validating my MVP and go-to-market strategy."
+                      className="w-full resize-none rounded-2xl border border-border bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-primary"
+                    />
+
+                    {consultationError && (
+                      <p className="text-sm font-medium text-red-600">
+                        {consultationError}
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={
+                        consultationSubmitting || !consultationStartupId
+                      }
+                      className="w-full rounded-2xl bg-primary px-5 py-3 font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {consultationSubmitting
+                        ? "Sending Request..."
+                        : "Request Consultation"}
+                    </button>
+                  </form>
+                )}
+
+                {consultationRequest &&
+                  isOpenConsultation(consultationRequest.status) &&
+                  consultationError && (
+                    <p className="mt-4 text-sm font-medium text-red-600">
+                      {consultationError}
+                    </p>
+                  )}
               </div>
             </div>
           </div>
