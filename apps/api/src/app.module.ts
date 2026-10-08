@@ -4,6 +4,8 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { ConfigModule } from '@nestjs/config';
 
+import { validateEnv } from './config/validate-env';
+
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AppController } from './app.controller';
@@ -38,6 +40,7 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validate: validateEnv,
     }),
 
     ThrottlerModule.forRoot([

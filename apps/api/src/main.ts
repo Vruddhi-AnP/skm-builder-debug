@@ -10,8 +10,6 @@ import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 
-import { validateEnv } from './config/validate-env';
-
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
@@ -19,46 +17,50 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
 import { API_PREFIX, DEFAULT_PORT } from './common/constants/app.constants';
 
 async function bootstrap() {
-  validateEnv();
-
   const logger = new Logger('Bootstrap');
 
-  const nodeEnv = process.env.NODE_ENV ?? 'development';
-
   const app = await NestFactory.create(AppModule, {
-    logger:
-      nodeEnv === 'production'
-        ? ['error', 'warn']
-        : ['log', 'error', 'warn', 'debug', 'verbose'],
+    bufferLogs: true,
   });
-
   const configService = app.get(ConfigService);
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('SKM Platform API')
-    .setDescription('Enterprise startup ecosystem API')
-    .setVersion('1.0')
-    .addServer(`/${API_PREFIX}`)
-    .addBearerAuth(
-      {
-        type: 'http',
+  const nodeEnv = configService.getOrThrow<string>('NODE_ENV');
 
-        scheme: 'bearer',
+  app.useLogger(
+    nodeEnv === 'production'
+      ? ['error', 'warn']
+      : ['log', 'error', 'warn', 'debug', 'verbose'],
+  );
 
-        bearerFormat: 'JWT',
+  if (nodeEnv !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('SKM Platform API')
+      .setDescription('Enterprise startup ecosystem API')
+      .setVersion('1.0')
+      .addServer(`/${API_PREFIX}`)
+      .addBearerAuth(
+        {
+          type: 'http',
 
-        description: 'Enter JWT access token',
-      },
-      'access-token',
-    )
-    .build();
+          scheme: 'bearer',
 
-  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+          bearerFormat: 'JWT',
 
-  SwaggerModule.setup('docs', app, swaggerDocument);
+          description: 'Enter JWT access token',
+        },
+        'access-token',
+      )
+      .build();
+
+    const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+
+    SwaggerModule.setup('docs', app, swaggerDocument);
+  }
+
+  const frontendUrl = configService.getOrThrow<string>('FRONTEND_URL');
 
   app.enableCors({
-    origin: configService.get<string>('FRONTEND_URL'),
+    origin: frontendUrl,
 
     credentials: true,
   });
@@ -94,14 +96,16 @@ async function bootstrap() {
 http://localhost:${port}/${API_PREFIX}
 `);
 
-  logger.log(`
+  if (nodeEnv !== 'production') {
+    logger.log(`
 📘 Swagger Docs:
 http://localhost:${port}/docs
 `);
+  }
 
   logger.log(`
 🌍 Environment:
-${configService.get<string>('NODE_ENV') ?? 'development'}
+${nodeEnv}
 `);
 }
 
