@@ -40,6 +40,12 @@ export class AuthService {
   }
 
   async signup(dto: CreateUserDto): Promise<AuthResponseDataDto> {
+    if (dto.role === Role.ADMIN) {
+      throw new BadRequestException(
+        'Admin accounts cannot be created through public signup',
+      );
+    }
+
     const existingUser = await this.prisma.user.findUnique({
       where: {
         email: dto.email,

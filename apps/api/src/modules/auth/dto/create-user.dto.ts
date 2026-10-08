@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   Equals,
   IsEmail,
-  IsEnum,
+  IsIn,
   IsNotEmpty,
   IsString,
   MinLength,
@@ -52,13 +52,13 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({
-    enum: Role,
-
+    enum: [Role.FOUNDER, Role.ADVISOR, Role.INVESTOR],
     example: Role.FOUNDER,
-
-    description: 'Platform role assigned to user',
+    description: 'Public platform role assigned to user',
   })
-  @IsEnum(Role)
+  @IsIn([Role.FOUNDER, Role.ADVISOR, Role.INVESTOR], {
+    message: 'Role must be founder, advisor, or investor',
+  })
   role: Role;
 
   @ApiProperty({
