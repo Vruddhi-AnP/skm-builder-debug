@@ -117,6 +117,7 @@ export default function AdvisorPricingPage() {
       "Failed to update advisor pricing:",
       error
     );
+    window.alert("We couldn't save your pricing details. Please try again.");
   }
 };
 

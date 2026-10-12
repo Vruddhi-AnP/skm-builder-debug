@@ -67,6 +67,7 @@ export default function AdvisorExpertisePage() {
     router.push("/onboarding/advisor/availability");
   } catch (error) {
     console.error("Failed to update advisor expertise:", error);
+    window.alert("We couldn't save your expertise details. Please try again.");
   }
 };
 

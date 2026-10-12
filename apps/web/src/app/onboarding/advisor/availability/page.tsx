@@ -71,6 +71,7 @@ export default function AdvisorAvailabilityPage() {
         "Failed to update advisor availability:",
         error
       );
+      window.alert("We couldn't save your availability details. Please try again.");
     }
   };
   

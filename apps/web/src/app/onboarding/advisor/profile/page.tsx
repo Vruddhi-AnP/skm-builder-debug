@@ -97,6 +97,7 @@ export default function AdvisorProfilePage() {
       router.push("/onboarding/advisor/expertise");
     } catch (error) {
       console.error("Failed to save advisor profile:", error);
+      window.alert("We couldn't save your advisor profile. Please try again.");
     }
   };
 

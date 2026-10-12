@@ -18,7 +18,9 @@ import {
 } from '@nestjs/swagger';
 
 import { ResponseMessage } from '../../common/decorators/response-message.decorator';
+import { Role } from '../../common/enums/role.enum';
 
+import { Auth } from '../auth/decorators/auth.decorator';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -42,6 +44,7 @@ export class AdvisorController {
   @ApiCreatedResponse({
     description: 'Advisor profile created successfully',
   })
+  @Auth(Role.ADVISOR)
   @Post('profile')
   @ResponseMessage('Advisor profile created successfully')
   createProfile(
@@ -59,6 +62,7 @@ export class AdvisorController {
   @ApiOkResponse({
     description: 'Advisor profile fetched successfully',
   })
+  @Auth(Role.ADVISOR)
   @Get('profile')
   @ResponseMessage('Advisor profile fetched successfully')
   getProfile(@GetUser('id') userId: string) {
@@ -72,6 +76,7 @@ export class AdvisorController {
   @ApiOkResponse({
     description: 'Advisor profile updated successfully',
   })
+  @Auth(Role.ADVISOR)
   @Patch('profile')
   @ResponseMessage('Advisor profile updated successfully')
   updateProfile(
