@@ -142,28 +142,53 @@ export default function AdvisorProfilePage() {
     let active = true;
 
     async function loadConsultationContext(id: string) {
+      setConsultationError(null);
+
+      let startupId: string;
+
       try {
-        setConsultationError(null);
+        startupId = await resolveFounderStartupId();
+      } catch (startupError) {
+        console.error("Failed to resolve founder startup", startupError);
 
-        const startupId = await resolveFounderStartupId();
+        if (active) {
+          setConsultationStartupId(null);
 
+          if (axios.isAxiosError(startupError)) {
+            setConsultationError(
+              "Unable to load your startup details. Please try again.",
+            );
+          } else {
+            setConsultationError(
+              "Your startup could not be resolved. Please complete your startup profile first.",
+            );
+          }
+        }
+
+        return;
+      }
+
+      if (!active) {
+        return;
+      }
+
+      setConsultationStartupId(startupId);
+
+      try {
         const requests = await getMyConsultations();
 
         if (!active) {
           return;
         }
 
-        setConsultationStartupId(startupId);
-
         setConsultationRequest(findLatestConsultation(requests, id, startupId));
-      } catch (loadError) {
-        console.error("Failed to load consultation context", loadError);
+      } catch (consultationError) {
+        console.error("Failed to load consultation requests", consultationError);
 
         if (active) {
-          setConsultationStartupId(null);
-
+          setConsultationRequest(null);
           setConsultationError(
-            "Your startup could not be resolved. Please complete your startup profile first.",
+            "Unable to load your consultation requests. Please try again.",
           );
         }
       }

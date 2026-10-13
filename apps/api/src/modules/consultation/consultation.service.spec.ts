@@ -19,6 +19,8 @@ describe('ConsultationService', () => {
 
   const requestFindUnique = jest.fn();
 
+  const requestFindMany = jest.fn();
+
   const requestCreate = jest.fn();
 
   const requestUpdate = jest.fn();
@@ -36,6 +38,8 @@ describe('ConsultationService', () => {
       findFirst: requestFindFirst,
 
       findUnique: requestFindUnique,
+
+      findMany: requestFindMany,
 
       create: requestCreate,
 
@@ -87,6 +91,80 @@ describe('ConsultationService', () => {
     expect(requestCreate).not.toHaveBeenCalled();
   });
 
+  it('creates a consultation for the authenticated founder owned startup', async () => {
+    startupFindFirst.mockResolvedValue({
+      id: 'startup-1',
+    });
+
+    advisorFindFirst.mockResolvedValue({
+      id: 'advisor-1',
+    });
+
+    requestFindFirst.mockResolvedValue(null);
+
+    requestCreate.mockResolvedValue({
+      id: 'request-1',
+      advisorId: 'advisor-1',
+      startupId: 'startup-1',
+      message: 'I need support with MVP planning.',
+      status: ConsultationStatus.NEW,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    const result = await service.create('founder-1', createDto);
+
+    expect(startupFindFirst).toHaveBeenCalledWith({
+      where: {
+        id: 'startup-1',
+        founderId: 'founder-1',
+      },
+
+      select: {
+        id: true,
+      },
+    });
+
+    expect(requestCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: {
+          founderId: 'founder-1',
+          advisorId: 'advisor-1',
+          startupId: 'startup-1',
+          message: 'I need support with MVP planning.',
+          status: ConsultationStatus.NEW,
+        },
+      }),
+    );
+
+    expect(result.status).toBe(ConsultationStatus.NEW);
+  });
+
+  it('rejects consultation creation for a startup not owned by the founder', async () => {
+    startupFindFirst.mockResolvedValue(null);
+
+    await expect(
+      service.create('founder-1', {
+        ...createDto,
+        startupId: 'startup-owned-by-founder-2',
+      }),
+    ).rejects.toBeInstanceOf(NotFoundException);
+
+    expect(startupFindFirst).toHaveBeenCalledWith({
+      where: {
+        id: 'startup-owned-by-founder-2',
+        founderId: 'founder-1',
+      },
+
+      select: {
+        id: true,
+      },
+    });
+
+    expect(advisorFindFirst).not.toHaveBeenCalled();
+    expect(requestCreate).not.toHaveBeenCalled();
+  });
+
   it('rejects a duplicate open consultation', async () => {
     startupFindFirst.mockResolvedValue({
       id: 'startup-1',
@@ -129,6 +207,45 @@ describe('ConsultationService', () => {
     });
 
     expect(requestCreate).not.toHaveBeenCalled();
+  });
+
+  it('returns the persisted consultation status to the owning founder', async () => {
+    requestFindMany.mockResolvedValue([
+      {
+        id: 'request-1',
+        advisorId: 'advisor-1',
+        startupId: 'startup-1',
+        message: 'Need support',
+        status: ConsultationStatus.SCHEDULED,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+
+    const result = await service.findMine('founder-1');
+
+    expect(requestFindMany).toHaveBeenCalledWith({
+      where: {
+        founderId: 'founder-1',
+      },
+
+      select: {
+        id: true,
+        advisorId: true,
+        startupId: true,
+        message: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe(ConsultationStatus.SCHEDULED);
   });
 
   it('allows admin workflow to update consultation status', async () => {

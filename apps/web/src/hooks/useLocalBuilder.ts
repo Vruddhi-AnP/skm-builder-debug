@@ -72,6 +72,68 @@ function removeLegacyBuilderData(): void {
   localStorage.removeItem(LEGACY_BUILDER_KEY);
 }
 
+function migrateUserDraftToStartupScope(storageKey: string): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    const storedUser = localStorage.getItem("user");
+
+    if (!storedUser) {
+      return;
+    }
+
+    const user = JSON.parse(storedUser) as StoredUser;
+    const userId = typeof user.id === "string" ? user.id.trim() : "";
+    const startupId = localStorage.getItem("startupId")?.trim() ?? "";
+
+    if (!userId || !startupId) {
+      return;
+    }
+
+    const userOnlyKey = `${BUILDER_KEY_PREFIX}:${userId}`;
+    const startupScopedKey = `${BUILDER_KEY_PREFIX}:${userId}:${startupId}`;
+
+    if (storageKey !== startupScopedKey) {
+      return;
+    }
+
+    const userOnlyRaw = localStorage.getItem(userOnlyKey);
+
+    if (!userOnlyRaw) {
+      return;
+    }
+
+    const userOnlyData = JSON.parse(userOnlyRaw) as BuilderStepData;
+
+    const startupScopedRaw = localStorage.getItem(startupScopedKey);
+
+    const startupScopedData = startupScopedRaw
+      ? (JSON.parse(startupScopedRaw) as BuilderStepData)
+      : {};
+
+    const migratedData: BuilderStepData = {};
+
+    for (const step of STEP_ORDER) {
+      const userOnlyStep = userOnlyData[step];
+      const startupScopedStep = startupScopedData[step];
+
+      if (userOnlyStep || startupScopedStep) {
+        migratedData[step] = {
+          ...(userOnlyStep ?? {}),
+          ...(startupScopedStep ?? {}),
+        };
+      }
+    }
+
+    localStorage.setItem(startupScopedKey, JSON.stringify(migratedData));
+    localStorage.removeItem(userOnlyKey);
+  } catch {
+    // Leave existing local drafts in place if migration cannot complete safely.
+  }
+}
+
 export function getBuilderData(): BuilderStepData {
   if (typeof window === "undefined") {
     return {};
@@ -90,6 +152,7 @@ export function getBuilderData(): BuilderStepData {
    * account-scoped draft after a successful API load.
    */
   removeLegacyBuilderData();
+  migrateUserDraftToStartupScope(storageKey);
 
   try {
     const raw = localStorage.getItem(storageKey);

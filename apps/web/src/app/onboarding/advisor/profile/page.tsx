@@ -85,10 +85,11 @@ export default function AdvisorProfilePage() {
       };
 
       try {
-        await advisorService.createProfile(payload);
+        await advisorService.getProfile();
+        await advisorService.updateProfile(payload);
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 409) {
-          await advisorService.updateProfile(payload);
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+          await advisorService.createProfile(payload);
         } else {
           throw error;
         }
