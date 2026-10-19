@@ -1,7 +1,5 @@
 "use client";
 
-import axios from "axios";
-
 import { useState } from "react";
 
 import { useRouter } from "next/navigation";
@@ -11,6 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { advisorService } from "@/services/advisor.service";
+import { saveAdvisorProfile } from "@/services/advisor-profile-flow";
 
 import {
   BriefcaseBusiness,
@@ -84,16 +83,7 @@ export default function AdvisorProfilePage() {
           : {}),
       };
 
-      try {
-        await advisorService.getProfile();
-        await advisorService.updateProfile(payload);
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 404) {
-          await advisorService.createProfile(payload);
-        } else {
-          throw error;
-        }
-      }
+      await saveAdvisorProfile(advisorService, payload);
 
       router.push("/onboarding/advisor/expertise");
     } catch (error) {

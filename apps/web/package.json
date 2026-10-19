@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:regression": "node --test test/useLocalBuilder.regression.test.mjs test/advisor-profile-flow.regression.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -13,13 +13,13 @@ import ProfileForm from "@/components/founder/profile/profile-form";
 import ProfileHero from "@/components/founder/profile/profile-hero";
 import ProfileSecurity from "@/components/founder/profile/profile-security";
 import ProfileStartupCard from "@/components/founder/profile/profile-startup-card";
+import { clearFounderSessionPreservingBuilderDrafts } from "@/lib/founder-session";
 
 export default function FounderProfilePage() {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
+    clearFounderSessionPreservingBuilderDrafts();
     router.push("/login");
   };
 
