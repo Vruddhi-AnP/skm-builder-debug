@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -9,7 +9,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { advisorService } from "@/services/advisor.service";
-import { saveAdvisorProfile } from "@/services/advisor-profile-flow";
+import {
+  loadAdvisorProfile,
+  saveAdvisorProfile,
+} from "@/services/advisor-profile-flow";
 
 import {
   BriefcaseBusiness,
@@ -45,6 +48,76 @@ export default function AdvisorProfilePage() {
 
     ...getAdvisorOnboarding(),
   }));
+
+  useEffect(() => {
+    let active = true;
+
+    const hydrateProfile = async () => {
+      try {
+        const profile = await loadAdvisorProfile(advisorService);
+
+        if (!active) {
+          return;
+        }
+
+        let storedName = "";
+        let storedEmail = "";
+
+        try {
+          const storedUser = localStorage.getItem("user");
+
+          if (storedUser) {
+            const user = JSON.parse(storedUser) as {
+              name?: string;
+              email?: string;
+            };
+
+            storedName = typeof user.name === "string" ? user.name : "";
+
+            storedEmail = typeof user.email === "string" ? user.email : "";
+          }
+        } catch {
+          // Ignore malformed browser identity state.
+        }
+
+        setFormData((current) => ({
+          ...current,
+
+          fullName: current.fullName || storedName,
+
+          email: current.email || storedEmail,
+
+          ...(profile
+            ? {
+                phoneNumber: profile.phoneNumber ?? "",
+
+                linkedinUrl: profile.linkedinUrl ?? "",
+
+                currentRole: profile.currentRole ?? "",
+
+                organization: profile.organization ?? "",
+
+                experienceLevel: profile.experienceLevel ?? "",
+              }
+            : {}),
+        }));
+      } catch (error) {
+        console.error("Failed to load advisor profile:", error);
+
+        if (active) {
+          window.alert(
+            "We couldn't load your advisor profile. Please try again.",
+          );
+        }
+      }
+    };
+
+    void hydrateProfile();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleChange = (
     e:

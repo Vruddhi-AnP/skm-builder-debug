@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  loadAdvisorProfile,
   saveAdvisorProfile,
 } from "../src/services/advisor-profile-flow.ts";
 
@@ -13,6 +14,60 @@ function axiosError(status) {
       : undefined,
   };
 }
+
+test(
+  "loads an existing Advisor profile for returning onboarding",
+  async () => {
+    const profile = await loadAdvisorProfile({
+      async getProfile() {
+        return {
+          data: {
+            phoneNumber: "9898985454",
+            currentRole: "Product Advisor",
+            organization: "RC Advisory",
+            linkedinUrl: "https://linkedin.com/in/rc-advisor",
+            experienceLevel: "YEARS_1_TO_3",
+          },
+        };
+      },
+    });
+
+    assert.deepEqual(profile, {
+      phoneNumber: "9898985454",
+      currentRole: "Product Advisor",
+      organization: "RC Advisory",
+      linkedinUrl: "https://linkedin.com/in/rc-advisor",
+      experienceLevel: "YEARS_1_TO_3",
+    });
+  },
+);
+
+test(
+  "treats Advisor profile GET 404 as first-time onboarding",
+  async () => {
+    const profile = await loadAdvisorProfile({
+      async getProfile() {
+        throw axiosError(404);
+      },
+    });
+
+    assert.equal(profile, null);
+  },
+);
+
+test(
+  "does not hide non-404 Advisor profile load failures",
+  async () => {
+    await assert.rejects(
+      () =>
+        loadAdvisorProfile({
+          async getProfile() {
+            throw axiosError(500);
+          },
+        }),
+    );
+  },
+);
 
 test(
   "creates a profile for first-time Advisor onboarding after GET returns 404",
